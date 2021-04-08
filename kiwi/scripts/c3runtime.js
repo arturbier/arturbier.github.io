@@ -3993,6 +3993,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Fade.Acts.StartFade,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.originalviewportheight,
+		C3.Plugins.VKBridge.Acts.BridgeConnect,
+		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
+		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
 		C3.Plugins.System.Acts.SetTimescale,
@@ -4148,10 +4151,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.TiledBg.Cnds.CompareOpacity,
 		C3.Plugins.System.Cnds.OnLoadFinished,
 		C3.Plugins.Spritefont2.Acts.SetX,
-		C3.Plugins.Sprite.Exps.AnimationFrame,
-		C3.Plugins.VKBridge.Acts.BridgeConnect,
-		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
-		C3.Plugins.VKBridge.Acts.Authorization
+		C3.Plugins.Sprite.Exps.AnimationFrame
 		];
 	};
 	self.C3_JsPropNameTable = [
