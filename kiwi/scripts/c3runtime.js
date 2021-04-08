@@ -4689,6 +4689,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => (("В моей коллекции уже " + f0(n1.ExpObject("Beetles"), 2)) + " жуков, присоединяйся!");
 		},
 		() => "photo220968686_457271458",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => ((f0() / 2) + 50);
+		},
 		() => "Data_Default",
 		() => "Beetles",
 		() => "Checkpoint",
