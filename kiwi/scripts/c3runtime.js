@@ -4105,7 +4105,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Platform.Cnds.IsFalling,
 		C3.Behaviors.Platform.Cnds.IsByWall,
 		C3.Behaviors.Platform.Exps.VectorX,
+		C3.Plugins.Keyboard.Cnds.IsKeyDown,
 		C3.Behaviors.Platform.Acts.FallThrough,
+		C3.Plugins.Keyboard.Cnds.OnKeyReleased,
 		C3.Plugins.Touch.Cnds.OnTouchEnd,
 		C3.Plugins.Function.Cnds.CompareParam,
 		C3.Behaviors.Platform.Acts.SimulateControl,
@@ -4678,13 +4680,15 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => (10 + Math.abs((n0.ExpBehavior() / 8)));
 		},
 		() => "Touch_Input",
-		() => "Up",
+		() => "PC",
 		() => "Player_Move",
 		() => "Left",
-		() => "Right",
 		() => "Player_Turn",
-		() => "Down",
+		() => "Right",
 		() => "Player_Fall",
+		() => "Mobile",
+		() => "Up",
+		() => "Down",
 		() => "PlayerFunctions",
 		p => {
 			const n0 = p._GetNode(0);
