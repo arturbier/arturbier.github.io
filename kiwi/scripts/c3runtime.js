@@ -3983,12 +3983,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.jumpthru,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.Audio.Acts.Play,
-		C3.Plugins.Sprite.Acts.SetSize,
-		C3.Plugins.System.Exps.viewportright,
-		C3.Plugins.System.Exps.viewportbottom,
-		C3.Plugins.Sprite.Acts.SetPos,
 		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
+		C3.Plugins.Sprite.Acts.SetSize,
+		C3.Plugins.Sprite.Acts.SetPos,
+		C3.Plugins.System.Exps.viewportright,
 		C3.Plugins.System.Acts.Wait,
 		C3.Behaviors.Fade.Acts.StartFade,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
@@ -4011,13 +4010,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Spritefont2.Cnds.CompareText,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
-		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
-		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
-		C3.Plugins.System.Exps.viewportleft,
-		C3.Plugins.System.Exps.viewporttop,
-		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
-		C3.Plugins.Sprite.Acts.SetX,
-		C3.Plugins.Sprite.Exps.X,
+		C3.Plugins.TiledBg.Acts.SetImageOffsetX,
+		C3.Plugins.TiledBg.Exps.ImageOffsetX,
 		C3.Plugins.System.Exps.dt,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.Audio.Acts.Stop,
@@ -4028,6 +4022,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.Browser.Acts.Vibrate,
 		C3.Plugins.Sprite.Cnds.CompareOpacity,
+		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
+		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
+		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
@@ -4039,6 +4036,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Browser.Acts.Close,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
+		C3.Plugins.Sprite.Acts.SetX,
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.Dictionary.Acts.AddKey,
@@ -4053,7 +4051,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Exps.Width,
 		C3.Plugins.Sprite.Exps.Height,
 		C3.Plugins.System.Acts.CreateObject,
+		C3.Plugins.System.Exps.viewportleft,
 		C3.Plugins.System.Exps.random,
+		C3.Plugins.System.Exps.viewporttop,
 		C3.Behaviors.Bullet.Acts.SetAngleOfMotion,
 		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Sprite.Acts.SetAnimSpeed,
@@ -4073,6 +4073,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.TiledBg.Acts.Destroy,
 		C3.Plugins.TiledBg.Acts.SetPos,
 		C3.Plugins.TiledBg.Acts.SetSize,
+		C3.Plugins.System.Exps.viewportbottom,
 		C3.Plugins.TiledBg.Acts.SetInstanceVar,
 		C3.Plugins.TiledBg.Cnds.CompareInstanceVar,
 		C3.Plugins.TiledBg.Acts.SetOpacity,
@@ -4116,6 +4117,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.NinePatch.Exps.UID,
 		C3.Plugins.NinePatch.Cnds.PickByUID,
 		C3.Plugins.System.Acts.Scroll,
+		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.NinePatch.Exps.X,
 		C3.Plugins.NinePatch.Exps.Width,
 		C3.Plugins.NinePatch.Exps.Y,
@@ -4149,6 +4151,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Spritefont2.Acts.SetScale,
 		C3.Plugins.Spritefont2.Acts.SetEffectParam,
 		C3.Behaviors.DragnDrop.Cnds.IsDragging,
+		C3.Plugins.TiledBg.Acts.SetVisible,
 		C3.Plugins.Touch.Exps.X,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Behaviors.DragnDrop.Acts.SetEnabled,
@@ -4295,11 +4298,15 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{EXIT: 0},
 		{exitpinner: 0},
 		{Keyboard: 0},
+		{BG_0: 0},
+		{BG_1: 0},
+		{BG_2: 0},
 		{Solid2: 0},
 		{Jumpthru2: 0},
 		{Solid: 0},
 		{Enemy: 0},
 		{HUD: 0},
+		{BG: 0},
 		{Intro: 0},
 		{GameStarted: 0},
 		{CameraZone_UID: 0},
@@ -4410,14 +4417,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 	self.C3_ExpressionFuncs = [
 		() => 0,
 		() => "Intro",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(1);
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(0);
-		},
 		() => "Effects ",
 		() => "Intro1",
 		() => "LVL",
@@ -4493,7 +4492,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "Cave",
 		() => 2,
 		() => "Temple",
-		() => 0.2,
 		p => {
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
@@ -4537,6 +4535,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "Health",
 		() => "HUD",
 		() => "Forest",
+		() => 0.2,
 		() => "Music",
 		() => 0.3,
 		p => {
@@ -4593,6 +4592,14 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => (3 + f0(10));
 		},
 		() => "Explosion_1",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(1);
+		},
 		() => "Explosion",
 		() => 5,
 		() => "Star",
