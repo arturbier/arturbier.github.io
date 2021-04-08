@@ -4031,7 +4031,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Exps.dt,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.Audio.Acts.Stop,
-		C3.Plugins.Function.Acts.CallFunction,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
 		C3.Plugins.Sprite.Acts.SetAnim,
@@ -4079,6 +4078,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Cnds.Repeat,
 		C3.Plugins.Sprite.Cnds.PickByUID,
 		C3.Plugins.Sprite.Acts.SubInstanceVar,
+		C3.Plugins.Function.Acts.CallFunction,
 		C3.Plugins.Sprite.Exps.ImagePointX,
 		C3.Plugins.Sprite.Exps.ImagePointY,
 		C3.Plugins.Sprite.Acts.Destroy,
@@ -4519,7 +4519,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => (n0.ExpObject() - (20 * f1()));
 		},
 		() => "",
-		() => "Transition",
 		() => "Out",
 		() => "DontEnergy",
 		() => "30,10,30,10,30,10",
@@ -4643,6 +4642,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "Brightness",
 		() => 200,
 		() => "Эффекты",
+		() => "Transition",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("Transition");
