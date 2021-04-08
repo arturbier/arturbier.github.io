@@ -4104,8 +4104,14 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Platform.Acts.SetVectorX,
 		C3.Plugins.Dictionary.Exps.Get,
 		C3.Plugins.Sprite.Acts.SetCollisions,
-		C3.Plugins.System.Acts.RestartLayout,
+		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Behaviors.Flash.Acts.StopFlashing,
+		C3.Plugins.Spritefont2.Cnds.CompareInstanceVar,
+		C3.Plugins.VKBridge.Acts.ShowInvite,
+		C3.Plugins.VKBridge.Acts.ShowWall,
+		C3.Plugins.System.Exps.zeropad,
+		C3.Plugins.VKBridge.Cnds.ShowInviteSuccess,
+		C3.Plugins.VKBridge.Cnds.ShowWallSuccess,
 		C3.Plugins.NinePatch.Exps.UID,
 		C3.Plugins.NinePatch.Cnds.PickByUID,
 		C3.Plugins.System.Acts.Scroll,
@@ -4132,9 +4138,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Sin.Acts.SetPhase,
 		C3.Behaviors.Platform.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.PickRandom,
-		C3.Plugins.System.Exps.zeropad,
 		C3.Plugins.System.Cnds.LayerCmpOpacity,
 		C3.Plugins.System.Acts.SetLayerOpacity,
+		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.Sprite.Acts.StartAnim,
 		C3.Plugins.Sprite.Acts.StopAnim,
 		C3.Behaviors.Sin.Acts.SetEnabled,
@@ -4177,6 +4183,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{BG_TitleScreen2: 0},
 		{EXITtextEN: 0},
 		{EXITtextRU: 0},
+		{state: 0},
+		{TextRU: 0},
 		{Audio: 0},
 		{Touch: 0},
 		{Function: 0},
@@ -4626,7 +4634,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => C3.lerp(n0.ExpObject(), 100, (10 * f1()));
 		},
 		() => "Pause",
-		() => 70,
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => C3.lerp(n0.ExpObject(), 70, (10 * f1()));
+		},
 		() => "Passive",
 		() => 600,
 		() => "Player_Animations",
@@ -4667,7 +4679,16 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => subtract(n0.ExpObject("Health"), f1(0));
 		},
 		() => 0.75,
+		() => "UI",
 		() => 500,
+		() => "add",
+		() => "share",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => (("В моей коллекции уже " + f0(n1.ExpObject("Beetles"), 2)) + " жуков, присоединяйся!");
+		},
+		() => "photo220968686_457271458",
 		() => "Data_Default",
 		() => "Beetles",
 		() => "Checkpoint",
@@ -4823,7 +4844,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "Door_Enter",
 		() => "Complete",
 		() => "Door",
-		() => "UI",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0("UI") / 2);
