@@ -4104,9 +4104,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Platform.Acts.SetVectorX,
 		C3.Plugins.Dictionary.Exps.Get,
 		C3.Plugins.Sprite.Acts.SetCollisions,
+		C3.Plugins.Spritefont2.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Behaviors.Flash.Acts.StopFlashing,
-		C3.Plugins.Spritefont2.Cnds.CompareInstanceVar,
 		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.Plugins.System.Exps.zeropad,
@@ -4679,20 +4679,20 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => subtract(n0.ExpObject("Health"), f1(0));
 		},
 		() => 0.75,
-		() => "UI",
-		() => 500,
 		() => "add",
+		() => "UI",
 		() => "share",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => ((f0() / 2) + 50);
+		},
+		() => 500,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			return () => (("В моей коллекции уже " + f0(n1.ExpObject("Beetles"), 2)) + " жуков, присоединяйся!");
 		},
 		() => "photo220968686_457271458",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => ((f0() / 2) + 50);
-		},
 		() => "Data_Default",
 		() => "Beetles",
 		() => "Checkpoint",
