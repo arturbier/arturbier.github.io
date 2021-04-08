@@ -4006,9 +4006,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Fade.Acts.StartFade,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.originalviewportheight,
-		C3.Plugins.VKBridge.Acts.BridgeConnect,
-		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
-		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
 		C3.Plugins.System.Cnds.CompareBoolVar,
@@ -4177,7 +4174,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Behaviors.DragnDrop.Acts.SetEnabled,
 		C3.Plugins.Spritefont2.Acts.SetPosToObject,
+		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Behaviors.Pin.Acts.Unpin,
+		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
+		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.TiledBg.Cnds.CompareOpacity,
 		C3.Plugins.System.Cnds.OnLoadFinished,
 		C3.Plugins.Spritefont2.Acts.SetX,
@@ -4913,8 +4913,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n1 = p._GetNode(1);
 			return () => ("x" + f0(n1.ExpObject("Beetles"), 2));
 		},
-		() => "Android",
-		() => "IOS",
+		() => "Windows",
+		() => "Mac",
 		() => "Optimising",
 		p => {
 			const n0 = p._GetNode(0);
