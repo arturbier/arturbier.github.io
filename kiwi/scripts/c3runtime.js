@@ -3284,7 +3284,7 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 		// Advertising connection
 		ConnectAds(){},
 		// Advertising web
-		async ShowAds(format){
+		async ShowAds(format, callback){
 			var ads_format = "rewarded";
 			if (format === 0) ads_format = "preloader";
 			
@@ -3292,7 +3292,21 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 				user_id: this.user_id, app_id: this.app_id,
 				// mobile: true,
 				// params: {preview: 1},
-				type: ads_format},  this.AdsReady, this.NoAds);
+				type: ads_format}, onAdsReady, onNoAds);
+				
+			function onAdsReady(adman){
+				adman.onStarted(function(){});
+				adman.onCompleted(function(){});
+				adman.onSkipped(function(){});
+				adman.onClicked(function(){});
+				adman.start('preroll');
+			};
+						
+			function onNoAds(){callback = "error";};
+				
+			let promise = new Promise((resolve, reject) => {setTimeout(() => resolve("timeout"), 1000)});let result = await promise;
+			if (callback == "error"){this.Trigger(this.conditions.ShowAdsFailed);}
+			else {this.Trigger(this.conditions.ShowAdsSuccess);}
 		},
 		// Advertising mobile
 		AdsMobile(format){
@@ -4030,7 +4044,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
-		C3.Plugins.VKBridge.Acts.ShowAds,
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.Browser.Cnds.OnBackButton,
