@@ -4043,13 +4043,13 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
-		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.VKBridge.Acts.ShowAds,
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.Browser.Cnds.OnBackButton,
 		C3.Plugins.Sprite.Acts.SetY,
 		C3.Plugins.Sprite.Exps.Y,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.Browser.Acts.Close,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Acts.SetX,
@@ -4087,10 +4087,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Acts.RestoreObjectTimescale,
 		C3.Plugins.Sprite.Cnds.OnAnyAnimFinished,
 		C3.Plugins.TiledBg.Acts.Destroy,
+		C3.Plugins.TiledBg.Acts.SetInstanceVar,
 		C3.Plugins.TiledBg.Acts.SetPos,
 		C3.Plugins.TiledBg.Acts.SetSize,
 		C3.Plugins.System.Exps.viewportbottom,
-		C3.Plugins.TiledBg.Acts.SetInstanceVar,
 		C3.Plugins.TiledBg.Cnds.CompareInstanceVar,
 		C3.Plugins.TiledBg.Acts.SetOpacity,
 		C3.Plugins.TiledBg.Exps.Opacity,
@@ -4157,8 +4157,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Sin.Acts.SetPhase,
 		C3.Behaviors.Platform.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.PickRandom,
+		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.System.Cnds.LayerCmpOpacity,
 		C3.Plugins.System.Acts.SetLayerOpacity,
+		C3.Plugins.Browser.Exps.Platform,
+		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Sprite.Acts.StartAnim,
 		C3.Plugins.Sprite.Acts.StopAnim,
 		C3.Behaviors.Sin.Acts.SetEnabled,
@@ -4284,7 +4287,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{ZoneWorlds: 0},
 		{DragDrop: 0},
 		{SwipeZone: 0},
-		{SpriteFont: 0},
+		{FPPS: 0},
 		{Blick: 0},
 		{Sine2: 0},
 		{LoaderBalls: 0},
@@ -4469,6 +4472,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
 		},
+		() => 0.2,
 		() => 0.1,
 		() => "ADS",
 		p => {
@@ -4552,7 +4556,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "Health",
 		() => "HUD",
 		() => "Forest",
-		() => 0.2,
 		() => "Music",
 		() => 0.3,
 		p => {
@@ -4906,6 +4909,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n1 = p._GetNode(1);
 			return () => ("x" + f0(n1.ExpObject("Beetles"), 2));
 		},
+		() => "Android",
+		() => "IOS",
 		() => "Optimising",
 		p => {
 			const n0 = p._GetNode(0);
