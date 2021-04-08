@@ -4040,6 +4040,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Browser.Acts.Close,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
+		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.Dictionary.Acts.AddKey,
 		C3.Plugins.System.Cnds.IsMobile,
 		C3.Plugins.System.Cnds.Compare,
@@ -4105,11 +4106,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Dictionary.Exps.Get,
 		C3.Plugins.Sprite.Acts.SetCollisions,
 		C3.Plugins.Spritefont2.Cnds.CompareInstanceVar,
-		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Behaviors.Flash.Acts.StopFlashing,
 		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.Plugins.System.Exps.zeropad,
+		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.VKBridge.Cnds.ShowInviteSuccess,
 		C3.Plugins.VKBridge.Cnds.ShowWallSuccess,
 		C3.Plugins.NinePatch.Exps.UID,
@@ -4140,7 +4141,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Cnds.PickRandom,
 		C3.Plugins.System.Cnds.LayerCmpOpacity,
 		C3.Plugins.System.Acts.SetLayerOpacity,
-		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.Sprite.Acts.StartAnim,
 		C3.Plugins.Sprite.Acts.StopAnim,
 		C3.Behaviors.Sin.Acts.SetEnabled,
@@ -4530,6 +4530,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => ((f0() - f1()) + 64);
 		},
+		() => "UI",
 		() => "Camera",
 		() => "Player_Engine",
 		() => "Player_Input",
@@ -4680,11 +4681,15 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		},
 		() => 0.75,
 		() => "add",
-		() => "UI",
 		() => "share",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => ((f0() / 2) + 50);
+			return () => ((f0() / 2) + 41);
+		},
+		() => "restart",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => ((f0() / 2) + 82);
 		},
 		() => 500,
 		p => {
