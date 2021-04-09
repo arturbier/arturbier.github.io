@@ -3900,7 +3900,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Behaviors.Physics.Acts.SetVelocity,
 		C3.Plugins.Sprite.Cnds.OnCreated,
-		C3.Plugins.Touch.Cnds.OnTouchObject,
+		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.RestartLayout,
@@ -4221,7 +4221,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const v0 = p._GetNode(0).GetVar();
 			return () => (and("Мой рекорд :", v0.GetValue()) + " , сможешь побить? Тогда присоединяйся");
 		},
-		() => "photo337485546,app7818856",
+		() => "photo220968686_457271483,app7818856",
 		() => 15,
 		() => 404,
 		() => 639,
