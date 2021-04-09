@@ -3867,17 +3867,18 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Behaviors.Physics.Acts.ApplyForce,
 		C3.Behaviors.Physics.Acts.ApplyTorqueToAngle,
 		C3.Plugins.Sprite.Exps.Angle,
+		C3.Plugins.System.Cnds.TriggerOnce,
+		C3.Plugins.Audio.Acts.Play,
 		C3.Plugins.Sprite.Cnds.IsOverlappingOffset,
 		C3.Behaviors.Physics.Acts.ApplyForceAtAngle,
-		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
 		C3.Plugins.System.Acts.AddVar,
-		C3.Plugins.Audio.Acts.Play,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
 		C3.Plugins.Sprite.Cnds.OnCollision,
+		C3.Plugins.VKBridge.Acts.AdsMobile,
 		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Sprite.Acts.RemoveFromParent,
@@ -3888,7 +3889,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.Spritefont2.Acts.SetVisible,
-		C3.Plugins.VKBridge.Acts.AdsMobile,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.Every,
@@ -4153,6 +4153,8 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const v1 = p._GetNode(1).GetVar();
 			return () => (n0.ExpObject() - v1.GetValue());
 		},
+		() => 22,
+		() => "",
 		() => "Right",
 		p => {
 			const n0 = p._GetNode(0);
@@ -4174,7 +4176,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => "Spawn/Move",
 		() => "Ground",
 		() => -5,
-		() => "",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("", v0.GetValue());
@@ -4201,6 +4202,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("visible", "invisible");
 		},
+		() => 33,
 		() => "Play",
 		() => 0.2,
 		() => -1100,
@@ -4210,6 +4212,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => 404,
 		() => 639,
 		() => 1262,
+		() => 11,
 		() => 0.1,
 		() => 2,
 		() => "Selected_Start",
