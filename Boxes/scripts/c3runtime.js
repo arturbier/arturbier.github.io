@@ -3874,6 +3874,8 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
+		C3.Plugins.System.Exps.choose,
+		C3.Plugins.Sprite.Exps.AnimationName,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
@@ -3895,7 +3897,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.System.Cnds.PickRandom,
 		C3.Plugins.Sprite.Acts.Spawn,
 		C3.Behaviors.Physics.Acts.SetImmovable,
-		C3.Plugins.System.Exps.choose,
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Behaviors.Physics.Acts.SetVelocity,
 		C3.Plugins.Sprite.Cnds.OnCreated,
@@ -3903,14 +3904,15 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.RestartLayout,
-		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.System.Acts.GoToLayout,
-		C3.Plugins.VKBridge.Acts.ShowInvite,
+		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.Text.Acts.SetVisible,
 		C3.Plugins.Touch.Cnds.OnTouchEnd,
 		C3.Plugins.Touch.Cnds.OnNthTouchStart,
+		C3.Plugins.VKBridge.Acts.ShowAds,
+		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
@@ -3929,7 +3931,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.System.Cnds.ForEachOrdered,
 		C3.Plugins.Sprite.Exps.UID,
 		C3.Plugins.Sprite.Cnds.PickByUID,
-		C3.Plugins.Sprite.Exps.AnimationName,
+		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.System.Exps.loopindex,
 		C3.Plugins.Sprite.Acts.SetSize,
@@ -4017,6 +4019,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		{Bullet: 0},
 		{Blick: 0},
 		{powered_by: 0},
+		{Destroyer_Paddle: 0},
 		{Rotate: 0},
 		{Torque_Angle: 0},
 		{Torque: 0},
@@ -4175,6 +4178,12 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => 1,
 		() => "Spawn/Move",
 		() => "Ground",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			return () => f0(n1.ExpObject(), (n2.ExpObject() + "_Anim"));
+		},
 		() => -5,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4207,8 +4216,13 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => 0.2,
 		() => -1100,
 		() => "Home",
-		() => "Share",
-		() => 55,
+		() => "Post",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (and("Мой рекорд :", v0.GetValue()) + " , сможешь побить? Тогда присоединяйся");
+		},
+		() => "photo337485546,app7818856",
+		() => 15,
 		() => 404,
 		() => 639,
 		() => 1262,
@@ -4281,6 +4295,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			return () => (f0() + 500);
 		},
 		() => 3,
+		() => "Share",
 		() => 13,
 		() => "X",
 		() => 7,
