@@ -4221,9 +4221,9 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => "Post",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (and("Мой рекорд :", v0.GetValue()) + " , сможешь побить? Тогда присоединяйся");
+			return () => (and("Мой рекорд : ", v0.GetValue()) + " , сможешь побить? Тогда присоединяйся к нам!");
 		},
-		() => "photo220968686_457271483,app7818856",
+		() => "photo220968686_457271483,https://vk.com/app7818856",
 		() => 15,
 		() => 404,
 		() => 639,
