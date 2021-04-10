@@ -4083,11 +4083,19 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
+		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.Dictionary.Acts.AddKey,
 		C3.Plugins.System.Cnds.IsMobile,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.System.Exps.layoutname,
+		C3.Plugins.VKBridge.Cnds.AuthorizationSuccess,
+		C3.Plugins.VKBridge.Acts.UserGet,
+		C3.Plugins.VKBridge.Exps.UserID,
+		C3.Plugins.VKBridge.Cnds.UserGetSuccess,
+		C3.Plugins.VKBridge.Acts.FriendsGet,
+		C3.Plugins.Sprite.Acts.LoadURL,
+		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.LocalStorage.Cnds.CompareValue,
 		C3.Plugins.System.Cnds.Every,
@@ -4124,13 +4132,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.TiledBg.Cnds.CompareInstanceVar,
 		C3.Plugins.TiledBg.Acts.SetOpacity,
 		C3.Plugins.TiledBg.Exps.Opacity,
-		C3.Plugins.VKBridge.Cnds.AuthorizationSuccess,
-		C3.Plugins.VKBridge.Acts.UserGet,
-		C3.Plugins.VKBridge.Exps.UserID,
-		C3.Plugins.VKBridge.Cnds.UserGetSuccess,
-		C3.Plugins.VKBridge.Acts.FriendsGet,
-		C3.Plugins.Sprite.Acts.LoadURL,
-		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Behaviors.Platform.Acts.SetGravity,
 		C3.Plugins.Sprite.Acts.MoveToTop,
@@ -4214,7 +4215,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Behaviors.Pin.Acts.Unpin,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
-		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.TiledBg.Cnds.CompareOpacity,
 		C3.Plugins.System.Cnds.OnLoadFinished,
 		C3.Plugins.Spritefont2.Acts.SetX,
@@ -4598,6 +4598,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "HUD",
 		() => "Forest",
 		() => "Music",
+		() => "photo_200",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("photo_200");
+		},
 		() => 0.3,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4708,11 +4713,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => C3.lerp(n0.ExpObject(), 70, (10 * f1()));
-		},
-		() => "photo_200",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("photo_200");
 		},
 		() => "Passive",
 		() => 600,
