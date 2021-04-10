@@ -3347,7 +3347,7 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 		// Save leaderboard
 		LeaderSave(activ, value){
 			vkBridge
-				.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "leader", "params": {"user_id": this.user_id, "activity_id": activ+1, "value": value, "v": "5.130", "access_token": this.user_token, "client_secret": this.app_service_key}})
+				.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "leader", "params": {"user_id": this.user_id, "activity_id": activ+1, "value": value, "v": "5.130", "access_token": this.app_service_key, "client_secret": this.app_secret_key}})
 				.then(data => {
 					this.Trigger(this.conditions.LeaderSaveSuccess);
 				})
@@ -4037,6 +4037,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
+		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.System.Acts.SetTimescale,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
@@ -4087,6 +4088,13 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Cnds.IsMobile,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.System.Exps.layoutname,
+		C3.Plugins.VKBridge.Cnds.AuthorizationSuccess,
+		C3.Plugins.VKBridge.Acts.UserGet,
+		C3.Plugins.VKBridge.Exps.UserID,
+		C3.Plugins.VKBridge.Cnds.UserGetSuccess,
+		C3.Plugins.VKBridge.Acts.FriendsGet,
+		C3.Plugins.Sprite.Acts.LoadURL,
+		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.LocalStorage.Cnds.CompareValue,
 		C3.Plugins.System.Cnds.Every,
@@ -4352,6 +4360,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{BG_1: 0},
 		{BG_2: 0},
 		{Mouse: 0},
+		{Type: 0},
+		{Photo_Loader: 0},
 		{Solid2: 0},
 		{Jumpthru2: 0},
 		{Solid: 0},
@@ -4588,6 +4598,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "HUD",
 		() => "Forest",
 		() => "Music",
+		() => "photo_200",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("photo_200");
+		},
 		() => 0.3,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4751,6 +4766,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => ((f0() / 2) + 82);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => ((f0() / 2) - 60);
 		},
 		() => 500,
 		p => {
