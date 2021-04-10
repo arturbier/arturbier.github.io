@@ -3388,7 +3388,7 @@ await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesL
 		// Save leaderboard
 		LeaderSave(activ, value){
 			vkBridge
-				.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "leader", "params": {"user_id": this.user_id, "activity_id": activ+1, "value": value, "v": "5.130", "access_token": this.user_token, "client_secret": this.app_service_key}})
+				.send("VKWebAppCallAPIMethod", {"method": "secure.addAppEvent", "request_id": "leader", "params": {"user_id": this.user_id, "activity_id": activ+1, "value": value, "v": "5.130", "access_token": this.app_service_key, "client_secret": this.app_secret_key}})
 				.then(data => {
 					this.Trigger(this.conditions.LeaderSaveSuccess);
 				})
@@ -3895,6 +3895,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.System.Acts.SetLayerVisible,
+		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
 		C3.Behaviors.Physics.Cnds.CompareVelocity,
@@ -3906,8 +3907,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.Sprite.Cnds.IsOverlappingOffset,
 		C3.Behaviors.Physics.Acts.ApplyForceAtAngle,
 		C3.Plugins.Browser.Acts.Vibrate,
-		C3.Behaviors.Tween.Acts.TweenOneProperty,
-		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
 		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Sprite.Exps.AnimationName,
@@ -3916,6 +3915,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Plugins.Sprite.Acts.Destroy,
+		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Sprite.Acts.RemoveFromParent,
@@ -3924,11 +3924,12 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
+		C3.Behaviors.Tween.Acts.TweenOneProperty,
+		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.VKBridge.Acts.AdsMobile,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
 		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.System.Cnds.CompareVar,
-		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.System.Cnds.PickRandom,
 		C3.Plugins.Sprite.Acts.Spawn,
@@ -3939,7 +3940,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.System.Cnds.ForEach,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
-		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.VKBridge.Acts.ShowWall,
@@ -4180,6 +4180,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => "Best",
 		() => "Coin",
 		() => "Start",
+		() => "Control",
 		() => "Left",
 		() => 10,
 		p => {
@@ -4205,6 +4206,10 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const v1 = p._GetNode(1).GetVar();
 			return () => (n0.ExpObject() + v1.GetValue());
 		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject();
+		},
 		() => 4,
 		() => "Mover_l",
 		() => -700,
@@ -4212,14 +4217,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => "Mover_r",
 		() => 700,
 		() => "Trap_1",
-		() => "90,60,90",
-		() => "Y",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (f0() / 2.3);
-		},
-		() => 1,
-		() => "Spawn/Move",
 		() => "Ground",
 		() => "50,30,50",
 		() => -5,
@@ -4229,14 +4226,24 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const n2 = p._GetNode(2);
 			return () => f0(n1.ExpObject(), (n2.ExpObject() + "_Anim"));
 		},
+		() => 1,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("", v0.GetValue());
 		},
+		() => 15,
+		() => "90,60,90",
+		() => 0.2,
+		() => "Spawn/Move",
 		() => "visible",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
+		},
+		() => "Y",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0() / 2.3);
 		},
 		() => "Pause",
 		() => "Score",
@@ -4258,7 +4265,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => "invisible",
 		() => 33,
 		() => "Play",
-		() => 0.2,
 		() => -1100,
 		() => "Home",
 		() => "Post",
@@ -4267,7 +4273,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			return () => (and("Мой рекорд : ", v0.GetValue()) + " , сможешь побить? Тогда присоединяйся к нам!");
 		},
 		() => "photo220968686_457271483,https://vk.com/app7818856",
-		() => 15,
 		() => 404,
 		() => 639,
 		() => 1262,
@@ -4323,10 +4328,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const n3 = p._GetNode(3);
 			const v4 = p._GetNode(4).GetVar();
 			return () => (n0.ExpObject() + (Math.sin(C3.toRadians((v1.GetValue() + n2.ExpInstVar_Family()))) * (n3.ExpInstVar_Family() / v4.GetValue())));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject();
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
