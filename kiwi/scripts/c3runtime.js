@@ -4223,6 +4223,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.VKBridge.Cnds.LeaderSaveSuccess,
 		C3.Plugins.VKBridge.Acts.LeaderBoard,
+		C3.Plugins.VKBridge.Cnds.LeaderBoardSuccess,
 		C3.Plugins.VKBridge.Exps.BoardCount,
 		C3.Plugins.Spritefont2.Acts.AppendText,
 		C3.Plugins.VKBridge.Exps.BoardData,
@@ -5079,7 +5080,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f1 = p._GetNode(1).GetBoundMethod();
 			const f2 = p._GetNode(2).GetBoundMethod();
 			const f3 = p._GetNode(3).GetBoundMethod();
-			return () => ((("\n" + f0(f1(), "first_name")) + ":") + f2(f3(), "level"));
+			return () => ((("\n" + f0(f1(), "first_name")) + ":") + f2(f3(), "user_result"));
 		},
 		p => {
 			const n0 = p._GetNode(0);
