@@ -4223,7 +4223,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.VKBridge.Cnds.LeaderSaveSuccess,
 		C3.Plugins.VKBridge.Acts.LeaderBoard,
-		C3.Plugins.VKBridge.Cnds.LeaderBoardSuccess,
 		C3.Plugins.VKBridge.Exps.BoardCount,
 		C3.Plugins.Spritefont2.Acts.AppendText,
 		C3.Plugins.VKBridge.Exps.BoardData,
