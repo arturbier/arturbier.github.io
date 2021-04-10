@@ -5077,7 +5077,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f1 = p._GetNode(1).GetBoundMethod();
 			const f2 = p._GetNode(2).GetBoundMethod();
 			const f3 = p._GetNode(3).GetBoundMethod();
-			return () => (((f0(f1(), "first_name") + ":") + f2(f3(), "level")) + "\n");
+			return () => ((("\n" + f0(f1(), "first_name")) + ":") + f2(f3(), "level"));
 		},
 		p => {
 			const n0 = p._GetNode(0);
