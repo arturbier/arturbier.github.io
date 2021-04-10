@@ -4049,6 +4049,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
+		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Spritefont2.Cnds.CompareText,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
@@ -4083,9 +4084,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
-		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.Dictionary.Acts.AddKey,
+		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.System.Cnds.IsMobile,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.System.Exps.layoutname,
@@ -4217,7 +4218,13 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.TiledBg.Cnds.CompareOpacity,
 		C3.Plugins.System.Cnds.OnLoadFinished,
+		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.Spritefont2.Acts.SetX,
+		C3.Plugins.VKBridge.Cnds.LeaderSaveSuccess,
+		C3.Plugins.VKBridge.Exps.BoardCount,
+		C3.Plugins.Spritefont2.Acts.AppendText,
+		C3.Plugins.VKBridge.Exps.BoardData,
+		C3.Plugins.System.Exps.loopindex,
 		C3.Plugins.Sprite.Exps.AnimationFrame
 		];
 	};
@@ -4246,6 +4253,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{EXITtextRU: 0},
 		{state: 0},
 		{TextRU: 0},
+		{Leaderboard: 0},
 		{Audio: 0},
 		{Touch: 0},
 		{Function: 0},
@@ -4370,6 +4378,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{BG: 0},
 		{ADS_Reward: 0},
 		{Intro: 0},
+		{Cur_LVL: 0},
 		{GameStarted: 0},
 		{CameraZone_UID: 0},
 		{SwipeSpeed: 0},
@@ -5063,6 +5072,13 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => f0(300, 450);
 		},
 		() => "Credits",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			const f3 = p._GetNode(3).GetBoundMethod();
+			return () => (((f0(f1(), "first_name") + ":") + f2(f3(), "level")) + "\n");
+		},
 		p => {
 			const n0 = p._GetNode(0);
 			return () => ((n0.ExpObject()) ? (0) : (1));
