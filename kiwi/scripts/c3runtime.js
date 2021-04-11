@@ -4120,13 +4120,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.Dictionary.Acts.AddKey,
-		C3.Plugins.VKBridge.Acts.Authorization,
+		C3.Plugins.VKBridge.Acts.UserGet,
+		C3.Plugins.VKBridge.Exps.UserID,
 		C3.Plugins.System.Cnds.IsMobile,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.System.Exps.layoutname,
-		C3.Plugins.VKBridge.Cnds.AuthorizationSuccess,
-		C3.Plugins.VKBridge.Acts.UserGet,
-		C3.Plugins.VKBridge.Exps.UserID,
 		C3.Plugins.VKBridge.Cnds.UserGetSuccess,
 		C3.Plugins.VKBridge.Acts.FriendsGet,
 		C3.Plugins.Sprite.Acts.LoadURL,
@@ -4232,12 +4230,12 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Sin.Acts.SetPhase,
 		C3.Behaviors.Platform.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.PickRandom,
-		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.VKBridge.Acts.AppGetClient,
-		C3.Plugins.System.Cnds.LayerCmpOpacity,
-		C3.Plugins.System.Acts.SetLayerOpacity,
+		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
 		C3.Plugins.VKBridge.Exps.ClientPlatform,
+		C3.Plugins.System.Cnds.LayerCmpOpacity,
+		C3.Plugins.System.Acts.SetLayerOpacity,
 		C3.Plugins.Sprite.Acts.StartAnim,
 		C3.Plugins.Sprite.Acts.StopAnim,
 		C3.Behaviors.Sin.Acts.SetEnabled,
@@ -4253,6 +4251,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Behaviors.Pin.Acts.Unpin,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
+		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.TiledBg.Cnds.CompareOpacity,
 		C3.Plugins.System.Cnds.OnLoadFinished,
 		C3.Plugins.Spritefont2.Acts.SetX,
@@ -4364,6 +4363,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{ZoneWorlds: 0},
 		{DragDrop: 0},
 		{SwipeZone: 0},
+		{stat: 0},
 		{FPPS: 0},
 		{Blick: 0},
 		{Sine2: 0},
@@ -4636,10 +4636,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "Player_Engine",
 		() => "Player_Input",
 		() => "Health",
+		() => "photo_200",
 		() => "HUD",
 		() => "Forest",
 		() => "Music",
-		() => "photo_200",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("photo_200");
@@ -4994,6 +4994,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f2 = p._GetNode(2).GetBoundMethod();
 			return () => f0(f1(4), f2(4));
 		},
+		() => "web",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("Health");
@@ -5003,7 +5004,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n1 = p._GetNode(1);
 			return () => ("x" + f0(n1.ExpObject("Beetles"), 2));
 		},
-		() => "Windows",
 		() => "Optimising",
 		p => {
 			const n0 = p._GetNode(0);
