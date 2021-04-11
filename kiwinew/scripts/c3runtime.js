@@ -3333,9 +3333,9 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 				});				
 		},
 		// Leaderboard VKUI
-		LeaderBoardVKUI(global){
+		LeaderBoardVKUI(result, global){
 			vkBridge
-				.send("VKWebAppShowLeaderBoardBox", {"user_result": 100, "global": global})
+				.send("VKWebAppShowLeaderBoardBox", {"user_result": result, "global": global})
 				.then(data => console.log("Leaderboard success"))
 				.catch(error => console.log("Leaderboard error"));
 		},
@@ -4080,6 +4080,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
+		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Spritefont2.Cnds.CompareText,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
@@ -4111,8 +4112,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Keyboard.Cnds.OnAnyKey,
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
+		C3.Plugins.VKBridge.Acts.LeaderSave,
+		C3.Plugins.VKBridge.Cnds.LeaderSaveSuccess,
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
-		C3.Plugins.VKBridge.Acts.LeaderBoard,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
@@ -4227,18 +4229,13 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Audio.Cnds.IsAnyPlaying,
 		C3.Behaviors.Sin.Acts.SetPhase,
 		C3.Behaviors.Platform.Acts.SetEnabled,
-		C3.Plugins.System.Acts.AddVar,
-		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.System.Cnds.PickRandom,
-		C3.Plugins.VKBridge.Cnds.LeaderSaveSuccess,
 		C3.Plugins.VKBridge.Acts.AppGetClient,
 		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
 		C3.Plugins.VKBridge.Exps.ClientPlatform,
 		C3.Plugins.System.Cnds.LayerCmpOpacity,
 		C3.Plugins.System.Acts.SetLayerOpacity,
-		C3.Plugins.Keyboard.Cnds.OnKeyReleased,
-		C3.Plugins.LocalStorage.Acts.ClearStorage,
 		C3.Plugins.Sprite.Acts.StartAnim,
 		C3.Plugins.Sprite.Acts.StopAnim,
 		C3.Behaviors.Sin.Acts.SetEnabled,
@@ -4412,7 +4409,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{BG: 0},
 		{ADS_Reward: 0},
 		{Intro: 0},
-		{win_LVL: 0},
+		{Cur_LVL: 0},
 		{GameStarted: 0},
 		{CameraZone_UID: 0},
 		{SwipeSpeed: 0},
@@ -4523,7 +4520,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => 0,
 		() => "Intro",
 		() => "Effects ",
-		() => "Cur_LVL",
 		() => "Intro1",
 		() => "LVL",
 		() => "LVLCave",
@@ -4566,6 +4562,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => f0();
 		},
 		() => 3,
+		() => "cur_LVL",
 		() => "FOREST",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
