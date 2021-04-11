@@ -4115,6 +4115,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.VKBridge.Cnds.LeaderSaveSuccess,
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
+		C3.Plugins.VKBridge.Acts.LeaderBoard,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
