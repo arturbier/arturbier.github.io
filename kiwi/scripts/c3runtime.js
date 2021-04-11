@@ -3019,6 +3019,9 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 			this.leaderboard_count	= 0;
 			this.leaderboard_data	= [];
 			this.leaderboard_prof	= [];
+			// Client
+			this.client_platform	= "";
+			this.client_version		= "";
 			// Scrips
 			function addScript(src){
 				var script = document.createElement('script');
@@ -3134,7 +3137,11 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 		// Join group success
 		JoinGroupSuccess()					{console.log("Join group success");																return true;},
 		// Join group failed
-		JoinGroupFailed()					{console.log("Join group failed");																return true;}
+		JoinGroupFailed()					{console.log("Join group failed");																return true;},
+		// App client success
+		AppGetClientSuccess()				{console.log("App client success");																return true;},
+		// App client failed
+		AppGetClientFailed()				{console.log("App client failed");																return true;}
 	};
 	
     if (globalThis.C3) {
@@ -3325,6 +3332,13 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 					this.Trigger(this.conditions.AdsMobileFailed);
 				});				
 		},
+		// Leaderboard VKUI
+		LeaderBoardVKUI(global){
+			vkBridge
+				.send("VKWebAppShowLeaderBoardBox", {"user_result": 100, "global": global})
+				.then(data => console.log("Leaderboard success"))
+				.catch(error => console.log("Leaderboard error"));
+		},
 		// Leaderboard
 		LeaderBoard(type, global){
 			var leader_type = "score";
@@ -3356,7 +3370,7 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 					this.Trigger(this.conditions.LeaderSaveFailed);
 				});				
 		},
-		// Join Group
+		// Join group
 		JoinGroup(group_id){
 			vkBridge
 				.send("VKWebAppJoinGroup", {"group_id": group_id})
@@ -3367,7 +3381,21 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 					if (error.error_data){var error_data = error.error_data;this.error_code = error_data["error_code"];this.error_reason = error_data["error_reason"];}
 					this.Trigger(this.conditions.JoinGroupFailed);
 				});
-		}		
+		},
+		// App client
+		AppGetClient(group_id){
+			vkBridge
+				.send("VKWebAppGetClientVersion")
+				.then(data => {
+					this.client_platform = data.platform;
+					this.client_version = data.version;
+					this.Trigger(this.conditions.AppGetClientSuccess);
+				})
+				.catch(error => {
+					if (error.error_data){var error_data = error.error_data;this.error_code = error_data["error_code"];this.error_reason = error_data["error_reason"];}
+					this.Trigger(this.conditions.AppGetClientFailed);
+				});
+		}
 	};
 	
     if (globalThis.C3) {
@@ -3394,7 +3422,10 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 		// Leaderboard
 		BoardCount()						{return this.leaderboard_count;},
 		BoardData(number, type, data)		{if (this.leaderboard_data[number]){data = this.leaderboard_data[number];if (data[type]){return data[type];};};},
-		BoardProf(number, type, data)		{if (this.leaderboard_prof[number]){data = this.leaderboard_prof[number];if (data[type]){return data[type];};};}
+		BoardProf(number, type, data)		{if (this.leaderboard_prof[number]){data = this.leaderboard_prof[number];if (data[type]){return data[type];};};},
+		// Client
+		ClientPlatform()					{return this.client_platform;},
+		ClientVersion()						{return this.client_version;}
 	}
 	
     if (globalThis.C3){
@@ -4050,7 +4081,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.System.Acts.AddVar,
-		C3.Plugins.LocalStorage.Acts.GetItem,
 		C3.Plugins.Spritefont2.Cnds.CompareText,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
@@ -4082,6 +4112,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Keyboard.Cnds.OnAnyKey,
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
+		C3.Plugins.LocalStorage.Acts.GetItem,
+		C3.Plugins.VKBridge.Acts.LeaderSave,
+		C3.Plugins.VKBridge.Cnds.LeaderSaveSuccess,
+		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
@@ -4147,7 +4181,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Platform.Exps.VectorX,
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
 		C3.Behaviors.Platform.Acts.FallThrough,
-		C3.Plugins.Keyboard.Cnds.OnKeyReleased,
+		C3.Plugins.Keyboard.Cnds.OnAnyKeyReleased,
 		C3.Plugins.Touch.Cnds.OnTouchEnd,
 		C3.Plugins.Function.Cnds.CompareParam,
 		C3.Behaviors.Platform.Acts.SimulateControl,
@@ -4200,8 +4234,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Platform.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.PickRandom,
 		C3.Plugins.Spritefont2.Acts.SetVisible,
+		C3.Plugins.VKBridge.Acts.AppGetClient,
 		C3.Plugins.System.Cnds.LayerCmpOpacity,
 		C3.Plugins.System.Acts.SetLayerOpacity,
+		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
+		C3.Plugins.VKBridge.Exps.ClientPlatform,
 		C3.Plugins.Sprite.Acts.StartAnim,
 		C3.Plugins.Sprite.Acts.StopAnim,
 		C3.Behaviors.Sin.Acts.SetEnabled,
@@ -4220,14 +4257,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.TiledBg.Cnds.CompareOpacity,
 		C3.Plugins.System.Cnds.OnLoadFinished,
 		C3.Plugins.Spritefont2.Acts.SetX,
-		C3.Plugins.VKBridge.Acts.LeaderSave,
-		C3.Plugins.VKBridge.Cnds.LeaderSaveSuccess,
-		C3.Plugins.VKBridge.Acts.LeaderBoard,
-		C3.Plugins.VKBridge.Cnds.LeaderBoardSuccess,
-		C3.Plugins.VKBridge.Exps.BoardCount,
-		C3.Plugins.Spritefont2.Acts.AppendText,
-		C3.Plugins.VKBridge.Exps.BoardData,
-		C3.Plugins.System.Exps.loopindex,
 		C3.Plugins.Sprite.Exps.AnimationFrame
 		];
 	};
@@ -4256,7 +4285,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{EXITtextRU: 0},
 		{state: 0},
 		{TextRU: 0},
-		{Leaderboard: 0},
 		{Audio: 0},
 		{Touch: 0},
 		{Function: 0},
@@ -4373,6 +4401,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{Mouse: 0},
 		{Type: 0},
 		{Photo_Loader: 0},
+		{Leaderboard: 0},
 		{Solid2: 0},
 		{Jumpthru2: 0},
 		{Solid: 0},
@@ -4534,6 +4563,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => f0();
 		},
 		() => 3,
+		() => "cur_LVL",
 		() => "FOREST",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4974,6 +5004,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n1 = p._GetNode(1);
 			return () => ("x" + f0(n1.ExpObject("Beetles"), 2));
 		},
+		() => "Windows",
 		() => "Optimising",
 		p => {
 			const n0 = p._GetNode(0);
@@ -5075,13 +5106,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => f0(300, 450);
 		},
 		() => "Credits",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			const f2 = p._GetNode(2).GetBoundMethod();
-			const f3 = p._GetNode(3).GetBoundMethod();
-			return () => ((("\n" + f0(f1(), "first_name")) + ":") + f2(f3(), "user_result"));
-		},
 		p => {
 			const n0 = p._GetNode(0);
 			return () => ((n0.ExpObject()) ? (0) : (1));
