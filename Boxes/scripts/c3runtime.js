@@ -3060,6 +3060,9 @@ await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesL
 			this.leaderboard_count	= 0;
 			this.leaderboard_data	= [];
 			this.leaderboard_prof	= [];
+			// Client
+			this.client_platform	= "";
+			this.client_version		= "";
 			// Scrips
 			function addScript(src){
 				var script = document.createElement('script');
@@ -3175,7 +3178,11 @@ await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesL
 		// Join group success
 		JoinGroupSuccess()					{console.log("Join group success");																return true;},
 		// Join group failed
-		JoinGroupFailed()					{console.log("Join group failed");																return true;}
+		JoinGroupFailed()					{console.log("Join group failed");																return true;},
+		// App client success
+		AppGetClientSuccess()				{console.log("App client success");																return true;},
+		// App client failed
+		AppGetClientFailed()				{console.log("App client failed");																return true;}
 	};
 	
     if (globalThis.C3) {
@@ -3366,6 +3373,13 @@ await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesL
 					this.Trigger(this.conditions.AdsMobileFailed);
 				});				
 		},
+		// Leaderboard VKUI
+		LeaderBoardVKUI(result, global){
+			vkBridge
+				.send("VKWebAppShowLeaderBoardBox", {"user_result": result, "global": global})
+				.then(data => console.log("Leaderboard success"))
+				.catch(error => console.log("Leaderboard error"));
+		},
 		// Leaderboard
 		LeaderBoard(type, global){
 			var leader_type = "score";
@@ -3397,7 +3411,7 @@ await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesL
 					this.Trigger(this.conditions.LeaderSaveFailed);
 				});				
 		},
-		// Join Group
+		// Join group
 		JoinGroup(group_id){
 			vkBridge
 				.send("VKWebAppJoinGroup", {"group_id": group_id})
@@ -3408,7 +3422,21 @@ await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesL
 					if (error.error_data){var error_data = error.error_data;this.error_code = error_data["error_code"];this.error_reason = error_data["error_reason"];}
 					this.Trigger(this.conditions.JoinGroupFailed);
 				});
-		}		
+		},
+		// App client
+		AppGetClient(group_id){
+			vkBridge
+				.send("VKWebAppGetClientVersion")
+				.then(data => {
+					this.client_platform = data.platform;
+					this.client_version = data.version;
+					this.Trigger(this.conditions.AppGetClientSuccess);
+				})
+				.catch(error => {
+					if (error.error_data){var error_data = error.error_data;this.error_code = error_data["error_code"];this.error_reason = error_data["error_reason"];}
+					this.Trigger(this.conditions.AppGetClientFailed);
+				});
+		}
 	};
 	
     if (globalThis.C3) {
@@ -3435,7 +3463,10 @@ await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesL
 		// Leaderboard
 		BoardCount()						{return this.leaderboard_count;},
 		BoardData(number, type, data)		{if (this.leaderboard_data[number]){data = this.leaderboard_data[number];if (data[type]){return data[type];};};},
-		BoardProf(number, type, data)		{if (this.leaderboard_prof[number]){data = this.leaderboard_prof[number];if (data[type]){return data[type];};};}
+		BoardProf(number, type, data)		{if (this.leaderboard_prof[number]){data = this.leaderboard_prof[number];if (data[type]){return data[type];};};},
+		// Client
+		ClientPlatform()					{return this.client_platform;},
+		ClientVersion()						{return this.client_version;}
 	}
 	
     if (globalThis.C3){
@@ -3888,9 +3919,10 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Behaviors.Bullet,
 		C3.Plugins.Browser,
 		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.Sprite.Acts.SetPosToObject,
+		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Behaviors.Physics.Acts.SetWorldGravity,
 		C3.Plugins.Sprite.Acts.SetAnim,
-		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Plugins.NinePatch.Acts.AddChild,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.System.Acts.SetGroupActive,
@@ -3916,9 +3948,8 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.System.Acts.Wait,
-		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Text.Acts.SetText,
-		C3.Plugins.Sprite.Acts.RemoveFromParent,
+		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
@@ -3927,6 +3958,8 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.VKBridge.Acts.AdsMobile,
+		C3.Behaviors.Tween.Cnds.OnTweensFinished,
+		C3.Behaviors.Tween.Acts.TweenTwoProperties,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
 		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.System.Cnds.CompareVar,
@@ -3937,7 +3970,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Behaviors.Physics.Acts.SetVelocity,
 		C3.Plugins.Sprite.Cnds.OnCreated,
-		C3.Plugins.System.Cnds.ForEach,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.System.Acts.RestartLayout,
@@ -3949,10 +3981,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.Text.Acts.SetVisible,
 		C3.Plugins.Touch.Cnds.OnTouchEnd,
 		C3.Plugins.Touch.Cnds.OnNthTouchStart,
-		C3.Plugins.Sprite.Cnds.IsVisible,
-		C3.Plugins.VKBridge.Acts.ShowAds,
-		C3.Plugins.System.Cnds.Else,
-		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
@@ -3967,7 +3995,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.TiledBg.Acts.SetImageOffsetX,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.System.Acts.SetBoolVar,
-		C3.Behaviors.Tween.Cnds.OnTweensFinished,
 		C3.Plugins.System.Cnds.ForEachOrdered,
 		C3.Plugins.Sprite.Exps.UID,
 		C3.Plugins.Sprite.Cnds.PickByUID,
@@ -3975,7 +4002,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.System.Exps.loopindex,
 		C3.Plugins.Sprite.Acts.SetSize,
-		C3.Behaviors.Tween.Acts.TweenTwoProperties,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.System.Exps.viewportright,
@@ -3993,7 +4019,9 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		C3.Plugins.TiledBg.Exps.ImageOffsetX,
 		C3.Plugins.TiledBg.Acts.SetImageOffsetY,
 		C3.Plugins.TiledBg.Exps.ImageOffsetY,
-		C3.Plugins.System.Acts.WaitForSignal
+		C3.Plugins.System.Acts.WaitForSignal,
+		C3.Plugins.VKBridge.Acts.ShowAds,
+		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -4172,6 +4200,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 	}
 
 	self.C3_ExpressionFuncs = [
+		() => "Money",
 		() => 44,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4236,6 +4265,7 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => 0.2,
 		() => "Spawn/Move",
 		() => "visible",
+		() => "invisible",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
@@ -4245,24 +4275,24 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() / 2.3);
 		},
+		() => "GameOver",
+		() => 109,
 		() => "Pause",
 		() => "Score",
 		() => 1.2,
 		() => "Game",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Ground", "Ground", "Ground", "Trap_1", "Ground", "Ground", "Ground", "Ground", "Ground", "Ground", "Ground", "Ground", "Mover_r");
+			return () => f0("Ground", "Ground", "Ground", "Trap_1", "Ground", "Ground", "Ground", "Ground", "Mover_l", "Ground", "Ground", "Ground", "Mover_r");
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => C3.clamp((v0.GetValue() - 340), (-1000), (-50));
 		},
-		() => "Money",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("visible", "invisible");
 		},
-		() => "invisible",
 		() => 33,
 		() => "Play",
 		() => -1100,
@@ -4280,11 +4310,6 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 		() => 11,
 		() => 4934621,
 		() => 2,
-		() => "Реклама загружается...",
-		() => 1026047,
-		() => "Монет достаточно",
-		() => 10411339,
-		() => "+15",
 		() => "Selected_Start",
 		() => "Setup",
 		p => {
@@ -4342,12 +4367,12 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() / 1.35);
 		},
+		() => "Share",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() + 500);
 		},
 		() => 3,
-		() => "Share",
 		() => 13,
 		() => "X",
 		() => 7,
@@ -4391,7 +4416,11 @@ const map=new WeakMap;self.IBulletBehaviorInstance=class IBulletBehaviorInstance
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - (10 * f1()));
-		}
+		},
+		() => "Реклама загружается...",
+		() => 1026047,
+		() => "+15",
+		() => 10411339
 	];
 }
 
