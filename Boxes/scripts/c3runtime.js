@@ -4417,7 +4417,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => 11,
 		() => 4934621,
 		() => 2,
-		() => "Locker",
+		() => "Lock",
 		() => "Selected_Start",
 		() => "Move",
 		p => {
@@ -4429,6 +4429,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			return () => ((f0() / 2) - C3.distanceTo(n1.ExpObject(), n2.ExpObject(), n3.ExpObject(), n4.ExpObject()));
 		},
 		() => 0.4,
+		() => "Locker",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() / 1.35);
