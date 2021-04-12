@@ -1,7 +1,7 @@
 {
 	"name": "Падай или умри",
 	"short_name": "Падай или умри",
-	"description": "",
+	"description": "2D Arcade Game",
 	"start_url": "index.html",
 	"display": "fullscreen",
 	"orientation": "portrait",
