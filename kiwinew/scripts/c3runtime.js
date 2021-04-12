@@ -2998,9 +2998,10 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 		
         async init(properties){
 			// Properties
-            this.app_id				= properties[0];
-            this.app_secret_key		= properties[1];
-            this.app_service_key	= properties[2];			
+			this.app_id				= properties[0];
+			this.app_secret_key		= properties[1];
+			this.app_service_key	= properties[2];
+			this.subscribe_enabled	= properties[3];
 			// Error
 			this.error_code			= 0;
 			this.error_reason		= "";
@@ -3160,7 +3161,7 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 			vkBridge.send('VKWebAppInit');
 			console.log("Connect VK Bridge");
 			// Подключение событий, отправленных нативным клиентом
-			vkBridge.subscribe((e) => console.log(e));
+			if (this.subscribe_enabled == true){vkBridge.subscribe((e) => console.log(e));}
 			// Получение прав доступа
 			vkBridge
 				.send("VKWebAppGetAuthToken", {"app_id": this.app_id, "scope": "friends,status,wall"})
@@ -3383,7 +3384,7 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 				});
 		},
 		// App client
-		AppGetClient(group_id){
+		AppGetClient(){
 			vkBridge
 				.send("VKWebAppGetClientVersion")
 				.then(data => {
@@ -4112,6 +4113,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Keyboard.Cnds.OnAnyKey,
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
+		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Acts.SetX,
