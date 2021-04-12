@@ -4099,13 +4099,13 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Behaviors.DragnDrop.Cnds.OnDrop,
 		C3.Plugins.Sprite.Exps.UID,
 		C3.Plugins.Sprite.Cnds.PickByUID,
+		C3.Plugins.Sprite.Exps.Width,
+		C3.Plugins.Sprite.Exps.Height,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.Text.Acts.SetOpacity,
 		C3.Behaviors.Sin.Acts.SetEnabled,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
-		C3.Plugins.Sprite.Exps.Width,
-		C3.Plugins.Sprite.Exps.Height,
 		C3.Plugins.Sprite.Acts.AddInstanceVar,
 		C3.Plugins.Arr.Acts.SetXY,
 		C3.Plugins.Arr.Exps.AsJSON,
@@ -4178,6 +4178,10 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		{Price: 0},
 		{Lock: 0},
 		{Selected: 0},
+		{sX: 0},
+		{sY: 0},
+		{sX2: 0},
+		{sY2: 0},
 		{Player_Select: 0},
 		{Keyboard: 0},
 		{Gamepad: 0},
@@ -4409,7 +4413,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const v0 = p._GetNode(0).GetVar();
 			return () => (and("Мой рекорд : ", v0.GetValue()) + " , сможешь побить? Тогда присоединяйся к нам!");
 		},
-		() => "photo220968686_457271483,https://vk.com/app7818856",
+		() => "photo220968686_457271544,https://vk.com/app7818856",
 		() => 404,
 		() => 639,
 		() => 1262,
@@ -4478,16 +4482,17 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		},
 		() => "lock",
 		() => "Select_Player",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 30);
+		},
 		() => 100,
 		p => {
 			const n0 = p._GetNode(0);
-			return () => C3.lerp(n0.ExpObject(), 255, 0.1);
+			const n1 = p._GetNode(1);
+			return () => C3.lerp(n0.ExpObject(), n1.ExpInstVar(), 0.1);
 		},
 		() => 50,
-		p => {
-			const n0 = p._GetNode(0);
-			return () => C3.lerp(n0.ExpObject(), 222, 0.1);
-		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0(0) / 2);
