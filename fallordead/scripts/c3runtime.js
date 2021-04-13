@@ -4100,6 +4100,10 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.Text.Acts.SetVisible,
 		C3.Plugins.Touch.Cnds.OnTouchEnd,
 		C3.Plugins.Touch.Cnds.OnNthTouchStart,
+		C3.Plugins.Sprite.Exps.AnimationFrame,
+		C3.Plugins.System.Acts.SetTimescale,
+		C3.Plugins.System.Exps.timescale,
+		C3.Plugins.TiledBg.Acts.SetVisible,
 		C3.Plugins.VKBridge.Acts.AppGetClient,
 		C3.Plugins.Sprite.Cnds.PickDistance,
 		C3.Plugins.Sprite.Exps.X,
@@ -4195,7 +4199,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		{BG_2: 0},
 		{Sine: 0},
 		{hand: 0},
-		{pauseBtn: 0},
 		{Tween: 0},
 		{Result_BG: 0},
 		{btn_Continue: 0},
@@ -4241,9 +4244,13 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		{Pinned_Player: 0},
 		{Pin_Player_Center: 0},
 		{NoCoin: 0},
+		{Pause: 0},
+		{Pause_TB: 0},
+		{Pause_txt: 0},
 		{Torque_Angle: 0},
 		{Torque: 0},
 		{Force: 0},
+		{frame: 0},
 		{Animations: 0},
 		{Platforms: 0},
 		{Selected_UID: 0}
@@ -4462,6 +4469,14 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => 11,
 		() => 4934621,
 		() => 2,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => ((n0.ExpObject()) ? (0) : (1));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => ((f0()) ? (0) : (1));
+		},
 		() => "Lock",
 		() => "Selected_Start",
 		() => "Move",
