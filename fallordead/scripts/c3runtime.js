@@ -4076,8 +4076,8 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.VKBridge.Acts.ShowAds,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
 		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
-		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.System.Cnds.CompareVar,
+		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Behaviors.Tween.Acts.TweenTwoProperties,
 		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.VKBridge.Cnds.AdsMobileFailed,
@@ -4253,7 +4253,8 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		{frame: 0},
 		{Animations: 0},
 		{Platforms: 0},
-		{Selected_UID: 0}
+		{Selected_UID: 0},
+		{ADS: 0}
 	];
 }
 
@@ -4425,6 +4426,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
 		},
+		() => "gameover_ads",
 		() => "Y",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4434,6 +4436,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => "web",
 		() => "android",
 		() => "ios",
+		() => "none",
 		() => "GameOver",
 		() => "Pause",
 		() => 109,
@@ -4495,6 +4498,10 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			return () => (f0() / 1.35);
 		},
 		() => "open",
+		() => "interstetial",
+		() => "lock",
+		() => "Персонаж закрыт",
+		() => 16777215,
 		() => "Share",
 		() => "Leaderboard",
 		p => {
@@ -4537,7 +4544,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const n0 = p._GetNode(0);
 			return () => n0.ExpInstVar();
 		},
-		() => "lock",
 		() => "Select_Player",
 		p => {
 			const n0 = p._GetNode(0);
@@ -4582,8 +4588,11 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - (10 * f1()));
 		},
+		() => "Rewarded",
+		() => "Started",
 		() => "Реклама загружается...",
 		() => 1026047,
+		() => "rewarded",
 		() => "+15",
 		() => 10411339
 	];
