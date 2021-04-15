@@ -3906,6 +3906,9 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.System.Cnds.LayerCmpOpacity,
+		C3.Plugins.VKBridge.Acts.AdsMobile,
+		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
+		C3.Plugins.VKBridge.Cnds.AdsMobileFailed,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.System.Cnds.PickNth,
@@ -4442,6 +4445,10 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 			return () => C3.lerp(n0.ExpObject(), 62, 0.1);
 		},
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => and("crystal_take", f0(1, 2, 3, 4, 5, 6, 7, 8));
+		},
+		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (10 + v0.GetValue());
 		},
@@ -4591,8 +4598,6 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		() => 150,
 		() => 29,
 		() => 52,
-		() => 49,
-		() => 53,
 		() => "Anim",
 		p => {
 			const n0 = p._GetNode(0);
