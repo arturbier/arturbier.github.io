@@ -3956,12 +3956,10 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.AJAX.Acts.RequestFile,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Plugins.AJAX.Exps.LastData,
-		C3.Plugins.Touch.Cnds.OnTouchEnd,
-		C3.Plugins.Touch.Cnds.IsTouchingObject,
-		C3.Plugins.Arr.Cnds.CompareXY,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
 		C3.Behaviors.Tween.Acts.TweenTwoProperties,
 		C3.Plugins.System.Acts.SetBoolVar,
+		C3.Plugins.Arr.Cnds.CompareXY,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.Arr.Exps.CurY,
@@ -4668,15 +4666,15 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		},
 		() => "character select&unselect",
 		() => "characters",
-		() => 6,
-		() => 8,
-		() => 9,
 		() => "size",
 		() => "unsize",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() - 5);
 		},
+		() => 6,
+		() => 8,
+		() => 9,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 5);
