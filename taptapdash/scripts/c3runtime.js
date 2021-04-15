@@ -3971,7 +3971,6 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.System.Exps.max,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
-		C3.Plugins.System.Cnds.IsMobile,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.Spritefont2.Acts.SetPosToObject,
 		C3.Plugins.NinePatch.Acts.SetWidth,
@@ -4721,10 +4720,6 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 			return () => n0.ExpObject(v1.GetValue(), 1);
 		},
 		() => "character purchase",
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => ("" + v0.GetValue());
-		},
 		() => "lvlselect",
 		() => "BG_PR",
 		() => "BG",
