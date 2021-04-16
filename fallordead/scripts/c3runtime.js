@@ -4170,7 +4170,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.TiledBg.Acts.SetImageOffsetY,
 		C3.Plugins.TiledBg.Exps.ImageOffsetY,
 		C3.Plugins.System.Acts.WaitForSignal,
-		C3.ScriptsInEvents.Ads_Event4_Act2
+		C3.ScriptsInEvents.Ads_Event4_Act1
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -4590,8 +4590,8 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		},
 		() => "Rewarded",
 		() => "Started",
-		() => "rewarded",
 		() => 0.6,
+		() => "rewarded",
 		() => "Реклама загружается...",
 		() => 1026047,
 		() => "+15",
