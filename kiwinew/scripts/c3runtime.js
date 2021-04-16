@@ -4088,7 +4088,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.System.Cnds.IsGroupActive,
-		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
+		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.System.Acts.SetTimescale,
 		C3.Plugins.System.Acts.SetVar,
