@@ -12,7 +12,7 @@
 
 		async Ads_Event4_Act4(runtime, localVars)
 		{
-			vkbridge.send("VKWebAppShowNativeAds", {ad_format:"preloader"}) 
+			vkbridge.send("VKWebAppShowNativeAds", {ad_format:"reward"}) 
 			.then(data => console.log(data.result)) 
 			.catch(error => console.log(error));
 		}
