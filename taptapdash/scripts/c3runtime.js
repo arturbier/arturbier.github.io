@@ -3978,6 +3978,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.System.Exps.max,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.ScriptsInEvents.Menubutton_Event4_Act1,
+		C3.ScriptsInEvents.Menubutton_Event4_Act3,
 		C3.ScriptsInEvents.Menubutton_Event7_Act2,
 		C3.ScriptsInEvents.Menubutton_Event7_Act4,
 		C3.ScriptsInEvents.Menubutton_Event7_Act6,
@@ -4744,6 +4745,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 			return () => n0.ExpObject(v1.GetValue(), 1);
 		},
 		() => "character purchase",
+		() => 0.3,
 		() => "lvlselect",
 		() => "Скрипты",
 		() => "BG_PR",
