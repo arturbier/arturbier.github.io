@@ -5,16 +5,19 @@
 {
 	const scriptsInEvents = {
 
-		async Ads_Event3_Act2(runtime, localVars)
+		async Main_s_Event24_Act2(runtime, localVars)
 		{
-			vkBridge.send("VKWebAppCheckNativeAds", {ad_format:"reward"});
+			vkBridge.send("VKWebAppTapticImpactOccurred", {"style": "heavy"}); //light, medium, heavy
 		},
 
-		async Ads_Event4_Act2(runtime, localVars)
+		async Menu_s_Event14_Act4(runtime, localVars)
 		{
-			vkBridge.send("VKWebAppShowNativeAds", {ad_format:"reward"}) 
-			.then(data => console.log(data.result)) 
-			.catch(error => console.log(error));
+			vkbridge.send("VKWebAppTapticNotificationOccurred", {"type": "error"}); //error, success, warning
+		},
+
+		async Menu_s_Event49_Act3(runtime, localVars)
+		{
+			vkbridge.send("VKWebAppTapticSelectionChanged", {}); 
 		}
 
 	};
