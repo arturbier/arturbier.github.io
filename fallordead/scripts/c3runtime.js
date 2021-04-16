@@ -4590,8 +4590,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - (10 * f1()));
 		},
-		() => "Rewarded",
-		() => "Started",
 		() => "Реклама загружается...",
 		() => 1026047,
 		() => "+15",
