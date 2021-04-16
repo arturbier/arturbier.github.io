@@ -12,7 +12,7 @@
 
 		async Menu_s_Event14_Act4(runtime, localVars)
 		{
-			vkbridge.send("VKWebAppTapticNotificationOccurred", {"type": "error"}); //error, success, warning
+			vkbridge.send("VKWebAppTapticNotificationOccurred", {"type": "success"}); //error, success, warning
 		},
 
 		async Menu_s_Event49_Act3(runtime, localVars)
