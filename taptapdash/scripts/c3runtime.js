@@ -3851,6 +3851,9 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.Sprite.Acts.SetSize,
 		C3.Plugins.Sprite.Acts.ZMoveToObject,
 		C3.Plugins.Spritefont2.Acts.AddChild,
+		C3.Plugins.Sprite.Acts.SetPosToObject,
+		C3.Plugins.Sprite.Acts.LoadURL,
+		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.Function.Acts.CallFunction,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.System.Acts.SetLayerScale,
@@ -3882,7 +3885,6 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.System.Exps.layerscale,
 		C3.Plugins.Sprite.Acts.RotateCounterclockwise,
 		C3.Behaviors.Bullet.Acts.SetSpeed,
-		C3.Plugins.Sprite.Acts.SetPosToObject,
 		C3.Behaviors.Fade.Acts.StartFade,
 		C3.Plugins.Audio.Acts.PlayByName,
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
@@ -3932,6 +3934,9 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
+		C3.Plugins.VKBridge.Cnds.AuthorizationSuccess,
+		C3.Plugins.VKBridge.Acts.UserGet,
+		C3.Plugins.VKBridge.Exps.UserID,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.System.Exps.viewportright,
 		C3.Plugins.Sprite.Exps.BBoxLeft,
@@ -4019,7 +4024,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		{a_hd_gui_game: 0},
 		{Particles: 0},
 		{LocalStorage: 0},
-		{pnofb: 0},
+		{Avata_Checkpoint: 0},
 		{RecordPIN: 0},
 		{Dead: 0},
 		{Audio: 0},
@@ -4087,6 +4092,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		{AJAX: 0},
 		{lvl_avatar: 0},
 		{Avatar_Placed: 0},
+		{Avata_Checkpointed: 0},
 		{Effect: 0},
 		{SineSize: 0},
 		{SineAngle: 0},
@@ -4222,6 +4228,10 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 			return () => n0.ExpObject("Shadow");
 		},
 		() => 32,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("photo_200");
+		},
 		() => "Effects",
 		() => "Up",
 		() => "Obj",
@@ -4527,6 +4537,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(5, 9);
 		},
+		() => "photo_200",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0(0) / 2);
@@ -4731,6 +4742,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		() => "ProgressA",
 		() => "Worlds",
 		() => "ComingSoon",
+		() => "avatar",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => and("", f0());
