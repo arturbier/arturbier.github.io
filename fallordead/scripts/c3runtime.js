@@ -4592,7 +4592,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => "rewarded",
 		() => "Реклама загружается...",
 		() => 1026047,
-		() => "+15",
+		() => "+1",
 		() => 10411339
 	];
 }
