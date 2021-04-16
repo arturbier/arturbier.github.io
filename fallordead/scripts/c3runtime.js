@@ -4170,8 +4170,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.TiledBg.Acts.SetImageOffsetY,
 		C3.Plugins.TiledBg.Exps.ImageOffsetY,
 		C3.Plugins.System.Acts.WaitForSignal,
-		C3.Plugins.System.Cnds.CompareBoolVar,
-		C3.Plugins.System.Acts.SetBoolVar
+		C3.ScriptsInEvents.Ads_Event4_Act2
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -4255,8 +4254,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		{Animations: 0},
 		{Platforms: 0},
 		{Selected_UID: 0},
-		{ADS: 0},
-		{Rewarded: 0}
+		{ADS: 0}
 	];
 }
 
@@ -4428,6 +4426,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
 		},
+		() => "gameover_ads",
 		() => "Y",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4437,10 +4436,9 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => "web",
 		() => "android",
 		() => "ios",
-		() => "gameover_ads",
+		() => "none",
 		() => "GameOver",
 		() => 109,
-		() => "none",
 		() => "Score",
 		() => 1.2,
 		() => "Game",
@@ -4590,6 +4588,10 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - (10 * f1()));
 		},
+		() => "Rewarded",
+		() => "Started",
+		() => "rewarded",
+		() => 0.6,
 		() => "Реклама загружается...",
 		() => 1026047,
 		() => "+15",
