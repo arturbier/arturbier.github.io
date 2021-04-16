@@ -4169,9 +4169,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.TiledBg.Exps.ImageOffsetX,
 		C3.Plugins.TiledBg.Acts.SetImageOffsetY,
 		C3.Plugins.TiledBg.Exps.ImageOffsetY,
-		C3.Plugins.System.Acts.WaitForSignal,
-		C3.ScriptsInEvents.Ads_Event3_Act2,
-		C3.ScriptsInEvents.Ads_Event4_Act2
+		C3.Plugins.System.Acts.WaitForSignal
 		];
 	};
 	self.C3_JsPropNameTable = [
