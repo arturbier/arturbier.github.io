@@ -4058,19 +4058,20 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
+		C3.Plugins.System.Cnds.Compare,
+		C3.Plugins.VKBridge.Exps.ClientPlatform,
+		C3.ScriptsInEvents.Main_s_Event23_Act2,
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.System.Acts.Wait,
-		C3.Plugins.System.Cnds.Compare,
-		C3.Plugins.VKBridge.Exps.ClientPlatform,
-		C3.ScriptsInEvents.Main_s_Event24_Act2,
+		C3.ScriptsInEvents.Main_s_Event26_Act2,
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.LocalStorage.Acts.SetItem,
+		C3.ScriptsInEvents.Main_s_Event29_Act2,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Sprite.Acts.SetVisible,
-		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.originalviewportheight,
@@ -4121,9 +4122,10 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.AJAX.Acts.RequestFile,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Plugins.AJAX.Exps.LastData,
-		C3.ScriptsInEvents.Menu_s_Event14_Act4,
+		C3.ScriptsInEvents.Menu_s_Event16_Act2,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.VKBridge.Acts.ShowInvite,
+		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
 		C3.Plugins.System.Cnds.For,
@@ -4147,7 +4149,8 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.Text.Acts.SetOpacity,
 		C3.Behaviors.Sin.Acts.SetEnabled,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
-		C3.ScriptsInEvents.Menu_s_Event49_Act3,
+		C3.ScriptsInEvents.Menu_s_Event53_Act2,
+		C3.ScriptsInEvents.Menu_s_Event57_Act2,
 		C3.Plugins.Sprite.Acts.AddInstanceVar,
 		C3.Plugins.Arr.Exps.AsJSON,
 		C3.Plugins.Keyboard.Cnds.OnKey,
@@ -4405,7 +4408,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => 700,
 		() => "Trap_1",
 		() => "Ground",
-		() => "50,30,50",
 		() => -5,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4418,16 +4420,17 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("", v0.GetValue());
 		},
-		() => 15,
-		() => 0.2,
-		() => "Spawn/Move",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
 		},
 		() => "android",
-		() => "90,60,90",
+		() => "50,30,50",
 		() => "ios",
+		() => 15,
+		() => 0.2,
+		() => "Spawn/Move",
+		() => "90,60,90",
 		() => "visible",
 		() => "invisible",
 		() => "gameover_ads",
@@ -4499,6 +4502,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() / 1.35);
 		},
+		() => "40,30,40",
 		() => "open",
 		() => "interstetial",
 		() => "lock",
@@ -4506,6 +4510,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => 16777215,
 		() => "Share",
 		() => "Leaderboard",
+		() => 0.3,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() + 500);
