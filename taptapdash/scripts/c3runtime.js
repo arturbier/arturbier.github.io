@@ -3982,6 +3982,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.ScriptsInEvents.Menubutton_Event7_Act2,
 		C3.ScriptsInEvents.Menubutton_Event7_Act4,
 		C3.ScriptsInEvents.Menubutton_Event7_Act6,
+		C3.Plugins.Sprite.Acts.SetFlipped,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.Spritefont2.Acts.SetPosToObject,
 		C3.Plugins.NinePatch.Acts.SetWidth,
