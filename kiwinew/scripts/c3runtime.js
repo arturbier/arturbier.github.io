@@ -4120,7 +4120,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
-		C3.ScriptsInEvents.Etittlescreen_Event40_Act1,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Plugins.Keyboard.Cnds.OnKey,
@@ -4568,7 +4567,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "Реклама",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => C3.clamp((v0.GetValue() + 3), 0, 3);
+			return () => C3.clamp((v0.GetValue() + 1), 0, 3);
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4630,7 +4629,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const v0 = p._GetNode(0).GetVar();
 			return () => C3.clamp((v0.GetValue() - 1), 0, 3);
 		},
-		() => 0.6,
 		() => 100,
 		() => "EXIT",
 		p => {
