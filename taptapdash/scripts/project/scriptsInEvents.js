@@ -12,7 +12,9 @@
 
 		async Menubutton_Event4_Act1(runtime, localVars)
 		{
-			vkbridge.send("VKWebAppAddToHomeScreen");
+			vkbridge.send("VKWebAppShowNativeAds", {ad_format:"rewarded"}) 
+			.then(data => console.log(data.result)) 
+			.catch(error => console.log(error));
 		}
 
 	};
