@@ -4094,7 +4094,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.LocalStorage.Acts.SetItem,
-		C3.Plugins.System.Acts.ToggleBoolVar,
+		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.VKBridge.Acts.AdsMobile,
@@ -4121,7 +4121,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.ScriptsInEvents.Etittlescreen_Event40_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event40_Act3,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Plugins.Keyboard.Cnds.OnKey,
@@ -4631,7 +4630,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const v0 = p._GetNode(0).GetVar();
 			return () => C3.clamp((v0.GetValue() - 1), 0, 3);
 		},
-		() => 0.3,
+		() => 0.6,
 		() => 100,
 		() => "EXIT",
 		p => {
@@ -4666,6 +4665,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("photo_200");
 		},
+		() => 0.3,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => and("FPS : ", f0());
