@@ -4170,7 +4170,9 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.TiledBg.Acts.SetImageOffsetY,
 		C3.Plugins.TiledBg.Exps.ImageOffsetY,
 		C3.Plugins.System.Acts.WaitForSignal,
-		C3.ScriptsInEvents.Ads_Event4_Act1
+		C3.ScriptsInEvents.Ads_Event4_Act2,
+		C3.Plugins.System.Acts.SetBoolVar,
+		C3.Plugins.System.Cnds.CompareBoolVar
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -4254,7 +4256,8 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		{Animations: 0},
 		{Platforms: 0},
 		{Selected_UID: 0},
-		{ADS: 0}
+		{ADS: 0},
+		{Rewarded: 0}
 	];
 }
 
@@ -4591,7 +4594,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => "Rewarded",
 		() => "Started",
 		() => 0.6,
-		() => "rewarded",
 		() => "Реклама загружается...",
 		() => 1026047,
 		() => "+15",
