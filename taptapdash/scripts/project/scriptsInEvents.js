@@ -17,7 +17,9 @@
 
 		async Menubutton_Event4_Act3(runtime, localVars)
 		{
-			vkBridge.send("VKWebAppShowNativeAds", {ad_format:"reward"});
+			vkBridge.send("VKWebAppShowNativeAds", {ad_format:"reward"})
+			.then(data => console.log(data.result)) 
+			.catch(error => console.log(error));
 		},
 
 		async Menubutton_Event7_Act2(runtime, localVars)
