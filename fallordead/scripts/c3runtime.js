@@ -4171,7 +4171,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.TiledBg.Exps.ImageOffsetY,
 		C3.Plugins.System.Acts.WaitForSignal,
 		C3.Plugins.System.Cnds.CompareBoolVar,
-		C3.ScriptsInEvents.Ads_Event5_Act2,
 		C3.Plugins.System.Acts.SetBoolVar
 		];
 	};
@@ -4593,7 +4592,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		},
 		() => "Rewarded",
 		() => "Started",
-		() => 0.6,
 		() => "Реклама загружается...",
 		() => 1026047,
 		() => "+15",
