@@ -4526,6 +4526,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		},
 		() => "40,30,40",
 		() => "open",
+		() => "interstetial",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() + 500);
@@ -4537,7 +4538,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => "Share",
 		() => "Leaderboard",
 		() => 0.3,
-		() => "interstetial",
 		() => 13,
 		() => "X",
 		() => 7,
