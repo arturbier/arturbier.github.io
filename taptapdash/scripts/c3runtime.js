@@ -3836,8 +3836,6 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Sprite.Acts.ZMoveToObject,
 		C3.Plugins.Spritefont2.Acts.AddChild,
 		C3.Plugins.Sprite.Acts.SetPosToObject,
-		C3.Plugins.Sprite.Acts.LoadURL,
-		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.Function.Acts.CallFunction,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.System.Acts.SetLayerScale,
@@ -3987,6 +3985,8 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.ScriptsInEvents.Menubutton_Event7_Act4,
 		C3.ScriptsInEvents.Menubutton_Event7_Act6,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
+		C3.Plugins.Sprite.Acts.LoadURL,
+		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.Spritefont2.Acts.SetPosToObject,
 		C3.Plugins.NinePatch.Acts.SetWidth,
 		C3.Plugins.NinePatch.Acts.SetY,
@@ -4231,10 +4231,6 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		},
 		() => 32,
 		() => 0,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("photo_200");
-		},
 		() => "Effects",
 		() => "Up",
 		() => 1,
@@ -4780,6 +4776,10 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		() => "photo220968686_457271602,https://vk.com/app7824963",
 		() => "lvlselect",
 		() => "Скрипты",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("photo_200");
+		},
 		() => "joined",
 		() => "BG_PR",
 		() => "BG",
