@@ -4493,10 +4493,6 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 			return () => C3.lerp(n0.ExpObject(), 62, 0.1);
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => and("crystal_take", f0(1, 2, 3, 4, 5, 6, 7, 8));
-		},
-		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (10 + v0.GetValue());
 		},
