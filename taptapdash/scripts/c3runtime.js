@@ -3854,6 +3854,8 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.System.Exps.choose,
 		C3.Plugins.System.Acts.Wait,
+		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
+		C3.Plugins.VKBridge.Exps.ClientPlatform,
 		C3.Plugins.Function.Cnds.OnFunction,
 		C3.Plugins.Sprite.Cnds.CompareY,
 		C3.Plugins.Sprite.Exps.Y,
@@ -3921,7 +3923,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Arr.Exps.AsJSON,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.System.Cnds.IsGroupActive,
-		C3.ScriptsInEvents.Main_Event97_Act2,
+		C3.ScriptsInEvents.Main_Event98_Act2,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.System.Cnds.LayerVisible,
 		C3.Plugins.System.Acts.Scroll,
@@ -3939,8 +3941,6 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Behaviors.Sin.Acts.SetEnabled,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
-		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
-		C3.Plugins.VKBridge.Exps.ClientPlatform,
 		C3.Plugins.VKBridge.Cnds.AuthorizationSuccess,
 		C3.Plugins.VKBridge.Acts.UserGet,
 		C3.Plugins.VKBridge.Exps.UserID,
@@ -4256,6 +4256,10 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		},
 		() => 0.1,
 		() => 10,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
 		() => "Destroyer",
 		p => {
 			const n0 = p._GetNode(0);
@@ -4274,10 +4278,6 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		},
 		() => 0.12,
 		() => "Best_Score",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
-		},
 		() => "DeadPoinX",
 		() => "DeadPoinY",
 		() => "DeadAngle",

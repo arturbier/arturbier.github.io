@@ -5,7 +5,7 @@
 {
 	const scriptsInEvents = {
 
-		async Main_Event97_Act2(runtime, localVars)
+		async Main_Event98_Act2(runtime, localVars)
 		{
 			vkBridge.send("VKWebAppOpenApp", {"app_id": 7816086, "location": "https://vk.com/superkiwiadventure"});
 		},
