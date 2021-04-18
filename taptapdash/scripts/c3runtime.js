@@ -3981,6 +3981,8 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.System.Exps.max,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
+		C3.Plugins.Sprite.Cnds.IsVisible,
+		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.ScriptsInEvents.Menubutton_Event7_Act2,
 		C3.ScriptsInEvents.Menubutton_Event7_Act4,
 		C3.ScriptsInEvents.Menubutton_Event7_Act6,
@@ -3993,6 +3995,9 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Spritefont2.Exps.Y,
 		C3.Plugins.NinePatch.Acts.SetVisible,
 		C3.Plugins.Spritefont2.Acts.SetVisible,
+		C3.Plugins.VKBridge.Acts.JoinGroup,
+		C3.Plugins.VKBridge.Acts.ShowInvite,
+		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess,
 		C3.Plugins.NinePatch.Exps.X,
 		C3.Plugins.NinePatch.Acts.SetX
 		];
@@ -4768,8 +4773,14 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 			return () => n0.ExpObject(v1.GetValue(), 1);
 		},
 		() => "character purchase",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (and("Я уже на ", v0.GetValue()) + ", сможешь меня обыграть?");
+		},
+		() => "photo220968686_457271602,https://vk.com/app7824963",
 		() => "lvlselect",
 		() => "Скрипты",
+		() => "joined",
 		() => "BG_PR",
 		() => "BG",
 		() => "ProgressA",
@@ -4782,14 +4793,14 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (and("Прогресс: ", f0()) + "/320");
+			return () => (and("Прогресс: ", f0()) + "/60");
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => add(88, multiply(subtract(f0(), 320), (88 / 320)));
+			return () => add(88, multiply(subtract(f0(), 60), (88 / 60)));
 		},
 		() => "1",
-		() => "Прогресс: 1/320",
+		() => "Прогресс: 1/60",
 		() => "start",
 		p => {
 			const n0 = p._GetNode(0);
@@ -4892,7 +4903,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => C3.lerp(n0.ExpObject(), (f1(0) / 2), 0.11);
 		},
-		() => "options",
+		() => 204017056,
 		p => {
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
