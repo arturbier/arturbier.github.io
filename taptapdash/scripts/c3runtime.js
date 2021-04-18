@@ -4775,7 +4775,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		() => "character purchase",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (and("Я уже на ", v0.GetValue()) + ", сможешь меня обыграть?");
+			return () => (and("Я уже на ", v0.GetValue()) + " уровне, сможешь меня обыграть?");
 		},
 		() => "photo220968686_457271602,https://vk.com/app7824963",
 		() => "lvlselect",
