@@ -3841,19 +3841,24 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		C3.Plugins.Sprite.Acts.MoveToBottom,
 		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Plugins.Sprite.Acts.SetPosToObject,
+		C3.Plugins.System.Acts.SetVar,
+		C3.Plugins.NinePatch.Exps.X,
+		C3.Plugins.NinePatch.Exps.BBoxBottom,
+		C3.Plugins.System.Acts.SetGroupActive,
+		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.System.Exps.random,
 		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.System.Exps.originalviewportwidth,
 		C3.Plugins.System.Exps.originalviewportheight,
+		C3.Plugins.Sprite.Acts.SetOpacity,
+		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Exps.Height,
 		C3.Plugins.Touch.Cnds.IsInTouch,
 		C3.Behaviors.Tween.Acts.StopTweens,
-		C3.Plugins.NinePatch.Exps.X,
-		C3.Plugins.NinePatch.Exps.BBoxBottom,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Cnds.Compare,
@@ -3868,24 +3873,36 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		C3.Plugins.TiledBg.Acts.SetImageOffsetX,
 		C3.Plugins.TiledBg.Exps.ImageOffsetX,
 		C3.Plugins.Sprite.Cnds.OnCollision,
-		C3.Plugins.Sprite.Cnds.IsVisible,
+		C3.Plugins.Sprite.Cnds.CompareOpacity,
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.System.Acts.AddVar,
+		C3.Plugins.Text.Acts.SetText,
+		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Audio.Acts.PlayByName,
-		C3.Plugins.System.Exps.choose,
-		C3.Plugins.System.Acts.SetGroupActive,
-		C3.Plugins.System.Acts.SetVar,
-		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
+		C3.Plugins.Sprite.Acts.SetAnimFrame,
+		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
+		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
+		C3.Plugins.VKBridge.Acts.ShowWall,
+		C3.Plugins.Audio.Acts.Play,
+		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.System.Acts.RestartLayout,
+		C3.Plugins.System.Acts.GoToLayout,
+		C3.Plugins.System.Cnds.For,
+		C3.Plugins.System.Exps.loopindex,
+		C3.Plugins.Sprite.Acts.SetSize,
+		C3.Behaviors.Tween.Acts.TweenTwoProperties,
+		C3.Plugins.Sprite.Acts.SetAngle,
 		C3.Plugins.Touch.Cnds.OnNthTouchStart,
+		C3.Plugins.Sprite.Cnds.CompareX,
+		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
+		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.Sprite.Cnds.PickDistance,
-		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.Arr.Acts.JSONLoad,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
@@ -3895,32 +3912,23 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		C3.Plugins.AJAX.Acts.RequestFile,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Plugins.AJAX.Exps.LastData,
-		C3.Plugins.Text.Acts.SetText,
-		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Exps.Width,
 		C3.Plugins.VKBridge.Exps.ClientPlatform,
 		C3.Plugins.Browser.Acts.Vibrate,
-		C3.ScriptsInEvents.Menu_Event17_Act2,
-		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
+		C3.ScriptsInEvents.Menu_Event18_Act2,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
-		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Sprite.Acts.AddInstanceVar,
 		C3.Plugins.Arr.Acts.SetXY,
-		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Arr.Exps.AsJSON,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Plugins.Text.Acts.SetFontColor,
 		C3.Plugins.Text.Acts.SetVisible,
 		C3.Plugins.System.Cnds.ForEach,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
-		C3.Plugins.Sprite.Acts.SetOpacity,
-		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
-		C3.Plugins.Sprite.Acts.SetSize,
 		C3.Plugins.Sprite.Exps.AnimationName,
-		C3.ScriptsInEvents.Menu_Event27_Act2,
-		C3.Plugins.Sprite.Acts.SetAngle,
+		C3.ScriptsInEvents.Menu_Event28_Act2,
 		C3.Behaviors.DragnDrop.Cnds.OnDrop,
 		C3.Plugins.Sprite.Exps.UID,
 		C3.Plugins.Sprite.Cnds.PickByUID,
@@ -3928,11 +3936,10 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		C3.Plugins.Arr.Exps.At,
 		C3.Plugins.Arr.Acts.SetSize,
 		C3.Plugins.Arr.Cnds.CompareX,
-		C3.Plugins.System.Exps.loopindex,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.VKBridge.Acts.ShowAds,
 		C3.Plugins.VKBridge.Acts.AdsMobile,
-		C3.Plugins.System.Acts.GoToLayout,
-		C3.ScriptsInEvents.Menu_Event49_Act2
+		C3.ScriptsInEvents.Menu_Event50_Act2
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -3942,6 +3949,7 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		{n_Right: 0},
 		{Touch: 0},
 		{Sprite3: 0},
+		{Check: 0},
 		{Bottom: 0},
 		{Text: 0},
 		{Sine: 0},
@@ -3987,6 +3995,9 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		{Best_Score: 0},
 		{Browser: 0},
 		{Keyboard: 0},
+		{Canvas: 0},
+		{Coin_Plus: 0},
+		{Fade: 0},
 		{Platform: 0},
 		{Legs: 0},
 		{Hands: 0},
@@ -4131,6 +4142,18 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			return () => n0.ExpObject("hR");
 		},
 		() => "Money",
+		() => 0,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 2);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 3);
+		},
+		() => "Start",
+		() => "Game_Over_Start",
+		() => "Button",
 		() => "Control",
 		() => "Spawn",
 		p => {
@@ -4150,6 +4173,10 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		},
 		() => 1,
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0, 0, 0, 100);
+		},
+		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject();
 		},
@@ -4159,16 +4186,7 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			return () => (n0.ExpObject() - ((n1.ExpObject() * 2) + 120));
 		},
 		() => "Height",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() + 2);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() - 3);
-		},
 		() => "Down",
-		() => 0,
 		() => 0.2,
 		p => {
 			const n0 = p._GetNode(0);
@@ -4197,24 +4215,59 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			const n1 = p._GetNode(1);
 			return () => (n0.ExpObject() - n1.ExpObject());
 		},
+		() => 100,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (and("-", v0.GetValue()) + "-");
+		},
+		() => "Coin",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("cat_jump1", "cat_jump2", "cat_jump3");
 		},
 		() => "",
-		() => "Game_Over_Start",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("game_over1", "game_over2", "game_over3");
 		},
+		() => "gameover",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0() / 2.7);
+		},
+		() => "Best",
+		() => "Post",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (and("Мой рекорд : ", v0.GetValue()) + " , сможешь побить? Тогда присоединяйся к котикам!");
+		},
+		() => "https://vk.com/app7815639",
 		() => "Restart",
 		() => "restart",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => ((f0() / 2) - 15);
+			return () => (f0() + 300);
 		},
-		() => 0.5,
-		() => "Start",
+		() => "Home",
+		() => "home",
+		() => 3,
+		() => "Y",
+		() => 11,
+		() => "X",
+		() => 6,
+		() => "Fade",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (16 + (f0("X") * 62));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (16 + (f0("Y") * 62));
+		},
+		() => "IncreaseSize",
+		() => 65,
+		() => 45,
+		() => "Rotate",
 		() => 175,
 		() => "start",
 		p => {
@@ -4228,8 +4281,6 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => ((f0() - f1()) + 43);
 		},
-		() => "Coin",
-		() => "Best",
 		() => "Lock",
 		() => "Move",
 		p => {
@@ -4243,7 +4294,7 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		() => 0.4,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (f0() / 1.4);
+			return () => (f0() / 1.3);
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4269,7 +4320,6 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		() => 0.1,
 		() => "Не хватает косточек",
 		() => 1842382,
-		() => 100,
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -4282,7 +4332,6 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			const n1 = p._GetNode(1);
 			return () => and("", n0.ExpObject(n1.ExpInstVar(), 2));
 		},
-		() => 3,
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -4296,8 +4345,14 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		() => "mobile-web",
 		() => "interstetial",
 		() => "web",
+		() => "play",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0() + 200);
+		},
 		() => "Котик закрыт",
-		() => 16777215
+		() => 16777215,
+		() => "Share"
 	];
 }
 

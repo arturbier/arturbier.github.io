@@ -37,3 +37,38 @@ html, body, canvas {
 }
 
 
+@font-face {
+	font-family: '17575';
+	src: url('fonts/17575.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'blocky5x7';
+	src: url('fonts/blocky5x7.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'covenant5x5';
+	src: url('fonts/covenant5x5.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'volt5x5';
+	src: url('fonts/volt5x5.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'scoreboard9x13';
+	src: url('fonts/scoreboard9x13.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'mini3x5';
+	src: url('fonts/mini3x5.ttf') format('truetype');
+}
+
+@font-face {
+	font-family: 'round9x13';
+	src: url('fonts/round9x13.ttf') format('truetype');
+}
+
