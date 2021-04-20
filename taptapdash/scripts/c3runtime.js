@@ -3923,7 +3923,10 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Arr.Exps.AsJSON,
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.System.Cnds.IsGroupActive,
-		C3.ScriptsInEvents.Main_Event98_Act2,
+		C3.Plugins.System.Cnds.Every,
+		C3.ScriptsInEvents.Main_Event101_Act1,
+		C3.ScriptsInEvents.Main_Event102_Act1,
+		C3.ScriptsInEvents.Main_Event103_Act1,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.System.Cnds.LayerVisible,
 		C3.Plugins.System.Acts.Scroll,
@@ -3946,7 +3949,6 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.VKBridge.Exps.UserID,
 		C3.Plugins.System.Cnds.OnLoadFinished,
 		C3.Plugins.System.Acts.GoToLayout,
-		C3.Plugins.System.Cnds.Every,
 		C3.Behaviors.Bullet.Acts.SetEnabled,
 		C3.Plugins.Spritefont2.Cnds.OnCreated,
 		C3.Plugins.Arr.Acts.JSONLoad,
@@ -4532,7 +4534,18 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		() => "Star",
 		() => 9999,
 		() => "Record",
-		() => "open kiwi",
+		() => "My games",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(1, 2);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Cube", "Kiwi", "Cats");
+		},
+		() => "Kiwi",
+		() => "Cube",
+		() => "Cats",
 		() => "zoom",
 		() => "Game",
 		() => "MenuButton",
@@ -4632,10 +4645,6 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(15, 30);
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(1, 2);
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
