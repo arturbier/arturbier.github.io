@@ -3973,6 +3973,13 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Sprite.Acts.Destroy,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
+		C3.Plugins.VKBridge.Acts.JoinGroup,
+		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess,
+		C3.Plugins.Sprite.Acts.SetAnim,
+		C3.ScriptsInEvents.Main_Event40_Act1,
+		C3.ScriptsInEvents.Main_Event41_Act1,
+		C3.ScriptsInEvents.Main_Event42_Act1,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
@@ -4015,10 +4022,10 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		C3.Plugins.Arr.Exps.At,
 		C3.Plugins.Arr.Acts.SetSize,
 		C3.Plugins.Arr.Cnds.CompareX,
-		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.VKBridge.Acts.ShowAds,
 		C3.ScriptsInEvents.Menu_Event53_Act2,
+		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.Sprite.Exps.BBoxLeft,
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Behaviors.Pin.Acts.Unpin,
@@ -4095,6 +4102,7 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		{Bullet: 0},
 		{Blick: 0},
 		{Deatroyer: 0},
+		{Button_AD: 0},
 		{Platform: 0},
 		{Legs: 0},
 		{Hands: 0},
@@ -4325,6 +4333,11 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			return () => f0("cat_jump1", "cat_jump2", "cat_jump3");
 		},
 		() => "",
+		() => "x",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0() / 2);
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("game_over1", "game_over2", "game_over3");
@@ -4375,14 +4388,27 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => ((f0() - f1()) + 65);
 		},
-		() => "x",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => ((f0() - f1()) + 43);
 		},
 		() => -5,
-		() => "Game_Over",
+		() => "group",
+		() => 204017056,
+		() => "Подписан",
+		() => "My games",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(1, 2);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Cube", "Tap", "Kiwi");
+		},
+		() => "Kiwi",
+		() => "Cube",
+		() => "Tap",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
@@ -4456,10 +4482,7 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		() => 16777215,
 		() => "Share",
 		() => "pc",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (f0() / 2);
-		},
+		() => "plus",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() - 98);
