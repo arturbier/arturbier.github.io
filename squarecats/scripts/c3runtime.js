@@ -3915,13 +3915,14 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		C3.Plugins.NinePatch.Exps.X,
 		C3.Plugins.NinePatch.Exps.BBoxBottom,
 		C3.Plugins.System.Acts.SetGroupActive,
+		C3.Behaviors.Tween.Acts.TweenOneProperty,
+		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.System.Exps.random,
 		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.System.Exps.originalviewportwidth,
-		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Sprite.Exps.X,
@@ -3930,7 +3931,6 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		C3.Plugins.Touch.Cnds.IsInTouch,
 		C3.Behaviors.Tween.Acts.StopTweens,
 		C3.Plugins.System.Cnds.TriggerOnce,
-		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Sprite.Exps.BBoxTop,
 		C3.Plugins.NinePatch.Acts.SetHeight,
@@ -4103,6 +4103,7 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		{Blick: 0},
 		{Deatroyer: 0},
 		{Button_AD: 0},
+		{Start: 0},
 		{Platform: 0},
 		{Legs: 0},
 		{Hands: 0},
@@ -4260,6 +4261,12 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 		},
 		() => "Start",
 		() => "Game_Over_Start",
+		() => "y",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0() / 2.5);
+		},
+		() => 1,
 		() => "Button",
 		() => "Control",
 		() => "Spawn",
@@ -4278,7 +4285,6 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			const f2 = p._GetNode(2).GetBoundMethod();
 			return () => f0((f1() * 1.4), f2());
 		},
-		() => 1,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(0, 0, 0, 100);
@@ -4393,10 +4399,15 @@ VectorY(){return this._GetVectorY()},JumpSustain(){return this._GetJumpSustain()
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => ((f0() - f1()) + 43);
 		},
+		() => "y2",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (0 - f0());
+		},
 		() => -5,
 		() => "group",
 		() => 204017056,
-		() => "Подписан",
+		() => "П о д п и с а н",
 		() => "My games",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
