@@ -3925,9 +3925,9 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.Every,
+		C3.ScriptsInEvents.Main_Event100_Act1,
 		C3.ScriptsInEvents.Main_Event101_Act1,
 		C3.ScriptsInEvents.Main_Event102_Act1,
-		C3.ScriptsInEvents.Main_Event103_Act1,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.System.Cnds.LayerVisible,
 		C3.Plugins.System.Acts.Scroll,
@@ -3974,6 +3974,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Arr.Cnds.CompareXY,
 		C3.Plugins.System.Cnds.CompareBoolVar,
+		C3.Plugins.VKBridge.Acts.ShowOrder,
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.Arr.Exps.CurY,
 		C3.Plugins.Arr.Cnds.ArrForEach,
@@ -3982,6 +3983,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.System.Exps.max,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
+		C3.Plugins.VKBridge.Cnds.ShowOrderSuccess,
 		C3.Plugins.Sprite.Cnds.IsVisible,
 		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.ScriptsInEvents.Menubutton_Event7_Act2,
@@ -4497,7 +4499,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (10 + v0.GetValue());
+			return () => (1 + v0.GetValue());
 		},
 		() => "Score",
 		p => {
@@ -4506,13 +4508,14 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 			return () => and("", f0((and("String(", v1.GetValue()) + ").split( /(?=(?:...)*$)/ ).join();")));
 		},
 		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
+		() => "Star",
+		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
 			return () => C3.lerp(n0.ExpObject(), n1.ExpObject(), 0.3);
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
 		},
 		() => "finish",
 		() => "CharacterUnlock",
@@ -4530,9 +4533,8 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		() => 4,
 		p => {
 			const n0 = p._GetNode(0);
-			return () => and(n0.ExpInstVar(), "/320");
+			return () => and(n0.ExpInstVar(), "/60");
 		},
-		() => "Star",
 		() => 9999,
 		() => "Record",
 		() => "My games",
@@ -4775,6 +4777,10 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 			return () => n0.ExpObject(v1.GetValue(), 1);
 		},
 		() => "character purchase",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => ("" + v0.GetValue());
+		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (and("Я уже на ", v0.GetValue()) + " уровне, сможешь меня обыграть?");
