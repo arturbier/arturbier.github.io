@@ -3974,7 +3974,6 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Arr.Cnds.CompareXY,
 		C3.Plugins.System.Cnds.CompareBoolVar,
-		C3.Plugins.VKBridge.Acts.ShowOrder,
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.Arr.Exps.CurY,
 		C3.Plugins.Arr.Cnds.ArrForEach,
