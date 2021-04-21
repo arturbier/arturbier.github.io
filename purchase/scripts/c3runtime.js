@@ -3171,6 +3171,7 @@ this._y)[getx?0:1];else return 0}}}};
 		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.VKBridge.Acts.ShowOrder,
+		C3.Plugins.Sprite.Exps.AnimationName,
 		C3.Plugins.VKBridge.Cnds.ShowOrderSuccess,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.VKBridge.Cnds.ShowOrderFailed
@@ -3281,7 +3282,10 @@ this._y)[getx?0:1];else return 0}}}};
 	}
 
 	self.C3_ExpressionFuncs = [
-		() => "dog",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject();
+		},
 		() => 1,
 		() => 2
 	];
