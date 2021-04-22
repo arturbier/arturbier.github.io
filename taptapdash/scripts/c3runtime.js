@@ -3829,14 +3829,11 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.AJAX,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.TiledBg.Acts.AddChild,
-		C3.Plugins.System.Acts.CreateObject,
-		C3.Plugins.Sprite.Exps.ImagePointX,
-		C3.Plugins.Sprite.Exps.ImagePointY,
+		C3.Plugins.Sprite.Acts.SetPosToObject,
 		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Plugins.Sprite.Acts.SetSize,
 		C3.Plugins.Sprite.Acts.ZMoveToObject,
 		C3.Plugins.Spritefont2.Acts.AddChild,
-		C3.Plugins.Sprite.Acts.SetPosToObject,
 		C3.Plugins.Function.Acts.CallFunction,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Plugins.System.Acts.SetLayerScale,
@@ -3872,6 +3869,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Sprite.Exps.Height,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
+		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Sprite.Acts.SetPos,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Acts.SetAngle,
@@ -3900,7 +3898,10 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Sprite.Exps.Opacity,
+		C3.Plugins.System.Acts.CreateObject,
+		C3.Plugins.Sprite.Exps.ImagePointX,
 		C3.Plugins.System.Exps.random,
+		C3.Plugins.Sprite.Exps.ImagePointY,
 		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Plugins.Sprite.Acts.SetHeight,
 		C3.Plugins.Sprite.Acts.SetAnim,
@@ -3912,8 +3913,10 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.System.Cnds.LayerCmpOpacity,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.System.Acts.RestartLayout,
+		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.VKBridge.Acts.AdsMobile,
 		C3.Plugins.VKBridge.Acts.ShowAds,
+		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
 		C3.Plugins.VKBridge.Cnds.AdsMobileFailed,
 		C3.Plugins.System.Cnds.PickNth,
@@ -3924,11 +3927,10 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Arr.Acts.SetXY,
 		C3.Plugins.Arr.Exps.AsJSON,
 		C3.Plugins.Sprite.Acts.SetX,
-		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.Every,
-		C3.ScriptsInEvents.Main_Event101_Act1,
-		C3.ScriptsInEvents.Main_Event102_Act1,
-		C3.ScriptsInEvents.Main_Event103_Act1,
+		C3.ScriptsInEvents.Main_Event105_Act1,
+		C3.ScriptsInEvents.Main_Event106_Act1,
+		C3.ScriptsInEvents.Main_Event107_Act1,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.System.Cnds.LayerVisible,
 		C3.Plugins.System.Acts.Scroll,
@@ -3972,9 +3974,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
-		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.Arr.Cnds.CompareXY,
-		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.VKBridge.Acts.ShowOrder,
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.Arr.Exps.CurY,
@@ -4003,6 +4003,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Spritefont2.Acts.SetVisible,
 		C3.Plugins.VKBridge.Acts.JoinGroup,
 		C3.Plugins.VKBridge.Acts.ShowInvite,
+		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
 		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess,
 		C3.Plugins.NinePatch.Exps.X,
 		C3.Plugins.NinePatch.Acts.SetX
@@ -4122,6 +4123,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		{zoom: 0},
 		{Best_Score: 0},
 		{Score: 0},
+		{ADS: 0},
 		{Platform: 0},
 		{buyname: 0},
 		{buy: 0},
@@ -4230,15 +4232,12 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 	}
 
 	self.C3_ExpressionFuncs = [
-		() => "Player",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("Shadow");
-		},
+		() => "Shadow",
 		() => 32,
 		() => 0,
 		() => "Effects",
 		() => "Up",
+		() => "Player",
 		() => 1,
 		() => "Obj",
 		() => 1.3,
@@ -4284,6 +4283,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		},
 		() => 0.12,
 		() => "Best_Score",
+		() => "ADS",
 		() => "DeadPoinX",
 		() => "DeadPoinY",
 		() => "DeadAngle",
@@ -4291,7 +4291,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		() => "LVL",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => and(v0.GetValue(), "/320");
+			return () => and(v0.GetValue(), "/60");
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
