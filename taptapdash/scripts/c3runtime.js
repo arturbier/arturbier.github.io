@@ -3913,6 +3913,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.VKBridge.Acts.AdsMobile,
+		C3.Plugins.VKBridge.Acts.ShowAds,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
 		C3.Plugins.VKBridge.Cnds.AdsMobileFailed,
 		C3.Plugins.System.Cnds.PickNth,
@@ -3925,9 +3926,9 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Sprite.Acts.SetX,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.Every,
-		C3.ScriptsInEvents.Main_Event100_Act1,
 		C3.ScriptsInEvents.Main_Event101_Act1,
 		C3.ScriptsInEvents.Main_Event102_Act1,
+		C3.ScriptsInEvents.Main_Event103_Act1,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.System.Cnds.LayerVisible,
 		C3.Plugins.System.Acts.Scroll,
@@ -4493,6 +4494,10 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		() => 50,
 		() => "UI",
 		() => 95,
+		() => "ios",
+		() => "android",
+		() => "web",
+		() => "mobile-web",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => C3.lerp(n0.ExpObject(), 62, 0.1);

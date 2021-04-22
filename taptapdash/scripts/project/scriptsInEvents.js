@@ -5,17 +5,17 @@
 {
 	const scriptsInEvents = {
 
-		async Main_Event100_Act1(runtime, localVars)
+		async Main_Event101_Act1(runtime, localVars)
 		{
 			vkBridge.send("VKWebAppOpenApp", {"app_id": 7816086, "location": "https://vk.com/superkiwiadventure"});
 		},
 
-		async Main_Event101_Act1(runtime, localVars)
+		async Main_Event102_Act1(runtime, localVars)
 		{
 			vkBridge.send("VKWebAppOpenApp", {"app_id": 7818856, "location": "https://vk.com/fallordead"});
 		},
 
-		async Main_Event102_Act1(runtime, localVars)
+		async Main_Event103_Act1(runtime, localVars)
 		{
 			vkBridge.send("VKWebAppOpenApp", {"app_id": 7815639, "location": "https://vk.com/squarecats"});
 		},
