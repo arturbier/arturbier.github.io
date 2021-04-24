@@ -3819,6 +3819,7 @@ d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinI
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Sprite.Acts.SetPosToObject,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
+		C3.Plugins.Particles.Acts.Destroy,
 		C3.Plugins.System.Cnds.PickAll,
 		C3.Plugins.Particles.Acts.SetVisible,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
