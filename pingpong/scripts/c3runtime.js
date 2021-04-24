@@ -4238,6 +4238,7 @@ d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinI
 		},
 		() => -30,
 		() => "Purchase&ADS",
+		() => 50,
 		() => "purchase_menu",
 		() => "video",
 		() => "500",
@@ -4247,7 +4248,6 @@ d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinI
 		() => "2650",
 		() => 2650,
 		() => "false",
-		() => 50,
 		() => "Menu",
 		() => "shop",
 		() => -500
