@@ -3888,7 +3888,7 @@ d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinI
 		{Browser: 0},
 		{PlatformInfo: 0},
 		{Enemies_R: 0},
-		{Enemies_Effects: 0},
+		{Enemies_Effects_L: 0},
 		{Player_Effects: 0},
 		{Coin_txt: 0},
 		{Spawner: 0},
@@ -3924,6 +3924,7 @@ d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinI
 		{LoadPINNER: 0},
 		{Blick: 0},
 		{Bounce: 0},
+		{Enemies_Effects_R: 0},
 		{Bullet2: 0},
 		{Enemies: 0},
 		{zsort: 0},
@@ -4177,7 +4178,7 @@ d},Unpin(){this._SetPinInst(null);this._mode="";this._propSet.clear();this._pinI
 		() => "Restart",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => (and("Я собрал", v0.GetValue()) + " монет в игре Утиный Пинг-Понг, подключайся!");
+			return () => (and("Я собрал ", v0.GetValue()) + " монет в игре Утиный Пинг-Понг, подключайся!");
 		},
 		() => "https://vk.com/app7833257",
 		p => {
