@@ -4091,6 +4091,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Exps.viewportbottom,
 		C3.Plugins.Sprite.Exps.Height,
 		C3.Plugins.Sprite.Acts.SetX,
+		C3.Plugins.VKBridge.Acts.AppGetClient,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
 		C3.Plugins.System.Cnds.CompareBoolVar,
@@ -4099,12 +4100,15 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.System.Acts.SetBoolVar,
+		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.VKBridge.Acts.AdsMobile,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
+		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
+		C3.Plugins.VKBridge.Exps.ClientPlatform,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Spritefont2.Cnds.CompareText,
 		C3.Plugins.Spritefont2.Acts.SetText,
@@ -4125,6 +4129,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
+		C3.Plugins.VKBridge.Acts.ShowAds,
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.Browser.Cnds.OnBackButton,
@@ -4140,11 +4145,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.System.Exps.choose,
-		C3.ScriptsInEvents.Etittlescreen_Event66_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event67_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event68_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event69_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event70_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event71_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event72_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event73_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event74_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event75_Act1,
 		C3.Plugins.VKBridge.Acts.ShowOrder,
 		C3.Plugins.VKBridge.Cnds.ShowOrderSuccess,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
@@ -4257,10 +4262,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Sin.Acts.SetPhase,
 		C3.Behaviors.Platform.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.PickRandom,
-		C3.Plugins.VKBridge.Acts.AppGetClient,
 		C3.Plugins.Spritefont2.Acts.SetVisible,
-		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
-		C3.Plugins.VKBridge.Exps.ClientPlatform,
 		C3.Plugins.System.Cnds.LayerCmpOpacity,
 		C3.Plugins.System.Acts.SetLayerOpacity,
 		C3.Plugins.Sprite.Acts.StartAnim,
@@ -4436,7 +4438,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{Enemy: 0},
 		{HUD: 0},
 		{BG: 0},
-		{ADS_Reward: 0},
+		{ADS_AndroidIOS: 0},
+		{ADS_Web: 0},
 		{ADS: 0},
 		{Intro: 0},
 		{Cur_LVL: 0},
@@ -4596,6 +4599,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => v0.GetValue();
 		},
 		() => 0.2,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => C3.clamp((v0.GetValue() + 3), 0, 3);
+		},
 		() => 0.1,
 		() => "ADS",
 		p => {
@@ -4653,6 +4660,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => C3.clamp((v0.GetValue() - 1), 0, 3);
 		},
 		() => 100,
+		() => "android",
+		() => "ios",
+		() => "web",
+		() => "mobile-web",
 		() => "EXIT",
 		p => {
 			const n0 = p._GetNode(0);
@@ -5046,7 +5057,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f2 = p._GetNode(2).GetBoundMethod();
 			return () => f0(f1(4), f2(4));
 		},
-		() => "web",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("Health");
