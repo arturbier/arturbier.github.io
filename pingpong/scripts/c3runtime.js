@@ -4017,6 +4017,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Behaviors.Pin.Acts.Pin,
 		C3.Behaviors.Pin.Acts.Unpin,
 		C3.Behaviors.Sin.Acts.SetEnabled,
+		C3.Plugins.Particles.Acts.MoveToBottom,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
@@ -4036,7 +4037,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.VKBridge.Cnds.ShowOrderSuccess,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
-		C3.Plugins.VKBridge.Cnds.AdsMobileFailed,
+		C3.Plugins.VKBridge.Cnds.ShowAdsSuccess,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.NinePatch.Acts.AddChild,
 		C3.Plugins.Sprite.Cnds.PickDistance,
@@ -4131,7 +4132,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		{Player_Select: 0},
 		{NoCoin: 0},
 		{Price_Player: 0},
-		{Array: 0},
+		{Characters: 0},
 		{AJAX: 0},
 		{Keyboard: 0},
 		{Bullet2: 0},
@@ -4143,6 +4144,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		{s: 0},
 		{id: 0},
 		{ADS: 0},
+		{ADS_Showed: 0},
 		{First_Game: 0},
 		{Video: 0},
 		{Animations: 0},
@@ -4473,6 +4475,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			return () => (f0() + 222);
 		},
 		() => "Menu",
+		() => "show",
 		() => "40,30",
 		() => "shop",
 		() => "500",
@@ -4483,8 +4486,8 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => "2650",
 		() => 2650,
 		() => "false",
+		() => 0.3,
 		() => -500,
-		() => 3,
 		() => "Close",
 		() => 10,
 		() => "Move",
@@ -4501,6 +4504,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			const n1 = p._GetNode(1);
 			return () => ((and("", n0.ExpObject(n1.ExpInstVar(), 2)) + "\n") + "монет");
 		},
+		() => 3,
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
