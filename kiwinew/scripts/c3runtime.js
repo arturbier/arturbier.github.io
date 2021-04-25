@@ -4661,8 +4661,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => 100,
 		() => "android",
 		() => "ios",
-		() => "web",
-		() => "mobile-web",
 		() => "EXIT",
 		p => {
 			const n0 = p._GetNode(0);
@@ -4883,6 +4881,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => ((f0() / 2) - 60);
 		},
+		() => "web",
+		() => "mobile-web",
 		() => 500,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
