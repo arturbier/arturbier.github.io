@@ -4033,7 +4033,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		C3.Plugins.System.Acts.SetLayerOpacity,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.Browser.Acts.Vibrate,
-		C3.ScriptsInEvents.Purchase_Event24_Act2,
+		C3.ScriptsInEvents.Purchase_Event26_Act2,
 		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.VKBridge.Cnds.ShowOrderSuccess,
 		C3.Plugins.VKBridge.Cnds.AdsMobileSuccess,
@@ -4399,10 +4399,9 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			return () => f0();
 		},
 		() => "mobile-web",
-		() => "reward",
+		() => "show",
 		() => "web",
 		() => "android",
-		() => "interstetial",
 		() => "ios",
 		() => "firstgame",
 		p => {
@@ -4475,7 +4474,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 			return () => (f0() + 222);
 		},
 		() => "Menu",
-		() => "show",
 		() => "40,30",
 		() => "shop",
 		() => "500",

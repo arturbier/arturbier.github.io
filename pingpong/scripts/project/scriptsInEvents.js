@@ -5,7 +5,7 @@
 {
 	const scriptsInEvents = {
 
-		async Purchase_Event24_Act2(runtime, localVars)
+		async Purchase_Event26_Act2(runtime, localVars)
 		{
 			vkBridge.send("VKWebAppTapticImpactOccurred", {"style": "heavy"}); //light, medium, heavy
 		},
