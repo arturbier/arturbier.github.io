@@ -4259,6 +4259,7 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => "Score",
 		() => "GUI",
 		() => "Spawn",
+		() => 0,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
@@ -4285,7 +4286,6 @@ newY);wi.SetBboxChanged()}}else if(this._axes===1){if(wi.GetX()!==newX){wi.SetX(
 		() => 1,
 		() => 90,
 		() => -90,
-		() => 0,
 		() => 270,
 		() => "Collision",
 		() => "",
