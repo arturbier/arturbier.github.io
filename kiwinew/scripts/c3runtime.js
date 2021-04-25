@@ -4109,7 +4109,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
 		C3.Plugins.VKBridge.Exps.ClientPlatform,
-		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.Spritefont2.Cnds.CompareText,
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
@@ -4145,11 +4144,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.System.Exps.choose,
-		C3.ScriptsInEvents.Etittlescreen_Event71_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event72_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event73_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event74_Act1,
-		C3.ScriptsInEvents.Etittlescreen_Event75_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event80_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event81_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event82_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event83_Act1,
+		C3.ScriptsInEvents.Etittlescreen_Event84_Act1,
 		C3.Plugins.VKBridge.Acts.ShowOrder,
 		C3.Plugins.VKBridge.Cnds.ShowOrderSuccess,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
@@ -4678,6 +4677,10 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(0, 1, 2);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Cats", "Cube", "Pong", "Tap");
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
