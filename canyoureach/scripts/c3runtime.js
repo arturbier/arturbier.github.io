@@ -4021,7 +4021,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			return () => (f0() / 2);
 		},
 		() => 5000,
-		() => "HIGH SCORE: 0",
+		() => "ЛУЧШИЙ СЧЕТ: 0",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
@@ -4044,7 +4044,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => and("HIGH SCORE: ", v0.GetValue());
+			return () => and("ЛУЧШИЙ СЧЕТ: ", v0.GetValue());
 		},
 		() => "Game",
 		() => 2,
@@ -4056,7 +4056,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			const v1 = p._GetNode(1).GetVar();
-			return () => (and(((and("SCORE: ", v0.GetValue()) + "\n") + "[size=16]BEST: "), v1.GetValue()) + "[/size]");
+			return () => (and(((and("СЧЕТ: ", v0.GetValue()) + "\n") + "[size=16]ЛУЧШИЙ СЧЕТ: "), v1.GetValue()) + "[/size]");
 		},
 		() => 10000,
 		() => "theme",
@@ -4144,7 +4144,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		},
 		() => "HUD",
 		() => -21,
-		() => "P A U S E D",
+		() => "П А У З А",
 		() => 15132390,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4245,7 +4245,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			return () => (f0("Hud") * 0.125);
 		},
 		() => 0.4,
-		() => "checking",
+		() => "проверка",
 		() => "i",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();

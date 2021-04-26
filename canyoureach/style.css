@@ -38,6 +38,11 @@ html, body, canvas {
 
 
 @font-face {
+	font-family: '20011';
+	src: url('fonts/20011.ttf') format('truetype');
+}
+
+@font-face {
 	font-family: 'sharetech-regular';
 	src: url('fonts/sharetech-regular.ttf') format('truetype');
 }
