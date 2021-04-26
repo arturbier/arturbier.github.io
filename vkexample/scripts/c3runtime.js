@@ -2705,8 +2705,7 @@ SetWrapping(w){this._SetWrapByWord(w===0)}}};
 		C3.ScriptsInEvents.Maineventsheet_Event6_Act2,
 		C3.ScriptsInEvents.Maineventsheet_Event7_Act2,
 		C3.ScriptsInEvents.Maineventsheet_Event8_Act1,
-		C3.ScriptsInEvents.Maineventsheet_Event9_Act1,
-		C3.Plugins.System.Cnds.OnLayoutStart
+		C3.ScriptsInEvents.Maineventsheet_Event9_Act1
 		];
 	};
 	self.C3_JsPropNameTable = [
