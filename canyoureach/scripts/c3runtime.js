@@ -3721,18 +3721,24 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.TiledBg.Acts.SetPos,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.Audio.Acts.Play,
+		C3.Plugins.Sprite.Cnds.CompareFrame,
+		C3.Plugins.VKBridge.Acts.JoinGroup,
+		C3.ScriptsInEvents.Ev_main_Event4_Act1,
+		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess,
+		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Behaviors.Sin.Acts.SetEnabled,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.GoToLayout,
+		C3.Plugins.System.Cnds.CompareVar,
+		C3.Plugins.VKBridge.Acts.ShowAds,
+		C3.Plugins.VKBridge.Acts.AdsMobile,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Acts.GetItem,
 		C3.Plugins.LocalStorage.Cnds.OnItemGet,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.System.Cnds.IsGroupActive,
-		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.Sprite.Acts.Destroy,
-		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Audio.Exps.Volume,
@@ -3769,6 +3775,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.Audio.Acts.Stop,
+		C3.ScriptsInEvents.Ev_game_Event32_Act1,
 		C3.Plugins.Sprite.Exps.AnimationName,
 		C3.Plugins.Sprite.Acts.Spawn,
 		C3.Behaviors.Timer.Acts.StopTimer,
@@ -3783,7 +3790,6 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.Touch.Exps.Y,
 		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
-		C3.Plugins.Sprite.Cnds.CompareFrame,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Plugins.System.Acts.AddVar,
@@ -3827,6 +3833,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.System.Cnds.PickRandom,
+		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.Text.Acts.Destroy,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.System.Exps.loadingprogress,
@@ -4031,13 +4038,20 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (f0(0) - f1(0));
 		},
-		() => 0,
+		() => 55,
 		() => "",
+		() => 0,
+		() => 204017056,
+		() => 1,
 		() => 0.22,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() + 10);
 		},
+		() => "web",
+		() => "mobile-web",
+		() => "android",
+		() => "ios",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
@@ -4048,7 +4062,6 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		},
 		() => "Game",
 		() => 2,
-		() => 1,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => ((((v0.GetValue()) === (0) ? 1 : 0)) ? (0) : (1));
@@ -4191,9 +4204,9 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		() => 9,
 		() => 11,
 		() => 13,
-		() => "Congratulations!!",
+		() => "Поздравляю!!",
 		() => "victory-3",
-		() => "You rock!!",
+		() => "Ты на вершине!!",
 		() => 0.1,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4328,8 +4341,8 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			const f18 = p._GetNode(18).GetBoundMethod();
 			return () => and((and((and((and("ok: ", f0("i")) + ": "), n1.ExpObject(f2(f3(f4(v5.GetValue(), f6("i"), ";"), 0, ",")))) + ","), n7.ExpObject(f8(f9(f10(v11.GetValue(), f12("i"), ";"), 1, ",")))) + ","), n13.ExpObject(f14(f15(f16(v17.GetValue(), f18("i"), ";"), 2, ","))));
 		},
-		() => "No more moves",
-		() => "Game over",
+		() => "ХОДОВ НЕ ОСТАЛОСЬ",
+		() => "ИГРА ОКОНЧЕНА",
 		() => "wrong2",
 		() => 12,
 		p => {
@@ -4368,7 +4381,11 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		},
 		() => "Debug",
 		() => 2000,
-		() => "You reached. Congratulations!",
+		() => "Ты достиг 8K. Поздравляю!",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(180, 300);
+		},
 		() => 1.75
 	];
 }
