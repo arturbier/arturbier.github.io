@@ -10,7 +10,7 @@
 			window.open('https://vk.com/public204017056')
 		},
 
-		async Ev_game_Event32_Act1(runtime, localVars)
+		async Ev_game_Event33_Act1(runtime, localVars)
 		{
 			window.open('https://vk.com/public204017056')
 		}

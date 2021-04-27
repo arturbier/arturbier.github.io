@@ -3772,10 +3772,11 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.System.Acts.SetTimescale,
 		C3.Plugins.TiledBg.Acts.Destroy,
 		C3.Plugins.Sprite.Cnds.IsVisible,
+		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.Audio.Acts.Stop,
-		C3.ScriptsInEvents.Ev_game_Event32_Act1,
+		C3.ScriptsInEvents.Ev_game_Event33_Act1,
 		C3.Plugins.Sprite.Exps.AnimationName,
 		C3.Plugins.Sprite.Acts.Spawn,
 		C3.Behaviors.Timer.Acts.StopTimer,
@@ -3834,6 +3835,11 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.System.Cnds.PickRandom,
 		C3.Plugins.System.Cnds.Every,
+		C3.Plugins.Sprite.Acts.SetX,
+		C3.Plugins.System.Exps.originalviewportwidth,
+		C3.Plugins.Sprite.Exps.BBoxLeft,
+		C3.Behaviors.Pin.Acts.Pin,
+		C3.Behaviors.Pin.Acts.Unpin,
 		C3.Plugins.Text.Acts.Destroy,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.System.Exps.loadingprogress,
@@ -3842,7 +3848,9 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.VKBridge.Cnds.AuthorizationSuccess,
 		C3.Plugins.VKBridge.Acts.AppGetClient,
 		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
-		C3.Plugins.VKBridge.Exps.ClientPlatform
+		C3.Plugins.VKBridge.Exps.ClientPlatform,
+		C3.Behaviors.Bullet.Acts.SetSpeed,
+		C3.Behaviors.Bullet.Acts.SetEnabled
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -3863,7 +3871,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		{btn_pause: 0},
 		{transition: 0},
 		{btn_restart: 0},
-		{intro_: 0},
+		{Crown: 0},
 		{progress: 0},
 		{bottom: 0},
 		{anim: 0},
@@ -3904,6 +3912,13 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		{txt_point: 0},
 		{bgGame: 0},
 		{VKBridge: 0},
+		{Join_Group: 0},
+		{btn_share: 0},
+		{LoaderBalls: 0},
+		{LoadPINNER: 0},
+		{Blick: 0},
+		{A_B_VStudio: 0},
+		{powered_by: 0},
 		{storageName: 0},
 		{positions: 0},
 		{AnimationMAX: 0},
@@ -4166,6 +4181,11 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		() => -5,
 		() => 5066061,
 		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (((((and("В моей коллекции ", v0.GetValue()) + "очков, сможешь рискнуть и набрать больше?") + "\n") + "Больше игр тут: https://vk.com/a_b_vstudio") + "\n") + "#abvstudio #сможешьнабрать8к");
+		},
+		() => "photo220968686_457271654,https://vk.com/app7838558_-204017056",
+		p => {
 			const n0 = p._GetNode(0);
 			return () => ((((n0.ExpObject()) === (0) ? 1 : 0)) ? (1) : (0));
 		},
@@ -4242,16 +4262,16 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			return () => and(((("[size=32]" + v0.GetValue()) + "[/size]") + "\n"), n1.ExpInstVar());
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => ((f0() / 2) - 60);
-		},
-		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 50);
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => ((f0() / 2) + 60);
+			return () => ((f0() / 2) + 80);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => ((f0() / 2) - 80);
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4386,7 +4406,22 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(180, 300);
 		},
-		() => 1.75
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 98);
+		},
+		() => 3.75,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(2, 4.5);
+		},
+		() => 32,
+		() => 252,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(200, 250);
+		},
+		() => -30
 	];
 }
 
