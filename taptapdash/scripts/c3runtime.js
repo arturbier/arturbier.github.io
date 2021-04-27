@@ -3968,6 +3968,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		C3.Plugins.Sprite.Acts.SetY,
 		C3.Plugins.System.Exps.viewportbottom,
 		C3.Plugins.TiledBg.Exps.Y,
+		C3.Plugins.System.Exps.originalviewportwidth,
 		C3.Plugins.LocalStorage.Cnds.CompareKey,
 		C3.Plugins.AJAX.Acts.RequestFile,
 		C3.Plugins.AJAX.Cnds.OnComplete,
@@ -4686,7 +4687,7 @@ const i=VALID_WAVES.indexOf(w);if(i===-1)throw new Error("invalid wave");map.get
 		p => {
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => C3.lerp(n0.ExpObject(), (f1("Menu") / 2), 0.1);
+			return () => C3.lerp(n0.ExpObject(), (f1() / 2), 0.1);
 		},
 		p => {
 			const n0 = p._GetNode(0);
