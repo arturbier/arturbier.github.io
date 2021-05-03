@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<trans>
+    <lang id='ru'>
+         <text id='menu_but_play'>Быстрый матч</text>
+		 <text id='menu_but_cup'>Кубок</text>
+		 <text id='menu_but_settings'>Настройки</text>
+		 <text id='enter_name'>Введите Ваше Имя</text>
+		 <text id='name_'>Ваше Имя</text>
+		 <text id='done_name'>Готово</text>
+		 <text id='select_tactick'>Тактическое построение</text>
+		 <text id='tactick_disk'>Настройте Ваше тактическое построение. Перетащите футболистов согласно вашей схеме.</text>
+	     <text id='done_'>Готово</text>
+		 <text id='type_player'>Тип Игрока</text>
+		 <text id='color_player'>Цвет Команды</text>
+		 <text id='player_set'>Изменение игрока</text>
+		 <text id='select_con'>Выберите страну</text>
+		 <text id='ava_'>Ваша Аватарка</text>
+		 <text id='search_player'>Поиск противника</text>
+		 <text id='search_done'>Противник найден!</text>
+		 <text id='menu_but_tack'>Настройка команды</text>
+		 <text id='error_online'>Ошибка подключения</text>
+		 <text id='hod_your'>Ваш ход</text>
+		 <text id='hod_op'>Ход противника</text>
+		 <text id='game_end'>Матч окончен!</text>
+		 <text id='play_with_bot'>Играть с Ботом</text>
+		 <text id='search_bot'>Поиск бота</text>
+		 <text id='settings'>Настройки</text>
+         <text id='disconnect_'>Противник отключился</text>
+		 
+	</lang>	
+	<lang id='en'>
+         <text id='menu_but_play'>Quick match</text>
+		 <text id='menu_but_cup'>Cup</text>
+		 <text id='menu_but_settings'>Settings</text>
+		 <text id='enter_name'>Enter Your Name</text>
+		 <text id='name_'>Your name</text>
+		 <text id='done_name'>Done</text>
+		 <text id='select_tactick'>Tactical map</text>
+		 <text id='tactick_disk'>Customize Your team's formation. Drag the players according to your scheme.</text>
+	     <text id='done_'>Done</text>
+		 <text id='type_player'>Type player</text>
+		 <text id='color_player'>Command Color</text>
+		 <text id='player_set'>Player change</text>
+		 <text id='select_con'>Chosen country</text>
+		 <text id='ava_'>Your Avatar</text>
+		 <text id='search_player'>Enemy search</text>
+		 <text id='search_done'>Enemy found!</text>
+		 <text id='menu_but_tack'>Configure command</text>
+		 <text id='error_online'>Connection error</text>
+		 <text id='hod_your'>Your turn</text>
+		 <text id='hod_op'>Opponent's move</text>
+		 <text id='game_end'>The match is over!</text>
+		 <text id='play_with_bot'>Play with Bot</text>
+		 <text id='search_bot'>Bot search</text>
+		 <text id='settings'>Settings</text>
+         <text id='disconnect_'>Opponent Disconnected</text>
+		
+	</lang>	
+	<lang id='es'>
+         <text id='menu_but_play'>Quick match</text>
+		 <text id='menu_but_cup'>Copa</text>
+		 <text id='menu_but_settings'>Configuración</text>
+		 <text id='enter_name'>Introduzca Su Nombre De</text>
+		 <text id='name_'>Tu nombre</text>
+		 <text id='done_name'>Hecho</text>
+		 <text id='select_tactick'>Mapa táctico</text>
+		 <text id='tactick_disk'>Personalizar Su equipo de formación. Arrastre los jugadores de acuerdo a su esquema.</text>
+	     <text id='done_'>Hecho</text>
+		 <text id='type_player'>Tipo de jugador</text>
+		 <text id='color_player'>Comando De Color</text>
+		 <text id='player_set'>Reproductor de cambio</text>
+		 <text id='select_con'>País elegido</text>
+		 <text id='ava_'>Su Avatar</text>
+		 <text id='search_player'>Enemigo de búsqueda</text>
+		 <text id='search_done'>Enemigo!</text>
+		 <text id='menu_but_tack'>El comando Configure</text>
+		 <text id='error_online'>Error de conexión</text>
+		 <text id='hod_your'>El turn</text>
+		 <text id='hod_op'>Oponente mover</text>
+		 <text id='game_end'>El partido!</text>
+		 <text id='play_with_bot'>Jugar con Bot</text>
+		 <text id='search_bot'>Bot search</text>
+		 <text id='settings'>Configuración</text>
+         <text id='disconnect_'>Oponente Desconectado</text>
+		
+	</lang>	
+	<lang id='it'>
+         <text id='menu_but_play'>Partita veloce</text>
+		 <text id='menu_but_cup'>Coppa</text>
+		 <text id='menu_but_settings'>Impostazioni</text>
+		 <text id='enter_name'>Inserisci Il Tuo Nome</text>
+		 <text id='name_'>Il tuo nome</text>
+		 <text id='done_name'>Fatto</text>
+		 <text id='select_tactick'>Mappa tattica</text>
+		 <text id='tactick_disk'>Personalizza la Tua squadra di formazione. Trascinare i giocatori secondo il tuo schema.</text>
+	     <text id='done_'>Fatto</text>
+		 <text id='type_player'>Tipo di player</text>
+		 <text id='color_player'>Comando Colore</text>
+		 <text id='player_set'>Player</text>
+		 <text id='select_con'>Paese scelto</text>
+		 <text id='ava_'>Il Tuo Avatar</text>
+		 <text id='search_player'>Nemico di ricerca</text>
+		 <text id='search_done'>Nemico!!!</text>
+		 <text id='menu_but_tack'>Comando Configure</text>
+		 <text id='error_online'>Errore di connessione</text>
+		 <text id='hod_your'>Il tuo turno</text>
+		 <text id='hod_op'>OAvversario spostare</text>
+		 <text id='game_end'>La partita è finita!</text>
+		 <text id='play_with_bot'>Giocare con i Bot</text>
+		 <text id='search_bot'>Bot di ricerca</text>
+		 <text id='settings'>Impostazioni</text>
+         <text id='disconnect_'>Avversario Disconnesso</text>
+		
+	</lang>	
+	<lang id='fr'>
+         <text id='menu_but_play'>Match rapide</text>
+		 <text id='menu_but_cup'>Coupe</text>
+		 <text id='menu_but_settings'>Paramètres</text>
+		 <text id='enter_name'>Entrez Votre Nom</text>
+		 <text id='name_'>Votre nom</text>
+		 <text id='done_name'>Fait</text>
+		 <text id='select_tactick'>Carte tactique</text>
+		 <text id='tactick_disk'>Personnalisez Votre équipe de formation. Faites glisser les joueurs en fonction de votre système.</text>
+	     <text id='done_'>Fait</text>
+		 <text id='type_player'>Type de joueur</text>
+		 <text id='color_player'>Commande De Couleur</text>
+		 <text id='player_set'>Changement de joueur</text>
+		 <text id='select_con'>Pays</text>
+		 <text id='ava_'>Votre Avatar</text>
+		 <text id='search_player'>Ennemi de recherche</text>
+		 <text id='search_done'>Ennemi trouvé!!!</text>
+		 <text id='menu_but_tack'>Configurer la commande</text>
+		 <text id='error_online'>Erreur de connexion</text>
+		 <text id='hod_your'>Votre tour</text>
+		 <text id='hod_op'>L'adversaire de déplacer</text>
+		 <text id='game_end'>Le match est terminé!</text>
+		 <text id='play_with_bot'>Jouer avec Bot</text>
+		 <text id='search_bot'>Bot search</text>
+		 <text id='settings'>Paramètres</text>
+         <text id='disconnect_'>Adversaire Déconnecté</text>
+		
+	</lang>	
+	<lang id='de'>
+         <text id='menu_but_play'>Schnelles Spiel</text>
+		 <text id='menu_but_cup'>Tasse</text>
+		 <text id='menu_but_settings'>Einstellungen</text>
+		 <text id='enter_name'>Geben Sie Ihren Namen Ein!</text>
+		 <text id='name_'>Ihr name</text>
+		 <text id='done_name'>Getan</text>
+		 <text id='select_tactick'>Taktische Karte</text>
+		 <text id='tactick_disk'>Passen Sie Ihre team-Bildung. Ziehen Sie die Spieler nach Ihrem Schema.</text>
+	     <text id='done_'>Getan</text>
+		 <text id='type_player'>Typ-player</text>
+		 <text id='color_player'>Befehl Farbe</text>
+		 <text id='player_set'>Spieler ändern</text>
+		 <text id='select_con'>Wahlheimat</text>
+		 <text id='ava_'>Ihr Avatar</text>
+		 <text id='search_player'>Feind suchen,</text>
+		 <text id='search_done'>Feind gefunden!!!</text>
+		 <text id='menu_but_tack'>Configure-Befehl</text>
+		 <text id='error_online'>Verbindungsfehler</text>
+		 <text id='hod_your'>Drehen</text>
+		 <text id='hod_op'>Gegner bewegen</text>
+		 <text id='game_end'>Das match ist vorbei!!!</text>
+		 <text id='play_with_bot'>Spielen mit Bot</text>
+		 <text id='search_bot'>Bot search</text>
+		 <text id='settings'>Einstellungen</text>
+         <text id='disconnect_'>Gegner Disconnected</text>
+		
+	</lang>	
+	
+	
+<country>
+    <con id='1'>Egypt</con>
+	<con id='2'>Morocco</con>
+	<con id='3'>Nigeria</con>
+	<con id='4'>Senegal</con>
+	<con id='5'>Tunisia</con>
+	<con id='6'>Australia</con>
+	<con id='7'>IR Iran</con>
+	<con id='8'>Japan</con>
+	<con id='9'>Korea Republic</con>
+	<con id='10'>Saudi Arabia</con>
+	<con id='11'>Belgium</con>
+	<con id='12'>Croatia</con>
+	<con id='13'>Denmark</con>
+	<con id='14'>England</con>
+	<con id='15'>France</con>
+	<con id='16'>Germany</con>
+	<con id='17'>Iceland</con>
+	<con id='18'>Poland</con>
+	<con id='19'>Portugal</con>
+	<con id='20'>Russia</con>
+	<con id='21'>Serbia</con>
+	<con id='22'>Spain</con>
+	<con id='23'>Sweden</con>
+	<con id='24'>Switzerland</con>
+	<con id='25'>Costa Rica</con>
+	<con id='26'>Mexico</con>
+	<con id='27'>Panama</con>
+	<con id='28'>Argentina</con>
+	<con id='29'>Brazil</con>
+	<con id='30'>Colombia</con>
+	<con id='31'>Peru</con>
+	<con id='32'>Uruguay</con>
+</country>	
+<nicks id='nick'>3D Waffle,Hightower,Papa Smurf,57 Pixels,Hog Butcher,Pepper Legs,101,Houston,Pinball Wizard,Accidental Genius,Hyper,Pluto,Alpha,Jester,Pogue,Airport Hobo,Jigsaw,Prometheus,Bearded Angler,Joker's Grin,Psycho Thinker,Beetle King,Judge,Pusher,Bitmap,Junkyard Dog,Riff Raff,Blister,K-9,Roadblock,Bowie,Keystone,Rooster,Bowler,Kickstart,Sandbox,Breadmaker,Kill Switch,Scrapper,Broomspun,Kingfisher,Screwtape,Buckshot,Kitchen,Sexual Chocolate,Bugger,Knuckles,Shadow Chaser,Cabbie,Lady Killer,Sherwood Gladiator,Candy Butcher,Liquid Science,Shooter,Capital F,Little Cobra,Sidewalk Enforcer,Captain Peroxide,Little General,Skull Crusher,Celtic Charger,Lord Nikon,Sky Bully,Cereal Killer,Lord Pistachio,Slow Trot,Chicago Blackout,Mad Irishman,Snake Eyes,Chocolate Thunder,Mad Jack,Snow Hound,Chuckles,Mad Rascal,Sofa King,Commando,Manimal,Speedwell,Cool Whip,Marbles,Spider Fuji</nicks>
+
+</trans>	
