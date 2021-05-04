@@ -9599,8 +9599,9 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.System.Exps.tokencount,
 		C3.Plugins.System.Exps.replace,
 		C3.Plugins.TextBox.Cnds.OnTextChanged,
+		C3.Plugins.VKBridge.Cnds.UserGetSuccess,
+		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.filechooser.Cnds.OnChanged,
-		C3.Plugins.Browser.Acts.ExecJs,
 		C3.Plugins.filechooser.Exps.FileURLAt,
 		C3.Plugins.Sprite.Acts.LoadURL,
 		C3.Plugins.System.Acts.SetLayerVisible,
@@ -10415,8 +10416,12 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		},
 		() => "contry_name",
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("photo_200");
+		},
+		p => {
 			const n0 = p._GetNode(0);
-			return () => (("var img = new Image(); \nimg.crossOrigin = 'Anonymous'; \nimg.onload = function() { \nvar _c = document.createElement('canvas'); \nvar _ctx = _c.getContext('2d'); \n_c.width = 178; _c.height =178;\nvar cur_size_ =img.height;\nif(img.width< img.height) {var cur_size_ = img.width;   }\n_ctx.drawImage(img, 0, 0, cur_size_, cur_size_, 0, 0, 179, 179); \nc2_callFunction('get_data',[_c.toDataURL()]) \n} \nimg.src = '" + n0.ExpObject(0)) + "'");
+			return () => n0.ExpObject(0);
 		},
 		() => 178,
 		p => {
