@@ -297,15 +297,16 @@ C3.RequireInstanceOf;C3X.RequireOptionalInstanceOf=C3.RequireOptionalInstanceOf;
 
 
 // ../lib/misc/jsutil.js
-'use strict';{const C3=self.C3;C3.GetCallStack=function GetCallStack(){return(new Error).stack};C3.Debugger=function Debugger(){debugger};C3.cast=function cast(o,T){if(o&&o instanceof T)return o;else return null};C3.getName=function getName(o){if(typeof o==="undefined")return"undefined";if(o===null)return"null";if(typeof o==="boolean")return"<boolean>";if(C3.IsNumber(o))return"<number>";if(C3.IsString(o))return"<string>";if(C3.IsArray(o))return"<array>";if(typeof o==="symbol")return"<"+o.toString()+
-">";if(C3.IsFunction(o)){if(o.name&&o.name!=="Function")return o.name;return"<anonymous function>"}if(typeof o==="object"){if(o.constructor&&o.constructor.name&&o.constructor.name!=="Object")return o.constructor.name;return"<anonymous object>"}return"<unknown>"};C3.getType=function getType(o){if(o===null)return"null";if(Array.isArray(o))return"array";return typeof o};C3.range=function*range(a,b){if(!isFinite(Math.abs(a-b)))throw new Error("Invalid parameters");if(a>b)for(let i=a-1;i>=b;i--)yield i;
-else for(let i=a;i<b;i++)yield i};function isValidTypeChange(from,to){let fromType=C3.getType(from);let toType=C3.getType(to);if(fromType==="null"||toType==="null")return true;if(fromType==="undefined"||toType==="undefined")return false;return fromType===toType}let ctorObjectToProxy=new Map;let ctorProxyToObject=new Map;let proxyToObject=new WeakMap;let releasedObjects=new WeakMap;C3.DefendHandler={};const VALID_GET_MISSING_KEYS=new Set(["then","splice"]);function logDefendedObjectWarning(msg){console.warn("[Defence] "+
-msg+" @",C3.GetCallStack())}C3.DefendHandler.get=function defended_get(target,key){if(!(key in target)&&typeof key!=="symbol"&&!VALID_GET_MISSING_KEYS.has(key))logDefendedObjectWarning(`Accessed missing property '${key}' from defended object '${C3.getName(target)}', returning undefined`);if(releasedObjects.has(target)&&typeof key!=="symbol"&&!VALID_GET_MISSING_KEYS.has(key))logDefendedObjectWarning(`Accessed property '${key}' on a released object '${C3.getName(target)}'\nObject was originally released at: ${releasedObjects.get(target)})\nCall stack at access: `);
-return target[key]};C3.DefendHandler.set=function defended_set(target,key,value){if(!(key in target)&&!ctorObjectToProxy.has(target))logDefendedObjectWarning(`Set non-existent property '${key}' to '${value}' on defended object '${C3.getName(target)}'`);if(!isValidTypeChange(target[key],value)&&!ctorObjectToProxy.has(target))logDefendedObjectWarning(`Set '${C3.getType(target[key])}' property '${key}' to type '${C3.getType(value)}' on defended object '${C3.getName(target)}'`);if(releasedObjects.has(target))logDefendedObjectWarning(`Set property '${key}' on a released object '${C3.getName(target)}'\nObject was originally released at: ${releasedObjects.get(target)})\nCall stack at access: `);
-target[key]=value;return true};C3.DefendHandler.deleteProperty=function defended_deleteProperty(target,key){throw new ReferenceError(`Cannot delete property '${key}' from defended object '${C3.getName(target)}'`);};C3.DefendHandler.defineProperty=function defended_defineProperty(target,key,desc){throw new ReferenceError(`Cannot define property '${key}' on defended object '${C3.getName(target)}'`);};C3.DefendHandler.enumerate=function defended_enumerate(target){throw new ReferenceError(`Cannot enumerate defended object '${C3.getName(target)}'`);
-};let checkRafId=-1;function CheckDefendedObjectsUsedCorrectly(){checkRafId=-1;if(ctorObjectToProxy.size>0||ctorProxyToObject.size>0){let uniqueNames=new Set([...ctorObjectToProxy.keys()].map(o=>C3.getName(o)));let leftoverNames=[...uniqueNames].join(",");console.warn(`An object derived from DefendedBase was not protected with debugDefend(). This will disable some checks. See the coding guidelines! Possible affected class names: ${leftoverNames}`);ctorObjectToProxy.clear();ctorProxyToObject.clear()}}
-C3.DefendedBase=class DefendedBase{constructor(){if(!C3.isDebugDefend||!C3.Supports.Proxies)return;let newTarget=new.target;let realObject=Object.create(newTarget.prototype);let proxy=new Proxy(realObject,C3.DefendHandler);ctorObjectToProxy.set(realObject,proxy);ctorProxyToObject.set(proxy,realObject);proxyToObject.set(proxy,realObject);if(checkRafId===-1)checkRafId=requestAnimationFrame(CheckDefendedObjectsUsedCorrectly);return proxy}};C3.debugDefend=function debugDefend(o){if(C3.isDebugDefend&&
-C3.Supports.Proxies&&o instanceof C3.DefendedBase){if(!ctorProxyToObject.has(o))return o;let realObject=ctorProxyToObject.get(o);ctorProxyToObject.delete(o);ctorObjectToProxy.delete(realObject);return o}else if(C3.isDebug)return Object.seal(o);else return o};C3.New=function New(Type,...args){let o;try{o=new Type(...args)}catch(e){ctorProxyToObject.clear();ctorObjectToProxy.clear();throw e;}if(C3.isDebugDefend)VerifyObjectPropertiesConsistent(Type,o);return C3.debugDefend(o)};C3.Release=function Release(o){let realObject=
+'use strict';{const C3=self.C3;const logRafIds=new Map;C3.RafLog=function RaFLog(name,...args){if(!logRafIds.has(name))logRafIds.set(name,-1);if(logRafIds.get(name)===-1)logRafIds.set(name,requestAnimationFrame(()=>{console.log(`%c${name}`,"font-weight: bold",...args);logRafIds.set(name,-1)}))};C3.GetCallStack=function GetCallStack(){return(new Error).stack};C3.Debugger=function Debugger(){debugger};C3.cast=function cast(o,T){if(o&&o instanceof T)return o;else return null};C3.getName=function getName(o){if(typeof o===
+"undefined")return"undefined";if(o===null)return"null";if(typeof o==="boolean")return"<boolean>";if(C3.IsNumber(o))return"<number>";if(C3.IsString(o))return"<string>";if(C3.IsArray(o))return"<array>";if(typeof o==="symbol")return"<"+o.toString()+">";if(C3.IsFunction(o)){if(o.name&&o.name!=="Function")return o.name;return"<anonymous function>"}if(typeof o==="object"){if(o.constructor&&o.constructor.name&&o.constructor.name!=="Object")return o.constructor.name;return"<anonymous object>"}return"<unknown>"};
+C3.getType=function getType(o){if(o===null)return"null";if(Array.isArray(o))return"array";return typeof o};C3.range=function*range(a,b){if(!isFinite(Math.abs(a-b)))throw new Error("Invalid parameters");if(a>b)for(let i=a-1;i>=b;i--)yield i;else for(let i=a;i<b;i++)yield i};function isValidTypeChange(from,to){let fromType=C3.getType(from);let toType=C3.getType(to);if(fromType==="null"||toType==="null")return true;if(fromType==="undefined"||toType==="undefined")return false;return fromType===toType}
+let ctorObjectToProxy=new Map;let ctorProxyToObject=new Map;let proxyToObject=new WeakMap;let releasedObjects=new WeakMap;C3.DefendHandler={};const VALID_GET_MISSING_KEYS=new Set(["then","splice"]);function logDefendedObjectWarning(msg){console.warn("[Defence] "+msg+" @",C3.GetCallStack())}C3.DefendHandler.get=function defended_get(target,key){if(!(key in target)&&typeof key!=="symbol"&&!VALID_GET_MISSING_KEYS.has(key))logDefendedObjectWarning(`Accessed missing property '${key}' from defended object '${C3.getName(target)}', returning undefined`);
+if(releasedObjects.has(target)&&typeof key!=="symbol"&&!VALID_GET_MISSING_KEYS.has(key))logDefendedObjectWarning(`Accessed property '${key}' on a released object '${C3.getName(target)}'\nObject was originally released at: ${releasedObjects.get(target)})\nCall stack at access: `);return target[key]};C3.DefendHandler.set=function defended_set(target,key,value){if(!(key in target)&&!ctorObjectToProxy.has(target))logDefendedObjectWarning(`Set non-existent property '${key}' to '${value}' on defended object '${C3.getName(target)}'`);
+if(!isValidTypeChange(target[key],value)&&!ctorObjectToProxy.has(target))logDefendedObjectWarning(`Set '${C3.getType(target[key])}' property '${key}' to type '${C3.getType(value)}' on defended object '${C3.getName(target)}'`);if(releasedObjects.has(target))logDefendedObjectWarning(`Set property '${key}' on a released object '${C3.getName(target)}'\nObject was originally released at: ${releasedObjects.get(target)})\nCall stack at access: `);target[key]=value;return true};C3.DefendHandler.deleteProperty=
+function defended_deleteProperty(target,key){throw new ReferenceError(`Cannot delete property '${key}' from defended object '${C3.getName(target)}'`);};C3.DefendHandler.defineProperty=function defended_defineProperty(target,key,desc){throw new ReferenceError(`Cannot define property '${key}' on defended object '${C3.getName(target)}'`);};C3.DefendHandler.enumerate=function defended_enumerate(target){throw new ReferenceError(`Cannot enumerate defended object '${C3.getName(target)}'`);};let checkRafId=
+-1;function CheckDefendedObjectsUsedCorrectly(){checkRafId=-1;if(ctorObjectToProxy.size>0||ctorProxyToObject.size>0){let uniqueNames=new Set([...ctorObjectToProxy.keys()].map(o=>C3.getName(o)));let leftoverNames=[...uniqueNames].join(",");console.warn(`An object derived from DefendedBase was not protected with debugDefend(). This will disable some checks. See the coding guidelines! Possible affected class names: ${leftoverNames}`);ctorObjectToProxy.clear();ctorProxyToObject.clear()}}C3.DefendedBase=
+class DefendedBase{constructor(){if(!C3.isDebugDefend||!C3.Supports.Proxies)return;let newTarget=new.target;let realObject=Object.create(newTarget.prototype);let proxy=new Proxy(realObject,C3.DefendHandler);ctorObjectToProxy.set(realObject,proxy);ctorProxyToObject.set(proxy,realObject);proxyToObject.set(proxy,realObject);if(checkRafId===-1)checkRafId=requestAnimationFrame(CheckDefendedObjectsUsedCorrectly);return proxy}};C3.debugDefend=function debugDefend(o){if(C3.isDebugDefend&&C3.Supports.Proxies&&
+o instanceof C3.DefendedBase){if(!ctorProxyToObject.has(o))return o;let realObject=ctorProxyToObject.get(o);ctorProxyToObject.delete(o);ctorObjectToProxy.delete(realObject);return o}else if(C3.isDebug)return Object.seal(o);else return o};C3.New=function New(Type,...args){let o;try{o=new Type(...args)}catch(e){ctorProxyToObject.clear();ctorObjectToProxy.clear();throw e;}if(C3.isDebugDefend)VerifyObjectPropertiesConsistent(Type,o);return C3.debugDefend(o)};C3.Release=function Release(o){let realObject=
 proxyToObject.get(o);if(realObject)releasedObjects.set(realObject,C3.GetCallStack())};C3.WasReleased=function(o){let realObject=proxyToObject.get(o);if(!realObject)return false;return!!releasedObjects.get(realObject)};let typeProperties=new Map;function getObjectPropertySet(o){let ret=new Set;for(let k in o)ret.add(k);return ret}function VerifyObjectPropertiesConsistent(Type,o){let properties=getObjectPropertySet(o);let existingProperties=typeProperties.get(Type);if(existingProperties){let inconsistentProperties=
 [];for(let k of existingProperties.values())if(properties.has(k))properties.delete(k);else inconsistentProperties.push(k);C3.appendArray(inconsistentProperties,[...properties]);if(inconsistentProperties.length)console.warn(`[Defence] '${C3.getName(Type)}' constructor creates inconsistent properties: ${inconsistentProperties.join(", ")}`)}else typeProperties.set(Type,properties)}C3.PerfMark=class PerfMark{constructor(name){this._name="";if(name)this.start(name)}start(name){this._name=name;performance.mark(this._name+
 "-Start")}end(){performance.mark(this._name+"-End");performance.measure(this._name,this._name+"-Start",this._name+"-End")}next(name){this.end();this._name=name;performance.mark(this._name+"-Start")}}};
@@ -2352,11 +2353,11 @@ objectClass);this._objectClassesBySid.set(objectClass.GetSID(),objectClass)}for(
 const firstLayoutName=projectData[1];if(firstLayoutName){const firstLayout=this._layoutManager.GetLayoutByName(firstLayoutName);if(firstLayout)this._layoutManager.SetFirstLayout(firstLayout)}for(const timelineData of projectData[33])this._timelineManager.Create(timelineData);for(const transitionData of projectData[35])this._transitionManager.Create(transitionData);this._InitScriptInterfaces();for(const eventSheetData of projectData[6])this._eventSheetManager.Create(eventSheetData);this._eventSheetManager._PostInit();
 this._InitGlobalVariableScriptInterface();C3.clearArray(this._objectReferenceTable);this.FlushPendingInstances();let targetOrientation="any";const orientations=projectData[20];if(orientations===1)targetOrientation="portrait";else if(orientations===2)targetOrientation="landscape";this.PostComponentMessageToDOM("runtime","set-target-orientation",{"targetOrientation":targetOrientation})}GetLoaderStyle(){return this._loaderStyle}IsFBInstantAvailable(){return this._isFBInstantAvailable}IsLoading(){return this._isLoading}AddLoadPromise(promise){this._additionalLoadPromises.push(promise)}SetUsingCreatePromises(e){this._isUsingCreatePromises=
 !!e}AddCreatePromise(promise){if(!this._isUsingCreatePromises)return;this._additionalCreatePromises.push(promise)}GetCreatePromises(){return this._additionalCreatePromises}_GetNextFamilyIndex(){return this._familyCount++}GetFamilyCount(){return this._familyCount}_AddEffectList(el){this._allEffectLists.push(el)}_GetAllEffectLists(){return this._allEffectLists}async _InitialiseCanvas(opts){if(!this._canvasManager)return;await this._canvasManager.CreateCanvas(opts);this._canvasManager.InitLoadingScreen(this._loaderStyle)}async _MaybeLoadOpusDecoder(){if(this._assetManager.IsAudioFormatSupported("audio/webm; codecs=opus"))return;
-let wasmBlob=null;let wasmBuffer=null;try{if(this.IsiOSCordova()&&location.protocol==="file:")wasmBuffer=await this._assetManager.CordovaFetchLocalFileAsArrayBuffer(this._opusWasmBinaryUrl);else wasmBlob=await this._assetManager.FetchBlob(this._opusWasmBinaryUrl)}catch(err){console.info("Failed to fetch Opus decoder WASM; assuming project has no Opus audio.",err);return}if(wasmBuffer)this.AddJobWorkerBuffer(wasmBuffer,"opus-decoder-wasm");else this.AddJobWorkerBlob(wasmBlob,"opus-decoder-wasm");await this.AddJobWorkerScripts([this._opusWasmScriptUrl])}async _WasmDecodeWebMOpus(arrayBuffer){const result=
-await this.AddJob("OpusDecode",{"arrayBuffer":arrayBuffer},[arrayBuffer]);return result}async Start(){this._hasStarted=true;this._startTime=Date.now();if(this._usesLoaderLayout){for(const objectClass of this._allObjectClasses)if(!objectClass.IsFamily()&&!objectClass.IsOnLoaderLayout()&&objectClass.IsWorldType())objectClass.OnCreate();this._assetManager.WaitForAllToLoad().then(()=>{this._isLoading=false;this._OnLoadFinished()})}else this._isLoading=false;this._assetManager.SetInitialLoadFinished();
-if(this.IsDebug())C3Debugger.RuntimeInit(ife);for(const layout of this._layoutManager.GetAllLayouts())layout._CreateGlobalNonWorlds();const firstLayout=this._layoutManager.GetFirstLayout();await firstLayout._Load(null,this.GetWebGLRenderer());await firstLayout._StartRunning(true);this._fpsLastTime=performance.now();if(!this._usesLoaderLayout)this._OnLoadFinished();const state=await this.PostComponentMessageToDOMAsync("runtime","before-start-ticking");if(state["isSuspended"])this._suspendCount++;else this.Tick()}_OnLoadFinished(){this.Trigger(C3.Plugins.System.Cnds.OnLoadFinished,
-null,null);this.PostComponentMessageToDOM("runtime","register-sw")}GetObjectReference(index){index=Math.floor(index);const objRefTable=this._objectReferenceTable;if(index<0||index>=objRefTable.length)throw new Error("invalid object reference");return objRefTable[index]}_LoadJsPropNameTable(){for(const entry of self.C3_JsPropNameTable){const propName=C3.first(Object.keys(entry));this._jsPropNameTable.push(propName)}}GetJsPropName(index){index=Math.floor(index);const jsPropNameTable=this._jsPropNameTable;
-if(index<0||index>=jsPropNameTable.length)throw new Error("invalid prop reference");return jsPropNameTable[index]}HasDOM(){return this._hasDom}IsHeadless(){return this._isHeadless}IsInWorker(){return this._isInWorker}GetBaseURL(){return this._baseUrl}GetEventSheetManager(){return this._eventSheetManager}GetEventStack(){return this._eventSheetManager.GetEventStack()}GetCurrentEventStackFrame(){return this._eventSheetManager.GetCurrentEventStackFrame()}GetCurrentEvent(){return this._eventSheetManager.GetCurrentEvent()}GetCurrentCondition(){return this._eventSheetManager.GetCurrentCondition()}IsCurrentConditionFirst(){return this.GetCurrentEventStackFrame().GetConditionIndex()===
+let wasmBlob=null;let wasmBuffer=null;try{if(this.IsiOSCordova()&&location.protocol==="file:")wasmBuffer=await this._assetManager.CordovaFetchLocalFileAsArrayBuffer(this._opusWasmBinaryUrl);else wasmBuffer=await this._assetManager.FetchArrayBuffer(this._opusWasmBinaryUrl)}catch(err){console.info("Failed to fetch Opus decoder WASM; assuming project has no Opus audio.",err);return}if(wasmBuffer)this.AddJobWorkerBuffer(wasmBuffer,"opus-decoder-wasm");else this.AddJobWorkerBlob(wasmBlob,"opus-decoder-wasm");
+await this.AddJobWorkerScripts([this._opusWasmScriptUrl])}async _WasmDecodeWebMOpus(arrayBuffer){const result=await this.AddJob("OpusDecode",{"arrayBuffer":arrayBuffer},[arrayBuffer]);return result}async Start(){this._hasStarted=true;this._startTime=Date.now();if(this._usesLoaderLayout){for(const objectClass of this._allObjectClasses)if(!objectClass.IsFamily()&&!objectClass.IsOnLoaderLayout()&&objectClass.IsWorldType())objectClass.OnCreate();this._assetManager.WaitForAllToLoad().then(()=>{this._isLoading=
+false;this._OnLoadFinished()})}else this._isLoading=false;this._assetManager.SetInitialLoadFinished();if(this.IsDebug())C3Debugger.RuntimeInit(ife);for(const layout of this._layoutManager.GetAllLayouts())layout._CreateGlobalNonWorlds();const firstLayout=this._layoutManager.GetFirstLayout();await firstLayout._Load(null,this.GetWebGLRenderer());await firstLayout._StartRunning(true);this._fpsLastTime=performance.now();if(!this._usesLoaderLayout)this._OnLoadFinished();const state=await this.PostComponentMessageToDOMAsync("runtime",
+"before-start-ticking");if(state["isSuspended"])this._suspendCount++;else this.Tick()}_OnLoadFinished(){this.Trigger(C3.Plugins.System.Cnds.OnLoadFinished,null,null);this.PostComponentMessageToDOM("runtime","register-sw")}GetObjectReference(index){index=Math.floor(index);const objRefTable=this._objectReferenceTable;if(index<0||index>=objRefTable.length)throw new Error("invalid object reference");return objRefTable[index]}_LoadJsPropNameTable(){for(const entry of self.C3_JsPropNameTable){const propName=
+C3.first(Object.keys(entry));this._jsPropNameTable.push(propName)}}GetJsPropName(index){index=Math.floor(index);const jsPropNameTable=this._jsPropNameTable;if(index<0||index>=jsPropNameTable.length)throw new Error("invalid prop reference");return jsPropNameTable[index]}HasDOM(){return this._hasDom}IsHeadless(){return this._isHeadless}IsInWorker(){return this._isInWorker}GetBaseURL(){return this._baseUrl}GetEventSheetManager(){return this._eventSheetManager}GetEventStack(){return this._eventSheetManager.GetEventStack()}GetCurrentEventStackFrame(){return this._eventSheetManager.GetCurrentEventStackFrame()}GetCurrentEvent(){return this._eventSheetManager.GetCurrentEvent()}GetCurrentCondition(){return this._eventSheetManager.GetCurrentCondition()}IsCurrentConditionFirst(){return this.GetCurrentEventStackFrame().GetConditionIndex()===
 0}GetCurrentAction(){return this._eventSheetManager.GetCurrentAction()}GetPluginManager(){return this._pluginManager}GetSystemPlugin(){return this._pluginManager.GetSystemPlugin()}GetObjectClassByIndex(i){i=Math.floor(i);if(i<0||i>=this._allObjectClasses.length)throw new RangeError("invalid index");return this._allObjectClasses[i]}GetObjectClassByName(name){return this._objectClassesByName.get(name.toLowerCase())||null}GetObjectClassBySID(sid){return this._objectClassesBySid.get(sid)||null}GetSingleGlobalObjectClassByCtor(ctor){const plugin=
 this._pluginManager.GetPluginByConstructorFunction(ctor);if(!plugin)return null;return plugin.GetSingleGlobalObjectClass()}GetAllObjectClasses(){return this._allObjectClasses}*allInstances(){for(const objectClass of this._allObjectClasses){if(objectClass.IsFamily())continue;yield*objectClass.instances()}}Dispatcher(){return this._dispatcher}UserScriptDispatcher(){return this._userScriptDispatcher}DispatchUserScriptEvent(e){e.runtime=this.GetIRuntime();const shouldTime=this.IsDebug()&&!this._eventSheetManager.IsInEventEngine();
 if(shouldTime)C3Debugger.StartMeasuringScriptTime();this._userScriptDispatcher.dispatchEvent(e);if(shouldTime)C3Debugger.AddScriptTime()}DispatchUserScriptEventAsyncWait(e){e.runtime=this.GetIRuntime();return this._userScriptDispatcher.dispatchEventAndWaitAsync(e)}GetOriginalViewportWidth(){return this._originalViewportWidth}GetOriginalViewportHeight(){return this._originalViewportHeight}SetOriginalViewportSize(w,h){this._originalViewportWidth=w;this._originalViewportHeight=h}GetViewportWidth(){return this._viewportWidth}GetViewportHeight(){return this._viewportHeight}SetViewportSize(w,
@@ -2381,8 +2382,8 @@ for(const [objectClass,s]of this._instancesPendingDestroy.entries()){this._Flush
 const wi=inst.GetWorldInfo();if(wi){wi._RemoveFromCollisionCells();wi._RemoveFromRenderCells();wi._MarkDestroyed()}this._instancesToReleaseAtEndOfTick.add(inst);this._objectCount--}C3.arrayRemoveAllInSet(objectClass.GetInstances(),s);objectClass._SetIIDsStale();this._instancesToReleaseAffectedObjectClasses.add(objectClass);if(objectClass.GetInstances().length===0)objectClass._SetAnyInstanceParallaxed(false);for(const family of objectClass.GetFamilies()){C3.arrayRemoveAllInSet(family.GetInstances(),
 s);family._SetIIDsStale();this._instancesToReleaseAffectedObjectClasses.add(family)}if(objectClass.GetPlugin().IsWorldType()){const layers=new Set([...s].map(i=>i.GetWorldInfo().GetLayer()));for(const layer of layers)layer._RemoveAllInstancesInSet(s)}}_GetInstancesPendingCreate(){return this._instancesPendingCreate}_GetNewUID(){return this._nextUid++}_MapInstanceByUID(uid,inst){this._instancesByUid.set(uid,inst)}_OnWebGLContextLost(){this._dispatcher.dispatchEvent(C3.New(C3.Event,"webglcontextlost"));
 this.SetSuspended(true);for(const objectClass of this._allObjectClasses)if(!objectClass.IsFamily()&&objectClass.HasLoadedTextures())objectClass.ReleaseTextures();const runningLayout=this.GetMainRunningLayout();if(runningLayout)runningLayout._OnWebGLContextLost();C3.ImageInfo.OnWebGLContextLost();C3.ImageAsset.OnWebGLContextLost()}async _OnWebGLContextRestored(){await this.GetMainRunningLayout()._Load(null,this.GetWebGLRenderer());this._dispatcher.dispatchEvent(C3.New(C3.Event,"webglcontextrestored"));
-this.SetSuspended(false);this.UpdateRender()}_OnVisibilityChange(e){this.SetSuspended(e["hidden"])}_OnWindowBlur(e){if(!this.IsPreview()||!this._pauseOnBlur||C3.Platform.IsMobile)return;if(!e.data["parentHasFocus"]){this.SetSuspended(true);this._isPausedOnBlur=true}}_OnWindowFocus(){if(!this._isPausedOnBlur)return;this.SetSuspended(false);this._isPausedOnBlur=false}_RequestAnimationFrame(){const tickCallbacks=this._tickCallbacks;if(this._framerateMode==="vsync"){if(this._rafId===-1)this._rafId=C3.RequestPostAnimationFrame(tickCallbacks.normal)}else if(this._framerateMode===
-"unlimited-tick"){if(this._ruafId===-1)this._ruafId=C3.RequestUnlimitedAnimationFrame(tickCallbacks.tickOnly);if(this._rafId===-1)this._rafId=C3.RequestPostAnimationFrame(tickCallbacks.renderOnly)}else if(this._ruafId===-1)this._ruafId=C3.RequestUnlimitedAnimationFrame(tickCallbacks.normal)}_CancelAnimationFrame(){if(this._rafId!==-1){C3.CancelPostAnimationFrame(this._rafId);this._rafId=-1}if(this._ruafId!==-1){C3.CancelUnlimitedAnimationFrame(this._ruafId);this._ruafId=-1}}IsSuspended(){return this._suspendCount>
+this.SetSuspended(false);this.UpdateRender()}_OnVisibilityChange(e){this.SetSuspended(e["hidden"])}_OnWindowBlur(e){if(!this.IsPreview()||!this._pauseOnBlur||C3.Platform.IsMobile)return;if(!e.data["parentHasFocus"]){this.SetSuspended(true);this._isPausedOnBlur=true}}_OnWindowFocus(){if(!this._isPausedOnBlur)return;this.SetSuspended(false);this._isPausedOnBlur=false}_RequestAnimationFrame(){const tickCallbacks=this._tickCallbacks;if(this._framerateMode==="vsync"){if(this._rafId===-1)this._rafId=self.requestAnimationFrame(tickCallbacks.normal)}else if(this._framerateMode===
+"unlimited-tick"){if(this._ruafId===-1)this._ruafId=C3.RequestUnlimitedAnimationFrame(tickCallbacks.tickOnly);if(this._rafId===-1)this._rafId=self.requestAnimationFrame(tickCallbacks.renderOnly)}else if(this._ruafId===-1)this._ruafId=C3.RequestUnlimitedAnimationFrame(tickCallbacks.normal)}_CancelAnimationFrame(){if(this._rafId!==-1){self.cancelAnimationFrame(this._rafId);this._rafId=-1}if(this._ruafId!==-1){C3.CancelUnlimitedAnimationFrame(this._ruafId);this._ruafId=-1}}IsSuspended(){return this._suspendCount>
 0}SetSuspended(s){const wasSuspended=this.IsSuspended();this._suspendCount+=s?1:-1;if(this._suspendCount<0)this._suspendCount=0;const isSuspended=this.IsSuspended();if(!wasSuspended&&isSuspended){console.log("[Construct 3] Suspending");this._CancelAnimationFrame();this._dispatcher.dispatchEvent(C3.New(C3.Event,"suspend"));this.Trigger(C3.Plugins.System.Cnds.OnSuspend,null,null)}else if(wasSuspended&&!isSuspended){console.log("[Construct 3] Resuming");const now=performance.now();this._lastTickTime=
 now;this._fpsLastTime=now;this._fpsFrameCount=0;this._fps=0;this._mainThreadTime=0;this._mainThreadTimeCounter=0;this._dispatcher.dispatchEvent(C3.New(C3.Event,"resume"));this.Trigger(C3.Plugins.System.Cnds.OnResume,null,null);if(!this.HitBreakpoint())this.Tick(now)}}_AddBehInstToTick(behSdkInst){this._behInstsToTick.Add(behSdkInst)}_AddBehInstToPostTick(behSdkInst){this._behInstsToPostTick.Add(behSdkInst)}_AddBehInstToTick2(behSdkInst){this._behInstsToTick2.Add(behSdkInst)}_RemoveBehInstToTick(behSdkInst){this._behInstsToTick.Remove(behSdkInst)}_RemoveBehInstToPostTick(behSdkInst){this._behInstsToPostTick.Remove(behSdkInst)}_RemoveBehInstToTick2(behSdkInst){this._behInstsToTick2.Remove(behSdkInst)}_BehaviorTick(){this._behInstsToTick.SetQueueingEnabled(true);
 for(const bi of this._behInstsToTick)bi.Tick();this._behInstsToTick.SetQueueingEnabled(false)}_BehaviorPostTick(){this._behInstsToPostTick.SetQueueingEnabled(true);for(const bi of this._behInstsToPostTick)bi.PostTick();this._behInstsToPostTick.SetQueueingEnabled(false)}_BehaviorTick2(){this._behInstsToTick2.SetQueueingEnabled(true);for(const bi of this._behInstsToTick2)bi.Tick2();this._behInstsToTick2.SetQueueingEnabled(false)}*_DebugBehaviorTick(){this._behInstsToTick.SetQueueingEnabled(true);for(const bi of this._behInstsToTick){const ret=
@@ -7548,8 +7549,9 @@ this._runtime.GetEventSheetManager();eventSheetManager.BlockFlushingInstances(tr
 sol._SetSelectAll(false);const solInstances=sol._GetOwnInstances();if(resetSol){C3.clearArray(solInstances);solInstances.push(inst)}else solInstances.push(inst);if(inst.IsInContainer())for(const s of inst.siblings()){const sol2=s.GetObjectClass().GetCurrentSol();if(resetSol)sol2.SetSinglePicked(s);else{sol2._SetSelectAll(false);sol2._PushInstance(s)}}}},StopAnim(){this.SetAnimationPlaying(false)},StartAnim(from){this._StartAnim(from)},SetAnim(animName,from){this._SetAnim(animName,from)},SetAnimFrame(frameNum){this._SetAnimFrame(frameNum)},
 SetAnimSpeed(s){this._SetAnimSpeed(s)},SetAnimRepeatToFrame(f){this._SetAnimRepeatToFrame(f)},SetMirrored(m){const wi=this.GetWorldInfo();const oldW=wi.GetWidth();const newW=Math.abs(oldW)*(m===0?-1:1);if(oldW===newW)return;wi.SetWidth(newW);wi.SetBboxChanged()},SetFlipped(f){const wi=this.GetWorldInfo();const oldH=wi.GetHeight();const newH=Math.abs(oldH)*(f===0?-1:1);if(oldH===newH)return;wi.SetHeight(newH);wi.SetBboxChanged()},SetScale(s){const frame=this._currentAnimationFrame;const imageInfo=
 frame.GetImageInfo();const wi=this.GetWorldInfo();const mirrorFactor=wi.GetWidth()<0?-1:1;const flipFactor=wi.GetHeight()<0?-1:1;const newWidth=imageInfo.GetWidth()*s*mirrorFactor;const newHeight=imageInfo.GetHeight()*s*flipFactor;if(wi.GetWidth()!==newWidth||wi.GetHeight()!==newHeight){wi.SetSize(newWidth,newHeight);wi.SetBboxChanged()}},async LoadURL(url,resize,crossOrigin){const curAnimFrame=this._currentAnimationFrame;const curImageInfo=curAnimFrame.GetImageInfo();const wi=this.GetWorldInfo();
-const runtime=this._runtime;if(curImageInfo.GetURL()===url){if(resize===0){wi.SetSize(curImageInfo.GetWidth(),curImageInfo.GetHeight());wi.SetBboxChanged()}this.Trigger(C3.Plugins.Sprite.Cnds.OnURLLoaded);return}const imageInfo=C3.New(C3.ImageInfo);await imageInfo.LoadDynamicAsset(runtime,url);if(!imageInfo.IsLoaded()){this.Trigger(C3.Plugins.Sprite.Cnds.OnURLFailed);return}await imageInfo.LoadStaticTexture(runtime.GetWebGLRenderer(),{sampling:this._runtime.GetSampling()});curImageInfo.ReplaceWith(imageInfo);
-this._sdkType._UpdateAllCurrentTexture();if(!this.WasReleased()&&resize===0){wi.SetSize(curImageInfo.GetWidth(),curImageInfo.GetHeight());wi.SetBboxChanged()}runtime.UpdateRender();if(!this.WasReleased())await this.TriggerAsync(C3.Plugins.Sprite.Cnds.OnURLLoaded)},SetCollisions(e){this.GetWorldInfo().SetCollisionEnabled(e)},SetSolidCollisionFilter(mode,tags){this.GetWorldInfo().SetSolidCollisionFilter(mode===0,tags)},SetEffect(effect){this.GetWorldInfo().SetBlendMode(effect);this._runtime.UpdateRender()}}};
+const runtime=this._runtime;if(curImageInfo.GetURL()===url){if(resize===0){wi.SetSize(curImageInfo.GetWidth(),curImageInfo.GetHeight());wi.SetBboxChanged()}this.Trigger(C3.Plugins.Sprite.Cnds.OnURLLoaded);return}const imageInfo=C3.New(C3.ImageInfo);try{await imageInfo.LoadDynamicAsset(runtime,url);if(!imageInfo.IsLoaded())throw new Error("image failed to load");await imageInfo.LoadStaticTexture(runtime.GetWebGLRenderer(),{sampling:this._runtime.GetSampling()})}catch(err){console.error("Load image from URL failed: ",
+err);this.Trigger(C3.Plugins.Sprite.Cnds.OnURLFailed);return}curImageInfo.ReplaceWith(imageInfo);this._sdkType._UpdateAllCurrentTexture();if(!this.WasReleased()&&resize===0){wi.SetSize(curImageInfo.GetWidth(),curImageInfo.GetHeight());wi.SetBboxChanged()}runtime.UpdateRender();if(!this.WasReleased())await this.TriggerAsync(C3.Plugins.Sprite.Cnds.OnURLLoaded)},SetCollisions(e){this.GetWorldInfo().SetCollisionEnabled(e)},SetSolidCollisionFilter(mode,tags){this.GetWorldInfo().SetSolidCollisionFilter(mode===
+0,tags)},SetEffect(effect){this.GetWorldInfo().SetBlendMode(effect);this._runtime.UpdateRender()}}};
 
 
 'use strict';{const C3=self.C3;C3.Plugins.Sprite.Exps={AnimationFrame(){return this._currentFrameIndex},AnimationFrameCount(){return this._currentAnimation.GetFrameCount()},AnimationName(){return this._currentAnimation.GetName()},AnimationSpeed(){return this._GetAnimSpeed()},OriginalAnimationSpeed(){return this._currentAnimation.GetSpeed()},ImagePointX(imgpt){return this.GetImagePoint(imgpt)[0]},ImagePointY(imgpt){return this.GetImagePoint(imgpt)[1]},ImagePointCount(){return this.GetImagePointCount()},
@@ -7862,6 +7864,64 @@ runtime.SetDebuggingEnabled(false);for(const key of this._data.keys()){this._cur
 
 
 'use strict';{const C3=self.C3;C3.Plugins.Dictionary.Exps={Get(key){const ret=this._data.get(key);if(typeof ret==="undefined")return 0;else return ret},GetDefault(key,defaultValue){const ret=this._data.get(key);if(typeof ret==="undefined")return defaultValue;else return ret},KeyCount(){return this._data.size},CurrentKey(){return this._curKey},CurrentValue(){return this._data.get(this._curKey)||0},AsJSON(){return this.GetAsJsonString()}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.googleplay=class GooglePlayPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.googleplay.Type=class GooglePlayType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}}};
+
+
+'use strict';{const C3=self.C3;const DOM_COMPONENT_ID="googleplay";C3.Plugins.googleplay.Instance=class GooglePlayInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst,DOM_COMPONENT_ID);this.isLoaded=false;this.fireLoadedFirstTick=false;this.isSignedIn=false;this.lastError="";this.my_playerid="";this.my_displayname="";this.my_avatarurl="";this.my_givenname="";this.my_familyname="";this.hiscores_total=0;this.hiscores_mybest=0;this.hiscores_myformattedbest="";this.hiscores_mybesttag=
+"";this.hiscores_myrank=0;this.hiscores_myformattedrank="";this.hiscores_page=null;this.achievements_page=null;this.achievements_by_id=new Map;this.achievement_trigger_id="";this._runtime.AddLoadPromise(this.PostToDOMAsync("load",[properties[1]]).then(()=>{this.isLoaded=true},e=>{console.warn("failed to load Google Play",e)}));this.AddDOMMessageHandler("login",e=>{const state=e["state"];const error=e["error"];if(this.isSignedIn!=state){this.isSignedIn=state;if(state)this.Trigger(C3.Plugins.googleplay.Cnds.OnSignedIn);
+else this.Trigger(C3.Plugins.googleplay.Cnds.OnSignedOut)}if(error){this.lastError=error;this.Trigger(C3.Plugins.googleplay.Cnds.OnSignInFail)}})}GetAchievementAt(i){if(!this.achievements_page)return null;i=Math.floor(i);if(i<0||i>=this.achievements_page.length)return null;return this.achievements_page[i]}GetAchievementMetadataAt(i){const a=this.GetAchievementAt(i);if(!a)return null;const id=a["id"];if(!this.achievements_by_id.has(id))return null;return this.achievements_by_id.get(id)}GetScoreAt(i){if(!this.hiscores_page)return null;
+i=Math.floor(i);if(i<0||i>=this.hiscores_page.length)return null;return this.hiscores_page[i]}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.googleplay.Cnds={OnLoaded(){return true},IsLoaded(){return this.isLoaded},OnSignedIn(){return true},OnSignedOut(){return true},IsSignedIn(){return this.isSignedIn},OnError(){return true},OnPlayerDetails(){return true},OnAutoSignInFailed(){return true},OnSignInFail(){return true},OnScoreSubmitSuccess(){return true},OnScoreSubmitFail(){return true},OnHiScoreRequestSuccess(){return true},OnHiScoreRequestFail(){return true},OnAchievementsRequestSuccess(){return true},
+OnAchievementsRequestFail(){return true},CompareAchievementState(i,s){const a=this.GetAchievementAt(i);if(!a)return false;const str=a["achievementState"];return str===["HIDDEN","REVEALED","UNLOCKED"][s]},OnAchievementsMetadataSuccess(){return true},OnAchievementsMetadataFail(){return true},OnAchievementRevealed(id){return this.achievement_trigger_id===id},OnAchievementUnlocked(id){return this.achievement_trigger_id===id}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.googleplay.Acts={SignIn(){this._PostToDOMMaybeSync("signin")},SignOut(){this._PostToDOMMaybeSync("signout")},async RequestPlayerDetails(){try{const result=await this.PostToDOMAsync("getplayer");if(result){this.my_playerid=result["id"];this.my_displayname=result["display"];this.my_avatarurl=result["avatar"];this.my_givenname=result["givenName"];this.my_familyname=result["familyName"];this.Trigger(C3.Plugins.googleplay.Cnds.OnPlayerDetails)}}catch(e){this.lastError=
+e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnError)}},async SubmitScore(leaderboardId,score,tag){leaderboardId=leaderboardId.trim();try{await this.PostToDOMAsync("submitscore",{"leaderboardId":leaderboardId.trim(),"score":score,"tag":tag});this.Trigger(C3.Plugins.googleplay.Cnds.OnScoreSubmitSuccess)}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnScoreSubmitFail)}},async RequestHiScores(leaderboardId,collection,timespan,maxresults,type,forceReload){collection=["PUBLIC",
+"SOCIAL"][collection];timespan=["ALL_TIME","WEEKLY","DAILY"][timespan];type=["scores","window"][type];leaderboardId=leaderboardId.trim();try{const result=await this.PostToDOMAsync("requestscores",{"leaderboardId":leaderboardId,"collection":collection,"timeSpan":timespan,"maxResults":maxresults,"reload":forceReload,"type":type});if(result){this.hiscores_total=result["total"];this.hiscores_mybest=result["best"];this.hiscores_myformattedbest=result["formattedbest"];this.hiscores_mybesttag=result["besttag"];
+this.hiscores_myrank=result["rank"];this.hiscores_myformattedrank=result["formattedrank"];this.hiscores_page=result["page"];this.Trigger(C3.Plugins.googleplay.Cnds.OnHiScoreRequestSuccess)}}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnHiScoreRequestFail)}},async RequestAchievements(which,forceReload){try{which=["ALL","HIDDEN","REVEALED","UNLOCKED"][which];const result=await this.PostToDOMAsync("requestachievements",{"which":which,"reload":forceReload});this.achievements_page=
+result["page"];if(result["id"])this.achievements_by_id=result["id"];this.Trigger(C3.Plugins.googleplay.Cnds.OnAchievementsRequestSuccess)}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnAchievementsRequestFail)}},async RequestAchievementMetadata(forceReload){try{const result=await this.PostToDOMAsync("requestmetadata",{"reload":forceReload});if(result){this.achievements_by_id=result["id"];if(result["page"])this.achievements_page=result["page"];this.Trigger(C3.Plugins.googleplay.Cnds.OnAchievementsMetadataSuccess)}}catch(e){this.lastError=
+e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnAchievementsMetadataFail)}},async RevealAchievement(id){id=id.trim();try{const res=await this.PostToDOMAsync("reveal",{"id":id});if(res){const ach=this.achievements_by_id.get(id);if(ach&&ach["achievementState"]=="HIDDEN"){ach["achievementState"]="REVEALED";this.achievement_trigger_id=id;this.Trigger(C3.Plugins.googleplay.Cnds.OnAchievementRevealed)}}}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnError)}},async UnlockAchievement(id){id=
+id.trim();try{const res=await this.PostToDOMAsync("unlock",{"id":id});if(res){const ach=this.achievements_by_id.get(id);if(ach&&ach["achievementState"]!="UNLOCKED"){ach["achievementState"]="UNLOCKED";this.achievement_trigger_id=id;this.Trigger(C3.Plugins.googleplay.Cnds.OnAchievementUnlocked)}}}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnError)}},async IncrementAchievement(id,steps){id=id.trim();try{const res=await this.PostToDOMAsync("increment",{"id":id,"steps":steps});
+if(res){const ach=this.achievements_by_id.get(id);if(ach&&ach["achievementState"]!="UNLOCKED"){ach["currentSteps"]+=steps;if(ach["currentSteps"]>=ach["totalSteps"]){this.achievement_trigger_id=id;ach["currentSteps"]=ach["totalSteps"];ach["achievementState"]="UNLOCKED";this.Trigger(C3.Plugins.googleplay.Cnds.OnAchievementUnlocked)}}}}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnError)}},async SetStepsAchievement(id,steps){id=id.trim();try{const res=await this.PostToDOMAsync("setsteps",
+{"id":id,"steps":steps});if(res){const ach=this.achievements_by_id.get(id);if(ach&&ach["achievementState"]!="UNLOCKED"){ach["currentSteps"]=steps;if(steps>=ach["totalSteps"]){this.achievement_trigger_id=id;ach["currentSteps"]=ach["totalSteps"];ach["achievementState"]="UNLOCKED";this.Trigger(C3.Plugins.googleplay.Cnds.OnAchievementUnlocked)}}}}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnError)}},async ShowLeaderboards(){try{const id=null;await this.PostToDOMAsync("showleaderboard",
+{"id":id})}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnError)}},async ShowLeaderboard(id){id=id.trim();try{await this.PostToDOMAsync("showleaderboard",{"id":id})}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnError)}},async ShowAchievements(){try{await this.PostToDOMAsync("showachievements")}catch(e){this.lastError=e.message;this.Trigger(C3.Plugins.googleplay.Cnds.OnError)}}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.googleplay.Exps={ErrorMessage(){return this.lastError},MyID(){return this.my_playerid},MyDisplayName(){return this.my_displayname},MyAvatarUrl(){return this.my_avatarurl},MyGivenName(){return this.my_givenname},MyFamilyName(){return this.my_familyname},HiScoreTotalCount(){return this.hiscores_total},HiScoreMyBest(){return this.hiscores_mybest},HiScoreMyBestTag(){return this.hiscores_mybesttag},HiScoreMyFormattedBest(){return this.hiscores_myformattedbest},
+HiScoreMyBestRank(){return this.hiscores_myrank},HiScoreMyBestFormattedRank(){return this.hiscores_myformattedrank},HiScoreCount(){return this.hiscores_page?this.hiscores_page.length||0:0},HiScoreNameAt(i){const s=this.GetScoreAt(i);return s&&s["player"]?s["player"]["displayName"]||"":""},HiScoreRankAt(i){const s=this.GetScoreAt(i);return s?parseInt(s["scoreRank"],10)||0:0},HiScoreAt(i){const s=this.GetScoreAt(i);return s?parseInt(s["scoreValue"],10)||0:0},HiScoreTagAt(i){const s=this.GetScoreAt(i);
+return s&&s["scoreTag"]?s["scoreTag"]||"":""},HiScoreFormattedAt(i){const s=this.GetScoreAt(i);return s&&s["formattedScore"]?s["formattedScore"]||"":""},HiScoreFormattedRankAt(i){const s=this.GetScoreAt(i);return s&&s["formattedScoreRank"]?s["formattedScoreRank"]||"":""},AchievementsCount(){return this.achievements_page?this.achievements_page.length||0:0},AchievementIDAt(i){const a=this.GetAchievementAt(i);return a?a["id"]||"":""},AchievementStepsAt(i){const a=this.GetAchievementAt(i);return a?a["currentSteps"]||
+0:0},AchievementNameAt(i){const a=this.GetAchievementMetadataAt(i);return a?a["name"]||"":""},AchievementDescriptionAt(i){const a=this.GetAchievementMetadataAt(i);return a?a["description"]||"":""},AchievementTypeAt(i){const a=this.GetAchievementMetadataAt(i);return a?(a["type"]||"").toLowerCase():""},AchievementTotalStepsAt(i){const a=this.GetAchievementMetadataAt(i);return a?a["totalSteps"]||0:0},AchievementRevealedIconURLAt(i){const a=this.GetAchievementMetadataAt(i);return a?a["revealedUrl"]||
+"":""},AchievementUnlockedIconURLAt(i){const a=this.GetAchievementMetadataAt(i);return a?a["unlockedUrl"]||"":""}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.gamecenter=class GameCenterPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.gamecenter.Type=class GameCenterType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}}};
+
+
+'use strict';{const C3=self.C3;const DOM_COMPONENT_ID="gamecenter";C3.Plugins.gamecenter.Instance=class GameCenterInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst,DOM_COMPONENT_ID);this.userAlias="";this.playerId="";this.displayName="";this.playerImageURL="";this.achievementList=[]}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.gamecenter.Cnds={OnAuthSuccess(){return true},OnAuthFail(){return true},OnPlayerImageSuccess(){return true},OnPlayerImageError(){return true},OnScoreSubmitSuccess(){return true},OnScoreSubmitFail(){return true},OnShowLeaderboardSuccess(){return true},OnShowLeaderboardError(){return true},OnAchievementReportSuccess(){return true},OnAchievementReportError(){return true},OnAchievementResetSuccess(){return true},OnAchievementResetError(){return true},OnAchievementList(){return true},
+OnAchievementListError(){return true}}};
+
+
+'use strict';{const C3=self.C3;let hadSuccessfulAuth=false;C3.Plugins.gamecenter.Acts={async Auth(){try{const user=await this.PostToDOMAsync("auth");this.userAlias=user["alias"]||"";this.playerId=user["playerID"]||"";this.displayName=user["displayName"]||"";hadSuccessfulAuth=true;await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnAuthSuccess)}catch(e){if(e!=="GameCenter not loaded")await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnAuthFail)}},async RequestPlayerImage(){if(!hadSuccessfulAuth)return;
+try{this.playerImageURL=await this.PostToDOMAsync("getPlayerImage");await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnPlayerImageSuccess)}catch(e){await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnPlayerImageError)}},async SubmitScore(score,leaderboardId){if(!hadSuccessfulAuth)return;try{await this.PostToDOMAsync("submitScore",{"score":score,"leaderboardId":leaderboardId});await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnScoreSubmitSuccess)}catch(e){await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnScoreSubmitFail)}},
+async ShowLeaderboard(leaderboardId){if(!hadSuccessfulAuth)return;try{await this.PostToDOMAsync("showLeaderboard",{"leaderboardId":leaderboardId});await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnShowLeaderboardSuccess)}catch(e){await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnShowLeaderboardError)}},async ReportAchievement(achievementId,percent){if(!hadSuccessfulAuth)return;try{await this.PostToDOMAsync("reportAchievement",{"achievementId":achievementId,"percent":Math.floor(percent).toString()});
+await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnAchievementReportSuccess)}catch(e){await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnAchievementReportError)}},async ResetAchievements(){if(!hadSuccessfulAuth)return;try{await this.PostToDOMAsync("resetAchievements");await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnAchievementResetSuccess)}catch(e){await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnAchievementResetError)}},async RequestAchievements(){if(!hadSuccessfulAuth)return;try{const results=
+await this.PostToDOMAsync("getAchievements")||[];this.achievementList.length=0;for(const res of results)this.achievementList.push(res||"");await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnAchievementList)}catch(e){await this.TriggerAsync(C3.Plugins.gamecenter.Cnds.OnAchievementListError)}}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.gamecenter.Exps={UserAlias(){return this.userAlias},PlayerID(){return this.playerId},UserDisplayName(){return this.displayName},PlayerImageURL(){return this.playerImageURL},AchievementCount(){return this.achievementList.length},AchievementAt(i){i=Math.floor(i);if(i<0||i>this.achievementList.length)return"";else return this.achievementList[i]}}};
 
 
 "use strict";
@@ -9394,6 +9454,8 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.filechooser,
 		C3.Plugins.Browser,
 		C3.Plugins.Dictionary,
+		C3.Plugins.googleplay,
+		C3.Plugins.gamecenter,
 		C3.Plugins.Photon,
 		C3.Behaviors.Flash,
 		C3.Plugins.Audio,
@@ -9440,7 +9502,6 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.Audio.Acts.Stop,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.Audio.Acts.Play,
-		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.XML.Exps.StringValue,
 		C3.Plugins.System.Exps.left,
 		C3.Plugins.System.Exps.right,
@@ -9492,25 +9553,28 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.System.Exps.random,
 		C3.Plugins.Text.Acts.SetInstanceVar,
 		C3.Plugins.Sprite.Acts.SetAnimSpeed,
+		C3.Plugins.LocalStorage.Acts.SetItem,
+		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.System.Exps.layeropacity,
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.Sprite.Exps.Opacity,
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.Arr.Acts.SetXYZ,
-		C3.Plugins.VKBridge.Acts.AdsMobile,
 		C3.Plugins.VKBridge.Acts.ShowAds,
+		C3.Plugins.VKBridge.Acts.AdsMobile,
+		C3.Plugins.VKBridge.Acts.JoinGroup,
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.System.Exps.loopindex,
 		C3.Plugins.System.Exps.anglerotate,
 		C3.Behaviors.Bullet.Exps.AngleOfMotion,
 		C3.Behaviors.Fade.Acts.RestartFade,
 		C3.Behaviors.Sin.Acts.SetEnabled,
+		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
 		C3.Plugins.System.Cnds.OnLayoutEnd,
 		C3.Plugins.Dictionary.Acts.AddKey,
 		C3.Plugins.Arr.Exps.AsJSON,
-		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Dictionary.Exps.AsJSON,
 		C3.Plugins.AJAX.Acts.RequestFile,
 		C3.Plugins.AJAX.Cnds.OnComplete,
@@ -9522,20 +9586,26 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.System.Exps.viewportleft,
 		C3.Plugins.VKBridge.Acts.UserGet,
 		C3.Plugins.VKBridge.Exps.UserID,
+		C3.Plugins.gamecenter.Acts.Auth,
 		C3.Plugins.TextBox.Acts.SetEnabled,
 		C3.Plugins.TextBox.Acts.SetVisible,
 		C3.Plugins.TextBox.Acts.SetCSSStyle,
 		C3.Plugins.filechooser.Acts.SetCSSStyle,
-		C3.Plugins.VKBridge.Cnds.UserGetSuccess,
-		C3.Plugins.Browser.Acts.ExecJs,
+		C3.Plugins.gamecenter.Cnds.OnAuthSuccess,
+		C3.Plugins.gamecenter.Exps.UserAlias,
 		C3.Plugins.TextBox.Acts.SetText,
 		C3.Plugins.TextBox.Acts.SetFocus,
+		C3.Plugins.TextBox.Exps.Text,
+		C3.Plugins.System.Exps.tokencount,
+		C3.Plugins.System.Exps.replace,
+		C3.Plugins.TextBox.Cnds.OnTextChanged,
+		C3.Plugins.VKBridge.Cnds.UserGetSuccess,
+		C3.Plugins.Browser.Acts.ExecJs,
+		C3.Plugins.VKBridge.Exps.UserData,
 		C3.Plugins.Sprite.Acts.LoadURL,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.Photon.Acts.connect,
-		C3.Plugins.System.Exps.tokencount,
-		C3.Plugins.System.Exps.replace,
 		C3.Plugins.Photon.Cnds.onJoinedLobby,
 		C3.Plugins.Photon.Acts.setMyActorName,
 		C3.Plugins.Photon.Acts.joinRandomRoom,
@@ -9551,26 +9621,27 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.Photon.Cnds.onError,
 		C3.Plugins.Photon.Acts.setRegion,
 		C3.Plugins.Photon.Acts.leaveRoom,
-		C3.Plugins.Keyboard.Cnds.OnKey,
-		C3.Plugins.LocalStorage.Acts.ClearStorage,
-		C3.Plugins.Dictionary.Acts.Clear,
+		C3.Plugins.gamecenter.Acts.RequestPlayerImage,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.VKBridge.Acts.AppGetClient,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.System.Exps.find,
 		C3.Plugins.Browser.Exps.Language,
-		C3.Plugins.LocalStorage.Cnds.OnItemExists,
-		C3.Plugins.LocalStorage.Acts.GetItem,
-		C3.Plugins.LocalStorage.Cnds.OnItemGet,
-		C3.Plugins.Dictionary.Acts.JSONLoad,
-		C3.Plugins.LocalStorage.Exps.ItemValue,
-		C3.Plugins.Arr.Acts.JSONLoad,
-		C3.Plugins.Dictionary.Exps.Get,
-		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Plugins.VKBridge.Cnds.AppGetClientSuccess,
-		C3.Plugins.VKBridge.Exps.ClientPlatform
+		C3.Plugins.VKBridge.Exps.ClientPlatform,
+		C3.Plugins.LocalStorage.Cnds.OnItemExists,
+		C3.Plugins.LocalStorage.Acts.GetItem,
+		C3.Plugins.LocalStorage.Exps.ItemValue,
+		C3.Plugins.LocalStorage.Cnds.OnItemGet,
+		C3.Plugins.Dictionary.Acts.JSONLoad,
+		C3.Plugins.Arr.Acts.JSONLoad,
+		C3.Plugins.Dictionary.Exps.Get,
+		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
+		C3.Plugins.Keyboard.Cnds.OnKey,
+		C3.Plugins.LocalStorage.Acts.ClearStorage,
+		C3.Plugins.Dictionary.Acts.Clear
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -9644,6 +9715,8 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		{planet: 0},
 		{Sine3: 0},
 		{search: 0},
+		{GooglePlay: 0},
+		{GameCenter: 0},
 		{team_hod: 0},
 		{multiplayer_var_obj: 0},
 		{bot_finger_x: 0},
@@ -9671,6 +9744,7 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		{VKBridge: 0},
 		{Keyboard: 0},
 		{football_coll_: 0},
+		{Win: 0},
 		{game_mode: 0},
 		{select_UID: 0},
 		{hod_team: 0},
@@ -9684,7 +9758,6 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		{ai_bot_choose_id: 0},
 		{player_name: 0},
 		{player_con: 0},
-		{platform: 0},
 		{lang_: 0},
 		{state_menu: 0},
 		{Data: 0},
@@ -9693,7 +9766,8 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		{Time_out: 0},
 		{peer_id: 0},
 		{type_multy: 0},
-		{Data2: 0}
+		{Data2: 0},
+		{platform: 0}
 	];
 }
 
@@ -9969,11 +10043,6 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 			const n0 = p._GetNode(0);
 			return () => n0.ExpInstVar();
 		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => ((f0("first_name") + " ") + f1("last_name"));
-		},
 		() => "player_1_con",
 		p => {
 			const n0 = p._GetNode(0);
@@ -10212,6 +10281,7 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() - 46);
 		},
+		() => "Win",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
@@ -10244,10 +10314,11 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 			return () => C3.clamp((n0.ExpObject() + (450 * f1())), 0, 45);
 		},
 		() => "Card_",
+		() => "web",
+		() => "mobile-web",
 		() => "android",
 		() => "ios",
-		() => "mobile-web",
-		() => "web",
+		() => 204017056,
 		() => -90,
 		() => 950,
 		() => 567,
@@ -10275,9 +10346,10 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		() => 215,
 		() => "Touch_but",
 		() => "menu_but_play",
+		() => "menu_join",
 		() => "menu_but_tack",
-		() => "menu_but_settings",
 		() => "menu_leaderboard",
+		() => "menu_but_settings",
 		() => "get_data",
 		() => "data_player",
 		() => "team_data",
@@ -10308,17 +10380,27 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 			return () => (f0(n1.ExpObject()) - f2(n3.ExpObject()));
 		},
 		() => "photo_200",
-		() => "name_",
 		() => "opacity",
 		() => "0.0",
 		() => "con_update",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (("var img = new Image(); \nimg.crossOrigin = 'Anonymous'; \nimg.onload = function() { \nvar _c = document.createElement('canvas'); \nvar _ctx = _c.getContext('2d'); \n_c.width = 178; _c.height =178;\nvar cur_size_ =img.height;\nif(img.width< img.height) {var cur_size_ = img.width;   }\n_ctx.drawImage(img, 0, 0, cur_size_, cur_size_, 0, 0, 179, 179); \nc2_callFunction('get_data',[_c.toDataURL()]) \n} \nimg.src = '" + f0("photo_200")) + "'");
-		},
 		() => "AUTH_IOS",
+		() => "name_",
 		() => "done_name",
 		() => "Player",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			const f2 = p._GetNode(2).GetBoundMethod();
+			const f3 = p._GetNode(3).GetBoundMethod();
+			const f4 = p._GetNode(4).GetBoundMethod();
+			const n5 = p._GetNode(5);
+			return () => f0(n1.ExpObject("/trans/nicks[@id='nick']/text()"), f2(f3(f4(n5.ExpObject("/trans/nicks[@id='nick']/text()"), ","))), ",");
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			return () => f0(v1.GetValue(), "\n", "");
+		},
 		() => "con_right",
 		p => {
 			const n0 = p._GetNode(0);
@@ -10332,6 +10414,10 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 			return () => (((((n0.ExpObject() - 1)) < (1) ? 1 : 0)) ? (31) : ((n1.ExpObject() - 1)));
 		},
 		() => "contry_name",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (("var img = new Image(); \nimg.crossOrigin = 'Anonymous'; \nimg.onload = function() { \nvar _c = document.createElement('canvas'); \nvar _ctx = _c.getContext('2d'); \n_c.width = 178; _c.height =178;\nvar cur_size_ =img.height;\nif(img.width< img.height) {var cur_size_ = img.width;   }\n_ctx.drawImage(img, 0, 0, cur_size_, cur_size_, 0, 0, 179, 179); \nc2_callFunction('get_data',[_c.toDataURL()]) \n} \nimg.src = '" + f0("photo_200")) + "'");
+		},
 		() => 178,
 		p => {
 			const n0 = p._GetNode(0);
@@ -10416,15 +10502,6 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		() => "name_player_my",
 		() => "stat",
 		() => "connecting",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const n1 = p._GetNode(1);
-			const f2 = p._GetNode(2).GetBoundMethod();
-			const f3 = p._GetNode(3).GetBoundMethod();
-			const f4 = p._GetNode(4).GetBoundMethod();
-			const n5 = p._GetNode(5);
-			return () => f0(n1.ExpObject("/trans/nicks[@id='nick']/text()"), f2(f3(f4(n5.ExpObject("/trans/nicks[@id='nick']/text()"), ","))), ",");
-		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
@@ -10527,13 +10604,17 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		() => "load_image",
 		() => "load_image_ios",
 		() => "AUTH_IOS_settings",
-		() => "last_name",
-		() => "ru",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("first_name");
+		},
+		() => "en",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => f0(f1(), "ru");
 		},
+		() => "ru",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
@@ -10565,6 +10646,10 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("team_data");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("player_name");
 		},
 		p => {
 			const n0 = p._GetNode(0);

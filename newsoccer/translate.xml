@@ -3,9 +3,10 @@
     <lang id='ru'>
          <text id='menu_but_play'>Быстрый матч</text>
 		 <text id='menu_but_cup'>Кубок</text>
-		 <text id='menu_leaderboard'>Рекорды</text>
 		 <text id='menu_but_settings'>Настройки</text>
-		 <text id='enter_name'>Ваше Имя</text>
+		 <text id='menu_leaderboard'>Рекорды</text>
+		 <text id='menu_join'>+</text>
+		 <text id='enter_name'>Введите Ваше Имя</text>
 		 <text id='name_'>Ваше Имя</text>
 		 <text id='done_name'>Готово</text>
 		 <text id='select_tactick'>Тактическое построение</text>
@@ -32,9 +33,10 @@
 	<lang id='en'>
          <text id='menu_but_play'>Quick match</text>
 		 <text id='menu_but_cup'>Cup</text>
-		 <text id='menu_leaderboard'>Leaderboard</text>
+		 <text id='menu_join'>+</text>
 		 <text id='menu_but_settings'>Settings</text>
-		 <text id='enter_name'>Your Name</text>
+		 <text id='menu_leaderboard'>Records</text>
+		 <text id='enter_name'>Enter Your Name</text>
 		 <text id='name_'>Your name</text>
 		 <text id='done_name'>Done</text>
 		 <text id='select_tactick'>Tactical map</text>
@@ -61,7 +63,7 @@
 	<lang id='es'>
          <text id='menu_but_play'>Quick match</text>
 		 <text id='menu_but_cup'>Copa</text>
-		 <text id='menu_leaderboard'>Récords</text>
+		 <text id='menu_join'>+</text>
 		 <text id='menu_but_settings'>Configuración</text>
 		 <text id='enter_name'>Introduzca Su Nombre De</text>
 		 <text id='name_'>Tu nombre</text>
@@ -90,7 +92,7 @@
 	<lang id='it'>
          <text id='menu_but_play'>Partita veloce</text>
 		 <text id='menu_but_cup'>Coppa</text>
-		 <text id='menu_leaderboard'>Record</text>
+		 <text id='menu_join'>+</text>
 		 <text id='menu_but_settings'>Impostazioni</text>
 		 <text id='enter_name'>Inserisci Il Tuo Nome</text>
 		 <text id='name_'>Il tuo nome</text>
@@ -119,8 +121,8 @@
 	<lang id='fr'>
          <text id='menu_but_play'>Match rapide</text>
 		 <text id='menu_but_cup'>Coupe</text>
+		 <text id='menu_join'>+</text>
 		 <text id='menu_but_settings'>Paramètres</text>
-		  <text id='menu_leaderboard'>Records</text>
 		 <text id='enter_name'>Entrez Votre Nom</text>
 		 <text id='name_'>Votre nom</text>
 		 <text id='done_name'>Fait</text>
@@ -148,7 +150,7 @@
 	<lang id='de'>
          <text id='menu_but_play'>Schnelles Spiel</text>
 		 <text id='menu_but_cup'>Tasse</text>
-		 <text id='menu_leaderboard'>Rekorde</text>
+		 <text id='menu_join'>+</text>
 		 <text id='menu_but_settings'>Einstellungen</text>
 		 <text id='enter_name'>Geben Sie Ihren Namen Ein!</text>
 		 <text id='name_'>Ihr name</text>
