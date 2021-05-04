@@ -9602,9 +9602,9 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.filechooser.Cnds.OnChanged,
 		C3.Plugins.Browser.Acts.ExecJs,
 		C3.Plugins.filechooser.Exps.FileURLAt,
-		C3.Plugins.Sprite.Acts.LoadURL,
 		C3.Plugins.VKBridge.Cnds.UserGetSuccess,
 		C3.Plugins.VKBridge.Exps.UserData,
+		C3.Plugins.Sprite.Acts.LoadURL,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.Photon.Acts.connect,
@@ -10610,10 +10610,6 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		() => "load_image",
 		() => "load_image_ios",
 		() => "AUTH_IOS_settings",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("first_name");
-		},
 		() => "en",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
