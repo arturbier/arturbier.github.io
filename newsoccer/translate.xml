@@ -4,6 +4,7 @@
          <text id='menu_but_play'>Быстрый матч</text>
 		 <text id='menu_but_cup'>Кубок</text>
 		 <text id='menu_but_settings'>Настройки</text>
+		 <text id='menu_back'>Сдаться</text>
 		 <text id='menu_leaderboard'>Рекорды</text>
 		 <text id='menu_join'>+</text>
 		 <text id='enter_name'>Введите Ваше Имя</text>
@@ -34,6 +35,7 @@
          <text id='menu_but_play'>Quick match</text>
 		 <text id='menu_but_cup'>Cup</text>
 		 <text id='menu_join'>+</text>
+		 <text id='menu_back'>Pass</text>
 		 <text id='menu_but_settings'>Settings</text>
 		 <text id='menu_leaderboard'>Records</text>
 		 <text id='enter_name'>Enter Your Name</text>
