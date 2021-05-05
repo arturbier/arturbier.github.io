@@ -9639,10 +9639,7 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.Dictionary.Acts.JSONLoad,
 		C3.Plugins.Arr.Acts.JSONLoad,
 		C3.Plugins.Dictionary.Exps.Get,
-		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
-		C3.Plugins.Keyboard.Cnds.OnKey,
-		C3.Plugins.LocalStorage.Acts.ClearStorage,
-		C3.Plugins.Dictionary.Acts.Clear
+		C3.Plugins.LocalStorage.Cnds.OnItemMissing
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -10231,7 +10228,7 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 			const n1 = p._GetNode(1);
 			return () => ((n0.ExpObject() / n1.ExpObject()) * 71);
 		},
-		() => "AI_BOT",
+		() => "AI_BOT2",
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -10245,6 +10242,7 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() + 3);
 		},
+		() => 0.3,
 		() => "select_player",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -10254,7 +10252,6 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() + 1);
 		},
-		() => 0.3,
 		() => "player_selected",
 		p => {
 			const n0 = p._GetNode(0);
