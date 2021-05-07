@@ -9541,6 +9541,7 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.Arr.Acts.AddInstanceVar,
 		C3.Plugins.Arr.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Acts.RestartLayout,
+		C3.Plugins.VKBridge.Acts.JoinGroup,
 		C3.Plugins.Sprite.Exps.Width,
 		C3.Plugins.Photon.Cnds.onActorLeave,
 		C3.Plugins.Photon.Exps.ActorNr,
@@ -9563,7 +9564,6 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		C3.Plugins.Arr.Acts.SetXYZ,
 		C3.Plugins.VKBridge.Acts.ShowAds,
 		C3.Plugins.VKBridge.Acts.AdsMobile,
-		C3.Plugins.VKBridge.Acts.JoinGroup,
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.System.Exps.loopindex,
 		C3.Plugins.System.Exps.anglerotate,
@@ -9758,6 +9758,7 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		{player_con: 0},
 		{lang_: 0},
 		{state_menu: 0},
+		{Join_Group: 0},
 		{Data: 0},
 		{state_move: 0},
 		{region: 0},
@@ -10211,6 +10212,11 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		() => 4.5,
 		() => "game_end",
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0, 1);
+		},
+		() => 204017056,
+		p => {
 			const n0 = p._GetNode(0);
 			return () => C3.cosp(n0.ExpObject(), 540, 0.2);
 		},
@@ -10318,7 +10324,6 @@ this._stage=0;this._stageTimeLeft+=this._onTime}this._runtime.UpdateRender()}}Ge
 		() => "mobile-web",
 		() => "android",
 		() => "ios",
-		() => 204017056,
 		() => -90,
 		() => 950,
 		() => 567,
