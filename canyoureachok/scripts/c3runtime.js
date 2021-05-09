@@ -4088,10 +4088,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.Arr.Exps.At,
 		C3.Plugins.System.Acts.StopLoop,
 		C3.Plugins.Sprite.Acts.SetAngle,
-		C3.Plugins.LocalStorage.Acts.SetItem,
-		C3.Plugins.LocalStorage.Cnds.OnItemSet,
 		C3.Plugins.OKBridge.Acts.StorageSet,
-		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Sprite.Acts.MoveToBottom,
 		C3.Plugins.TiledBg.Acts.SetWidth,
 		C3.Plugins.TiledBg.Exps.X,
@@ -4318,6 +4315,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
 		},
+		() => "user_score",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
@@ -4334,8 +4332,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			const v1 = p._GetNode(1).GetVar();
-			return () => f0(v1.GetValue());
+			return () => f0("user_score");
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -4634,7 +4631,6 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() * 30);
 		},
-		() => "storageName",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() + 1);
