@@ -1,6 +1,6 @@
 {
-	"name": "Can you reach 8K (OK)",
-	"short_name": "Can you reach 8K (OK)",
+	"name": "Can you reach 8K",
+	"short_name": "Can you reach 8K",
 	"description": "Match game - 2 in 1",
 	"start_url": "index.html",
 	"display": "fullscreen",

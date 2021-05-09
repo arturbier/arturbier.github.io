@@ -4088,7 +4088,10 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 		C3.Plugins.Arr.Exps.At,
 		C3.Plugins.System.Acts.StopLoop,
 		C3.Plugins.Sprite.Acts.SetAngle,
+		C3.Plugins.LocalStorage.Acts.SetItem,
+		C3.Plugins.LocalStorage.Cnds.OnItemSet,
 		C3.Plugins.OKBridge.Acts.StorageSet,
+		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Sprite.Acts.MoveToBottom,
 		C3.Plugins.TiledBg.Acts.SetWidth,
 		C3.Plugins.TiledBg.Exps.X,
@@ -4631,6 +4634,7 @@ map.get(this)._SetGravity(g)}get angleOfMotion(){return map.get(this)._GetAngleO
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() * 30);
 		},
+		() => "storageName",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() + 1);
