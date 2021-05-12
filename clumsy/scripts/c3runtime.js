@@ -3777,7 +3777,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Behaviors.Anchor.Acts.SetEnabled,
 		C3.Plugins.Sprite.Acts.SetX,
-		C3.Plugins.System.Exps.originalviewportwidth,
+		C3.Plugins.System.Exps.viewportright,
 		C3.Plugins.Text.Acts.SetX,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
 		C3.Plugins.System.Cnds.CompareBoolVar,
@@ -3798,7 +3798,6 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.Sprite.Acts.RotateTowardAngle,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.System.Acts.CreateObject,
-		C3.Plugins.System.Exps.viewportright,
 		C3.Plugins.System.Exps.random,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.System.Exps.choose,
@@ -4009,7 +4008,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		() => "Start",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (f0() / 2);
+			return () => (f0("GUI") / 2);
 		},
 		() => "Restart",
 		() => 2,
@@ -4094,6 +4093,10 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		() => 204017056,
 		() => "bg",
 		() => "Out",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0("BG") / 2);
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0("BG") / 2.2);
