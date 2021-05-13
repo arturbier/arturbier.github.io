@@ -4011,6 +4011,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 			return () => (f0("GUI") / 2);
 		},
 		() => "Restart",
+		() => "Home",
 		() => 2,
 		() => 1,
 		() => "First_Game",
