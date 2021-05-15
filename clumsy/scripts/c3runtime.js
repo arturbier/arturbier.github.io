@@ -3774,6 +3774,9 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.Spritefont2,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.System.Acts.SetGroupActive,
+		C3.Plugins.Sprite.Acts.SetAnim,
+		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Behaviors.Anchor.Acts.SetEnabled,
 		C3.Plugins.Sprite.Acts.SetX,
@@ -3791,7 +3794,6 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.Audio.Acts.Play,
 		C3.Behaviors.Platform.Acts.SetVectorY,
 		C3.Behaviors.Platform.Acts.SetVectorX,
-		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.viewporttop,
 		C3.Behaviors.Platform.Cnds.IsFalling,
@@ -3800,7 +3802,6 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.System.Exps.random,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
-		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Exps.Height,
@@ -3819,7 +3820,6 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
-		C3.Plugins.Sprite.Acts.SetAnim,
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Behaviors.scrollto.Acts.Shake,
@@ -3831,6 +3831,17 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
 		C3.Plugins.VKBridge.Acts.JoinGroup,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
+		C3.ScriptsInEvents.S_game_Event34_Act1,
+		C3.ScriptsInEvents.S_game_Event35_Act1,
+		C3.ScriptsInEvents.S_game_Event36_Act1,
+		C3.ScriptsInEvents.S_game_Event37_Act1,
+		C3.ScriptsInEvents.S_game_Event38_Act1,
+		C3.ScriptsInEvents.S_game_Event39_Act1,
+		C3.ScriptsInEvents.S_game_Event40_Act1,
+		C3.ScriptsInEvents.S_game_Event41_Act1,
+		C3.ScriptsInEvents.S_game_Event42_Act1,
+		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.VKBridge.Cnds.ShowInviteSuccess,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
@@ -3899,6 +3910,7 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 		{Pause: 0},
 		{Score: 0},
 		{Cubok: 0},
+		{Button_AD: 0},
 		{Column: 0},
 		{First_Game: 0},
 		{Best: 0},
@@ -4004,8 +4016,12 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 	}
 
 	self.C3_ExpressionFuncs = [
-		() => "Play",
 		() => "Start",
+		() => "Play",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Cube", "Tap", "Kiwi", "Pong", "Soccer", "Zombies", "8K");
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0("GUI") / 2);
@@ -4091,7 +4107,21 @@ true,result:this.OTHER})}if(C3.IsFiniteNumber(property))property=C3.Behaviors.Tw
 			return () => (f0(v1.GetValue()) + 5);
 		},
 		() => "Best",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("GUI");
+		},
 		() => 204017056,
+		() => "My games",
+		() => "Kiwi",
+		() => "Cube",
+		() => "Tap",
+		() => "Cats",
+		() => "Pong",
+		() => "Clumsy",
+		() => "Soccer",
+		() => "Zombies",
+		() => "8K",
 		() => "bg",
 		() => "Out",
 		p => {
