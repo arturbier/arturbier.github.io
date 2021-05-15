@@ -4071,6 +4071,16 @@ WaypointYAt(i){return this._GetWaypointYAt(i)}}};
 		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
+		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
+		C3.ScriptsInEvents.MenuEvents_Event27_Act1,
+		C3.ScriptsInEvents.MenuEvents_Event28_Act1,
+		C3.ScriptsInEvents.MenuEvents_Event29_Act1,
+		C3.ScriptsInEvents.MenuEvents_Event30_Act1,
+		C3.ScriptsInEvents.MenuEvents_Event31_Act1,
+		C3.ScriptsInEvents.MenuEvents_Event32_Act1,
+		C3.ScriptsInEvents.MenuEvents_Event33_Act1,
+		C3.ScriptsInEvents.MenuEvents_Event34_Act1,
+		C3.ScriptsInEvents.MenuEvents_Event35_Act1,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.Sprite.Exps.LayerName,
 		C3.Plugins.Sprite.Exps.BBoxLeft,
@@ -4154,6 +4164,7 @@ WaypointYAt(i){return this._GetWaypointYAt(i)}}};
 		{Text: 0},
 		{Tween: 0},
 		{Canvas: 0},
+		{Button_AD: 0},
 		{MoveTo2: 0},
 		{Zombies: 0},
 		{Movement: 0},
@@ -4455,6 +4466,14 @@ WaypointYAt(i){return this._GetWaypointYAt(i)}}};
 			return () => ((n0.ExpObject() - 100) * (-1));
 		},
 		() => "hiscore",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Cube", "Tap", "Kiwi", "Pong", "Soccer", "Clumsy", "8K");
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("UI");
+		},
 		() => "menu",
 		() => "Menu",
 		p => {
@@ -4485,6 +4504,19 @@ WaypointYAt(i){return this._GetWaypointYAt(i)}}};
 		() => "https://vk.com/a_b_vstudio",
 		() => "add",
 		() => "0",
+		() => "My games",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0, 1, 2);
+		},
+		() => "Kiwi",
+		() => "Cube",
+		() => "Tap",
+		() => "Cats",
+		() => "Pong",
+		() => "Clumsy",
+		() => "Soccer",
+		() => "8K",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
