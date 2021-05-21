@@ -4324,6 +4324,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.skymenTrail.Acts.ResetToPoint,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
+		C3.Plugins.VKBridge.Acts.BridgeConnect,
+		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
+		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Behaviors.skymenTrail.Acts.PushPoint,
 		C3.Plugins.System.Acts.ScrollY,
 		C3.Plugins.System.Exps.scrolly,
@@ -4369,8 +4372,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
-		C3.Plugins.Touch.Cnds.OnTouchEnd,
 		C3.Plugins.System.Acts.RestartLayout,
+		C3.Plugins.Touch.Cnds.OnTouchEnd,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.System.Exps.originalviewportheight
 		];
