@@ -7,12 +7,12 @@
 
 		async Buttons_Event8_Act1(runtime, localVars)
 		{
-			vkbridge.send("VKWebAppDenyNotifications");
+			vkBridge.callMethod('showAllowMessagesFromCommunityBox', 204017056);
 		},
 
 		async Buttons_Event11_Act1(runtime, localVars)
 		{
-			vkbridge.windows.open('https://vk.com/a_b_vstudio')
+			window.open('https://vk.com/a_b_vstudio')
 		}
 
 	};
