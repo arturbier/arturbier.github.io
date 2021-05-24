@@ -4407,25 +4407,25 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.StorageSet,
 		C3.Plugins.VKBridge.Acts.LeaderSave,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
+		C3.Plugins.System.Cnds.Every,
+		C3.Plugins.Shape3D.Acts.Destroy,
+		C3.Plugins.Sprite.Cnds.CompareY,
 		C3.Plugins.VKBridge.Acts.StorageGet,
 		C3.Plugins.VKBridge.Cnds.StorageGetSuccess,
 		C3.Plugins.VKBridge.Exps.StorageData,
-		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
-		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.System.Acts.GoToLayoutByName,
 		C3.Plugins.System.Exps.choose,
 		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
 		C3.Plugins.System.Acts.GoToLayout,
-		C3.ScriptsInEvents.Buttons_Event8_Act1,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
 		C3.Plugins.VKBridge.Acts.JoinGroup,
-		C3.ScriptsInEvents.Buttons_Event11_Act1,
+		C3.ScriptsInEvents.Buttons_Event10_Act1,
 		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess
 		];
 	};
@@ -4474,6 +4474,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{Logo: 0},
 		{Record: 0},
 		{games: 0},
+		{destr: 0},
 		{Solid: 0},
 		{Physics2: 0},
 		{Wall: 0},
@@ -4685,6 +4686,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => f0(v1.GetValue());
 		},
 		() => "Current",
+		() => 0.5,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 1500);
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("Best");
@@ -4713,7 +4719,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "https://vk.com/app7860467",
 		() => "leader",
 		() => "home",
-		() => "notif",
 		() => 204017056
 	];
 }

@@ -5,12 +5,7 @@
 {
 	const scriptsInEvents = {
 
-		async Buttons_Event8_Act1(runtime, localVars)
-		{
-			vkBridge.callMethod('showAllowMessagesFromCommunityBox', 204017056);
-		},
-
-		async Buttons_Event11_Act1(runtime, localVars)
+		async Buttons_Event10_Act1(runtime, localVars)
 		{
 			window.open('https://vk.com/a_b_vstudio')
 		}
