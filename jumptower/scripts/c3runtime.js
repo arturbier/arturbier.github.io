@@ -3400,6 +3400,34 @@ SetWrapping(w){this._SetWrapByWord(w===0)}}};
     Exps;
 }
 
+'use strict';{const C3=self.C3;C3.Plugins.LocalStorage=class LocalStoragePlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.LocalStorage.Type=class LocalStorageType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.LocalStorage.Instance=class LocalStorageInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst);this._currentKey="";this._lastValue="";this._keyNamesList=[];this._errorMessage="";this._pendingGets=0;this._pendingSets=0;this._storage=this._runtime._GetProjectStorage();this._debugCache=new Map;this._isLoadingDebugCache=false}Release(){super.Release()}async _TriggerStorageError(err){this._errorMessage=this._GetErrorString(err);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnError)}_GetErrorString(err){if(!err)return"unknown error";
+else if(typeof err==="string")return err;else if(typeof err.message==="string")return err.message;else if(typeof err.name==="string")return err.name;else if(typeof err.data==="string")return err.data;else return"unknown error"}GetDebuggerProperties(){if(!this._isLoadingDebugCache)this._DebugCacheStorage();return[{title:"plugins.localstorage.name",properties:[...this._debugCache.entries()].map(entry=>({name:"$"+entry[0],value:entry[1],onedit:v=>this._storage.setItem(entry[0],v)}))}]}async _DebugCacheStorage(){this._isLoadingDebugCache=
+true;try{const keyList=await this._storage.keys();keyList.sort((a,b)=>{const la=a.toLowerCase();const lb=b.toLowerCase();if(la<lb)return-1;else if(lb<la)return 1;else return 0});const values=await Promise.all(keyList.map(key=>this._storage.getItem(key)));this._debugCache.clear();for(let i=0,len=keyList.length;i<len;++i)this._debugCache.set(keyList[i],values[i])}catch(err){console.warn("[C3 debugger] Error displaying local storage: ",err)}finally{this._isLoadingDebugCache=false}}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.LocalStorage.Cnds={OnItemSet(key){return this._currentKey===key},OnAnyItemSet(){return true},OnItemGet(key){return this._currentKey===key},OnAnyItemGet(){return true},OnItemRemoved(key){return this._currentKey===key},OnAnyItemRemoved(){return true},OnCleared(){return true},OnAllKeyNamesLoaded(){return true},OnError(){return true},OnItemExists(key){return this._currentKey===key},OnItemMissing(key){return this._currentKey===key},CompareKey(cmp,key){return C3.compare(this._currentKey,
+cmp,key)},CompareValue(cmp,v){return C3.compare(this._lastValue,cmp,v)},IsProcessingSets(){return this._pendingSets>0},IsProcessingGets(){return this._pendingGets>0},OnAllSetsComplete(){return true},OnAllGetsComplete(){return true}}};
+
+
+'use strict';{const C3=self.C3;function IsExpressionType(x){return typeof x==="string"||typeof x==="number"}C3.Plugins.LocalStorage.Acts={async SetItem(key,value){this._pendingSets++;try{const valueSet=await this._storage.setItem(key,value);await this.ScheduleTriggers(async()=>{this._currentKey=key;this._lastValue=valueSet;await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemSet);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemSet)})}catch(err){await this._TriggerStorageError(err)}finally{this._pendingSets--;
+if(this._pendingSets===0)await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllSetsComplete)}},async SetBinaryItem(key,objectClass){if(!objectClass)return;const inst=objectClass.GetFirstPicked(this._inst);if(!inst)return;const sdkInst=inst.GetSdkInstance();if(!sdkInst)return;const buffer=sdkInst.GetArrayBufferReadOnly();this._pendingSets++;try{await this._storage.setItem(key,buffer);await this.ScheduleTriggers(async()=>{this._currentKey=key;this._lastValue="";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemSet);
+await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemSet)})}catch(err){await this._TriggerStorageError(err)}finally{this._pendingSets--;if(this._pendingSets===0)await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllSetsComplete)}},async GetItem(key){this._pendingGets++;try{const value=await this._storage.getItem(key);await this.ScheduleTriggers(async()=>{this._currentKey=key;this._lastValue=IsExpressionType(value)?value:"";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemGet);
+await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemGet)})}catch(err){await this._TriggerStorageError(err)}finally{this._pendingGets--;if(this._pendingGets===0)await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllGetsComplete)}},async GetBinaryItem(key,objectClass){if(!objectClass)return;const inst=objectClass.GetFirstPicked(this._inst);if(!inst)return;const sdkInst=inst.GetSdkInstance();this._pendingGets++;try{let value=await this._storage.getItem(key);value=value instanceof ArrayBuffer?
+value:new ArrayBuffer(0);await this.ScheduleTriggers(async()=>{this._lastValue="";this._currentKey=key;sdkInst.SetArrayBufferTransfer(value);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemGet);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemGet)})}catch(err){await this._TriggerStorageError(err)}finally{this._pendingGets--;if(this._pendingGets===0)await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllGetsComplete)}},async CheckItemExists(key){try{const value=await this._storage.getItem(key);
+await this.ScheduleTriggers(async()=>{this._currentKey=key;if(typeof value==="undefined"||value===null){this._lastValue="";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemMissing)}else{this._lastValue=IsExpressionType(value)?value:"";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemExists)}})}catch(err){await this._TriggerStorageError(err)}},async RemoveItem(key){try{await this._storage.removeItem(key);await this.ScheduleTriggers(async()=>{this._currentKey=key;this._lastValue=
+"";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemRemoved);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemRemoved)})}catch(err){await this._TriggerStorageError(err)}},async ClearStorage(){try{await this._storage.clear();await this.ScheduleTriggers(async()=>{this._currentKey="";this._lastValue="";C3.clearArray(this._keyNamesList);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnCleared)})}catch(err){await this._TriggerStorageError(err)}},async GetAllKeyNames(){try{const keyList=
+await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesList=keyList;await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllKeyNamesLoaded)})}catch(err){await this._TriggerStorageError(err)}}}};
+
+
+'use strict';{const C3=self.C3;C3.Plugins.LocalStorage.Exps={ItemValue(){return this._lastValue},Key(){return this._currentKey},KeyCount(){return this._keyNamesList.length},KeyAt(i){i=Math.floor(i);if(i<0||i>=this._keyNamesList.length)return"";return this._keyNamesList[i]},ErrorMessage(){return this._errorMessage}}};
+
+
 'use strict';{const C3=self.C3;C3.Behaviors.Anchor=class AnchorBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}};
 
 
@@ -4319,12 +4347,15 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.TextBox,
 		C3.Plugins.Text,
 		C3.Plugins.VKBridge,
+		C3.Plugins.LocalStorage,
 		C3.Behaviors.solid,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Behaviors.skymenTrail.Acts.ResetToPoint,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
+		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
+		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Behaviors.skymenTrail.Acts.PushPoint,
@@ -4364,23 +4395,46 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Shape3D.Cnds.PickDistance,
 		C3.Plugins.Shape3D.Exps.X,
-		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.Shape3D.Exps.BBoxRight,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.Text.Acts.SetText,
-		C3.Plugins.Touch.Cnds.OnTouchObject,
-		C3.Plugins.Sprite.Acts.SetAnimFrame,
-		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.Touch.Cnds.OnTouchEnd,
+		C3.Plugins.Sprite.Acts.SetAnimFrame,
+		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.System.Cnds.CompareVar,
-		C3.Plugins.System.Exps.originalviewportheight
+		C3.Plugins.VKBridge.Acts.StorageSet,
+		C3.Plugins.VKBridge.Acts.LeaderSave,
+		C3.Plugins.Text.Cnds.CompareInstanceVar,
+		C3.Plugins.VKBridge.Acts.StorageGet,
+		C3.Plugins.VKBridge.Cnds.StorageGetSuccess,
+		C3.Plugins.VKBridge.Exps.StorageData,
+		C3.Plugins.System.Cnds.Every,
+		C3.Plugins.LocalStorage.Cnds.OnItemExists,
+		C3.Plugins.LocalStorage.Exps.ItemValue,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
+		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
+		C3.Plugins.System.Acts.ResetGlobals,
+		C3.Plugins.System.Acts.GoToLayoutByName,
+		C3.Plugins.System.Exps.choose,
+		C3.Plugins.VKBridge.Acts.ShowInvite,
+		C3.Plugins.VKBridge.Acts.ShowWall,
+		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
+		C3.Plugins.Sprite.Cnds.CompareFrame,
+		C3.Plugins.VKBridge.Acts.JoinGroup,
+		C3.ScriptsInEvents.Buttons_Event9_Act1,
+		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess
 		];
 	};
 	self.C3_JsPropNameTable = [
 		{Anchor: 0},
 		{"3D_Wall_LR": 0},
+		{"3D_Wall_LR2": 0},
+		{"3D_Wall_LR3": 0},
+		{"3D_Wall_LR4": 0},
+		{"3D_Wall_LR5": 0},
+		{"3D_Wall_LR6": 0},
 		{Fitst_Ground: 0},
 		{Landed: 0},
 		{ShadowCaster: 0},
@@ -4406,17 +4460,22 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{Score: 0},
 		{Scores: 0},
 		{Effects: 0},
-		{Sprite: 0},
+		{Flash: 0},
 		{Vignette: 0},
-		{"3D_Wall_LR2": 0},
 		{Buttons: 0},
 		{VKBridge: 0},
+		{Canvas: 0},
+		{Fade: 0},
+		{Type: 0},
+		{Best_Score: 0},
+		{LocalStorage: 0},
+		{Logo: 0},
+		{Record: 0},
+		{games: 0},
 		{Solid: 0},
 		{Physics2: 0},
 		{Wall: 0},
-		{Wall_2: 0},
-		{type: 0},
-		{Best_Score: 0}
+		{Wall_2: 0}
 	];
 }
 
@@ -4523,6 +4582,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => n0.ExpObject();
 		},
 		() => 0,
+		() => "Spawn_2",
+		() => "Spawn_1",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
@@ -4557,7 +4618,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() - 120);
 		},
-		() => "restart",
 		() => 10,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4570,7 +4630,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => 2,
 		() => 70,
 		() => 0.2,
-		() => "Spawn_2",
 		() => -9999999999,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4588,7 +4647,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 311);
 		},
-		() => "Spawn_1",
 		p => {
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
@@ -4611,7 +4669,48 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() / 2.4);
-		}
+		},
+		() => 0.7,
+		() => 30,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
+		() => "Best",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			return () => f0(v1.GetValue());
+		},
+		() => "Current",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Best");
+		},
+		() => "Ball",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0.7);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => and("", f0());
+		},
+		() => "restart",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => and("Game_", f0(1, 2, 3, 4, 5, 6));
+		},
+		() => "add",
+		() => "play",
+		() => "share",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (("Мой рекорд: " + v0.GetValue()) + "! Сможешь побить его? Заходи)");
+		},
+		() => "https://vk.com/app7860467",
+		() => "leader",
+		() => 204017056
 	];
 }
 
