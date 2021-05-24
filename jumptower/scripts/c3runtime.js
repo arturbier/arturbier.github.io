@@ -4421,9 +4421,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.VKBridge.Acts.ShowInvite,
 		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
+		C3.Plugins.System.Acts.GoToLayout,
+		C3.ScriptsInEvents.Buttons_Event8_Act1,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
 		C3.Plugins.VKBridge.Acts.JoinGroup,
-		C3.ScriptsInEvents.Buttons_Event9_Act1,
+		C3.ScriptsInEvents.Buttons_Event11_Act1,
 		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess
 		];
 	};
@@ -4710,6 +4712,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		},
 		() => "https://vk.com/app7860467",
 		() => "leader",
+		() => "home",
+		() => "notif",
 		() => 204017056
 	];
 }

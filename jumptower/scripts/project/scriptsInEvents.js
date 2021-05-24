@@ -5,9 +5,14 @@
 {
 	const scriptsInEvents = {
 
-		async Buttons_Event9_Act1(runtime, localVars)
+		async Buttons_Event8_Act1(runtime, localVars)
 		{
-			windows.open('https://vk.com/a_b_vstudio')
+			vkbridge.send("VKWebAppDenyNotifications");
+		},
+
+		async Buttons_Event11_Act1(runtime, localVars)
+		{
+			vkbridge.windows.open('https://vk.com/a_b_vstudio')
 		}
 
 	};
