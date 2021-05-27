@@ -1411,17 +1411,19 @@ value;break;case "instance-variable":target.SetInstanceVariableValue(index,value
 
 // c3/timelines/state/propertyInterpolationAdapters/numericInterpolationAdapter.js
 'use strict';{const C3=self.C3;const NS=C3.PropertyTrackState.PropertyInterpolationAdapter;const INSTANCE_FUNC_MAP=new Map;const add=(prop,setter,absolute_setter,getter,round)=>INSTANCE_FUNC_MAP.set(prop,{setter,absolute_setter,getter,round});add("offsetX",(wi,v)=>wi.OffsetX(v),(wi,v)=>wi.SetX(v),wi=>wi.GetX(),true);add("offsetY",(wi,v)=>wi.OffsetY(v),(wi,v)=>wi.SetY(v),wi=>wi.GetY(),true);add("offsetWidth",(wi,v)=>wi.OffsetWidth(v),(wi,v)=>wi.SetWidth(v),wi=>wi.GetWidth(),true);add("offsetHeight",
-(wi,v)=>wi.OffsetHeight(v),(wi,v)=>wi.SetHeight(v),wi=>wi.GetHeight(),true);add("offsetAngle",(wi,v)=>wi.OffsetAngle(v),(wi,v)=>wi.SetAngle(v),wi=>wi.GetAngle(),false);add("offsetOpacity",(wi,v)=>wi.OffsetOpacity(v),(wi,v)=>wi.SetOpacity(v),wi=>wi.GetOpacity(),false);add("offsetOriginX",(wi,v)=>wi.OffsetOriginX(v),(wi,v)=>wi.SetOriginX(v),wi=>wi.GetOriginX(),false);add("offsetOriginY",(wi,v)=>wi.OffsetOriginY(v),(wi,v)=>wi.SetOriginY(v),wi=>wi.GetOriginY(),false);add("offsetZElevation",(wi,v)=>wi.OffsetZElevation(v),
-(wi,v)=>wi.SetZElevation(v),wi=>wi.GetZElevation(),true);add("offsetScaleX",(wi,v,t)=>{if(wi.GetTransformWithParentWidth()){const parentWi=wi.GetParent();const sgi=wi._GetSceneGraphInfo();wi.OffsetWidth(parentWi.GetWidth()*sgi.GetStartScaleX()*v)}else wi.OffsetWidth(t.GetOriginalWidth()*v)},(wi,v,t)=>{wi.SetWidth(t.GetOriginalWidth()*v)},(wi,t)=>{if(wi.GetTransformWithParentWidth()){const parentWi=wi.GetParent();const parentTrack=t.GetTimeline().GetTrackInstance(parentWi.GetInstance());const parentScale=
-parentWi.GetWidth()/parentTrack.GetOriginalWidth();return wi.GetWidth()/(t.GetOriginalWidth()*parentScale)}else return wi.GetWidth()/t.GetOriginalWidth()},false);add("offsetScaleY",(wi,v,t)=>{if(wi.GetTransformWithParentHeight()){const parentWi=wi.GetParent();const sgi=wi._GetSceneGraphInfo();wi.OffsetHeight(parentWi.GetHeight()*sgi.GetStartScaleY()*v)}else wi.OffsetHeight(t.GetOriginalHeight()*v)},(wi,v,t)=>{wi.SetHeight(t.GetOriginalHeight()*v)},(wi,t)=>{if(wi.GetTransformWithParentHeight()){const parentWi=
-wi.GetParent();const parentTrack=t.GetTimeline().GetTrackInstance(parentWi.GetInstance());const parentScale=parentWi.GetHeight()/parentTrack.GetOriginalHeight();return wi.GetHeight()/(t.GetOriginalHeight()*parentScale)}else return wi.GetHeight()/t.GetOriginalHeight()},false);class NumericInterpolationAdapter extends C3.PropertyTrackState.PropertyInterpolationAdapter{constructor(sourceAdapter){super(sourceAdapter);this._lastValue=0;this._instance_getter=null;this._instance_setter=null;this._instance_absolute_setter=
-null;this._round=false;if(C3.IsInstanceOf(this._propertyTrack.GetTimeline(),C3.Tween))this._typeAdapter=new C3.PropertyTrackState.PropertyInterpolationAdapter.NumericInterpolationAdapterForTween(this);else this._typeAdapter=new C3.PropertyTrackState.PropertyInterpolationAdapter.NumericInterpolationAdapterForTimeline(this);const property=this._propertyTrack.GetPropertyName();if(this._propertyTrack.GetSourceAdapterId()==="world-instance"){const p=INSTANCE_FUNC_MAP.get(property);this._instance_getter=
-p.getter;this._instance_setter=p.setter;this._instance_absolute_setter=p.absolute_setter;this._round=p.round}}Release(){this._typeAdapter=null;this._instance_getter=null;this._instance_setter=null;this._instance_absolute_setter=null;super.Release()}GetLastValue(){return this._lastValue}SetLastValue(v){this._lastValue=v}SetInitialState(){const initValue=this._typeAdapter.SetInitialState();if(typeof initValue==="number")this._lastValue=initValue}SetResumeState(){const resumeValue=this._typeAdapter.SetResumeState();
-if(typeof resumeValue==="number")this._lastValue=resumeValue}GetCurrentState(){return this._Getter()}CompareInitialStateWithCurrent(){const firstKeyframeValue=this._FirstKeyframeGetter();return firstKeyframeValue!==this.GetCurrentState()}CompareSaveStateWithCurrent(){if(C3.IsNullOrUndefined(this._saveState))return false;return this._saveState!==this.GetCurrentState()}BeforeChangeProperty(){this._typeAdapter.BeforeChangeProperty()}ChangeProperty(time,value,start,end,setTime,ensureValue){return this._typeAdapter.ChangeProperty(time,
-value,start,end,setTime,ensureValue)}AfterChangeProperty(){this._typeAdapter.AfterChangeProperty()}_Getter(){const target=this._GetTarget();const index=this._GetIndex();const track=this._propertyTrack.GetTrack();const wi=this.GetWorldInfo();return this._PickSource(()=>target.GetPropertyValueByIndex(index),()=>target[index],()=>target.GetInstanceVariableValue(index),()=>target.GetPropertyValueByIndex(index),()=>this._instance_getter(wi,track))}_Setter(value,start,end){const target=this._GetTarget();
-const index=this._GetIndex();const track=this._propertyTrack.GetTrack();const wi=this.GetWorldInfo();this._PickSource(()=>target.OffsetPropertyValueByIndex(index,value),()=>target[index]+=value,()=>target.SetInstanceVariableOffset(index,value),()=>target.OffsetPropertyValueByIndex(index,value),()=>this._instance_setter(wi,value,track))}_SetterAbsolute(value,start,end){const target=this._GetTarget();const index=this._GetIndex();const track=this._propertyTrack.GetTrack();const wi=this.GetWorldInfo();
-this._PickSource(()=>target.SetPropertyValueByIndex(index,value),()=>target[index]=value,()=>target.SetInstanceVariableValue(index,value),()=>target.SetPropertyValueByIndex(index,value),()=>this._instance_absolute_setter(wi,value,track))}_MaybeEnsureValue(time,start,end,setTime,lastValue,currentValue){this._typeAdapter._MaybeEnsureValue(time,start,end,setTime,lastValue,currentValue)}_AddDelta(value,start,end){const stringValue=value.toString();const decimalsString=stringValue.split(".")[1]||"";const decimalPlaces=
-decimalsString.length;const v=this._Getter();let rv;if(decimalPlaces===0)rv=this._round?Math.round(v):v;else rv=C3.toFixed(v,decimalPlaces);this._Setter(rv-v,start,end)}_SaveToJson(){return Object.assign(super._SaveToJson(),{"v":this._lastValue})}_LoadFromJson(o){if(!o)return;super._LoadFromJson(o);this._lastValue=o["v"]}}C3.PropertyTrackState.PropertyInterpolationAdapter.NumericInterpolationAdapter=NumericInterpolationAdapter};
+(wi,v)=>wi.OffsetHeight(v),(wi,v)=>wi.SetHeight(v),wi=>wi.GetHeight(),true);add("offsetAngle",(wi,v)=>wi.OffsetAngle(v),(wi,v)=>wi.SetAngle(v),wi=>wi.GetAngle(),false);add("offsetOpacity",(wi,v,t,a)=>{const o=wi.GetOpacity();const nv=o+v;const min=0;const max=1;if(a._clampAccumulator===0){if(nv>max)a._clampAccumulator+=nv-max;else if(nv<min)a._clampAccumulator+=nv;wi.OffsetOpacity(v)}else{const nv=wi.GetOpacity()+v;if(v>0&&a._clampAccumulator>0){if(nv>max)a._clampAccumulator+=nv-max}else if(v>0&&
+a._clampAccumulator<0){a._clampAccumulator+=v;if(a._clampAccumulator>0)a._clampAccumulator=0}else if(v<0&&a._clampAccumulator>0){a._clampAccumulator+=v;if(a._clampAccumulator<0)a._clampAccumulator=0}else if(v<0&&a._clampAccumulator<0)if(nv<min)a._clampAccumulator+=nv}},(wi,v)=>{wi.SetOpacity(v)},wi=>{return wi.GetOpacity()},false);add("offsetOriginX",(wi,v)=>wi.OffsetOriginX(v),(wi,v)=>wi.SetOriginX(v),wi=>wi.GetOriginX(),false);add("offsetOriginY",(wi,v)=>wi.OffsetOriginY(v),(wi,v)=>wi.SetOriginY(v),
+wi=>wi.GetOriginY(),false);add("offsetZElevation",(wi,v)=>wi.OffsetZElevation(v),(wi,v)=>wi.SetZElevation(v),wi=>wi.GetZElevation(),true);add("offsetScaleX",(wi,v,t)=>{const mirrorFactor=wi.GetWidth()<0?-1:1;if(wi.GetTransformWithParentWidth()){const parentWi=wi.GetParent();const sgi=wi._GetSceneGraphInfo();wi.OffsetWidth(parentWi.GetWidth()*sgi.GetStartScaleX()*mirrorFactor*v)}else wi.OffsetWidth(t.GetOriginalWidth()*mirrorFactor*v)},(wi,v,t)=>{wi.SetWidth(t.GetOriginalWidth()*v)},(wi,t)=>{const mirrorFactor=
+wi.GetWidth()<0?-1:1;if(wi.GetTransformWithParentWidth()){const parentWi=wi.GetParent();const parentTrack=t.GetTimeline().GetTrackInstance(parentWi.GetInstance());const parentScale=parentWi.GetWidth()/parentTrack.GetOriginalWidth();return wi.GetWidth()*mirrorFactor/(t.GetOriginalWidth()*parentScale)}else return wi.GetWidth()*mirrorFactor/t.GetOriginalWidth()},false);add("offsetScaleY",(wi,v,t)=>{const flipFactor=wi.GetHeight()<0?-1:1;if(wi.GetTransformWithParentHeight()){const parentWi=wi.GetParent();
+const sgi=wi._GetSceneGraphInfo();wi.OffsetHeight(parentWi.GetHeight()*sgi.GetStartScaleY()*flipFactor*v)}else wi.OffsetHeight(t.GetOriginalHeight()*flipFactor*v)},(wi,v,t)=>{wi.SetHeight(t.GetOriginalHeight()*v)},(wi,t)=>{const flipFactor=wi.GetHeight()<0?-1:1;if(wi.GetTransformWithParentHeight()){const parentWi=wi.GetParent();const parentTrack=t.GetTimeline().GetTrackInstance(parentWi.GetInstance());const parentScale=parentWi.GetHeight()/parentTrack.GetOriginalHeight();return wi.GetHeight()*flipFactor/
+(t.GetOriginalHeight()*parentScale)}else return wi.GetHeight()*flipFactor/t.GetOriginalHeight()},false);class NumericInterpolationAdapter extends C3.PropertyTrackState.PropertyInterpolationAdapter{constructor(sourceAdapter){super(sourceAdapter);this._lastValue=0;this._clampAccumulator=0;this._instance_getter=null;this._instance_setter=null;this._instance_absolute_setter=null;this._round=false;if(C3.IsInstanceOf(this._propertyTrack.GetTimeline(),C3.Tween))this._typeAdapter=new C3.PropertyTrackState.PropertyInterpolationAdapter.NumericInterpolationAdapterForTween(this);
+else this._typeAdapter=new C3.PropertyTrackState.PropertyInterpolationAdapter.NumericInterpolationAdapterForTimeline(this);const property=this._propertyTrack.GetPropertyName();if(this._propertyTrack.GetSourceAdapterId()==="world-instance"){const p=INSTANCE_FUNC_MAP.get(property);this._instance_getter=p.getter;this._instance_setter=p.setter;this._instance_absolute_setter=p.absolute_setter;this._round=p.round}}Release(){this._typeAdapter=null;this._instance_getter=null;this._instance_setter=null;this._instance_absolute_setter=
+null;super.Release()}GetLastValue(){return this._lastValue}SetLastValue(v){this._lastValue=v}SetInitialState(){const initValue=this._typeAdapter.SetInitialState();if(typeof initValue==="number")this._lastValue=initValue;this._clampAccumulator=0}SetResumeState(){const resumeValue=this._typeAdapter.SetResumeState();if(typeof resumeValue==="number")this._lastValue=resumeValue}GetCurrentState(){return this._Getter()}CompareInitialStateWithCurrent(){const firstKeyframeValue=this._FirstKeyframeGetter();
+return firstKeyframeValue!==this.GetCurrentState()}CompareSaveStateWithCurrent(){if(C3.IsNullOrUndefined(this._saveState))return false;return this._saveState!==this.GetCurrentState()}BeforeChangeProperty(){this._typeAdapter.BeforeChangeProperty()}ChangeProperty(time,value,start,end,setTime,ensureValue){return this._typeAdapter.ChangeProperty(time,value,start,end,setTime,ensureValue)}AfterChangeProperty(){this._typeAdapter.AfterChangeProperty()}_Getter(){const target=this._GetTarget();const index=
+this._GetIndex();const track=this._propertyTrack.GetTrack();const wi=this.GetWorldInfo();return this._PickSource(()=>target.GetPropertyValueByIndex(index),()=>target[index],()=>target.GetInstanceVariableValue(index),()=>target.GetPropertyValueByIndex(index),()=>this._instance_getter(wi,track))}_Setter(value,start,end){const target=this._GetTarget();const index=this._GetIndex();const track=this._propertyTrack.GetTrack();const wi=this.GetWorldInfo();this._PickSource(()=>target.OffsetPropertyValueByIndex(index,
+value),()=>target[index]+=value,()=>target.SetInstanceVariableOffset(index,value),()=>target.OffsetPropertyValueByIndex(index,value),()=>this._instance_setter(wi,value,track,this))}_SetterAbsolute(value,start,end){const target=this._GetTarget();const index=this._GetIndex();const track=this._propertyTrack.GetTrack();const wi=this.GetWorldInfo();this._PickSource(()=>target.SetPropertyValueByIndex(index,value),()=>target[index]=value,()=>target.SetInstanceVariableValue(index,value),()=>target.SetPropertyValueByIndex(index,
+value),()=>this._instance_absolute_setter(wi,value,track))}_MaybeEnsureValue(time,start,end,setTime,lastValue,currentValue){this._typeAdapter._MaybeEnsureValue(time,start,end,setTime,lastValue,currentValue)}_AddDelta(value,start,end){const stringValue=value.toString();const decimalsString=stringValue.split(".")[1]||"";const decimalPlaces=decimalsString.length;const v=this._Getter();let rv;if(decimalPlaces===0)rv=this._round?Math.round(v):v;else rv=C3.toFixed(v,decimalPlaces);this._Setter(rv-v,start,
+end)}_SaveToJson(){return Object.assign(super._SaveToJson(),{"v":this._lastValue,"a":this._clampAccumulator})}_LoadFromJson(o){if(!o)return;super._LoadFromJson(o);this._lastValue=o["v"];this._clampAccumulator=o["a"]}}C3.PropertyTrackState.PropertyInterpolationAdapter.NumericInterpolationAdapter=NumericInterpolationAdapter};
 
 
 // c3/timelines/state/propertyInterpolationAdapters/numericInterpolationAdapterForTimeline.js
@@ -2160,21 +2162,22 @@ transformedPoly);transformedPoly.offset(-ox,-oy);transformedPoly.transformPrecal
 Math.floor(hsize);vsize=Math.floor(vsize);if(!this.GetInstance().GetPlugin().SupportsMesh())throw new Error("object does not support mesh");this.ReleaseMesh();this._meshInfo={sourceMesh:C3.New(C3.Gfx.Mesh,hsize,vsize),transformedMesh:C3.New(C3.Gfx.Mesh,hsize,vsize),meshPoly:null}}HasMesh(){return this._meshInfo!==null}GetSourceMesh(){if(!this.HasMesh())throw new Error("no mesh");return this._meshInfo.sourceMesh}GetTransformedMesh(){if(!this.HasMesh())throw new Error("no mesh");return this._meshInfo.transformedMesh}SetMeshChanged(e){this._SetFlag(FLAG_MESH_CHANGED,
 e)}IsMeshChanged(){return(this._flags&FLAG_MESH_CHANGED)!==0}SetPhysicsBodyChanged(e){this._SetFlag(FLAG_PHYSICS_BODY_CHANGED,e)}IsPhysicsBodyChanged(){return(this._flags&FLAG_PHYSICS_BODY_CHANGED)!==0}_ExpandBboxForMesh(bbox){const sourceMesh=this._meshInfo.sourceMesh;const minX=Math.min(sourceMesh.GetMinX(),0);const minY=Math.min(sourceMesh.GetMinY(),0);const maxX=Math.max(sourceMesh.GetMaxX(),1);const maxY=Math.max(sourceMesh.GetMaxY(),1);const w=bbox.width();const h=bbox.height();bbox.offsetLeft(minX*
 w);bbox.offsetTop(minY*h);bbox.offsetRight((maxX-1)*w);bbox.offsetBottom((maxY-1)*h)}ReleaseMesh(){if(!this._meshInfo)return;this._meshInfo.sourceMesh.Release();this._meshInfo.transformedMesh.Release();this._meshInfo=null;this._DiscardTransformedCollisionPoly()}SetMeshPoint(col,row,opts){col=Math.floor(col);row=Math.floor(row);const mode=opts.mode||"absolute";if(!VALID_SET_MESH_POINT_MODES.has(mode))throw new Error("invalid mode");const isRelative=mode==="relative";let posx=opts.x;let posy=opts.y;
-const zElevation=opts.zElevation;let texu=typeof opts.u==="number"?opts.u:isRelative?0:-1;let texv=typeof opts.v==="number"?opts.v:isRelative?0:-1;if(!this.HasMesh())return false;const sourceMesh=this.GetSourceMesh();const p=sourceMesh.GetMeshPointAt(col,row);if(p===null)return false;if(typeof zElevation==="number")p.SetZElevation(zElevation);if(isRelative){posx+=col/(sourceMesh.GetHSize()-1);posy+=row/(sourceMesh.GetVSize()-1)}if(texu===-1&&!isRelative)texu=p.GetU();else{if(isRelative)texu+=col/
-(sourceMesh.GetHSize()-1);texu=C3.clamp(texu,0,1)}if(texv===-1&&!isRelative)texv=p.GetV();else{if(isRelative)texv+=row/(sourceMesh.GetVSize()-1);texv=C3.clamp(texv,0,1)}if(p.GetX()===posx&&p.GetY()===posy&&p.GetU()===texu&&p.GetV()===texv)return false;p.SetX(posx);p.SetY(posy);p.SetU(texu);p.SetV(texv);this._DiscardTransformedCollisionPoly();return true}HasTilemap(){return this._inst.HasTilemap()}ContainsPoint(x,y){if(!this.GetBoundingBox().containsPoint(x,y))return false;if(!this.GetBoundingQuad().containsPoint(x,
-y))return false;if(this.HasTilemap())return this._inst.GetSdkInstance().TestPointOverlapTile(x,y);if(!this.HasOwnCollisionPoly())return true;return this.GetTransformedCollisionPoly().containsPoint(x-this.GetX(),y-this.GetY())}_IsCollisionCellChanged(){return(this._flags&FLAG_COLLISION_CELL_CHANGED)!==0}_UpdateCollisionCell(){if(!this._IsCollisionCellChanged()||!this.IsCollisionEnabled()||(this._flags&FLAG_DESTROYED)!==0)return;const bbox=this.GetBoundingBox();const grid=this._objectClass._GetCollisionCellGrid();
-const collisionCells=this._collisionCells;tempRect.set(grid.XToCell(bbox.getLeft()),grid.YToCell(bbox.getTop()),grid.XToCell(bbox.getRight()),grid.YToCell(bbox.getBottom()));if(collisionCells.equals(tempRect))return;const inst=this._inst;if(collisionCells===DEFAULT_COLLISION_CELLS){grid.Update(inst,null,tempRect);this._collisionCells=C3.New(C3.Rect,tempRect)}else{grid.Update(inst,collisionCells,tempRect);collisionCells.copy(tempRect)}this._flags&=~FLAG_COLLISION_CELL_CHANGED}_RemoveFromCollisionCells(){const collisionCells=
-this._collisionCells;if(collisionCells===DEFAULT_COLLISION_CELLS)return;this._objectClass._GetCollisionCellGrid().Update(this._inst,collisionCells,null);this._collisionCells=DEFAULT_COLLISION_CELLS}_UpdateRenderCell(){const layer=this.GetLayer();if(!layer.UsesRenderCells()||(this._flags&FLAG_DESTROYED)!==0)return;const renderGrid=layer.GetRenderGrid();const bbox=this.GetBoundingBox();const renderCells=this._renderCells;tempRect.set(renderGrid.XToCell(bbox.getLeft()),renderGrid.YToCell(bbox.getTop()),
-renderGrid.XToCell(bbox.getRight()),renderGrid.YToCell(bbox.getBottom()));if(renderCells.equals(tempRect))return;const inst=this._inst;if(renderCells===DEFAULT_RENDER_CELLS){renderGrid.Update(inst,null,tempRect);this._renderCells=C3.New(C3.Rect,tempRect)}else{renderGrid.Update(inst,renderCells,tempRect);renderCells.copy(tempRect)}layer.SetRenderListStale()}_RemoveFromRenderCells(){const renderCells=this._renderCells;if(renderCells===DEFAULT_RENDER_CELLS)return;this.GetLayer().GetRenderGrid().Update(this._inst,
-renderCells,null);this._renderCells=DEFAULT_RENDER_CELLS}GetRenderCellRange(){return this._renderCells}ZOrderMoveToTop(){const inst=this._inst;const layer=this._layer;const layerInstances=layer._GetInstances();if(layerInstances.length&&layerInstances[layerInstances.length-1]===inst)return;layer._RemoveInstance(inst,false);layer._AddInstance(inst,false);this._runtime.UpdateRender()}ZOrderMoveToBottom(){const inst=this._inst;const layer=this._layer;const layerInstances=layer._GetInstances();if(layerInstances.length&&
-layerInstances[0]===inst)return;layer._RemoveInstance(inst,false);layer._PrependInstance(inst,false);this._runtime.UpdateRender()}ZOrderMoveToLayer(layerMove){const inst=this._inst;const curLayer=this._layer;if(curLayer.GetLayout()!==layerMove.GetLayout())throw new Error("layer from different layout");if(layerMove===curLayer)return;curLayer._RemoveInstance(inst,true);this._SetLayer(layerMove);layerMove._AddInstance(inst,true);this._runtime.UpdateRender()}ZOrderMoveAdjacentToInstance(otherInst,isAfter){const inst=
-this._inst;const curLayer=this._layer;if(otherInst.GetUID()===inst.GetUID())return;const otherWi=otherInst.GetWorldInfo();if(!otherWi)throw new Error("expected world instance");const otherLayer=otherWi.GetLayer();let didChangeLayer=false;if(curLayer.GetIndex()!==otherLayer.GetIndex()){curLayer._RemoveInstance(inst,true);this._SetLayer(otherLayer);otherLayer._AddInstance(inst,true);didChangeLayer=true}const didChangeZOrder=otherLayer.MoveInstanceAdjacent(inst,otherInst,!!isAfter);if(didChangeLayer||
-didChangeZOrder)this._runtime.UpdateRender()}GetInstanceEffectList(){return this._instanceEffectList}_SetHasAnyActiveEffect(e){this._SetFlag(FLAG_HAS_ANY_ACTIVE_EFFECT,e)}HasAnyActiveEffect(){return(this._flags&FLAG_HAS_ANY_ACTIVE_EFFECT)!==0}_SaveToJson(mode){const o={"x":this.GetX(),"y":this.GetY(),"w":this.GetWidth(),"h":this.GetHeight(),"l":this.GetLayer().GetSID(),"zi":this.GetZIndex()};if(this.GetZElevation()!==0)o["ze"]=this.GetZElevation();if(this.GetAngle()!==0)o["a"]=this.GetAngle();if(!this.HasDefaultColor())o["c"]=
-this._color.toJSON();if(this.GetOriginX()!==.5)o["oX"]=this.GetOriginX();if(this.GetOriginY()!==.5)o["oY"]=this.GetOriginY();if(this.GetBlendMode()!==0)o["bm"]=this.GetBlendMode();if(!this.IsVisible())o["v"]=this.IsVisible();if(!this.IsCollisionEnabled())o["ce"]=this.IsCollisionEnabled();if(this.IsBboxChangeEventEnabled())o["be"]=this.IsBboxChangeEventEnabled();if(this._instanceEffectList)o["fx"]=this._instanceEffectList._SaveToJson();const isSolidFilterInclusive=(this._flags&FLAG_SOLID_FILTER_INCLUSIVE)!==
-0;if(isSolidFilterInclusive)o["sfi"]=isSolidFilterInclusive;if(this._solidFilterTags)o["sft"]=[...this._solidFilterTags].join(" ");if(this._sceneGraphInfo&&mode!=="visual-state")o["sgi"]=this._sceneGraphInfo._SaveToJson();if(this.HasMesh())o["mesh"]=this.GetSourceMesh().SaveToJson();return o}_OnBeforeLoad(mode){if(mode!=="visual-state")this._ResetAllSceneGraphState()}_LoadFromJson(o,mode){enableUpdateRendererStateGroup=false;this.SetX(o["x"]);this.SetY(o["y"]);this.SetWidth(o["w"]);this.SetHeight(o["h"]);
-this._SetZIndex(o["zi"]);this.SetZElevation(o.hasOwnProperty("ze")?o["ze"]:0);this.SetAngle(o.hasOwnProperty("a")?o["a"]:0);if(o.hasOwnProperty("c"))tempColor.setFromJSON(o["c"]);else if(o.hasOwnProperty("o")){tempColor.copyRgb(this._color);tempColor.a=o["o"]}else tempColor.setRgba(1,1,1,1);this._SetColor(tempColor);this.SetOriginX(o.hasOwnProperty("oX")?o["oX"]:.5);this.SetOriginY(o.hasOwnProperty("oY")?o["oY"]:.5);this.SetBlendMode(o.hasOwnProperty("bm")?o["bm"]:0);this.SetVisible(o.hasOwnProperty("v")?
-o["v"]:true);this.SetCollisionEnabled(o.hasOwnProperty("ce")?o["ce"]:true);this.SetBboxChangeEventEnabled(o.hasOwnProperty("be")?o["be"]:false);this.SetSolidCollisionFilter(o.hasOwnProperty("sfi")?o["sfi"]:false,o.hasOwnProperty("sft")?o["sft"]:"");if(this._instanceEffectList&&o.hasOwnProperty("fx"))this._instanceEffectList._LoadFromJson(o["fx"]);if(o.hasOwnProperty("sgi")&&mode!=="visual-state"){this._CreateSceneGraphInfo(null);const sgi=this._sceneGraphInfo;const sgiData=o["sgi"];sgi._LoadFromJson(sgiData);
-const runtimeDispatcher=this.GetRuntime().Dispatcher();const onAfterLoad=()=>{runtimeDispatcher.removeEventListener("afterload",onAfterLoad);if((this._flags&FLAG_DESTROYED)===0)sgi._OnAfterLoad(sgiData)};runtimeDispatcher.addEventListener("afterload",onAfterLoad)}if(o.hasOwnProperty("mesh")){const meshData=o["mesh"];this.CreateMesh(meshData["cols"],meshData["rows"]);this.GetSourceMesh().LoadFromJson(meshData)}else this.ReleaseMesh();this.SetBboxChanged();enableUpdateRendererStateGroup=true;this._UpdateRendererStateGroup()}}};
+const zElevation=opts.zElevation;let texu=typeof opts.u==="number"?opts.u:isRelative?0:-1;let texv=typeof opts.v==="number"?opts.v:isRelative?0:-1;if(!this.HasMesh())return false;const sourceMesh=this.GetSourceMesh();const p=sourceMesh.GetMeshPointAt(col,row);if(p===null)return false;let ret=false;if(typeof zElevation==="number"&&p.GetZElevation()!==zElevation){p.SetZElevation(zElevation);ret=true}if(isRelative){posx+=col/(sourceMesh.GetHSize()-1);posy+=row/(sourceMesh.GetVSize()-1)}if(texu===-1&&
+!isRelative)texu=p.GetU();else{if(isRelative)texu+=col/(sourceMesh.GetHSize()-1);texu=C3.clamp(texu,0,1)}if(texv===-1&&!isRelative)texv=p.GetV();else{if(isRelative)texv+=row/(sourceMesh.GetVSize()-1);texv=C3.clamp(texv,0,1)}if(p.GetX()===posx&&p.GetY()===posy&&p.GetU()===texu&&p.GetV()===texv)return ret;p.SetX(posx);p.SetY(posy);p.SetU(texu);p.SetV(texv);this._DiscardTransformedCollisionPoly();return true}HasTilemap(){return this._inst.HasTilemap()}ContainsPoint(x,y){if(!this.GetBoundingBox().containsPoint(x,
+y))return false;if(!this.GetBoundingQuad().containsPoint(x,y))return false;if(this.HasTilemap())return this._inst.GetSdkInstance().TestPointOverlapTile(x,y);if(!this.HasOwnCollisionPoly())return true;return this.GetTransformedCollisionPoly().containsPoint(x-this.GetX(),y-this.GetY())}_IsCollisionCellChanged(){return(this._flags&FLAG_COLLISION_CELL_CHANGED)!==0}_UpdateCollisionCell(){if(!this._IsCollisionCellChanged()||!this.IsCollisionEnabled()||(this._flags&FLAG_DESTROYED)!==0)return;const bbox=
+this.GetBoundingBox();const grid=this._objectClass._GetCollisionCellGrid();const collisionCells=this._collisionCells;tempRect.set(grid.XToCell(bbox.getLeft()),grid.YToCell(bbox.getTop()),grid.XToCell(bbox.getRight()),grid.YToCell(bbox.getBottom()));if(collisionCells.equals(tempRect))return;const inst=this._inst;if(collisionCells===DEFAULT_COLLISION_CELLS){grid.Update(inst,null,tempRect);this._collisionCells=C3.New(C3.Rect,tempRect)}else{grid.Update(inst,collisionCells,tempRect);collisionCells.copy(tempRect)}this._flags&=
+~FLAG_COLLISION_CELL_CHANGED}_RemoveFromCollisionCells(){const collisionCells=this._collisionCells;if(collisionCells===DEFAULT_COLLISION_CELLS)return;this._objectClass._GetCollisionCellGrid().Update(this._inst,collisionCells,null);this._collisionCells=DEFAULT_COLLISION_CELLS}_UpdateRenderCell(){const layer=this.GetLayer();if(!layer.UsesRenderCells()||(this._flags&FLAG_DESTROYED)!==0)return;const renderGrid=layer.GetRenderGrid();const bbox=this.GetBoundingBox();const renderCells=this._renderCells;
+tempRect.set(renderGrid.XToCell(bbox.getLeft()),renderGrid.YToCell(bbox.getTop()),renderGrid.XToCell(bbox.getRight()),renderGrid.YToCell(bbox.getBottom()));if(renderCells.equals(tempRect))return;const inst=this._inst;if(renderCells===DEFAULT_RENDER_CELLS){renderGrid.Update(inst,null,tempRect);this._renderCells=C3.New(C3.Rect,tempRect)}else{renderGrid.Update(inst,renderCells,tempRect);renderCells.copy(tempRect)}layer.SetRenderListStale()}_RemoveFromRenderCells(){const renderCells=this._renderCells;
+if(renderCells===DEFAULT_RENDER_CELLS)return;this.GetLayer().GetRenderGrid().Update(this._inst,renderCells,null);this._renderCells=DEFAULT_RENDER_CELLS}GetRenderCellRange(){return this._renderCells}ZOrderMoveToTop(){const inst=this._inst;const layer=this._layer;const layerInstances=layer._GetInstances();if(layerInstances.length&&layerInstances[layerInstances.length-1]===inst)return;layer._RemoveInstance(inst,false);layer._AddInstance(inst,false);this._runtime.UpdateRender()}ZOrderMoveToBottom(){const inst=
+this._inst;const layer=this._layer;const layerInstances=layer._GetInstances();if(layerInstances.length&&layerInstances[0]===inst)return;layer._RemoveInstance(inst,false);layer._PrependInstance(inst,false);this._runtime.UpdateRender()}ZOrderMoveToLayer(layerMove){const inst=this._inst;const curLayer=this._layer;if(curLayer.GetLayout()!==layerMove.GetLayout())throw new Error("layer from different layout");if(layerMove===curLayer)return;curLayer._RemoveInstance(inst,true);this._SetLayer(layerMove);layerMove._AddInstance(inst,
+true);this._runtime.UpdateRender()}ZOrderMoveAdjacentToInstance(otherInst,isAfter){const inst=this._inst;const curLayer=this._layer;if(otherInst.GetUID()===inst.GetUID())return;const otherWi=otherInst.GetWorldInfo();if(!otherWi)throw new Error("expected world instance");const otherLayer=otherWi.GetLayer();let didChangeLayer=false;if(curLayer.GetIndex()!==otherLayer.GetIndex()){curLayer._RemoveInstance(inst,true);this._SetLayer(otherLayer);otherLayer._AddInstance(inst,true);didChangeLayer=true}const didChangeZOrder=
+otherLayer.MoveInstanceAdjacent(inst,otherInst,!!isAfter);if(didChangeLayer||didChangeZOrder)this._runtime.UpdateRender()}GetInstanceEffectList(){return this._instanceEffectList}_SetHasAnyActiveEffect(e){this._SetFlag(FLAG_HAS_ANY_ACTIVE_EFFECT,e)}HasAnyActiveEffect(){return(this._flags&FLAG_HAS_ANY_ACTIVE_EFFECT)!==0}_SaveToJson(mode){const o={"x":this.GetX(),"y":this.GetY(),"w":this.GetWidth(),"h":this.GetHeight(),"l":this.GetLayer().GetSID(),"zi":this.GetZIndex()};if(this.GetZElevation()!==0)o["ze"]=
+this.GetZElevation();if(this.GetAngle()!==0)o["a"]=this.GetAngle();if(!this.HasDefaultColor())o["c"]=this._color.toJSON();if(this.GetOriginX()!==.5)o["oX"]=this.GetOriginX();if(this.GetOriginY()!==.5)o["oY"]=this.GetOriginY();if(this.GetBlendMode()!==0)o["bm"]=this.GetBlendMode();if(!this.IsVisible())o["v"]=this.IsVisible();if(!this.IsCollisionEnabled())o["ce"]=this.IsCollisionEnabled();if(this.IsBboxChangeEventEnabled())o["be"]=this.IsBboxChangeEventEnabled();if(this._instanceEffectList)o["fx"]=
+this._instanceEffectList._SaveToJson();const isSolidFilterInclusive=(this._flags&FLAG_SOLID_FILTER_INCLUSIVE)!==0;if(isSolidFilterInclusive)o["sfi"]=isSolidFilterInclusive;if(this._solidFilterTags)o["sft"]=[...this._solidFilterTags].join(" ");if(this._sceneGraphInfo&&mode!=="visual-state")o["sgi"]=this._sceneGraphInfo._SaveToJson();if(this.HasMesh())o["mesh"]=this.GetSourceMesh().SaveToJson();return o}_OnBeforeLoad(mode){if(mode!=="visual-state")this._ResetAllSceneGraphState()}_LoadFromJson(o,mode){enableUpdateRendererStateGroup=
+false;this.SetX(o["x"]);this.SetY(o["y"]);this.SetWidth(o["w"]);this.SetHeight(o["h"]);this._SetZIndex(o["zi"]);this.SetZElevation(o.hasOwnProperty("ze")?o["ze"]:0);this.SetAngle(o.hasOwnProperty("a")?o["a"]:0);if(o.hasOwnProperty("c"))tempColor.setFromJSON(o["c"]);else if(o.hasOwnProperty("o")){tempColor.copyRgb(this._color);tempColor.a=o["o"]}else tempColor.setRgba(1,1,1,1);this._SetColor(tempColor);this.SetOriginX(o.hasOwnProperty("oX")?o["oX"]:.5);this.SetOriginY(o.hasOwnProperty("oY")?o["oY"]:
+.5);this.SetBlendMode(o.hasOwnProperty("bm")?o["bm"]:0);this.SetVisible(o.hasOwnProperty("v")?o["v"]:true);this.SetCollisionEnabled(o.hasOwnProperty("ce")?o["ce"]:true);this.SetBboxChangeEventEnabled(o.hasOwnProperty("be")?o["be"]:false);this.SetSolidCollisionFilter(o.hasOwnProperty("sfi")?o["sfi"]:false,o.hasOwnProperty("sft")?o["sft"]:"");if(this._instanceEffectList&&o.hasOwnProperty("fx"))this._instanceEffectList._LoadFromJson(o["fx"]);if(o.hasOwnProperty("sgi")&&mode!=="visual-state"){this._CreateSceneGraphInfo(null);
+const sgi=this._sceneGraphInfo;const sgiData=o["sgi"];sgi._LoadFromJson(sgiData);const runtimeDispatcher=this.GetRuntime().Dispatcher();const onAfterLoad=()=>{runtimeDispatcher.removeEventListener("afterload",onAfterLoad);if((this._flags&FLAG_DESTROYED)===0)sgi._OnAfterLoad(sgiData)};runtimeDispatcher.addEventListener("afterload",onAfterLoad)}if(o.hasOwnProperty("mesh")){const meshData=o["mesh"];this.CreateMesh(meshData["cols"],meshData["rows"]);this.GetSourceMesh().LoadFromJson(meshData)}else this.ReleaseMesh();
+this.SetBboxChanged();enableUpdateRendererStateGroup=true;this._UpdateRendererStateGroup()}}};
 
 
 // c3/objects/behaviorType.js
@@ -2281,23 +2284,24 @@ C3.New(C3.Gfx.WebGLQueryResultBuffer,this._webglRenderer);this._webglRenderer.Se
 null;this._webglRenderer=null;this._canvas=null}_OnWindowResize(e){const dpr=e["devicePixelRatio"];if(this._runtime.IsInWorker())self.devicePixelRatio=dpr;this._runtime._SetDevicePixelRatio(dpr);this._isDocumentFullscreen=!!e["isFullscreen"];this.SetSize(e["innerWidth"],e["innerHeight"]);this._runtime.UpdateRender()}_OnFullscreenChange(e){this._isDocumentFullscreen=!!e["isFullscreen"];this.SetSize(e["innerWidth"],e["innerHeight"],true);this._runtime.UpdateRender()}_OnFullscreenError(e){this._isDocumentFullscreen=
 !!e["isFullscreen"];this.SetSize(e["innerWidth"],e["innerHeight"],true);this._runtime.UpdateRender()}SetSize(availableWidth,availableHeight,force=false){availableWidth=Math.floor(availableWidth);availableHeight=Math.floor(availableHeight);if(availableWidth<=0||availableHeight<=0)throw new Error("invalid size");if(this._windowInnerWidth===availableWidth&&this._windowInnerHeight===availableHeight&&!force)return;this._windowInnerWidth=availableWidth;this._windowInnerHeight=availableHeight;const fullscreenMode=
 this.GetCurrentFullscreenMode();if(fullscreenMode==="letterbox-scale")this._CalculateLetterboxScale(availableWidth,availableHeight);else if(fullscreenMode==="letterbox-integer-scale")this._CalculateLetterboxIntegerScale(availableWidth,availableHeight);else if(fullscreenMode==="off")this._CalculateFixedSizeCanvas(availableWidth,availableHeight);else this._CalculateFullsizeCanvas(availableWidth,availableHeight);this._UpdateFullscreenScalingQuality(fullscreenMode);this._canvas.width=this._canvasDeviceWidth;
-this._canvas.height=this._canvasDeviceHeight;this._runtime.PostComponentMessageToDOM("canvas","update-size",{"marginLeft":this._canvasCssOffsetX,"marginTop":this._canvasCssOffsetY,"styleWidth":this._canvasCssWidth,"styleHeight":this._canvasCssHeight});this._webglRenderer.SetSize(this._canvasDeviceWidth,this._canvasDeviceHeight,true)}_CalculateLetterboxScale(availableWidth,availableHeight){const dpr=this._runtime.GetDevicePixelRatio();const originalViewportWidth=this._runtime.GetOriginalViewportWidth();
-const originalViewportHeight=this._runtime.GetOriginalViewportHeight();const originalAspectRatio=originalViewportWidth/originalViewportHeight;const availableAspectRatio=availableWidth/availableHeight;if(availableAspectRatio>originalAspectRatio){const letterboxedWidth=availableHeight*originalAspectRatio;this._canvasCssWidth=Math.round(letterboxedWidth);this._canvasCssHeight=availableHeight;this._canvasCssOffsetX=Math.floor((availableWidth-this._canvasCssWidth)/2);this._canvasCssOffsetY=0}else{const letterboxedHeight=
-availableWidth/originalAspectRatio;this._canvasCssWidth=availableWidth;this._canvasCssHeight=Math.round(letterboxedHeight);this._canvasCssOffsetX=0;this._canvasCssOffsetY=Math.floor((availableHeight-this._canvasCssHeight)/2)}this._canvasDeviceWidth=Math.round(this._canvasCssWidth*dpr);this._canvasDeviceHeight=Math.round(this._canvasCssHeight*dpr);this._runtime.SetViewportSize(originalViewportWidth,originalViewportHeight)}_CalculateLetterboxIntegerScale(availableWidth,availableHeight){const dpr=this._runtime.GetDevicePixelRatio();
-if(dpr!==1){availableWidth+=1;availableHeight+=1}const originalViewportWidth=this._runtime.GetOriginalViewportWidth();const originalViewportHeight=this._runtime.GetOriginalViewportHeight();const originalAspectRatio=originalViewportWidth/originalViewportHeight;const availableAspectRatio=availableWidth/availableHeight;let intScale;if(availableAspectRatio>originalAspectRatio){const letterboxedWidth=availableHeight*originalAspectRatio;intScale=letterboxedWidth*dpr/originalViewportWidth}else{const letterboxedHeight=
-availableWidth/originalAspectRatio;intScale=letterboxedHeight*dpr/originalViewportHeight}if(intScale>1)intScale=Math.floor(intScale);else if(intScale<1)intScale=1/Math.ceil(1/intScale);this._canvasDeviceWidth=Math.round(originalViewportWidth*intScale);this._canvasDeviceHeight=Math.round(originalViewportHeight*intScale);this._canvasCssWidth=this._canvasDeviceWidth/dpr;this._canvasCssHeight=this._canvasDeviceHeight/dpr;this._canvasCssOffsetX=Math.max(Math.floor((availableWidth-this._canvasCssWidth)/
-2),0);this._canvasCssOffsetY=Math.max(Math.floor((availableHeight-this._canvasCssHeight)/2),0);this._runtime.SetViewportSize(originalViewportWidth,originalViewportHeight)}_CalculateFullsizeCanvas(availableWidth,availableHeight){const dpr=this._runtime.GetDevicePixelRatio();this._canvasCssWidth=availableWidth;this._canvasCssHeight=availableHeight;this._canvasDeviceWidth=Math.round(this._canvasCssWidth*dpr);this._canvasDeviceHeight=Math.round(this._canvasCssHeight*dpr);this._canvasCssOffsetX=0;this._canvasCssOffsetY=
-0;const displayScale=this.GetDisplayScale();this._runtime.SetViewportSize(this._canvasCssWidth/displayScale,this._canvasCssHeight/displayScale)}_CalculateFixedSizeCanvas(availableWidth,availableHeight){const dpr=this._runtime.GetDevicePixelRatio();this._canvasCssWidth=this._runtime.GetViewportWidth();this._canvasCssHeight=this._runtime.GetViewportHeight();this._canvasDeviceWidth=Math.round(this._canvasCssWidth*dpr);this._canvasDeviceHeight=Math.round(this._canvasCssHeight*dpr);if(this.IsDocumentFullscreen()){this._canvasCssOffsetX=
-Math.floor((availableWidth-this._canvasCssWidth)/2);this._canvasCssOffsetY=Math.floor((availableHeight-this._canvasCssHeight)/2)}else{this._canvasCssOffsetX=0;this._canvasCssOffsetY=0}this._runtime.SetViewportSize(this._runtime.GetViewportWidth(),this._runtime.GetViewportHeight())}_UpdateFullscreenScalingQuality(fullscreenMode){if(this._wantFullscreenScalingQuality==="high"){this._drawWidth=this._canvasDeviceWidth;this._drawHeight=this._canvasDeviceHeight;this._fullscreenScalingQuality="high"}else{let viewportWidth,
-viewportHeight;if(this.GetCurrentFullscreenMode()==="off"){viewportWidth=this._runtime.GetViewportWidth();viewportHeight=this._runtime.GetViewportHeight()}else{viewportWidth=this._runtime.GetOriginalViewportWidth();viewportHeight=this._runtime.GetOriginalViewportHeight()}if(this._canvasDeviceWidth<viewportWidth&&this._canvasDeviceHeight<viewportHeight){this._drawWidth=this._canvasDeviceWidth;this._drawHeight=this._canvasDeviceHeight;this._fullscreenScalingQuality="high"}else{this._drawWidth=viewportWidth;
-this._drawHeight=viewportHeight;this._fullscreenScalingQuality="low";if(fullscreenMode==="scale-inner"){const originalAspectRatio=viewportWidth/viewportHeight;const currentAspectRatio=this._windowInnerWidth/this._windowInnerHeight;if(currentAspectRatio<originalAspectRatio)this._drawWidth=this._drawHeight*currentAspectRatio;else if(currentAspectRatio>originalAspectRatio)this._drawHeight=this._drawWidth/currentAspectRatio}else if(fullscreenMode==="scale-outer"){const originalAspectRatio=viewportWidth/
-viewportHeight;const currentAspectRatio=this._windowInnerWidth/this._windowInnerHeight;if(currentAspectRatio>originalAspectRatio)this._drawWidth=this._drawHeight*currentAspectRatio;else if(currentAspectRatio<originalAspectRatio)this._drawHeight=this._drawWidth/currentAspectRatio}}}}IsDocumentFullscreen(){return this._isDocumentFullscreen}SetFullscreenMode(m){if(!VALID_FULLSCREEN_MODES.has(m))throw new Error("invalid fullscreen mode");this._fullscreenMode=m}GetFullscreenMode(){return this._fullscreenMode}SetDocumentFullscreenMode(m){if(!VALID_FULLSCREEN_MODES.has(m))throw new Error("invalid fullscreen mode");
-this._documentFullscreenMode=m}GetDocumentFullscreenMode(){return this._documentFullscreenMode}GetCurrentFullscreenMode(){if(this.IsDocumentFullscreen())return this.GetDocumentFullscreenMode();else return this.GetFullscreenMode()}SetFullscreenScalingQuality(q){if(!VALID_FULLSCREEN_SCALING_QUALITIES.has(q))throw new Error("invalid fullscreen scaling quality");this._wantFullscreenScalingQuality=q}GetSetFullscreenScalingQuality(){return this._wantFullscreenScalingQuality}GetCurrentFullscreenScalingQuality(){return this._fullscreenScalingQuality}static _FullscreenModeNumberToString(n){switch(n){case 0:return"off";
-case 1:return"crop";case 2:return"scale-inner";case 3:return"scale-outer";case 4:return"letterbox-scale";case 5:return"letterbox-integer-scale";default:throw new Error("invalid fullscreen mode");}}GetLastWidth(){return this._windowInnerWidth}GetLastHeight(){return this._windowInnerHeight}GetDrawWidth(){return this._drawWidth}GetDrawHeight(){return this._drawHeight}SetMipmapsEnabled(e){this._enableMipmaps=!!e}_SetTextureAnisotropy(a){this._textureAnisotropy=a}GetTextureAnisotropy(){return this._textureAnisotropy}IsWebGLContextLost(){return this._webglRenderer.IsContextLost()}_OnWebGLContextLost(e){console.log("[Construct 3] WebGL context lost");
-e.preventDefault();this._availableAdditionalRenderTargets=[];this._usedAdditionalRenderTargets.clear();this._webglRenderer.OnContextLost();this._runtime._OnWebGLContextLost()}async _OnWebGLContextRestored(e){await this._webglRenderer.OnContextRestored();await this._LoadShaderPrograms();for(const effectList of this._runtime._GetAllEffectLists())for(const effectType of effectList.GetAllEffectTypes())effectType._InitRenderer(this._webglRenderer);await this._runtime._OnWebGLContextRestored();console.log("[Construct 3] WebGL context restored")}GetWebGLRenderer(){return this._webglRenderer}GetRenderScale(){if(this._fullscreenScalingQuality===
-"low")return 1/this._runtime.GetDevicePixelRatio();return this.GetDisplayScale()}GetDisplayScale(){const fullscreenMode=this.GetCurrentFullscreenMode();if(fullscreenMode==="off"||fullscreenMode==="crop")return 1;const originalViewportWidth=this._runtime.GetOriginalViewportWidth();const originalViewportHeight=this._runtime.GetOriginalViewportHeight();const originalAspectRatio=originalViewportWidth/originalViewportHeight;const currentAspectRatio=this._canvasDeviceWidth/this._canvasDeviceHeight;if(fullscreenMode!==
-"scale-inner"&&currentAspectRatio>originalAspectRatio||fullscreenMode==="scale-inner"&&currentAspectRatio<originalAspectRatio)return this._canvasCssHeight/originalViewportHeight;else return this._canvasCssWidth/originalViewportWidth}SetDeviceTransformOffset(x,y){this._deviceTransformOffX=x;this._deviceTransformOffY=y}SetDeviceTransform(renderer,w,h){const scrollX=(w||this._drawWidth)/2+this._deviceTransformOffX;const scrollY=(h||this._drawHeight)/2+this._deviceTransformOffY;renderer.SetCameraXYZ(scrollX,
-scrollY,100*this._runtime.GetDevicePixelRatio());renderer.SetLookXYZ(scrollX,scrollY,0);renderer.ResetModelView();renderer.UpdateModelView()}SetCssTransform(renderer){const scrollX=this._canvasCssWidth/2;const scrollY=this._canvasCssHeight/2;renderer.SetCameraXYZ(scrollX,scrollY,100);renderer.SetLookXYZ(scrollX,scrollY,0);renderer.ResetModelView();renderer.UpdateModelView()}GetDeviceWidth(){return this._canvasDeviceWidth}GetDeviceHeight(){return this._canvasDeviceHeight}GetCssWidth(){return this._canvasCssWidth}GetCssHeight(){return this._canvasCssHeight}GetCanvasClientX(){return this._canvasCssOffsetX}GetCanvasClientY(){return this._canvasCssOffsetY}GetAdditionalRenderTarget(opts){opts.depth=
+this._canvas.height=this._canvasDeviceHeight;this._runtime.PostComponentMessageToDOM("canvas","update-size",{"marginLeft":this._canvasCssOffsetX,"marginTop":this._canvasCssOffsetY,"styleWidth":this._canvasCssWidth,"styleHeight":this._canvasCssHeight});this._webglRenderer.SetSize(this._canvasDeviceWidth,this._canvasDeviceHeight,true);for(const rt of this._availableAdditionalRenderTargets)this._webglRenderer.DeleteRenderTarget(rt);C3.clearArray(this._availableAdditionalRenderTargets)}_CalculateLetterboxScale(availableWidth,
+availableHeight){const dpr=this._runtime.GetDevicePixelRatio();const originalViewportWidth=this._runtime.GetOriginalViewportWidth();const originalViewportHeight=this._runtime.GetOriginalViewportHeight();const originalAspectRatio=originalViewportWidth/originalViewportHeight;const availableAspectRatio=availableWidth/availableHeight;if(availableAspectRatio>originalAspectRatio){const letterboxedWidth=availableHeight*originalAspectRatio;this._canvasCssWidth=Math.round(letterboxedWidth);this._canvasCssHeight=
+availableHeight;this._canvasCssOffsetX=Math.floor((availableWidth-this._canvasCssWidth)/2);this._canvasCssOffsetY=0}else{const letterboxedHeight=availableWidth/originalAspectRatio;this._canvasCssWidth=availableWidth;this._canvasCssHeight=Math.round(letterboxedHeight);this._canvasCssOffsetX=0;this._canvasCssOffsetY=Math.floor((availableHeight-this._canvasCssHeight)/2)}this._canvasDeviceWidth=Math.round(this._canvasCssWidth*dpr);this._canvasDeviceHeight=Math.round(this._canvasCssHeight*dpr);this._runtime.SetViewportSize(originalViewportWidth,
+originalViewportHeight)}_CalculateLetterboxIntegerScale(availableWidth,availableHeight){const dpr=this._runtime.GetDevicePixelRatio();if(dpr!==1){availableWidth+=1;availableHeight+=1}const originalViewportWidth=this._runtime.GetOriginalViewportWidth();const originalViewportHeight=this._runtime.GetOriginalViewportHeight();const originalAspectRatio=originalViewportWidth/originalViewportHeight;const availableAspectRatio=availableWidth/availableHeight;let intScale;if(availableAspectRatio>originalAspectRatio){const letterboxedWidth=
+availableHeight*originalAspectRatio;intScale=letterboxedWidth*dpr/originalViewportWidth}else{const letterboxedHeight=availableWidth/originalAspectRatio;intScale=letterboxedHeight*dpr/originalViewportHeight}if(intScale>1)intScale=Math.floor(intScale);else if(intScale<1)intScale=1/Math.ceil(1/intScale);this._canvasDeviceWidth=Math.round(originalViewportWidth*intScale);this._canvasDeviceHeight=Math.round(originalViewportHeight*intScale);this._canvasCssWidth=this._canvasDeviceWidth/dpr;this._canvasCssHeight=
+this._canvasDeviceHeight/dpr;this._canvasCssOffsetX=Math.max(Math.floor((availableWidth-this._canvasCssWidth)/2),0);this._canvasCssOffsetY=Math.max(Math.floor((availableHeight-this._canvasCssHeight)/2),0);this._runtime.SetViewportSize(originalViewportWidth,originalViewportHeight)}_CalculateFullsizeCanvas(availableWidth,availableHeight){const dpr=this._runtime.GetDevicePixelRatio();this._canvasCssWidth=availableWidth;this._canvasCssHeight=availableHeight;this._canvasDeviceWidth=Math.round(this._canvasCssWidth*
+dpr);this._canvasDeviceHeight=Math.round(this._canvasCssHeight*dpr);this._canvasCssOffsetX=0;this._canvasCssOffsetY=0;const displayScale=this.GetDisplayScale();this._runtime.SetViewportSize(this._canvasCssWidth/displayScale,this._canvasCssHeight/displayScale)}_CalculateFixedSizeCanvas(availableWidth,availableHeight){const dpr=this._runtime.GetDevicePixelRatio();this._canvasCssWidth=this._runtime.GetViewportWidth();this._canvasCssHeight=this._runtime.GetViewportHeight();this._canvasDeviceWidth=Math.round(this._canvasCssWidth*
+dpr);this._canvasDeviceHeight=Math.round(this._canvasCssHeight*dpr);if(this.IsDocumentFullscreen()){this._canvasCssOffsetX=Math.floor((availableWidth-this._canvasCssWidth)/2);this._canvasCssOffsetY=Math.floor((availableHeight-this._canvasCssHeight)/2)}else{this._canvasCssOffsetX=0;this._canvasCssOffsetY=0}this._runtime.SetViewportSize(this._runtime.GetViewportWidth(),this._runtime.GetViewportHeight())}_UpdateFullscreenScalingQuality(fullscreenMode){if(this._wantFullscreenScalingQuality==="high"){this._drawWidth=
+this._canvasDeviceWidth;this._drawHeight=this._canvasDeviceHeight;this._fullscreenScalingQuality="high"}else{let viewportWidth,viewportHeight;if(this.GetCurrentFullscreenMode()==="off"){viewportWidth=this._runtime.GetViewportWidth();viewportHeight=this._runtime.GetViewportHeight()}else{viewportWidth=this._runtime.GetOriginalViewportWidth();viewportHeight=this._runtime.GetOriginalViewportHeight()}if(this._canvasDeviceWidth<viewportWidth&&this._canvasDeviceHeight<viewportHeight){this._drawWidth=this._canvasDeviceWidth;
+this._drawHeight=this._canvasDeviceHeight;this._fullscreenScalingQuality="high"}else{this._drawWidth=viewportWidth;this._drawHeight=viewportHeight;this._fullscreenScalingQuality="low";if(fullscreenMode==="scale-inner"){const originalAspectRatio=viewportWidth/viewportHeight;const currentAspectRatio=this._windowInnerWidth/this._windowInnerHeight;if(currentAspectRatio<originalAspectRatio)this._drawWidth=this._drawHeight*currentAspectRatio;else if(currentAspectRatio>originalAspectRatio)this._drawHeight=
+this._drawWidth/currentAspectRatio}else if(fullscreenMode==="scale-outer"){const originalAspectRatio=viewportWidth/viewportHeight;const currentAspectRatio=this._windowInnerWidth/this._windowInnerHeight;if(currentAspectRatio>originalAspectRatio)this._drawWidth=this._drawHeight*currentAspectRatio;else if(currentAspectRatio<originalAspectRatio)this._drawHeight=this._drawWidth/currentAspectRatio}}}}IsDocumentFullscreen(){return this._isDocumentFullscreen}SetFullscreenMode(m){if(!VALID_FULLSCREEN_MODES.has(m))throw new Error("invalid fullscreen mode");
+this._fullscreenMode=m}GetFullscreenMode(){return this._fullscreenMode}SetDocumentFullscreenMode(m){if(!VALID_FULLSCREEN_MODES.has(m))throw new Error("invalid fullscreen mode");this._documentFullscreenMode=m}GetDocumentFullscreenMode(){return this._documentFullscreenMode}GetCurrentFullscreenMode(){if(this.IsDocumentFullscreen())return this.GetDocumentFullscreenMode();else return this.GetFullscreenMode()}SetFullscreenScalingQuality(q){if(!VALID_FULLSCREEN_SCALING_QUALITIES.has(q))throw new Error("invalid fullscreen scaling quality");
+this._wantFullscreenScalingQuality=q}GetSetFullscreenScalingQuality(){return this._wantFullscreenScalingQuality}GetCurrentFullscreenScalingQuality(){return this._fullscreenScalingQuality}static _FullscreenModeNumberToString(n){switch(n){case 0:return"off";case 1:return"crop";case 2:return"scale-inner";case 3:return"scale-outer";case 4:return"letterbox-scale";case 5:return"letterbox-integer-scale";default:throw new Error("invalid fullscreen mode");}}GetLastWidth(){return this._windowInnerWidth}GetLastHeight(){return this._windowInnerHeight}GetDrawWidth(){return this._drawWidth}GetDrawHeight(){return this._drawHeight}SetMipmapsEnabled(e){this._enableMipmaps=
+!!e}_SetTextureAnisotropy(a){this._textureAnisotropy=a}GetTextureAnisotropy(){return this._textureAnisotropy}IsWebGLContextLost(){return this._webglRenderer.IsContextLost()}_OnWebGLContextLost(e){console.log("[Construct 3] WebGL context lost");e.preventDefault();this._availableAdditionalRenderTargets=[];this._usedAdditionalRenderTargets.clear();this._webglRenderer.OnContextLost();this._runtime._OnWebGLContextLost()}async _OnWebGLContextRestored(e){await this._webglRenderer.OnContextRestored();await this._LoadShaderPrograms();
+for(const effectList of this._runtime._GetAllEffectLists())for(const effectType of effectList.GetAllEffectTypes())effectType._InitRenderer(this._webglRenderer);await this._runtime._OnWebGLContextRestored();console.log("[Construct 3] WebGL context restored")}GetWebGLRenderer(){return this._webglRenderer}GetRenderScale(){if(this._fullscreenScalingQuality==="low")return 1/this._runtime.GetDevicePixelRatio();return this.GetDisplayScale()}GetDisplayScale(){const fullscreenMode=this.GetCurrentFullscreenMode();
+if(fullscreenMode==="off"||fullscreenMode==="crop")return 1;const originalViewportWidth=this._runtime.GetOriginalViewportWidth();const originalViewportHeight=this._runtime.GetOriginalViewportHeight();const originalAspectRatio=originalViewportWidth/originalViewportHeight;const currentAspectRatio=this._canvasDeviceWidth/this._canvasDeviceHeight;if(fullscreenMode!=="scale-inner"&&currentAspectRatio>originalAspectRatio||fullscreenMode==="scale-inner"&&currentAspectRatio<originalAspectRatio)return this._canvasCssHeight/
+originalViewportHeight;else return this._canvasCssWidth/originalViewportWidth}SetDeviceTransformOffset(x,y){this._deviceTransformOffX=x;this._deviceTransformOffY=y}SetDeviceTransform(renderer,w,h){const scrollX=(w||this._drawWidth)/2+this._deviceTransformOffX;const scrollY=(h||this._drawHeight)/2+this._deviceTransformOffY;renderer.SetCameraXYZ(scrollX,scrollY,100*this._runtime.GetDevicePixelRatio());renderer.SetLookXYZ(scrollX,scrollY,0);renderer.ResetModelView();renderer.UpdateModelView()}SetCssTransform(renderer){const scrollX=
+this._canvasCssWidth/2;const scrollY=this._canvasCssHeight/2;renderer.SetCameraXYZ(scrollX,scrollY,100);renderer.SetLookXYZ(scrollX,scrollY,0);renderer.ResetModelView();renderer.UpdateModelView()}GetDeviceWidth(){return this._canvasDeviceWidth}GetDeviceHeight(){return this._canvasDeviceHeight}GetCssWidth(){return this._canvasCssWidth}GetCssHeight(){return this._canvasCssHeight}GetCanvasClientX(){return this._canvasCssOffsetX}GetCanvasClientY(){return this._canvasCssOffsetY}GetAdditionalRenderTarget(opts){opts.depth=
 this._runtime.Uses3DFeatures();const arr=this._availableAdditionalRenderTargets;const useIndex=arr.findIndex(rt=>rt.IsCompatibleWithOptions(opts));let ret;if(useIndex!==-1){ret=arr[useIndex];arr.splice(useIndex,1)}else ret=this._webglRenderer.CreateRenderTarget(opts);this._usedAdditionalRenderTargets.add(ret);return ret}ReleaseAdditionalRenderTarget(renderTarget){if(!this._usedAdditionalRenderTargets.has(renderTarget))throw new Error("render target not in use");this._usedAdditionalRenderTargets.delete(renderTarget);
 this._availableAdditionalRenderTargets.push(renderTarget)}*activeLayersGpuProfiles(){for(const layout of this._runtime.GetLayoutManager().runningLayouts())for(const layer of layout.GetLayers()){const p=this._layersGpuProfile.get(layer);if(p)yield p}}GetLayerTimingsBuffer(layer){if(!this._webglRenderer.SupportsGPUProfiling())return null;let p=this._layersGpuProfile.get(layer);if(!p){p={name:layer.GetName(),timingsBuffer:C3.New(C3.Gfx.WebGLQueryResultBuffer,this._webglRenderer),curUtilisation:0,lastUtilisation:0};
 this._layersGpuProfile.set(layer,p)}return p.timingsBuffer}_Update1sFrameRange(){if(!this._webglRenderer.SupportsGPUProfiling())return;if(this._gpuTimeEndFrame===0){this._gpuTimeEndFrame=this._webglRenderer.GetFrameNumber();this._gpuCurUtilisation=NaN;for(const p of this.activeLayersGpuProfiles())p.curUtilisation=NaN}}_UpdateTick(){if(!this._webglRenderer.SupportsGPUProfiling()||!isNaN(this._gpuCurUtilisation))return;this._gpuCurUtilisation=this._gpuFrameTimingsBuffer.GetFrameRangeResultSum(this._gpuTimeStartFrame,
@@ -3305,18 +3309,37 @@ SetWrapping(w){this._SetWrapByWord(w===0)}}};
 				});				
 		},
 		// Leaderboard
-		LeaderBoard(type, global){
+		LeaderBoard(type, global, leaderboard_field){
 			var leader_type = "score";
 			if (type === 0) leader_type = "level";
 			
 			vkBridge
-				.send("VKWebAppCallAPIMethod", {"method": "apps.getLeaderboard", "request_id": "leader", "params": {"type": leader_type, "global": global, "extended": 1, "v": "5.130", "access_token": this.user_token}})
+				.send("VKWebAppCallAPIMethod", {"method": "apps.getLeaderboard", "request_id": "board", "params": {"type": leader_type, "global": global, "extended": 1, "v": "5.130", "access_token": this.user_token}})
 				.then(data => {
 					var data = data.response;
 					this.leaderboard_count = data.count;
 					this.leaderboard_data = data.items;
-					this.leaderboard_prof = data.profiles;
-					this.Trigger(this.conditions.LeaderBoardSuccess);
+					
+					let i = 0;
+					var board_data = [];
+					var board_id = [];
+					do {
+						board_data = this.leaderboard_data[i];
+						board_id[i] = board_data["user_id"];
+						i++;
+						if (i == this.leaderboard_count){
+							vkBridge
+								.send("VKWebAppCallAPIMethod", {"method": "users.get", "request_id": "userboard", "params": {"user_ids": board_id.join(','), "fields": leaderboard_field, "v": "5.130", "access_token": this.user_token}})
+								.then(data => {
+									this.leaderboard_prof = data.response;
+									this.Trigger(this.conditions.LeaderBoardSuccess);
+								})
+								.catch(error => {
+									if (error.error_data){var error_data = error.error_data;this.error_code = error_data["error_code"];this.error_reason = error_data["error_reason"];}
+									this.Trigger(this.conditions.LeaderBoardFailed);
+								});
+						}
+					} while (i < this.leaderboard_count);
 				})
 				.catch(error => {
 					if (error.error_data){var error_data = error.error_data;this.error_code = error_data["error_code"];this.error_reason = error_data["error_reason"];}
@@ -3426,6 +3449,1024 @@ await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesL
 
 
 'use strict';{const C3=self.C3;C3.Plugins.LocalStorage.Exps={ItemValue(){return this._lastValue},Key(){return this._currentKey},KeyCount(){return this._keyNamesList.length},KeyAt(i){i=Math.floor(i);if(i<0||i>=this._keyNamesList.length)return"";return this._keyNamesList[i]},ErrorMessage(){return this._errorMessage}}};
+
+
+'use strict';
+{
+    C3.Plugins.Eponesh_GameScore = class GameScorePlugin extends C3.SDKPluginBase {
+        constructor(opts) {
+            super(opts, 'Eponesh_GameScore');
+        }
+
+        Release() {
+            super.Release();
+        }
+    };
+}
+
+
+'use strict';
+{
+    C3.Plugins.Eponesh_GameScore.Type = class GameScoreType extends C3.SDKTypeBase {
+        constructor(objectClass) {
+            super(objectClass);
+        }
+
+        Release() {
+            super.Release();
+        }
+
+        OnCreate() {}
+    };
+}
+
+
+'use strict';
+{
+    const SERVER_HOST = 'https://gs.eponesh.com';
+    // const SERVER_HOST = 'https://gs.eponesh.com';
+
+    C3.Plugins.Eponesh_GameScore.Instance = class GameScoreInstance extends C3.SDKInstanceBase {
+        constructor(inst, properties) {
+            super(inst);
+
+            this.mappers = {
+                language: ['en', 'ru'],
+                avatarGenerator: [
+                    'dicebear_retro',
+                    'dicebear_identicon',
+                    'dicebear_human',
+                    'dicebear_micah',
+                    'dicebear_bottts',
+                    'icotar',
+                    'robohash_robots',
+                    'robohash_cats'
+                ],
+                withMe: ['none', 'first', 'last'],
+                platform: ['YANDEX', 'VK', 'NONE', 'OK', 'GAME_MONETIZE', 'CRAZY_GAMES'],
+                compare: [
+                    (a, b) => a === b,
+                    (a, b) => a !== b,
+                    (a, b) => a < b,
+                    (a, b) => a <= b,
+                    (a, b) => a > b,
+                    (a, b) => a >= b
+                ]
+            };
+
+            this.conditions = C3.Plugins.Eponesh_GameScore.Cnds;
+            this.actions = C3.Plugins.Eponesh_GameScore.Acts;
+
+            this.awaiters = {
+                player: {},
+                gs: {}
+            };
+            this.awaiters.gs.ready = new Promise((res, rej) => {
+                this.awaiters.gs.done = res;
+                this.awaiters.gs.abort = rej;
+            });
+            this.awaiters.player.ready = new Promise((res, rej) => {
+                this.awaiters.player.done = res;
+                this.awaiters.player.abort = rej;
+            });
+
+            this.leaderboard = [];
+            this.currentLeaderboardIndex = 0;
+            this.currentLeaderboardPlayer = {};
+            this.lastLeaderboardTag = '';
+            this.lastLeaderboardPlayerRatingTag = '';
+
+            this.currentPlayerFieldKey = '';
+            this.currentPlayerFieldType = '';
+            this.currentPlayerFieldName = '';
+            this.currentPlayerFieldValue = '';
+
+            this.currentPlayerFieldVariantValue = '';
+            this.currentPlayerFieldVariantName = '';
+            this.currentPlayerFieldVariantIndex = 0;
+
+            this.isLastAdSuccess = false;
+            this.isLastShareSuccess = false;
+            this.isReady = false;
+            this.isPlayerReady = false;
+
+            this.projectId = Number(properties[0] || 0);
+            this.publicToken = properties[1];
+            this.showPreloaderOnStart = properties[2];
+            this.shouldWaitPlayerOnLoad = properties[3];
+
+            this._runtime.AddLoadPromise(this.awaiters.gs.ready);
+            if (this.shouldWaitPlayerOnLoad) {
+                this._runtime.AddLoadPromise(this.awaiters.player.ready);
+            }
+
+            this._runtime.Dispatcher().addEventListener('afterfirstlayoutstart', () => {
+                if (this.isReady) {
+                    this.Trigger(this.conditions.OnReady);
+                }
+
+                if (this.isPlayerReady) {
+                    this.Trigger(this.conditions.OnPlayerReady);
+                }
+            });
+
+            this.loadLib();
+        }
+
+        loadLib() {
+            try {
+                window.onGSInit = (gs) => gs.ready.then(() => this.init(gs));
+                ((d) => {
+                    var t = d.getElementsByTagName('script')[0];
+                    var s = d.createElement('script');
+                    s.src = `${SERVER_HOST}/sdk/game-score.js?projectId=${this.projectId}&publicToken=${this.publicToken}&callback=onGSInit`;
+                    s.async = true;
+                    t.parentNode.insertBefore(s, t);
+                })(document);
+            } catch (err) {
+                this.awaiters.gs.abort();
+                console.error(err);
+            }
+        }
+
+        init(gs) {
+            this.gs = gs;
+
+            // player
+            this.gs.player.on('ready', () => {
+                this.isPlayerReady = true;
+                this.awaiters.player.done();
+                this.Trigger(this.conditions.OnPlayerReady);
+            });
+            this.gs.player.on('change', () => this.Trigger(this.conditions.OnPlayerChange));
+            this.gs.player.on('sync', (success) => {
+                this.Trigger(success ? this.conditions.OnPlayerSyncComplete : this.conditions.OnPlayerSyncError);
+            });
+            this.gs.player.on('load', (success) => {
+                this.Trigger(success ? this.conditions.OnPlayerLoadComplete : this.conditions.OnPlayerLoadError);
+            });
+            this.gs.player.on('login', (success) => {
+                this.Trigger(success ? this.conditions.OnPlayerLoginComplete : this.conditions.OnPlayerLoginError);
+            });
+            this.gs.player.on('fetchFields', (success) => {
+                this.Trigger(
+                    success ? this.conditions.OnPlayerFetchFieldsComplete : this.conditions.OnPlayerFetchFieldsError
+                );
+            });
+
+            // leaderboard
+            this.gs.leaderboard.on('open', () => this.Trigger(this.conditions.OnLeaderboardOpen));
+            // this.gs.leaderboard.on('fetch', (leaderboardInfo) => {});
+            // this.gs.leaderboard.on('error:fetch', () => {});
+            // this.gs.leaderboard.on('fetchPlayer', (result) => {});
+            // this.gs.leaderboard.on('error:fetchPlayer', () => {});
+
+            // fullscreen
+            this.gs.fullscreen.on('open', () => this.Trigger(this.conditions.OnFullscreenOpen));
+            this.gs.fullscreen.on('close', () => this.Trigger(this.conditions.OnFullscreenClose));
+            this.gs.fullscreen.on('change', () => this.Trigger(this.conditions.OnFullscreenChange));
+
+            // ads
+            this.gs.ads.on('start', () => this.Trigger(this.conditions.OnAdsStart));
+            this.gs.ads.on('close', (success) => {
+                this.isLastAdSuccess = success;
+                this.Trigger(this.conditions.OnAdsClose);
+            });
+
+            this.gs.ads.on('fullscreen:start', () => this.Trigger(this.conditions.OnAdsFullscreenStart));
+            this.gs.ads.on('fullscreen:close', () => this.Trigger(this.conditions.OnAdsFullscreenClose));
+
+            this.gs.ads.on('preloader:start', () => this.Trigger(this.conditions.OnAdsPreloaderStart));
+            this.gs.ads.on('preloader:close', () => this.Trigger(this.conditions.OnAdsPreloaderClose));
+
+            this.gs.ads.on('rewarded:start', () => this.Trigger(this.conditions.OnAdsRewardedStart));
+            this.gs.ads.on('rewarded:close', () => this.Trigger(this.conditions.OnAdsRewardedClose));
+            this.gs.ads.on('rewarded:reward', () => this.Trigger(this.conditions.OnAdsRewardedReward));
+
+            this.gs.ads.on('sticky:start', () => this.Trigger(this.conditions.OnAdsStickyStart));
+            this.gs.ads.on('sticky:close', () => this.Trigger(this.conditions.OnAdsStickyClose));
+            this.gs.ads.on('sticky:refresh', () => this.Trigger(this.conditions.OnAdsStickyRefresh));
+            this.gs.ads.on('sticky:render', () => this.Trigger(this.conditions.OnAdsStickyRender));
+
+            // socials
+            this.gs.socials.on('share', (success) => {
+                this.isLastShareSuccess = success;
+                this.Trigger(this.conditions.OnSocialsShare);
+            });
+            this.gs.socials.on('post', (success) => {
+                this.isLastShareSuccess = success;
+                this.Trigger(this.conditions.OnSocialsPost);
+            });
+            this.gs.socials.on('invite', (success) => {
+                this.isLastShareSuccess = success;
+                this.Trigger(this.conditions.OnSocialsInvite);
+            });
+
+            // gs
+            this.gs.on('change:language', () => this.Trigger(this.conditions.OnChangeLanguage));
+            this.gs.on('change:avatarGenerator', () => this.Trigger(this.conditions.OnChangeAvatarGenerator));
+            this.gs.on('overlay:ready', () => this.Trigger(this.conditions.OnOverlayReady));
+
+            // ready
+            this.isReady = true;
+            this.Trigger(this.conditions.OnReady);
+            this.awaiters.gs.done();
+
+            if (this.showPreloaderOnStart) {
+                this.gs.ads.showPreloader();
+            }
+        }
+
+        Release() {
+            super.Release();
+        }
+
+        SaveToJson() {
+            return {
+                leaderboard: this.leaderboard,
+                currentLeaderboardIndex: this.currentLeaderboardIndex,
+                currentLeaderboardPlayer: this.currentLeaderboardPlayer,
+                lastLeaderboardTag: this.lastLeaderboardTag,
+                lastLeaderboardPlayerRatingTag: this.lastLeaderboardPlayerRatingTag,
+
+                currentPlayerFieldKey: this.currentPlayerFieldKey,
+                currentPlayerFieldType: this.currentPlayerFieldType,
+                currentPlayerFieldName: this.currentPlayerFieldName,
+                currentPlayerFieldValue: this.currentPlayerFieldValue,
+
+                currentPlayerFieldVariantValue: this.currentPlayerFieldVariantValue,
+                currentPlayerFieldVariantName: this.currentPlayerFieldVariantName,
+                currentPlayerFieldVariantIndex: this.currentPlayerFieldVariantIndex,
+
+                isLastAdSuccess: this.isLastAdSuccess,
+                isLastShareSuccess: this.isLastShareSuccess,
+                isReady: this.isReady,
+                isPlayerReady: this.isPlayerReady
+            };
+        }
+
+        LoadFromJson(o) {
+            this.leaderboard = o.leaderboard;
+            this.currentLeaderboardIndex = o.currentLeaderboardIndex;
+            this.currentLeaderboardPlayer = o.currentLeaderboardPlayer;
+            this.lastLeaderboardTag = o.lastLeaderboardTag;
+            this.lastLeaderboardPlayerRatingTag = o.lastLeaderboardPlayerRatingTag;
+
+            this.currentPlayerFieldKey = o.currentPlayerFieldKey;
+            this.currentPlayerFieldType = o.currentPlayerFieldType;
+            this.currentPlayerFieldName = o.currentPlayerFieldName;
+            this.currentPlayerFieldValue = o.currentPlayerFieldValue;
+
+            this.currentPlayerFieldVariantValue = o.currentPlayerFieldVariantValue;
+            this.currentPlayerFieldVariantName = o.currentPlayerFieldVariantName;
+            this.currentPlayerFieldVariantIndex = o.currentPlayerFieldVariantIndex;
+
+            this.isLastAdSuccess = o.isLastAdSuccess;
+            this.isLastShareSuccess = o.isLastShareSuccess;
+            this.isReady = o.isReady;
+            this.isPlayerReady = o.isPlayerReady;
+        }
+
+        GetDebuggerProperties() {
+            if (!this.player) {
+                return [];
+            }
+            return [
+                // {
+                //     title: 'GameScore - Base fields',
+                //     properties: [
+                //         {
+                //             name: 'ID',
+                //             value: this.player.id,
+                //         },
+                //         {
+                //             name: 'active',
+                //             value: this.player.active,
+                //         },
+                //         {
+                //             name: 'removed',
+                //             value: this.player.removed,
+                //         },
+                //         {
+                //             name: 'test',
+                //             value: this.player.test,
+                //         },
+                //     ],
+                // },
+                // {
+                //     title: 'GameScore - Stats',
+                //     properties: Object.keys(this.player.state).map((key) => ({
+                //         name: key,
+                //         value: this.player.stats[key],
+                //         onedit: (v) => this.CallAction(this.actions.SetStats, key, v),
+                //     })),
+                // },
+                // {
+                //     title: 'GameScore - Data',
+                //     properties: Object.keys(this.player.data).map((key) => ({
+                //         name: key,
+                //         value: this.player.data[key],
+                //         onedit: (v) => this.CallAction(this.actions.SetData, key, v),
+                //     })),
+                // },
+                // {
+                //     title: 'GameScore - Flags',
+                //     properties: Object.keys(this.player.flags).map((key) => ({
+                //         name: key,
+                //         value: this.player.flags[key],
+                //         onedit: (v) => this.CallAction(this.actions.SetFlag, key, v),
+                //     })),
+                // },
+            ];
+        }
+    };
+}
+
+
+'use strict';
+{
+    function each(runtime, array, cb) {
+        const eventSheetManager = runtime.GetEventSheetManager();
+        const currentEvent = runtime.GetCurrentEvent();
+        const solModifiers = currentEvent.GetSolModifiers();
+        const eventStack = runtime.GetEventStack();
+        const oldFrame = eventStack.GetCurrentStackFrame();
+        const newFrame = eventStack.Push(currentEvent);
+
+        array.forEach((item, index) => {
+            cb(item, index);
+
+            eventSheetManager.PushCopySol(solModifiers);
+            currentEvent.Retrigger(oldFrame, newFrame);
+            eventSheetManager.PopSol(solModifiers);
+        });
+
+        eventStack.Pop();
+    }
+
+    C3.Plugins.Eponesh_GameScore.Cnds = {
+        OnPlayerChange() {
+            return true;
+        },
+
+        OnPlayerSyncComplete() {
+            return true;
+        },
+
+        OnPlayerSyncError() {
+            return true;
+        },
+
+        OnPlayerLoadComplete() {
+            return true;
+        },
+
+        OnPlayerLoadError() {
+            return true;
+        },
+
+        OnPlayerLoginComplete() {
+            return true;
+        },
+
+        OnPlayerLoginError() {
+            return true;
+        },
+
+        OnPlayerFetchFieldsComplete() {
+            return true;
+        },
+
+        OnPlayerFetchFieldsError() {
+            return true;
+        },
+
+        OnPlayerReady() {
+            return true;
+        },
+
+        IsPlayerReady() {
+            return this.isPlayerReady;
+        },
+
+        IsPlayerStub() {
+            return this.gs.player.isStub;
+        },
+
+        IsPlayerLoggedIn() {
+            return this.gs.player.isLoggedIn;
+        },
+
+        PlayerHasKey(key) {
+            return this.gs.player.has(key);
+        },
+
+        PlayerFieldIsEnum(key) {
+            return this.gs.player.getField(key).variants.length;
+        },
+
+        PlayerCompareScore(comparison, value) {
+            return this.mappers.compare[comparison](this.gs.player.score, value);
+        },
+
+        PlayerCompare(key, comparison, value) {
+            return this.mappers.compare[comparison](this.gs.player.get(key), value);
+        },
+
+        PlayerEachField() {
+            each(this._runtime, this.gs.player.fields, (field) => {
+                this.currentPlayerFieldKey = field.key;
+                this.currentPlayerFieldType = field.type;
+                this.currentPlayerFieldName = field.name;
+                this.currentPlayerFieldValue = this.gs.player.get(field.key);
+            });
+
+            return false;
+        },
+
+        PlayerEachFieldVariant(key) {
+            each(this._runtime, this.gs.player.getField(key).variants, (variant, index) => {
+                this.currentPlayerFieldVariantValue = variant.value;
+                this.currentPlayerFieldVariantName = variant.name;
+                this.currentPlayerFieldVariantIndex = index;
+            });
+
+            return false;
+        },
+
+        OnLeaderboardOpen() {
+            return true;
+        },
+
+        OnLeaderboardFetch(tag) {
+            return this.lastLeaderboardTag === tag;
+        },
+
+        OnLeaderboardAnyFetch() {
+            return true;
+        },
+
+        OnLeaderboardFetchError(tag) {
+            return this.lastLeaderboardTag === tag;
+        },
+
+        OnLeaderboardAnyFetchError() {
+            return true;
+        },
+
+        OnLeaderboardFetchPlayer(tag) {
+            return this.lastLeaderboardPlayerRatingTag === tag;
+        },
+
+        OnLeaderboardAnyFetchPlayer() {
+            return true;
+        },
+
+        OnLeaderboardFetchPlayerError(tag) {
+            return this.lastLeaderboardPlayerRatingTag === tag;
+        },
+
+        OnLeaderboardAnyFetchPlayerError() {
+            return true;
+        },
+
+        LeaderboardEachPlayer() {
+            each(this._runtime, this.leaderboard, (player, index) => {
+                this.currentLeaderboardIndex = index;
+                this.currentLeaderboardPlayer = player;
+            });
+
+            return false;
+        },
+
+        OnFullscreenOpen() {
+            return true;
+        },
+
+        OnFullscreenClose() {
+            return true;
+        },
+
+        OnFullscreenChange() {
+            return true;
+        },
+
+        IsFullscreenMode() {
+            return this.gs.fullscreen.isEnabled;
+        },
+
+        OnAdsStart() {
+            return true;
+        },
+
+        OnAdsClose() {
+            return true;
+        },
+
+        OnAdsFullscreenStart() {
+            return true;
+        },
+
+        OnAdsFullscreenClose() {
+            return true;
+        },
+
+        OnAdsPreloaderStart() {
+            return true;
+        },
+
+        OnAdsPreloaderClose() {
+            return true;
+        },
+
+        OnAdsRewardedStart() {
+            return true;
+        },
+
+        OnAdsRewardedClose() {
+            return true;
+        },
+
+        OnAdsRewardedReward() {
+            return true;
+        },
+
+        OnAdsStickyStart() {
+            return true;
+        },
+
+        OnAdsStickyClose() {
+            return true;
+        },
+
+        OnAdsStickyRefresh() {
+            return true;
+        },
+
+        OnAdsStickyRender() {
+            return true;
+        },
+
+        IsAdsFullscreenAvailable() {
+            return this.gs.ads.isFullscreenAvailable;
+        },
+
+        IsAdsRewardedAvailable() {
+            return this.gs.ads.isRewardedAvailable;
+        },
+
+        IsAdsPreloaderAvailable() {
+            return this.gs.ads.isPreloaderAvailable;
+        },
+
+        IsAdsStickyAvailable() {
+            return this.gs.ads.isStickyAvailable;
+        },
+
+        IsAdsAdblockEnabled() {
+            return this.gs.ads.isAdblockEnabled;
+        },
+
+        IsAdsLastAdSuccess() {
+            return Boolean(this.isLastAdSuccess);
+        },
+
+        // gs
+        OnChangeLanguage() {
+            return true;
+        },
+
+        OnChangeAvatarGenerator() {
+            return true;
+        },
+
+        OnOverlayReady() {
+            return true;
+        },
+
+        IsDev() {
+            return this.gs.isDev;
+        },
+
+        Language(language) {
+            return this.gs.language === this.mappers.language[language];
+        },
+
+        // platform
+        HasPlatformIntegratedAuth() {
+            return this.gs.platform.hasIntegratedAuth;
+        },
+
+        PlatformType(type) {
+            return this.gs.platform.type === this.mappers.platform[type];
+        },
+
+        // socials
+        OnSocialsShare() {
+            return true;
+        },
+
+        OnSocialsPost() {
+            return true;
+        },
+
+        OnSocialsInvite() {
+            return true;
+        },
+
+        IsSocialsLastShareSuccess() {
+            return this.isLastShareSuccess;
+        },
+
+        IsSocialsSupportsNativeShare() {
+            return this.gs.socials.isSupportsNativeShare;
+        },
+
+        IsSocialsSupportsNativePosts() {
+            return this.gs.socials.isSupportsNativePosts;
+        },
+
+        IsSocialsSupportsNativeInvite() {
+            return this.gs.socials.isSupportsNativeInvite;
+        },
+
+        OnLoadJsonError() {
+            return true;
+        }
+    };
+}
+
+
+'use strict';
+{
+    C3.Plugins.Eponesh_GameScore.Acts = {
+        PlayerSetName(name) {
+            this.gs.player.name = name;
+        },
+
+        PlayerSetAvatar(src) {
+            this.gs.player.avatar = src;
+        },
+
+        PlayerSetScore(score) {
+            this.gs.player.score = score;
+        },
+
+        PlayerAddScore(score) {
+            this.gs.player.score += score;
+        },
+
+        PlayerSet(key, value) {
+            this.gs.player.set(key, value);
+        },
+
+        PlayerAdd(key, value) {
+            this.gs.player.add(key, value);
+        },
+
+        PlayerToggle(key) {
+            this.gs.player.toggle(key);
+        },
+
+        PlayerReset() {
+            this.gs.player.reset();
+        },
+
+        PlayerRemove() {
+            this.gs.player.remove();
+        },
+
+        PlayerSync(override = false) {
+            return this.gs.player.sync({ override });
+        },
+
+        PlayerLoad() {
+            return this.gs.player.load();
+        },
+
+        PlayerLogin() {
+            return this.gs.player.login();
+        },
+
+        PlayerFetchFields() {
+            return this.gs.player.fetchFields();
+        },
+
+        PlayerWaitForReady() {
+            return this.awaiters.player.ready;
+        },
+
+        LeaderboardOpen(orderBy, order, limit, withMe, includeFields, displayFields) {
+            return this.gs.leaderboard
+                .open({
+                    id: this.gs.player.id,
+                    orderBy: orderBy
+                        .split(',')
+                        .map((o) => o.trim())
+                        .filter((f) => f),
+                    order: order === 0 ? 'DESC' : 'ASC',
+                    limit,
+                    withMe: this.mappers.withMe[withMe],
+                    includeFields: includeFields
+                        .split(',')
+                        .map((o) => o.trim())
+                        .filter((f) => f),
+                    displayFields: displayFields
+                        .split(',')
+                        .map((o) => o.trim())
+                        .filter((f) => f)
+                })
+                .catch(console.warn);
+        },
+
+        LeaderboardFetch(tag, orderBy, order, limit, withMe, includeFields) {
+            return this.gs.leaderboard
+                .fetch({
+                    id: this.gs.player.id,
+                    orderBy: orderBy
+                        .split(',')
+                        .map((o) => o.trim())
+                        .filter((f) => f),
+                    order: order === 0 ? 'DESC' : 'ASC',
+                    limit,
+                    withMe: this.mappers.withMe[withMe],
+                    includeFields: includeFields
+                        .split(',')
+                        .map((o) => o.trim())
+                        .filter((f) => f)
+                })
+                .then((leaderboardInfo) => {
+                    this.lastLeaderboardTag = tag;
+                    this.leaderboard = leaderboardInfo.players;
+                    this.Trigger(this.conditions.OnLeaderboardFetch);
+                    this.Trigger(this.conditions.OnLeaderboardAnyFetch);
+                })
+                .catch(() => {
+                    console.warn(err);
+                    this.lastLeaderboardTag = tag;
+                    this.Trigger(this.conditions.OnLeaderboardFetchError);
+                    this.Trigger(this.conditions.OnLeaderboardAnyFetchError);
+                });
+        },
+
+        LeaderboardFetchPlayerRating(tag, orderBy, order) {
+            return this.gs.leaderboard
+                .fetchPlayerRating({
+                    id: this.gs.player.id,
+                    orderBy: orderBy
+                        .split(',')
+                        .map((o) => o.trim())
+                        .filter((f) => f),
+                    order: order === 0 ? 'DESC' : 'ASC'
+                })
+                .then((result) => {
+                    this.lastLeaderboardPlayerRatingTag = tag;
+                    this.leaderboardPlayerPosition = result.player.position;
+                    this.Trigger(this.conditions.OnLeaderboardFetchPlayer);
+                    this.Trigger(this.conditions.OnLeaderboardAnyFetchPlayer);
+                })
+                .catch((err) => {
+                    console.warn(err);
+                    this.lastLeaderboardPlayerRatingTag = tag;
+                    this.Trigger(this.conditions.OnLeaderboardFetchPlayerError);
+                    this.Trigger(this.conditions.OnLeaderboardAnyFetchPlayerError);
+                });
+        },
+
+        FullscreenOpen() {
+            return this.gs.fullscreen.open();
+        },
+
+        FullscreenClose() {
+            return this.gs.fullscreen.close();
+        },
+
+        FullscreenToggle() {
+            return this.gs.fullscreen.toggle();
+        },
+
+        AdsShowFullscreen() {
+            return this.gs.ads.showFullscreen();
+        },
+
+        AdsShowRewarded() {
+            return this.gs.ads.showRewardedVideo();
+        },
+
+        AdsShowPreloader() {
+            return this.gs.ads.showPreloader();
+        },
+
+        AdsShowSticky() {
+            return this.gs.ads.showSticky();
+        },
+
+        AdsCloseSticky() {
+            return this.gs.ads.closeSticky();
+        },
+
+        AdsRefreshSticky() {
+            return this.gs.ads.refreshSticky();
+        },
+
+        AnalyticsHit(url) {
+            return this.gs.analytics.hit(url);
+        },
+
+        AnalyticsGoal(event, value) {
+            return this.gs.analytics.goal(event, value);
+        },
+
+        SocialsShare(text, url, image) {
+            return this.gs.socials.share({ text, url, image });
+        },
+
+        SocialsPost(text, url, image) {
+            return this.gs.socials.post({ text, url, image });
+        },
+
+        SocialsInvite(text, url, image) {
+            return this.gs.socials.invite({ text, url, image });
+        },
+
+        ChangeLanguage(language) {
+            return this.gs.changeLanguage(this.mappers.language[language]);
+        },
+
+        ChangeAvatarGenerator(generator) {
+            return this.gs.changeAvatarGenerator(this.mappers.avatarGenerator[generator]);
+        },
+
+        LoadOverlay() {
+            return this.gs.loadOverlay();
+        },
+
+        LoadFromJSON(data) {
+            try {
+                const parsed = JSON.parse(data);
+                if (!('isReady' in parsed)) {
+                    throw new Error('Data was corrupted');
+                }
+
+                this.LoadFromJson(parsed);
+            } catch (error) {
+                this.Trigger(this.conditions.OnLoadJsonError);
+            }
+        }
+    };
+}
+
+
+'use strict';
+{
+    C3.Plugins.Eponesh_GameScore.Exps = {
+        PlayerID() {
+            return this.gs.player.id;
+        },
+
+        PlayerScore() {
+            return this.gs.player.score;
+        },
+
+        PlayerName() {
+            return this.gs.player.name;
+        },
+
+        PlayerAvatar() {
+            return this.gs.player.avatar;
+        },
+
+        PlayerGet(key) {
+            return this.gs.player.get(key);
+        },
+
+        PlayerHas(key) {
+            return this.gs.player.is(key);
+        },
+
+        PlayerFieldName(key) {
+            return this.gs.player.getFieldName(key);
+        },
+
+        PlayerFieldVariantName(key, value) {
+            return this.gs.player.getFieldVariantName(key, value);
+        },
+
+        PlayerGetFieldVariantAt(key, index) {
+            const variant = this.gs.player.getField(key).variants[index];
+            return variant ? variant.value : '';
+        },
+
+        PlayerGetFieldVariantIndex(key, value) {
+            return this.gs.player.getField(key).variants.findIndex((v) => v.value === value);
+        },
+
+        PlayerCurFieldKey() {
+            return this.currentPlayerFieldKey || '';
+        },
+
+        PlayerCurFieldType() {
+            return this.currentPlayerFieldType || '';
+        },
+
+        PlayerCurFieldName() {
+            return this.currentPlayerFieldName || '';
+        },
+
+        PlayerCurFieldValue() {
+            return typeof this.currentPlayerFieldValue === 'string'
+                ? this.currentPlayerFieldValue
+                : Number(this.currentPlayerFieldValue || 0);
+        },
+
+        PlayerCurFieldVariantValue() {
+            return typeof this.currentPlayerFieldVariantValue === 'string'
+                ? this.currentPlayerFieldVariantValue
+                : Number(this.currentPlayerFieldVariantValue || 0);
+        },
+
+        PlayerCurFieldVariantName() {
+            return this.currentPlayerFieldVariantName || '';
+        },
+
+        PlayerCurFieldVariantIndex() {
+            return this.currentPlayerFieldVariantIndex || 0;
+        },
+
+        LeaderboardCurPlayerName() {
+            return this.currentLeaderboardPlayer.name || '';
+        },
+
+        LeaderboardCurPlayerAvatar() {
+            return this.currentLeaderboardPlayer.avatar || '';
+        },
+
+        LeaderboardCurPlayerID() {
+            return this.currentLeaderboardPlayer.id || 0;
+        },
+
+        LeaderboardCurPlayerScore() {
+            return this.currentLeaderboardPlayer.score || 0;
+        },
+
+        LeaderboardCurPlayerPosition() {
+            return this.currentLeaderboardPlayer.position || 0;
+        },
+
+        LeaderboardCurPlayerIndex() {
+            return this.currentLeaderboardIndex || 0;
+        },
+
+        LeaderboardCurPlayerField(key) {
+            return key in this.currentLeaderboardPlayer ? this.currentLeaderboardPlayer[key] : 0;
+        },
+
+        LeaderboardPlayerFieldAt(index, key) {
+            const player = this.leaderboard[index];
+            return player && key in player ? player[key] : 0;
+        },
+
+        LeaderboardPlayerPosition() {
+            return this.leaderboardPlayerPosition || 0;
+        },
+
+        IsFullscreenMode() {
+            return Number(this.gs.fullscreen.isEnabled);
+        },
+
+        Language() {
+            return this.gs.language;
+        },
+
+        AvatarGenerator() {
+            return this.gs.avatarGenerator;
+        },
+
+        PlatformType() {
+            return this.gs.platform.type;
+        },
+
+        AppTitle() {
+            return this.gs.app.title;
+        },
+
+        AppDescription() {
+            return this.gs.app.description;
+        },
+
+        AppImage() {
+            return this.gs.app.image;
+        },
+
+        AppUrl() {
+            return this.gs.app.url;
+        },
+
+        AsJSON() {
+            return JSON.stringify(this.SaveToJson());
+        }
+    };
+}
 
 
 'use strict';{const C3=self.C3;C3.Behaviors.Anchor=class AnchorBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}};
@@ -4033,53 +5074,53 @@ class PlatformInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,pr
 !!this._runtime.GetCollisionEngine().TestOverlapJumpthru(this._inst);this._loadJumpthruUid=-1;this._animMode="stopped";this._fallThrough=0;this._isFirstTick=true;this._dx=0;this._dy=0;this._downX=0;this._downY=0;this._rightX=0;this._rightY=0;this._g=1500;this._g1=1500;this._ga=C3.toRadians(90);this._maxSpeed=330;this._acc=1500;this._dec=1500;this._jumpStrength=650;this._maxFall=1E3;this._enableDoubleJump=false;this._jumpSustain=0;this._sustainTime=0;this._defaultControls=true;this._ceilingCollisionMode=
 0;this._isEnabled=true;if(properties){this._maxSpeed=properties[MAX_SPEED];this._acc=properties[ACCELERATION];this._dec=properties[DECELERATION];this._jumpStrength=properties[JUMP_STRENGTH];this._g=properties[GRAVITY];this._maxFall=properties[MAX_FALL_SPEED];this._enableDoubleJump=!!properties[DOUBLE_JUMP];this._jumpSustain=properties[JUMP_SUSTAIN]/1E3;this._defaultControls=!!properties[DEFAULT_CONTROLS];this._isEnabled=!!properties[ENABLE]}const rt=this._runtime.Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,
 "instancedestroy",e=>this._OnInstanceDestroyed(e.instance)),C3.Disposable.From(rt,"afterload",e=>this._OnAfterLoad()));if(this._defaultControls)this._BindEvents();if(this._isEnabled)this._StartPostTicking();this._UpdateGravity();this._inst.GetUnsavedDataMap().set("isPlatformBehavior",true)}Release(){if(this._keyboardDisposables){this._keyboardDisposables.Release();this._keyboardDisposables=null}this._lastFloorObject=null;this._wasOverJumpthru=null;super.Release()}_BindEvents(){if(this._keyboardDisposables)return;
-const rt=this._runtime.Dispatcher();this._keyboardDisposables=new C3.CompositeDisposable(C3.Disposable.From(rt,"keydown",e=>this._OnKeyDown(e.data)),C3.Disposable.From(rt,"keyup",e=>this._OnKeyUp(e.data)),C3.Disposable.From(rt,"window-blur",()=>this._OnWindowBlur()))}_UnBindEvents(){if(!this._keyboardDisposables)return;this._keyboardDisposables.Release();this._keyboardDisposables=null}_OnInstanceDestroyed(inst){if(this._lastFloorObject===inst)this._lastFloorObject=null;if(this._wasOverJumpthru===
-inst)this._wasOverJumpthru=null}_OnKeyDown(data){switch(data["key"]){case "ArrowLeft":this._leftKey=true;break;case "ArrowRight":this._rightKey=true;break;case "ArrowUp":this._jumpKey=true;break}}_OnKeyUp(data){switch(data["key"]){case "ArrowLeft":this._leftKey=false;break;case "ArrowRight":this._rightKey=false;break;case "ArrowUp":this._jumpKey=false;this._jumped=false;break}}_OnWindowBlur(){this._leftKey=false;this._rightKey=false;this._jumpKey=false;this._jumped=false}SaveToJson(){return{"ii":this._ignoreInput,
-"lfx":this._lastFloorX,"lfy":this._lastFloorY,"lfo":this._lastFloorObject?this._lastFloorObject.GetUID():-1,"am":this._animMode,"en":this._isEnabled,"fall":this._fallThrough,"ft":this._isFirstTick,"dx":this._dx,"dy":this._dy,"ms":this._maxSpeed,"acc":this._acc,"dec":this._dec,"js":this._jumpStrength,"g":this._g,"g1":this._g1,"mf":this._maxFall,"wof":this._wasOnFloor,"woj":this._wasOverJumpthru?this._wasOverJumpthru.GetUID():-1,"ga":this._ga,"edj":this._enableDoubleJump,"cdj":this._canDoubleJump,"dj":this._doubleJumped,
-"sus":this._jumpSustain,"dc":this._defaultControls,"cc":this._ceilingCollisionMode}}LoadFromJson(o){this._ignoreInput=o["ii"];this._lastFloorX=o["lfx"];this._lastFloorY=o["lfy"];this._loadFloorUid=o["lfo"];this._animMode=o["am"];const isEnabled=o["en"];this._fallThrough=o["fall"];this._isFirstTick=o["ft"];this._dx=o["dx"];this._dy=o["dy"];this._maxSpeed=o["ms"];this._acc=o["acc"];this._dec=o["dec"];this._jumpStrength=o["js"];this._g=o["g"];this._g1=o["g1"];this._maxFall=o["mf"];this._wasOnFloor=o["wof"];
-this._loadJumpthruUid=o["woj"];this._ga=o["ga"];this._enableDoubleJump=o["edj"];this._canDoubleJump=o["cdj"];this._doubleJumped=o["dj"];this._jumpSustain=o["sus"];this._defaultControls=o["dc"];this._ceilingCollisionMode=o["cc"]||0;this._leftKey=false;this._rightKey=false;this._jumpKey=false;this._jumped=false;this._simLeft=false;this._simRight=false;this._simJump=false;this._sustainTime=0;if(this._defaultControls)this._BindEvents();else this._UnBindEvents();this._SetEnabled(isEnabled);this._UpdateGravity()}_OnAfterLoad(){if(this._loadFloorUid===
--1)this._lastFloorObject=null;else this._lastFloorObject=this._runtime.GetInstanceByUID(this._loadFloorUid);if(this._loadJumpthruUid===-1)this._wasOverJumpthru=null;else this._wasOverJumpthru=this._runtime.GetInstanceByUID(this._loadJumpthruUid)}_UpdateGravity(){this._downX=Math.cos(this._ga);this._downY=Math.sin(this._ga);this._rightX=Math.cos(this._ga-Math.PI/2);this._rightY=Math.sin(this._ga-Math.PI/2);this._downX=C3.round6dp(this._downX);this._downY=C3.round6dp(this._downY);this._rightX=C3.round6dp(this._rightX);
-this._rightY=C3.round6dp(this._rightY);this._g1=this._g;if(this._g<0){this._downX*=-1;this._downY*=-1;this._g=Math.abs(this._g)}}_GetGDir(){if(this._g<0)return-1;else return 1}_IsOnFloor(){const wi=this._inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const inst=this._inst;const lfo=this._lastFloorObject;const oldX=wi.GetX();const oldY=wi.GetY();wi.OffsetXY(this._downX,this._downY);wi.SetBboxChanged();if(lfo&&collisionEngine.TestOverlap(inst,lfo)&&(!lfo.GetObjectClass().HasSolidBehavior()||
-collisionEngine.IsSolidCollisionAllowed(lfo,inst))){wi.SetXY(oldX,oldY);wi.SetBboxChanged();return lfo}else{let ret=collisionEngine.TestOverlapSolid(inst);let ret2=null;if(!ret&&this._fallThrough===0)ret2=collisionEngine.TestOverlapJumpthru(inst,true);wi.SetXY(oldX,oldY);wi.SetBboxChanged();if(ret)if(collisionEngine.TestOverlap(inst,ret))return null;else{this._floorIsJumpthru=false;return ret}if(ret2&&ret2.length){let j=0;for(let i=0,len=ret2.length;i<len;++i){ret2[j]=ret2[i];if(!collisionEngine.TestOverlap(inst,
-ret2[i]))++j}if(j>=1){this._floorIsJumpthru=true;return ret2[0]}}return null}}PostTick(){if(!this._isEnabled)return;const dt=this._runtime.GetDt(this._inst);if(!this._jumpKey&&!this._simJump)this._jumped=false;let left=this._leftKey||this._simLeft;let right=this._rightKey||this._simRight;let jumpkey=this._jumpKey||this._simJump;let jump=jumpkey&&!this._jumped;this._simLeft=false;this._simRight=false;this._simJump=false;if(this._ignoreInput){left=false;right=false;jumpkey=false;jump=false}if(!jumpkey)this._sustainTime=
-0;this._HandleFirstTick();const [mx,my,floorMoved]=this._TrackMovingPlatform();let floor=this._IsOnFloor();const didJustLandOnFloor=floor&&!this._wasOnFloor;let isStuck=false;[isStuck,floor]=this._MaybePushOutSolid(floor);if(isStuck)return;this._TrackFloor(floor,floorMoved,mx,jumpkey);jump=this._HandleJump(floor,jump,jumpkey);if(!floor)this._ApplyJumpGravity(jump,jumpkey,dt);this._wasOnFloor=!!floor;const hacc=this._ApplyHorizontalAcceleration(left,right,dt);let landed=false;let downMagnitude=0;if(this._dx!==
-0)landed=this._HandleHorizontalMovement(dt,hacc,floor,jump);if(this._dy!==0){const [l,dm]=this._HandleVerticalMovement(dt,floor);landed=landed||l;downMagnitude=dm}if(!landed&&didJustLandOnFloor&&this._dy<0&&downMagnitude>0){this._dy=0;landed=true}this._HandleAnimationTriggers(floor,landed,jump);if(this._fallThrough>0)this._fallThrough--;this._wasOverJumpthru=this._runtime.GetCollisionEngine().TestOverlapJumpthru(this._inst)}_HandleFirstTick(){if(!this._isFirstTick)return;const inst=this._inst;const collisionEngine=
-this._runtime.GetCollisionEngine();if(collisionEngine.TestOverlapSolid(inst)||collisionEngine.TestOverlapJumpthru(inst))collisionEngine.PushOutSolid(inst,-this._downX,-this._downY,4,true);this._isFirstTick=false}_TrackMovingPlatform(){const lastFloor=this._lastFloorObject;const lastFloorWi=lastFloor?lastFloor.GetWorldInfo():null;let mx=0;let my=0;let floorMoved=false;if(lastFloor&&this._dy===0&&(lastFloorWi.GetY()!==this._lastFloorY||lastFloorWi.GetX()!==this._lastFloorX)){const inst=this._inst;const wi=
-inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const lfx=lastFloorWi.GetX();const lfy=lastFloorWi.GetY();mx=lfx-this._lastFloorX;my=lfy-this._lastFloorY;wi.OffsetXY(mx,my);wi.SetBboxChanged();this._lastFloorX=lfx;this._lastFloorY=lfy;floorMoved=true;if(collisionEngine.TestOverlapSolid(inst))collisionEngine.PushOutSolid(inst,-mx,-my,Math.hypot(mx,my)*2.5)}return[mx,my,floorMoved]}_MaybePushOutSolid(floor){let isStuck=false;const inst=this._inst;const wi=inst.GetWorldInfo();
-const collisionEngine=this._runtime.GetCollisionEngine();const collInst=collisionEngine.TestOverlapSolid(inst);if(!collInst)return[false,floor];const instWidth=Math.abs(wi.GetWidth());const instHeight=Math.abs(wi.GetHeight());if(inst.GetSavedDataMap().get("inputPredicted"))collisionEngine.PushOutSolid(inst,-this._downX,-this._downY,10,false);else if(collisionEngine.PushOutSolidAxis(inst,-this._downX,-this._downY,instHeight/8)){collisionEngine.RegisterCollision(inst,collInst);floor=collInst;this._lastFloorObject=
-collInst;const collWi=collInst.GetWorldInfo();this._lastFloorX=collWi.GetX();this._lastFloorY=collWi.GetY();this._floorIsJumpthru=false}else if(collisionEngine.PushOutSolidAxis(inst,this._rightX,this._rightY,instWidth/2)||collisionEngine.PushOutSolidAxis(inst,this._downX,this._downY,instHeight/2)||collisionEngine.PushOutSolidNearest(inst,Math.max(instWidth,instHeight)/2))collisionEngine.RegisterCollision(inst,collInst);else isStuck=true;return[isStuck,floor]}_TrackFloor(floor,floorMoved,mx,jumpkey){const inst=
-this._inst;const collisionEngine=this._runtime.GetCollisionEngine();if(floor){const downX=this._downX;const downY=this._downY;const rightX=this._rightX;const rightY=this._rightY;this._doubleJumped=false;this._canDoubleJump=false;if(this._dy>0){if(!this._wasOnFloor){collisionEngine.PushInFractional(inst,-downX,-downY,floor,16);this._wasOnFloor=true}this._dy=0}if(this._lastFloorObject!==floor){this._lastFloorObject=floor;const floorWi=floor.GetWorldInfo();this._lastFloorX=floorWi.GetX();this._lastFloorY=
-floorWi.GetY();collisionEngine.RegisterCollision(inst,floor)}else if(floorMoved){const collInst=collisionEngine.TestOverlapSolid(inst);if(collInst){collisionEngine.RegisterCollision(inst,collInst);if(mx!==0)if(mx>0)collisionEngine.PushOutSolid(inst,-rightX,-rightY);else collisionEngine.PushOutSolid(inst,rightX,rightY);collisionEngine.PushOutSolid(inst,-downX,-downY)}}}else if(!jumpkey)this._canDoubleJump=true}_HandleJump(floor,jump,jumpkey){if(floor&&jump||!floor&&this._enableDoubleJump&&jumpkey&&
-this._canDoubleJump&&!this._doubleJumped){const inst=this._inst;const wi=inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const oldX=wi.GetX();const oldY=wi.GetY();wi.OffsetXY(-this._downX,-this._downY);wi.SetBboxChanged();if(!collisionEngine.TestOverlapSolid(inst)){this._sustainTime=this._jumpSustain;this.Trigger(C3.Behaviors.Platform.Cnds.OnJump);this._animMode="jumping";this._dy=-this._jumpStrength;jump=true;if(floor)this._jumped=true;else this._doubleJumped=true}else jump=
-false;wi.SetXY(oldX,oldY);wi.SetBboxChanged()}return jump}_ApplyJumpGravity(jump,jumpkey,dt){if(jumpkey&&this._sustainTime>0){this._dy=-this._jumpStrength;this._sustainTime-=dt}else{this._lastFloorObject=null;this._dy+=this._g*dt;if(this._dy>this._maxFall)this._dy=this._maxFall}if(jump)this._jumped=true}_ApplyHorizontalAcceleration(left,right,dt){const acc=this._acc;const dec=this._dec;if(left===right)if(this._dx<0){this._dx+=dec*dt;if(this._dx>0)this._dx=0}else if(this._dx>0){this._dx-=dec*dt;if(this._dx<
-0)this._dx=0}let hacc=0;if(left&&!right)if(this._dx>0)hacc=-(acc+dec);else hacc=-acc;if(right&&!left)if(this._dx<0)hacc=acc+dec;else hacc=acc;this._dx+=hacc*dt;this._dx=C3.clamp(this._dx,-this._maxSpeed,this._maxSpeed);return hacc}_HandleHorizontalMovement(dt,hacc,floor,jump){const inst=this._inst;const wi=inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const downX=this._downX;const downY=this._downY;const rightX=this._rightX;const rightY=this._rightY;const maxSpeed=this._maxSpeed;
-let landed=false;let oldX=wi.GetX();let oldY=wi.GetY();const mx=accelerate(this._dx,-maxSpeed,maxSpeed,hacc,dt)*rightX;const my=accelerate(this._dx,-maxSpeed,maxSpeed,hacc,dt)*rightY;wi.OffsetXY(rightX*(this._dx>1?1:-1)-downX,rightY*(this._dx>1?1:-1)-downY);wi.SetBboxChanged();let isJumpthru=false;const slopeTooSteep=collisionEngine.TestOverlapSolid(inst);wi.SetXY(oldX+mx,oldY+my);wi.SetBboxChanged();let obstacle=collisionEngine.TestOverlapSolid(inst);if(!obstacle&&floor){obstacle=collisionEngine.TestOverlapJumpthru(inst);
-if(obstacle){wi.SetXY(oldX,oldY);wi.SetBboxChanged();if(collisionEngine.TestOverlap(inst,obstacle)){obstacle=null;isJumpthru=false}else isJumpthru=true;wi.SetXY(oldX+mx,oldY+my);wi.SetBboxChanged()}}if(obstacle){let pushDist=Math.abs(this._dx*dt)+2;if(slopeTooSteep||!collisionEngine.PushOutSolid(inst,-downX,-downY,pushDist,isJumpthru,obstacle)){collisionEngine.RegisterCollision(inst,obstacle);pushDist=Math.max(Math.abs(this._dx*dt*2.5),30);if(!collisionEngine.PushOutSolid(inst,rightX*(this._dx<0?
-1:-1),rightY*(this._dx<0?1:-1),pushDist,false)){wi.SetXY(oldX,oldY);wi.SetBboxChanged()}else if(floor&&!isJumpthru&&!this._floorIsJumpthru){oldX=wi.GetX();oldY=wi.GetY();wi.OffsetXY(downX,downY);if(collisionEngine.TestOverlapSolid(inst)){if(!collisionEngine.PushOutSolid(inst,-downX,-downY,3,false)){wi.SetXY(oldX,oldY);wi.SetBboxChanged()}}else{wi.SetXY(oldX,oldY);wi.SetBboxChanged()}}if(!isJumpthru)this._dx=0}else if(!slopeTooSteep&&!jump&&Math.abs(this._dy)<Math.abs(this._jumpStrength/4)){this._dy=
-0;if(!floor)landed=true}}else{const newFloor=this._IsOnFloor();if(floor&&!newFloor){const mag=Math.ceil(Math.abs(this._dx*dt))+2;oldX=wi.GetX();oldY=wi.GetY();wi.OffsetXY(downX*mag,downY*mag);wi.SetBboxChanged();if(collisionEngine.TestOverlapSolid(inst)||collisionEngine.TestOverlapJumpthru(inst))collisionEngine.PushOutSolid(inst,-downX,-downY,mag+2,true);else{wi.SetXY(oldX,oldY);wi.SetBboxChanged()}}else if(newFloor){if(!floor&&this._floorIsJumpthru){this._lastFloorObject=newFloor;const floorWi=newFloor.GetWorldInfo();
-this._lastFloorX=floorWi.GetX();this._lastFloorY=floorWi.GetY();this._dy=0;landed=true}if(this._dy===0)collisionEngine.PushInFractional(inst,-downX,-downY,newFloor,16)}}return landed}_HandleVerticalMovement(dt,floor){const inst=this._inst;const wi=inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const downX=this._downX;const downY=this._downY;let landed=false;let oldX=wi.GetX();let oldY=wi.GetY();const downMagnitude=accelerate(this._dy,-Infinity,this._maxFall,this._g,dt);
-wi.OffsetXY(downMagnitude*downX,downMagnitude*downY);const newX=wi.GetX();const newY=wi.GetY();wi.SetBboxChanged();let collInst=collisionEngine.TestOverlapSolid(inst);let fellOnJumpthru=false;if(!collInst&&this._dy>0&&!floor){const allOver=this._fallThrough>0?null:collisionEngine.TestOverlapJumpthru(inst,true);if(allOver&&allOver.length){if(this._wasOverJumpthru){wi.SetXY(oldX,oldY);wi.SetBboxChanged();let j=0;for(let i=0,len=allOver.length;i<len;++i){allOver[j]=allOver[i];if(!collisionEngine.TestOverlap(inst,
-allOver[i]))++j}C3.truncateArray(allOver,j);wi.SetXY(newX,newY);wi.SetBboxChanged()}if(allOver.length>=1)collInst=allOver[0]}fellOnJumpthru=!!collInst}if(collInst){collisionEngine.RegisterCollision(inst,collInst);this._sustainTime=0;let multiplier=1.1;if(fellOnJumpthru&&!this._wasOverJumpthru)multiplier=2;const pushDist=Math.max(Math.abs(this._dy*dt*multiplier),2);if(!collisionEngine.PushOutSolid(inst,downX*(this._dy<0?1:-1),downY*(this._dy<0?1:-1),pushDist,fellOnJumpthru,collInst)){wi.SetXY(oldX,
-oldY);wi.SetBboxChanged();this._wasOnFloor=true;if(!fellOnJumpthru)this._dy=0}else{this._lastFloorObject=collInst;const collWi=collInst.GetWorldInfo();this._lastFloorX=collWi.GetX();this._lastFloorY=collWi.GetY();this._floorIsJumpthru=fellOnJumpthru;if(fellOnJumpthru)landed=true;if(this._dy>0||this._ceilingCollisionMode===0)this._dy=0;if(this._dy<0&&this._ceilingCollisionMode===1)collisionEngine.PushInFractional(inst,downX,downY,collInst,32)}}return[landed,downMagnitude]}_HandleAnimationTriggers(floor,
-landed,jump){if(this._animMode!=="falling"&&this._dy>0&&!floor){this.Trigger(C3.Behaviors.Platform.Cnds.OnFall);this._animMode="falling"}if((floor||landed)&&this._dy>=0)if(this._animMode==="falling"||landed||jump&&this._dy===0){this.Trigger(C3.Behaviors.Platform.Cnds.OnLand);if(this._dx===0&&this._dy===0)this._animMode="stopped";else this._animMode="moving"}else{if(this._animMode!=="stopped"&&this._dx===0&&this._dy===0){this.Trigger(C3.Behaviors.Platform.Cnds.OnStop);this._animMode="stopped"}if(this._animMode!==
-"moving"&&(this._dx!==0||this._dy!==0)&&!jump){this.Trigger(C3.Behaviors.Platform.Cnds.OnMove);this._animMode="moving"}}}_IsMoving(){return this._GetVectorX()!==0||this._GetVectorY()!==0}_CheckIfStandingOnFloor(){if(this._dy!==0)return false;const inst=this._inst;const wi=this.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const oldX=wi.GetX();const oldY=wi.GetY();wi.OffsetXY(this._downX,this._downY);wi.SetBboxChanged();const ret=collisionEngine.TestOverlapSolid(inst);let ret2=
-null;if(!ret&&this._fallThrough===0)ret2=collisionEngine.TestOverlapJumpthru(inst,true);wi.SetXY(oldX,oldY);wi.SetBboxChanged();if(ret)return!collisionEngine.TestOverlap(inst,ret);if(ret2&&ret2.length){let j=0;for(let i=0,len=ret2.length;i<len;++i){ret2[j]=ret2[i];if(!collisionEngine.TestOverlap(inst,ret2[i]))j++}if(j>=1)return true}return false}_IsByWall(side){const inst=this._inst;const wi=this.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const oldX=wi.GetX();const oldY=
-wi.GetY();if(side===0)wi.OffsetXY(-this._rightX*2,-this._rightY*2);else wi.OffsetXY(this._rightX*2,this._rightY*2);wi.SetBboxChanged();if(!collisionEngine.TestOverlapSolid(inst)){wi.SetXY(oldX,oldY);wi.SetBboxChanged();return false}wi.OffsetXY(-this._downX*3,-this._downY*3);wi.SetBboxChanged();const ret=!!collisionEngine.TestOverlapSolid(inst);wi.SetXY(oldX,oldY);wi.SetBboxChanged();return ret}_FallThroughJumpThru(){const wi=this.GetWorldInfo();const oldX=wi.GetX();const oldY=wi.GetY();wi.OffsetXY(this._downX,
-this._downY);wi.SetBboxChanged();const overlaps=this._runtime.GetCollisionEngine().TestOverlapJumpthru(this._inst,false);wi.SetXY(oldX,oldY);wi.SetBboxChanged();if(!overlaps)return;this._fallThrough=3;this._lastFloorObject=null}_ResetDoubleJump(d){this._doubleJumped=!d}_GetSpeed(){return Math.hypot(this._dx,this._dy)}_GetMovingAngle(){return Math.atan2(this._dy,this._dx)}_IsJumping(){return this._dy<0}_IsFalling(){return this._dy>0}_SetMaxSpeed(ms){this._maxSpeed=Math.max(ms,0)}_GetMaxSpeed(){return this._maxSpeed}_SetAcceleration(acc){this._acc=
-Math.max(acc,0)}_GetAcceleration(){return this._acc}_SetDeceleration(dec){this._dec=Math.max(dec,0)}_GetDeceleration(){return this._dec}_SetJumpStrength(js){this._jumpStrength=Math.max(js,0)}_GetJumpStrength(){return this._jumpStrength}_SetMaxFallSpeed(mfs){this._maxFall=Math.max(mfs,0)}_GetMaxFallSpeed(){return this._maxFall}_SetGravity(grav){if(this._g1===grav)return;this._g=grav;this._UpdateGravity();const collisionEngine=this._runtime.GetCollisionEngine();const wi=this.GetWorldInfo();if(collisionEngine.TestOverlapSolid(this._inst)){collisionEngine.PushOutSolid(this._inst,
-this._downX,this._downY,10);wi.OffsetXY(this._downX*2,this._downY*2);wi.SetBboxChanged()}this._lastFloorObject=null}_GetGravity(){return this._g}_SetGravityAngle(a){a=C3.clampAngle(a);if(this._ga===a)return;this._ga=a;this._UpdateGravity();this._lastFloorObject=null}_GetGravityAngle(){return this._ga}_SetDoubleJumpEnabled(e){this._enableDoubleJump=!!e}_IsDoubleJumpEnabled(){return this._enableDoubleJump}_SetJumpSustain(s){this._jumpSustain=s}_GetJumpSustain(){return this._jumpSustain}_SetCeilingCollisionMode(m){this._ceilingCollisionMode=
-m}_GetCeilingCollisionMode(){return this._ceilingCollisionMode}_SetVectorX(x){this._dx=x}_GetVectorX(){return this._dx}_SetVectorY(y){this._dy=y}_GetVectorY(){return this._dy}_SimulateControl(ctrl){if(!this._isEnabled)return;switch(ctrl){case 0:this._simLeft=true;break;case 1:this._simRight=true;break;case 2:this._simJump=true;break}}_SetDefaultControls(d){d=!!d;if(this._defaultControls===d)return;this._defaultControls=d;if(this._defaultControls)this._BindEvents();else{this._UnBindEvents();this._OnWindowBlur()}}_IsDefaultControls(){return this._defaultControls}_SetIgnoreInput(i){this._ignoreInput=
-!!i}_IsIgnoreInput(){return this._ignoreInput}_SetEnabled(e){e=!!e;if(this._isEnabled===e)return;this._isEnabled=e;if(this._isEnabled)this._StartPostTicking();else{this._StopPostTicking();this._lastFloorObject=null;this._simLeft=false;this._simRight=false;this._simJump=false}}_IsEnabled(){return this._isEnabled}GetPropertyValueByIndex(index){switch(index){case MAX_SPEED:return this._GetMaxSpeed();case ACCELERATION:return this._GetAcceleration();case DECELERATION:return this._GetDeceleration();case JUMP_STRENGTH:return this._GetJumpStrength();
-case GRAVITY:return this._GetGravity();case MAX_FALL_SPEED:return this._GetMaxFallSpeed();case DOUBLE_JUMP:return this._IsDoubleJumpEnabled();case JUMP_SUSTAIN:return this._GetJumpSustain()*1E3;case DEFAULT_CONTROLS:return this._IsDefaultControls();case ENABLE:return this._IsEnabled()}}SetPropertyValueByIndex(index,value){switch(index){case MAX_SPEED:this._SetMaxSpeed(value);break;case ACCELERATION:this._SetAcceleration(value);break;case DECELERATION:this._SetDeceleration(value);break;case JUMP_STRENGTH:this._SetJumpStrength(value);
-break;case GRAVITY:this._SetGravity(value);break;case MAX_FALL_SPEED:this._SetMaxFallSpeed(value);break;case DOUBLE_JUMP:this._SetDoubleJumpEnabled(!!value);break;case JUMP_SUSTAIN:this._SetJumpSustain(value/1E3);break;case DEFAULT_CONTROLS:this._SetDefaultControls(!!value);break;case ENABLE:this._SetEnabled(!!value);break}}GetDebuggerProperties(){const prefix="behaviors.platform";return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:prefix+".debugger.vector-x",value:this._GetVectorX(),
-onedit:v=>this._SetVectorX(v)},{name:prefix+".debugger.vector-y",value:this._GetVectorY(),onedit:v=>this._SetVectorY(v)},{name:prefix+".properties.max-speed.name",value:this._GetMaxSpeed(),onedit:v=>this._SetMaxSpeed(v)},{name:prefix+".properties.acceleration.name",value:this._GetAcceleration(),onedit:v=>this._SetAcceleration(v)},{name:prefix+".properties.deceleration.name",value:this._GetDeceleration(),onedit:v=>this._SetDeceleration(v)},{name:prefix+".properties.jump-strength.name",value:this._GetJumpStrength(),
-onedit:v=>this._SetJumpStrength(v)},{name:prefix+".properties.gravity.name",value:this._GetGravity(),onedit:v=>this._SetGravity(v)},{name:prefix+".debugger.gravity-angle",value:C3.toDegrees(this._GetGravityAngle()),onedit:v=>this._SetGravityAngle(C3.toRadians(v))},{name:prefix+".properties.max-fall-speed.name",value:this._GetMaxFallSpeed(),onedit:v=>this._SetMaxFallSpeed(v)},{name:prefix+".debugger.animation-mode",value:[prefix+".debugger.anim-"+this._animMode]},{name:prefix+".properties.enabled.name",
-value:this._IsEnabled(),onedit:v=>this._SetEnabled(v)}]}]}GetScriptInterfaceClass(){return self.IPlatformBehaviorInstance}};const map=new WeakMap;const SIMULATE_CONTROL_MAP=new Map([["left",0],["right",1],["jump",2]]);self.IPlatformBehaviorInstance=class IPlatformBehaviorInstance extends IBehaviorInstance{constructor(){super();map.set(this,IBehaviorInstance._GetInitInst().GetSdkInstance())}fallThrough(){map.get(this)._FallThroughJumpThru()}resetDoubleJump(d){map.get(this)._ResetDoubleJump(!!d)}simulateControl(ctrl){C3X.RequireString(ctrl);
-const index=SIMULATE_CONTROL_MAP.get(ctrl);if(typeof index!=="number")throw new Error("invalid control");map.get(this)._SimulateControl(index)}get speed(){return map.get(this)._GetSpeed()}get maxSpeed(){return map.get(this)._GetMaxSpeed()}set maxSpeed(s){C3X.RequireFiniteNumber(s);map.get(this)._SetMaxSpeed(s)}get acceleration(){return map.get(this)._GetAcceleration()}set acceleration(a){C3X.RequireFiniteNumber(a);map.get(this)._SetAcceleration(a)}get deceleration(){return map.get(this)._GetDeceleration()}set deceleration(d){C3X.RequireFiniteNumber(d);
-map.get(this)._SetDeceleration(d)}get jumpStrength(){return map.get(this)._GetJumpStrength()}set jumpStrength(js){C3X.RequireFiniteNumber(js);map.get(this)._SetJumpStrength(js)}get maxFallSpeed(){return map.get(this)._GetMaxFallSpeed()}set maxFallSpeed(mfs){C3X.RequireFiniteNumber(mfs);map.get(this)._SetMaxFallSpeed(mfs)}get gravity(){return map.get(this)._GetGravity()}set gravity(g){C3X.RequireFiniteNumber(g);map.get(this)._SetGravity(g)}get gravityAngle(){return map.get(this)._GetGravityAngle()}set gravityAngle(ga){C3X.RequireFiniteNumber(ga);
-map.get(this)._SetGravityAngle(ga)}get isDoubleJumpEnabled(){return map.get(this)._IsDoubleJumpEnabled()}set isDoubleJumpEnabled(e){map.get(this)._SetDoubleJumpEnabled(!!e)}get jumpSustain(){return map.get(this)._GetJumpSustain()}set jumpSustain(js){C3X.RequireFiniteNumber(js);map.get(this)._SetJumpSustain(js)}get ceilingCollisionMode(){const ccm=map.get(this)._GetCeilingCollisionMode();return ccm===0?"stop":"preserve-momentum"}set ceilingCollisionMode(ccm){C3X.RequireString(ccm);const bi=map.get(this);
-if(ccm==="stop")bi._SetCeilingCollisionMode(0);else if(ccm==="preserve-momentum")bi._SetCeilingCollisionMode(1);else throw new Error("invalid mode");}get isOnFloor(){return map.get(this)._CheckIfStandingOnFloor()}isByWall(side){C3X.RequireString(side);const bi=map.get(this);if(side==="left")return bi._IsByWall(0);else if(side==="right")return bi._IsByWall(1);else throw new Error("invalid side");}get isMoving(){return map.get(this)._IsMoving()}get isJumping(){return map.get(this)._IsJumping()}get isFalling(){return map.get(this)._IsFalling()}get vectorX(){return map.get(this)._GetVectorX()}set vectorX(x){C3X.RequireFiniteNumber(x);
-map.get(this)._SetVectorX(x)}get vectorY(){return map.get(this)._GetVectorY()}set vectorY(y){C3X.RequireFiniteNumber(y);map.get(this)._SetVectorY(y)}get isDefaultControls(){return map.get(this)._IsDefaultControls()}set isDefaultControls(d){map.get(this)._SetDefaultControls(!!d)}get isIgnoringInput(){return map.get(this)._IsIgnoreInput()}set isIgnoringInput(e){map.get(this)._SetIgnoreInput(!!e)}get isEnabled(){return map.get(this)._IsEnabled()}set isEnabled(e){map.get(this)._SetEnabled(!!e)}}};
+const rt=this._runtime.Dispatcher();this._keyboardDisposables=new C3.CompositeDisposable(C3.Disposable.From(rt,"keydown",e=>this._OnKeyDown(e.data)),C3.Disposable.From(rt,"keyup",e=>this._OnKeyUp(e.data)),C3.Disposable.From(rt,"window-blur",()=>this._OnWindowOrKeyboardBlur()),C3.Disposable.From(rt,"keyboard-blur",()=>this._OnWindowOrKeyboardBlur()))}_UnBindEvents(){if(!this._keyboardDisposables)return;this._keyboardDisposables.Release();this._keyboardDisposables=null}_OnInstanceDestroyed(inst){if(this._lastFloorObject===
+inst)this._lastFloorObject=null;if(this._wasOverJumpthru===inst)this._wasOverJumpthru=null}_OnKeyDown(data){switch(data["key"]){case "ArrowLeft":this._leftKey=true;break;case "ArrowRight":this._rightKey=true;break;case "ArrowUp":this._jumpKey=true;break}}_OnKeyUp(data){switch(data["key"]){case "ArrowLeft":this._leftKey=false;break;case "ArrowRight":this._rightKey=false;break;case "ArrowUp":this._jumpKey=false;this._jumped=false;break}}_OnWindowOrKeyboardBlur(){this._leftKey=false;this._rightKey=false;
+this._jumpKey=false;this._jumped=false}SaveToJson(){return{"ii":this._ignoreInput,"lfx":this._lastFloorX,"lfy":this._lastFloorY,"lfo":this._lastFloorObject?this._lastFloorObject.GetUID():-1,"am":this._animMode,"en":this._isEnabled,"fall":this._fallThrough,"ft":this._isFirstTick,"dx":this._dx,"dy":this._dy,"ms":this._maxSpeed,"acc":this._acc,"dec":this._dec,"js":this._jumpStrength,"g":this._g,"g1":this._g1,"mf":this._maxFall,"wof":this._wasOnFloor,"woj":this._wasOverJumpthru?this._wasOverJumpthru.GetUID():
+-1,"ga":this._ga,"edj":this._enableDoubleJump,"cdj":this._canDoubleJump,"dj":this._doubleJumped,"sus":this._jumpSustain,"dc":this._defaultControls,"cc":this._ceilingCollisionMode}}LoadFromJson(o){this._ignoreInput=o["ii"];this._lastFloorX=o["lfx"];this._lastFloorY=o["lfy"];this._loadFloorUid=o["lfo"];this._animMode=o["am"];const isEnabled=o["en"];this._fallThrough=o["fall"];this._isFirstTick=o["ft"];this._dx=o["dx"];this._dy=o["dy"];this._maxSpeed=o["ms"];this._acc=o["acc"];this._dec=o["dec"];this._jumpStrength=
+o["js"];this._g=o["g"];this._g1=o["g1"];this._maxFall=o["mf"];this._wasOnFloor=o["wof"];this._loadJumpthruUid=o["woj"];this._ga=o["ga"];this._enableDoubleJump=o["edj"];this._canDoubleJump=o["cdj"];this._doubleJumped=o["dj"];this._jumpSustain=o["sus"];this._defaultControls=o["dc"];this._ceilingCollisionMode=o["cc"]||0;this._leftKey=false;this._rightKey=false;this._jumpKey=false;this._jumped=false;this._simLeft=false;this._simRight=false;this._simJump=false;this._sustainTime=0;if(this._defaultControls)this._BindEvents();
+else this._UnBindEvents();this._SetEnabled(isEnabled);this._UpdateGravity()}_OnAfterLoad(){if(this._loadFloorUid===-1)this._lastFloorObject=null;else this._lastFloorObject=this._runtime.GetInstanceByUID(this._loadFloorUid);if(this._loadJumpthruUid===-1)this._wasOverJumpthru=null;else this._wasOverJumpthru=this._runtime.GetInstanceByUID(this._loadJumpthruUid)}_UpdateGravity(){this._downX=Math.cos(this._ga);this._downY=Math.sin(this._ga);this._rightX=Math.cos(this._ga-Math.PI/2);this._rightY=Math.sin(this._ga-
+Math.PI/2);this._downX=C3.round6dp(this._downX);this._downY=C3.round6dp(this._downY);this._rightX=C3.round6dp(this._rightX);this._rightY=C3.round6dp(this._rightY);this._g1=this._g;if(this._g<0){this._downX*=-1;this._downY*=-1;this._g=Math.abs(this._g)}}_GetGDir(){if(this._g<0)return-1;else return 1}_IsOnFloor(){const wi=this._inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const inst=this._inst;const lfo=this._lastFloorObject;const oldX=wi.GetX();const oldY=wi.GetY();
+wi.OffsetXY(this._downX,this._downY);wi.SetBboxChanged();if(lfo&&collisionEngine.TestOverlap(inst,lfo)&&(!lfo.GetObjectClass().HasSolidBehavior()||collisionEngine.IsSolidCollisionAllowed(lfo,inst))){wi.SetXY(oldX,oldY);wi.SetBboxChanged();return lfo}else{let ret=collisionEngine.TestOverlapSolid(inst);let ret2=null;if(!ret&&this._fallThrough===0)ret2=collisionEngine.TestOverlapJumpthru(inst,true);wi.SetXY(oldX,oldY);wi.SetBboxChanged();if(ret)if(collisionEngine.TestOverlap(inst,ret))return null;else{this._floorIsJumpthru=
+false;return ret}if(ret2&&ret2.length){let j=0;for(let i=0,len=ret2.length;i<len;++i){ret2[j]=ret2[i];if(!collisionEngine.TestOverlap(inst,ret2[i]))++j}if(j>=1){this._floorIsJumpthru=true;return ret2[0]}}return null}}PostTick(){if(!this._isEnabled)return;const dt=this._runtime.GetDt(this._inst);if(!this._jumpKey&&!this._simJump)this._jumped=false;let left=this._leftKey||this._simLeft;let right=this._rightKey||this._simRight;let jumpkey=this._jumpKey||this._simJump;let jump=jumpkey&&!this._jumped;
+this._simLeft=false;this._simRight=false;this._simJump=false;if(this._ignoreInput){left=false;right=false;jumpkey=false;jump=false}if(!jumpkey)this._sustainTime=0;this._HandleFirstTick();const [mx,my,floorMoved]=this._TrackMovingPlatform();let floor=this._IsOnFloor();const didJustLandOnFloor=floor&&!this._wasOnFloor;let isStuck=false;[isStuck,floor]=this._MaybePushOutSolid(floor);if(isStuck)return;this._TrackFloor(floor,floorMoved,mx,jumpkey);jump=this._HandleJump(floor,jump,jumpkey);if(!floor)this._ApplyJumpGravity(jump,
+jumpkey,dt);this._wasOnFloor=!!floor;const hacc=this._ApplyHorizontalAcceleration(left,right,dt);let landed=false;let downMagnitude=0;if(this._dx!==0)landed=this._HandleHorizontalMovement(dt,hacc,floor,jump);if(this._dy!==0){const [l,dm]=this._HandleVerticalMovement(dt,floor);landed=landed||l;downMagnitude=dm}if(!landed&&didJustLandOnFloor&&this._dy<0&&downMagnitude>0){this._dy=0;landed=true}this._HandleAnimationTriggers(floor,landed,jump);if(this._fallThrough>0)this._fallThrough--;this._wasOverJumpthru=
+this._runtime.GetCollisionEngine().TestOverlapJumpthru(this._inst)}_HandleFirstTick(){if(!this._isFirstTick)return;const inst=this._inst;const collisionEngine=this._runtime.GetCollisionEngine();if(collisionEngine.TestOverlapSolid(inst)||collisionEngine.TestOverlapJumpthru(inst))collisionEngine.PushOutSolid(inst,-this._downX,-this._downY,4,true);this._isFirstTick=false}_TrackMovingPlatform(){const lastFloor=this._lastFloorObject;const lastFloorWi=lastFloor?lastFloor.GetWorldInfo():null;let mx=0;let my=
+0;let floorMoved=false;if(lastFloor&&this._dy===0&&(lastFloorWi.GetY()!==this._lastFloorY||lastFloorWi.GetX()!==this._lastFloorX)){const inst=this._inst;const wi=inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const lfx=lastFloorWi.GetX();const lfy=lastFloorWi.GetY();mx=lfx-this._lastFloorX;my=lfy-this._lastFloorY;wi.OffsetXY(mx,my);wi.SetBboxChanged();this._lastFloorX=lfx;this._lastFloorY=lfy;floorMoved=true;if(collisionEngine.TestOverlapSolid(inst))collisionEngine.PushOutSolid(inst,
+-mx,-my,Math.hypot(mx,my)*2.5)}return[mx,my,floorMoved]}_MaybePushOutSolid(floor){let isStuck=false;const inst=this._inst;const wi=inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const collInst=collisionEngine.TestOverlapSolid(inst);if(!collInst)return[false,floor];const instWidth=Math.abs(wi.GetWidth());const instHeight=Math.abs(wi.GetHeight());if(inst.GetSavedDataMap().get("inputPredicted"))collisionEngine.PushOutSolid(inst,-this._downX,-this._downY,10,false);else if(collisionEngine.PushOutSolidAxis(inst,
+-this._downX,-this._downY,instHeight/8)){collisionEngine.RegisterCollision(inst,collInst);floor=collInst;this._lastFloorObject=collInst;const collWi=collInst.GetWorldInfo();this._lastFloorX=collWi.GetX();this._lastFloorY=collWi.GetY();this._floorIsJumpthru=false}else if(collisionEngine.PushOutSolidAxis(inst,this._rightX,this._rightY,instWidth/2)||collisionEngine.PushOutSolidAxis(inst,this._downX,this._downY,instHeight/2)||collisionEngine.PushOutSolidNearest(inst,Math.max(instWidth,instHeight)/2))collisionEngine.RegisterCollision(inst,
+collInst);else isStuck=true;return[isStuck,floor]}_TrackFloor(floor,floorMoved,mx,jumpkey){const inst=this._inst;const collisionEngine=this._runtime.GetCollisionEngine();if(floor){const downX=this._downX;const downY=this._downY;const rightX=this._rightX;const rightY=this._rightY;this._doubleJumped=false;this._canDoubleJump=false;if(this._dy>0){if(!this._wasOnFloor){collisionEngine.PushInFractional(inst,-downX,-downY,floor,16);this._wasOnFloor=true}this._dy=0}if(this._lastFloorObject!==floor){this._lastFloorObject=
+floor;const floorWi=floor.GetWorldInfo();this._lastFloorX=floorWi.GetX();this._lastFloorY=floorWi.GetY();collisionEngine.RegisterCollision(inst,floor)}else if(floorMoved){const collInst=collisionEngine.TestOverlapSolid(inst);if(collInst){collisionEngine.RegisterCollision(inst,collInst);if(mx!==0)if(mx>0)collisionEngine.PushOutSolid(inst,-rightX,-rightY);else collisionEngine.PushOutSolid(inst,rightX,rightY);collisionEngine.PushOutSolid(inst,-downX,-downY)}}}else if(!jumpkey)this._canDoubleJump=true}_HandleJump(floor,
+jump,jumpkey){if(floor&&jump||!floor&&this._enableDoubleJump&&jumpkey&&this._canDoubleJump&&!this._doubleJumped){const inst=this._inst;const wi=inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const oldX=wi.GetX();const oldY=wi.GetY();wi.OffsetXY(-this._downX,-this._downY);wi.SetBboxChanged();if(!collisionEngine.TestOverlapSolid(inst)){this._sustainTime=this._jumpSustain;this.Trigger(C3.Behaviors.Platform.Cnds.OnJump);this._animMode="jumping";this._dy=-this._jumpStrength;
+jump=true;if(floor)this._jumped=true;else this._doubleJumped=true}else jump=false;wi.SetXY(oldX,oldY);wi.SetBboxChanged()}return jump}_ApplyJumpGravity(jump,jumpkey,dt){if(jumpkey&&this._sustainTime>0){this._dy=-this._jumpStrength;this._sustainTime-=dt}else{this._lastFloorObject=null;this._dy+=this._g*dt;if(this._dy>this._maxFall)this._dy=this._maxFall}if(jump)this._jumped=true}_ApplyHorizontalAcceleration(left,right,dt){const acc=this._acc;const dec=this._dec;if(left===right)if(this._dx<0){this._dx+=
+dec*dt;if(this._dx>0)this._dx=0}else if(this._dx>0){this._dx-=dec*dt;if(this._dx<0)this._dx=0}let hacc=0;if(left&&!right)if(this._dx>0)hacc=-(acc+dec);else hacc=-acc;if(right&&!left)if(this._dx<0)hacc=acc+dec;else hacc=acc;this._dx+=hacc*dt;this._dx=C3.clamp(this._dx,-this._maxSpeed,this._maxSpeed);return hacc}_HandleHorizontalMovement(dt,hacc,floor,jump){const inst=this._inst;const wi=inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const downX=this._downX;const downY=
+this._downY;const rightX=this._rightX;const rightY=this._rightY;const maxSpeed=this._maxSpeed;let landed=false;let oldX=wi.GetX();let oldY=wi.GetY();const mx=accelerate(this._dx,-maxSpeed,maxSpeed,hacc,dt)*rightX;const my=accelerate(this._dx,-maxSpeed,maxSpeed,hacc,dt)*rightY;wi.OffsetXY(rightX*(this._dx>1?1:-1)-downX,rightY*(this._dx>1?1:-1)-downY);wi.SetBboxChanged();let isJumpthru=false;const slopeTooSteep=collisionEngine.TestOverlapSolid(inst);wi.SetXY(oldX+mx,oldY+my);wi.SetBboxChanged();let obstacle=
+collisionEngine.TestOverlapSolid(inst);if(!obstacle&&floor){obstacle=collisionEngine.TestOverlapJumpthru(inst);if(obstacle){wi.SetXY(oldX,oldY);wi.SetBboxChanged();if(collisionEngine.TestOverlap(inst,obstacle)){obstacle=null;isJumpthru=false}else isJumpthru=true;wi.SetXY(oldX+mx,oldY+my);wi.SetBboxChanged()}}if(obstacle){let pushDist=Math.abs(this._dx*dt)+2;if(slopeTooSteep||!collisionEngine.PushOutSolid(inst,-downX,-downY,pushDist,isJumpthru,obstacle)){collisionEngine.RegisterCollision(inst,obstacle);
+pushDist=Math.max(Math.abs(this._dx*dt*2.5),30);if(!collisionEngine.PushOutSolid(inst,rightX*(this._dx<0?1:-1),rightY*(this._dx<0?1:-1),pushDist,false)){wi.SetXY(oldX,oldY);wi.SetBboxChanged()}else if(floor&&!isJumpthru&&!this._floorIsJumpthru){oldX=wi.GetX();oldY=wi.GetY();wi.OffsetXY(downX,downY);if(collisionEngine.TestOverlapSolid(inst)){if(!collisionEngine.PushOutSolid(inst,-downX,-downY,3,false)){wi.SetXY(oldX,oldY);wi.SetBboxChanged()}}else{wi.SetXY(oldX,oldY);wi.SetBboxChanged()}}if(!isJumpthru)this._dx=
+0}else if(!slopeTooSteep&&!jump&&Math.abs(this._dy)<Math.abs(this._jumpStrength/4)){this._dy=0;if(!floor)landed=true}}else{const newFloor=this._IsOnFloor();if(floor&&!newFloor){const mag=Math.ceil(Math.abs(this._dx*dt))+2;oldX=wi.GetX();oldY=wi.GetY();wi.OffsetXY(downX*mag,downY*mag);wi.SetBboxChanged();if(collisionEngine.TestOverlapSolid(inst)||collisionEngine.TestOverlapJumpthru(inst))collisionEngine.PushOutSolid(inst,-downX,-downY,mag+2,true);else{wi.SetXY(oldX,oldY);wi.SetBboxChanged()}}else if(newFloor){if(!floor&&
+this._floorIsJumpthru){this._lastFloorObject=newFloor;const floorWi=newFloor.GetWorldInfo();this._lastFloorX=floorWi.GetX();this._lastFloorY=floorWi.GetY();this._dy=0;landed=true}if(this._dy===0)collisionEngine.PushInFractional(inst,-downX,-downY,newFloor,16)}}return landed}_HandleVerticalMovement(dt,floor){const inst=this._inst;const wi=inst.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const downX=this._downX;const downY=this._downY;let landed=false;let oldX=wi.GetX();
+let oldY=wi.GetY();const downMagnitude=accelerate(this._dy,-Infinity,this._maxFall,this._g,dt);wi.OffsetXY(downMagnitude*downX,downMagnitude*downY);const newX=wi.GetX();const newY=wi.GetY();wi.SetBboxChanged();let collInst=collisionEngine.TestOverlapSolid(inst);let fellOnJumpthru=false;if(!collInst&&this._dy>0&&!floor){const allOver=this._fallThrough>0?null:collisionEngine.TestOverlapJumpthru(inst,true);if(allOver&&allOver.length){if(this._wasOverJumpthru){wi.SetXY(oldX,oldY);wi.SetBboxChanged();
+let j=0;for(let i=0,len=allOver.length;i<len;++i){allOver[j]=allOver[i];if(!collisionEngine.TestOverlap(inst,allOver[i]))++j}C3.truncateArray(allOver,j);wi.SetXY(newX,newY);wi.SetBboxChanged()}if(allOver.length>=1)collInst=allOver[0]}fellOnJumpthru=!!collInst}if(collInst){collisionEngine.RegisterCollision(inst,collInst);this._sustainTime=0;let multiplier=1.1;if(fellOnJumpthru&&!this._wasOverJumpthru)multiplier=2;const pushDist=Math.max(Math.abs(this._dy*dt*multiplier),2);if(!collisionEngine.PushOutSolid(inst,
+downX*(this._dy<0?1:-1),downY*(this._dy<0?1:-1),pushDist,fellOnJumpthru,collInst)){wi.SetXY(oldX,oldY);wi.SetBboxChanged();this._wasOnFloor=true;if(!fellOnJumpthru)this._dy=0}else{this._lastFloorObject=collInst;const collWi=collInst.GetWorldInfo();this._lastFloorX=collWi.GetX();this._lastFloorY=collWi.GetY();this._floorIsJumpthru=fellOnJumpthru;if(fellOnJumpthru)landed=true;if(this._dy>0||this._ceilingCollisionMode===0)this._dy=0;if(this._dy<0&&this._ceilingCollisionMode===1)collisionEngine.PushInFractional(inst,
+downX,downY,collInst,32)}}return[landed,downMagnitude]}_HandleAnimationTriggers(floor,landed,jump){if(this._animMode!=="falling"&&this._dy>0&&!floor){this.Trigger(C3.Behaviors.Platform.Cnds.OnFall);this._animMode="falling"}if((floor||landed)&&this._dy>=0)if(this._animMode==="falling"||landed||jump&&this._dy===0){this.Trigger(C3.Behaviors.Platform.Cnds.OnLand);if(this._dx===0&&this._dy===0)this._animMode="stopped";else this._animMode="moving"}else{if(this._animMode!=="stopped"&&this._dx===0&&this._dy===
+0){this.Trigger(C3.Behaviors.Platform.Cnds.OnStop);this._animMode="stopped"}if(this._animMode!=="moving"&&(this._dx!==0||this._dy!==0)&&!jump){this.Trigger(C3.Behaviors.Platform.Cnds.OnMove);this._animMode="moving"}}}_IsMoving(){return this._GetVectorX()!==0||this._GetVectorY()!==0}_CheckIfStandingOnFloor(){if(this._dy!==0)return false;const inst=this._inst;const wi=this.GetWorldInfo();const collisionEngine=this._runtime.GetCollisionEngine();const oldX=wi.GetX();const oldY=wi.GetY();wi.OffsetXY(this._downX,
+this._downY);wi.SetBboxChanged();const ret=collisionEngine.TestOverlapSolid(inst);let ret2=null;if(!ret&&this._fallThrough===0)ret2=collisionEngine.TestOverlapJumpthru(inst,true);wi.SetXY(oldX,oldY);wi.SetBboxChanged();if(ret)return!collisionEngine.TestOverlap(inst,ret);if(ret2&&ret2.length){let j=0;for(let i=0,len=ret2.length;i<len;++i){ret2[j]=ret2[i];if(!collisionEngine.TestOverlap(inst,ret2[i]))j++}if(j>=1)return true}return false}_IsByWall(side){const inst=this._inst;const wi=this.GetWorldInfo();
+const collisionEngine=this._runtime.GetCollisionEngine();const oldX=wi.GetX();const oldY=wi.GetY();if(side===0)wi.OffsetXY(-this._rightX*2,-this._rightY*2);else wi.OffsetXY(this._rightX*2,this._rightY*2);wi.SetBboxChanged();if(!collisionEngine.TestOverlapSolid(inst)){wi.SetXY(oldX,oldY);wi.SetBboxChanged();return false}wi.OffsetXY(-this._downX*3,-this._downY*3);wi.SetBboxChanged();const ret=!!collisionEngine.TestOverlapSolid(inst);wi.SetXY(oldX,oldY);wi.SetBboxChanged();return ret}_FallThroughJumpThru(){const wi=
+this.GetWorldInfo();const oldX=wi.GetX();const oldY=wi.GetY();wi.OffsetXY(this._downX,this._downY);wi.SetBboxChanged();const overlaps=this._runtime.GetCollisionEngine().TestOverlapJumpthru(this._inst,false);wi.SetXY(oldX,oldY);wi.SetBboxChanged();if(!overlaps)return;this._fallThrough=3;this._lastFloorObject=null}_ResetDoubleJump(d){this._doubleJumped=!d}_GetSpeed(){return Math.hypot(this._dx,this._dy)}_GetMovingAngle(){return Math.atan2(this._dy,this._dx)}_IsJumping(){return this._dy<0}_IsFalling(){return this._dy>
+0}_SetMaxSpeed(ms){this._maxSpeed=Math.max(ms,0)}_GetMaxSpeed(){return this._maxSpeed}_SetAcceleration(acc){this._acc=Math.max(acc,0)}_GetAcceleration(){return this._acc}_SetDeceleration(dec){this._dec=Math.max(dec,0)}_GetDeceleration(){return this._dec}_SetJumpStrength(js){this._jumpStrength=Math.max(js,0)}_GetJumpStrength(){return this._jumpStrength}_SetMaxFallSpeed(mfs){this._maxFall=Math.max(mfs,0)}_GetMaxFallSpeed(){return this._maxFall}_SetGravity(grav){if(this._g1===grav)return;this._g=grav;
+this._UpdateGravity();const collisionEngine=this._runtime.GetCollisionEngine();const wi=this.GetWorldInfo();if(collisionEngine.TestOverlapSolid(this._inst)){collisionEngine.PushOutSolid(this._inst,this._downX,this._downY,10);wi.OffsetXY(this._downX*2,this._downY*2);wi.SetBboxChanged()}this._lastFloorObject=null}_GetGravity(){return this._g}_SetGravityAngle(a){a=C3.clampAngle(a);if(this._ga===a)return;this._ga=a;this._UpdateGravity();this._lastFloorObject=null}_GetGravityAngle(){return this._ga}_SetDoubleJumpEnabled(e){this._enableDoubleJump=
+!!e}_IsDoubleJumpEnabled(){return this._enableDoubleJump}_SetJumpSustain(s){this._jumpSustain=s}_GetJumpSustain(){return this._jumpSustain}_SetCeilingCollisionMode(m){this._ceilingCollisionMode=m}_GetCeilingCollisionMode(){return this._ceilingCollisionMode}_SetVectorX(x){this._dx=x}_GetVectorX(){return this._dx}_SetVectorY(y){this._dy=y}_GetVectorY(){return this._dy}_SimulateControl(ctrl){if(!this._isEnabled)return;switch(ctrl){case 0:this._simLeft=true;break;case 1:this._simRight=true;break;case 2:this._simJump=
+true;break}}_SetDefaultControls(d){d=!!d;if(this._defaultControls===d)return;this._defaultControls=d;if(this._defaultControls)this._BindEvents();else{this._UnBindEvents();this._OnWindowBlur()}}_IsDefaultControls(){return this._defaultControls}_SetIgnoreInput(i){this._ignoreInput=!!i}_IsIgnoreInput(){return this._ignoreInput}_SetEnabled(e){e=!!e;if(this._isEnabled===e)return;this._isEnabled=e;if(this._isEnabled)this._StartPostTicking();else{this._StopPostTicking();this._lastFloorObject=null;this._simLeft=
+false;this._simRight=false;this._simJump=false}}_IsEnabled(){return this._isEnabled}GetPropertyValueByIndex(index){switch(index){case MAX_SPEED:return this._GetMaxSpeed();case ACCELERATION:return this._GetAcceleration();case DECELERATION:return this._GetDeceleration();case JUMP_STRENGTH:return this._GetJumpStrength();case GRAVITY:return this._GetGravity();case MAX_FALL_SPEED:return this._GetMaxFallSpeed();case DOUBLE_JUMP:return this._IsDoubleJumpEnabled();case JUMP_SUSTAIN:return this._GetJumpSustain()*
+1E3;case DEFAULT_CONTROLS:return this._IsDefaultControls();case ENABLE:return this._IsEnabled()}}SetPropertyValueByIndex(index,value){switch(index){case MAX_SPEED:this._SetMaxSpeed(value);break;case ACCELERATION:this._SetAcceleration(value);break;case DECELERATION:this._SetDeceleration(value);break;case JUMP_STRENGTH:this._SetJumpStrength(value);break;case GRAVITY:this._SetGravity(value);break;case MAX_FALL_SPEED:this._SetMaxFallSpeed(value);break;case DOUBLE_JUMP:this._SetDoubleJumpEnabled(!!value);
+break;case JUMP_SUSTAIN:this._SetJumpSustain(value/1E3);break;case DEFAULT_CONTROLS:this._SetDefaultControls(!!value);break;case ENABLE:this._SetEnabled(!!value);break}}GetDebuggerProperties(){const prefix="behaviors.platform";return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:prefix+".debugger.vector-x",value:this._GetVectorX(),onedit:v=>this._SetVectorX(v)},{name:prefix+".debugger.vector-y",value:this._GetVectorY(),onedit:v=>this._SetVectorY(v)},{name:prefix+".properties.max-speed.name",
+value:this._GetMaxSpeed(),onedit:v=>this._SetMaxSpeed(v)},{name:prefix+".properties.acceleration.name",value:this._GetAcceleration(),onedit:v=>this._SetAcceleration(v)},{name:prefix+".properties.deceleration.name",value:this._GetDeceleration(),onedit:v=>this._SetDeceleration(v)},{name:prefix+".properties.jump-strength.name",value:this._GetJumpStrength(),onedit:v=>this._SetJumpStrength(v)},{name:prefix+".properties.gravity.name",value:this._GetGravity(),onedit:v=>this._SetGravity(v)},{name:prefix+
+".debugger.gravity-angle",value:C3.toDegrees(this._GetGravityAngle()),onedit:v=>this._SetGravityAngle(C3.toRadians(v))},{name:prefix+".properties.max-fall-speed.name",value:this._GetMaxFallSpeed(),onedit:v=>this._SetMaxFallSpeed(v)},{name:prefix+".debugger.animation-mode",value:[prefix+".debugger.anim-"+this._animMode]},{name:prefix+".properties.enabled.name",value:this._IsEnabled(),onedit:v=>this._SetEnabled(v)}]}]}GetScriptInterfaceClass(){return self.IPlatformBehaviorInstance}};const map=new WeakMap;
+const SIMULATE_CONTROL_MAP=new Map([["left",0],["right",1],["jump",2]]);self.IPlatformBehaviorInstance=class IPlatformBehaviorInstance extends IBehaviorInstance{constructor(){super();map.set(this,IBehaviorInstance._GetInitInst().GetSdkInstance())}fallThrough(){map.get(this)._FallThroughJumpThru()}resetDoubleJump(d){map.get(this)._ResetDoubleJump(!!d)}simulateControl(ctrl){C3X.RequireString(ctrl);const index=SIMULATE_CONTROL_MAP.get(ctrl);if(typeof index!=="number")throw new Error("invalid control");
+map.get(this)._SimulateControl(index)}get speed(){return map.get(this)._GetSpeed()}get maxSpeed(){return map.get(this)._GetMaxSpeed()}set maxSpeed(s){C3X.RequireFiniteNumber(s);map.get(this)._SetMaxSpeed(s)}get acceleration(){return map.get(this)._GetAcceleration()}set acceleration(a){C3X.RequireFiniteNumber(a);map.get(this)._SetAcceleration(a)}get deceleration(){return map.get(this)._GetDeceleration()}set deceleration(d){C3X.RequireFiniteNumber(d);map.get(this)._SetDeceleration(d)}get jumpStrength(){return map.get(this)._GetJumpStrength()}set jumpStrength(js){C3X.RequireFiniteNumber(js);
+map.get(this)._SetJumpStrength(js)}get maxFallSpeed(){return map.get(this)._GetMaxFallSpeed()}set maxFallSpeed(mfs){C3X.RequireFiniteNumber(mfs);map.get(this)._SetMaxFallSpeed(mfs)}get gravity(){return map.get(this)._GetGravity()}set gravity(g){C3X.RequireFiniteNumber(g);map.get(this)._SetGravity(g)}get gravityAngle(){return map.get(this)._GetGravityAngle()}set gravityAngle(ga){C3X.RequireFiniteNumber(ga);map.get(this)._SetGravityAngle(ga)}get isDoubleJumpEnabled(){return map.get(this)._IsDoubleJumpEnabled()}set isDoubleJumpEnabled(e){map.get(this)._SetDoubleJumpEnabled(!!e)}get jumpSustain(){return map.get(this)._GetJumpSustain()}set jumpSustain(js){C3X.RequireFiniteNumber(js);
+map.get(this)._SetJumpSustain(js)}get ceilingCollisionMode(){const ccm=map.get(this)._GetCeilingCollisionMode();return ccm===0?"stop":"preserve-momentum"}set ceilingCollisionMode(ccm){C3X.RequireString(ccm);const bi=map.get(this);if(ccm==="stop")bi._SetCeilingCollisionMode(0);else if(ccm==="preserve-momentum")bi._SetCeilingCollisionMode(1);else throw new Error("invalid mode");}get isOnFloor(){return map.get(this)._CheckIfStandingOnFloor()}isByWall(side){C3X.RequireString(side);const bi=map.get(this);
+if(side==="left")return bi._IsByWall(0);else if(side==="right")return bi._IsByWall(1);else throw new Error("invalid side");}get isMoving(){return map.get(this)._IsMoving()}get isJumping(){return map.get(this)._IsJumping()}get isFalling(){return map.get(this)._IsFalling()}get vectorX(){return map.get(this)._GetVectorX()}set vectorX(x){C3X.RequireFiniteNumber(x);map.get(this)._SetVectorX(x)}get vectorY(){return map.get(this)._GetVectorY()}set vectorY(y){C3X.RequireFiniteNumber(y);map.get(this)._SetVectorY(y)}get isDefaultControls(){return map.get(this)._IsDefaultControls()}set isDefaultControls(d){map.get(this)._SetDefaultControls(!!d)}get isIgnoringInput(){return map.get(this)._IsIgnoreInput()}set isIgnoringInput(e){map.get(this)._SetIgnoreInput(!!e)}get isEnabled(){return map.get(this)._IsEnabled()}set isEnabled(e){map.get(this)._SetEnabled(!!e)}}};
 
 
 'use strict';{const C3=self.C3;C3.Behaviors.Platform.Cnds={IsMoving(){return this._IsMoving()},CompareSpeed(cmp,s){return C3.compare(this._GetSpeed(),cmp,s)},IsOnFloor(){return this._CheckIfStandingOnFloor()},IsByWall(side){return this._IsByWall(side)},IsJumping(){return this._IsJumping()},IsFalling(){return this._IsFalling()},IsDoubleJumpEnabled(){return this._IsDoubleJumpEnabled()},OnJump(){return true},OnFall(){return true},OnStop(){return true},OnMove(){return true},OnLand(){return true},IsEnabled(){return this._IsEnabled()}}};
@@ -4348,16 +5389,14 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Text,
 		C3.Plugins.VKBridge,
 		C3.Plugins.LocalStorage,
+		C3.Plugins.Eponesh_GameScore,
 		C3.Behaviors.solid,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Behaviors.skymenTrail.Acts.ResetToPoint,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Acts.AddChild,
-		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.System.Acts.SetGroupActive,
-		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
-		C3.Plugins.VKBridge.Acts.Authorization,
 		C3.Behaviors.skymenTrail.Acts.PushPoint,
 		C3.Plugins.System.Acts.ScrollY,
 		C3.Plugins.System.Exps.scrolly,
@@ -4404,29 +5443,32 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.System.Cnds.CompareVar,
-		C3.Plugins.VKBridge.Acts.StorageSet,
-		C3.Plugins.VKBridge.Acts.LeaderSave,
+		C3.Plugins.System.Acts.WaitForPreviousActions,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSet,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSync,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.Shape3D.Acts.Destroy,
 		C3.Plugins.Sprite.Cnds.CompareY,
-		C3.Plugins.VKBridge.Acts.StorageGet,
-		C3.Plugins.VKBridge.Cnds.StorageGetSuccess,
-		C3.Plugins.VKBridge.Exps.StorageData,
-		C3.Plugins.LocalStorage.Cnds.OnItemExists,
-		C3.Plugins.LocalStorage.Exps.ItemValue,
+		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnPlayerReady,
+		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardFetchPlayerRating,
+		C3.Plugins.Eponesh_GameScore.Exps.PlayerName,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnLeaderboardFetchPlayer,
+		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardPlayerPosition,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
 		C3.Plugins.System.Acts.GoToLayoutByName,
 		C3.Plugins.System.Exps.choose,
-		C3.Plugins.VKBridge.Acts.ShowInvite,
-		C3.Plugins.VKBridge.Acts.ShowWall,
-		C3.Plugins.VKBridge.Acts.LeaderBoardVKUI,
+		C3.Plugins.Eponesh_GameScore.Acts.SocialsInvite,
+		C3.Plugins.Eponesh_GameScore.Acts.SocialsPost,
+		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardOpen,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
-		C3.Plugins.VKBridge.Acts.JoinGroup,
+		C3.ScriptsInEvents.Buttons_Event9_Act1,
 		C3.ScriptsInEvents.Buttons_Event10_Act1,
-		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess
+		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess,
+		C3.Plugins.Eponesh_GameScore.Acts.ChangeLanguage
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -4475,6 +5517,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{Record: 0},
 		{games: 0},
 		{destr: 0},
+		{GameScore: 0},
+		{type: 0},
+		{Hello: 0},
 		{Solid: 0},
 		{Physics2: 0},
 		{Wall: 0},
@@ -4679,12 +5724,13 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
 		},
-		() => "Best",
+		() => "score",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const v1 = p._GetNode(1).GetVar();
 			return () => f0(v1.GetValue());
 		},
+		() => "Best",
 		() => "Current",
 		() => 0.5,
 		p => {
@@ -4693,16 +5739,25 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Best");
+			return () => f0("score");
 		},
 		() => "Ball",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(0.7);
 		},
+		() => "BeStOfBest",
+		() => "name",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => and("", f0());
+			return () => ("Привет, " + f0());
+		},
+		() => "Opacity",
+		() => 100,
+		() => "rate",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => and("Твой рейтинг: ", f0());
 		},
 		() => "restart",
 		p => {
@@ -4718,8 +5773,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		},
 		() => "https://vk.com/app7860467",
 		() => "leader",
-		() => "home",
-		() => 204017056
+		() => "home"
 	];
 }
 
