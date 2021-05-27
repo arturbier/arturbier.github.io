@@ -3805,6 +3805,7 @@ ImageWidth(){return this.GetCurrentImageInfo().GetWidth()},ImageHeight(){return 
 		C3.Plugins.Sprite.Acts.LoadURL,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerAvatar,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerID,
+		C3.Plugins.Eponesh_GameScore.Exps.PlayerName,
 		C3.Plugins.Eponesh_GameScore.Cnds.PlayerEachField,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerCurFieldKey,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerCurFieldValue,
@@ -3969,6 +3970,11 @@ ImageWidth(){return this.GetCurrentImageInfo().GetWidth()},ImageHeight(){return 
 			return () => f0();
 		},
 		() => "playerValue_id",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => (and(f0(), " | Имя: ") + f1());
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => ("playerValue_" + f0());
