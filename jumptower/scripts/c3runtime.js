@@ -5522,7 +5522,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Acts.GoToLayoutByName,
 		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Eponesh_GameScore.Acts.SocialsInvite,
-		C3.Plugins.Eponesh_GameScore.Acts.SocialsPost,
+		C3.Plugins.VKBridge.Acts.ShowWall,
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardOpen,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
@@ -5534,11 +5534,14 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Eponesh_GameScore.Acts.ChangeLanguage,
 		C3.Plugins.System.Acts.ScrollX,
 		C3.Plugins.Shape3D.Exps.BBoxTop,
+		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.Shape3D.Acts.SetY,
-		C3.Plugins.Sprite.Acts.SetY
+		C3.Plugins.Sprite.Acts.SetY,
+		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
+		C3.Plugins.VKBridge.Acts.Authorization
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -5824,7 +5827,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("floors");
 		},
-		() => "score,floors",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => and("Твой рейтинг: ", f0());
@@ -5856,9 +5858,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const v0 = p._GetNode(0).GetVar();
 			return () => (("Мой рекорд: " + v0.GetValue()) + "! Сможешь побить его? Заходи)");
 		},
-		() => "https://vk.com/app7860467,https://vk.com/a_b_v_97?z=photo220968686_457271878%2Falbum220968686_000%2Frev",
+		() => "https://vk.com/app7860467,photo220968686_457271878",
 		() => "leader",
-		() => 25,
+		() => 50,
 		() => "home",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -5870,7 +5872,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() - 115);
 		},
-		() => 50,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 10);
