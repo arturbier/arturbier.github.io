@@ -5446,9 +5446,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerSet,
-		C3.Plugins.Eponesh_GameScore.Acts.PlayerSync,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Acts.WaitForPreviousActions,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSync,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.Shape3D.Acts.Destroy,
 		C3.Plugins.Sprite.Cnds.CompareY,
@@ -5738,6 +5738,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
 		},
+		() => 0.1,
 		() => "score",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -5760,6 +5761,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("floors");
 		},
+		() => "score,floors",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => and("Твой рейтинг: ", f0());
