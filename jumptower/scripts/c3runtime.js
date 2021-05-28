@@ -5425,11 +5425,13 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Platform.Acts.SetEnabled,
 		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Behaviors.shadowcaster.Acts.SetEnabled,
+		C3.Plugins.Eponesh_GameScore.Acts.AdsShowFullscreen,
 		C3.Plugins.Sprite.Acts.Spawn,
 		C3.Behaviors.Physics.Acts.ApplyForceAtAngle,
 		C3.Plugins.System.Exps.random,
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.System.Acts.Wait,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.System.Acts.SetVar,
@@ -5454,6 +5456,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardFetchPlayerRating,
 		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardPlayerPosition,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerName,
+		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
 		C3.Plugins.System.Acts.GoToLayoutByName,
@@ -5466,7 +5469,16 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.ScriptsInEvents.Buttons_Event9_Act1,
 		C3.ScriptsInEvents.Buttons_Event10_Act1,
 		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess,
-		C3.Plugins.Eponesh_GameScore.Acts.ChangeLanguage
+		C3.Plugins.System.Cnds.Compare,
+		C3.Plugins.System.Exps.layoutname,
+		C3.Plugins.Eponesh_GameScore.Acts.ChangeLanguage,
+		C3.Plugins.System.Acts.ScrollX,
+		C3.Plugins.Shape3D.Exps.BBoxTop,
+		C3.Behaviors.Tween.Cnds.OnTweensFinished,
+		C3.Plugins.System.Acts.SetBoolVar,
+		C3.Plugins.System.Cnds.CompareBoolVar,
+		C3.Plugins.Shape3D.Acts.SetY,
+		C3.Plugins.Sprite.Acts.SetY
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -5504,11 +5516,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{Effects: 0},
 		{Flash: 0},
 		{Vignette: 0},
+		{Type: 0},
 		{Buttons: 0},
 		{VKBridge: 0},
 		{Canvas: 0},
 		{Fade: 0},
-		{Type: 0},
 		{Best_Score: 0},
 		{LocalStorage: 0},
 		{Logo: 0},
@@ -5518,12 +5530,14 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		{GameScore: 0},
 		{type: 0},
 		{Hello: 0},
+		{Logo2: 0},
 		{Solid: 0},
 		{Physics2: 0},
 		{Wall: 0},
 		{Wall_2: 0},
 		{Floors: 0},
-		{Best_Floors: 0}
+		{Best_Floors: 0},
+		{Logo_Move: 0}
 	];
 }
 
@@ -5719,7 +5733,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => (f0() / 2.4);
 		},
 		() => 0.7,
-		() => 30,
+		() => 35,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
@@ -5757,6 +5771,9 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => ("Привет, " + f0());
 		},
+		() => "Leaderboard",
+		() => 180,
+		() => 0.35,
 		() => "Ball",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -5777,7 +5794,26 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "https://vk.com/app7860467",
 		() => "leader",
 		() => 25,
-		() => "home"
+		() => "home",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
+		() => "Menu",
+		() => "Start",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 115);
+		},
+		() => 50,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 10);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 12);
+		}
 	];
 }
 

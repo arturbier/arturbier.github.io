@@ -24,17 +24,17 @@
 		},
 		{
 			"src": "icons/icon-128.png",
-			"sizes": "128x128",
+			"sizes": "150x150",
 			"type": "image/png"
 		},
 		{
 			"src": "icons/icon-256.png",
-			"sizes": "256x256",
+			"sizes": "278x278",
 			"type": "image/png"
 		},
 		{
 			"src": "icons/icon-512.png",
-			"sizes": "512x512",
+			"sizes": "300x900",
 			"type": "image/png"
 		}
 	]
