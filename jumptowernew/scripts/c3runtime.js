@@ -5456,6 +5456,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Plugins.System.Acts.SetGroupActive,
+		C3.Plugins.Audio.Cnds.IsTagPlaying,
+		C3.Plugins.Audio.Acts.Stop,
 		C3.Behaviors.skymenTrail.Acts.PushPoint,
 		C3.Plugins.System.Acts.ScrollY,
 		C3.Plugins.System.Exps.scrolly,
@@ -5468,6 +5470,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Behaviors.Platform.Acts.SimulateControl,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Plugins.Audio.Acts.Play,
+		C3.Plugins.Audio.Acts.SetPaused,
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Behaviors.Platform.Cnds.IsOnFloor,
 		C3.Plugins.Shape3D.Cnds.IsBoolInstanceVarSet,
@@ -5526,7 +5529,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardOpen,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
-		C3.ScriptsInEvents.Buttons_Event9_Act1,
+		C3.Plugins.VKBridge.Acts.JoinGroup,
 		C3.ScriptsInEvents.Buttons_Event10_Act1,
 		C3.Plugins.VKBridge.Cnds.JoinGroupSuccess,
 		C3.Plugins.System.Exps.layoutname,
@@ -5709,6 +5712,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => 0,
 		() => "Spawn_2",
 		() => "Spawn_1",
+		() => "menu",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
@@ -5720,6 +5724,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		},
 		() => -5,
 		() => "",
+		() => "game",
 		() => "Game",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -5735,7 +5740,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			return () => (f0() / 2);
 		},
 		() => 1,
-		() => -20,
+		() => -10,
 		() => 5,
 		p => {
 			const n0 = p._GetNode(0);
@@ -5860,6 +5865,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "leader",
 		() => 50,
 		() => "home",
+		() => 204017056,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
