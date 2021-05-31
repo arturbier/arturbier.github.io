@@ -5165,6 +5165,7 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Acts.Wait,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.Spritefont2.Acts.SetText,
+		C3.Plugins.System.Exps.uppercase,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerName,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
 		C3.Plugins.System.Cnds.Compare,
@@ -5194,7 +5195,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Behaviors.Flash.Acts.Flash,
-		C3.Plugins.Eponesh_GameScore.Acts.AdsShowRewarded,
 		C3.Plugins.Spritefont2.Acts.SetOpacity,
 		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Sprite.Cnds.CompareOpacity,
@@ -5202,11 +5202,13 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerAdd,
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerSync,
-		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsRewardedReward,
 		C3.Plugins.Spritefont2.Acts.SetY,
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.TiledBg.Acts.SetImageOffsetX,
 		C3.Plugins.TiledBg.Exps.ImageOffsetX,
+		C3.Plugins.Eponesh_GameScore.Acts.AdsShowRewarded,
+		C3.Plugins.System.Acts.WaitForPreviousActions,
+		C3.Plugins.Eponesh_GameScore.Cnds.IsAdsLastAdSuccess,
 		C3.Plugins.Sprite.Acts.SetInstanceVar,
 		C3.Behaviors.Fade.Cnds.OnFadeInEnd,
 		C3.Plugins.Dictionary.Acts.AddKey,
@@ -5641,7 +5643,8 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => and((((("ПРИВЕТ, " + f0()) + "!") + "\n") + "СОБРАНО ЖУКОВ: "), f1("beatles"));
+			const f2 = p._GetNode(2).GetBoundMethod();
+			return () => and((((("ПРИВЕТ, " + f0(f1())) + "!") + "\n") + "СОБРАНО ЖУКОВ: "), f2("beatles"));
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -5697,7 +5700,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "Transition",
 		() => "Out",
 		() => 0.1,
-		() => "РЕКЛАМА ЗАГРУЖЕНА",
 		() => 100,
 		() => "БАТАРЕЯ ЗАРЯЖЕНА",
 		() => 98,
@@ -5708,10 +5710,6 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 		() => "level",
 		() => "true",
 		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => C3.clamp((v0.GetValue() + 1), 0, 3);
-		},
-		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 40);
 		},
@@ -5719,6 +5717,11 @@ value){switch(index){case ENABLE:this.SetEnabled(value);break}}GetDebuggerProper
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - (5 * f1()));
+		},
+		() => "РЕКЛАМА ЗАГРУЖАЕТСЯ",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => C3.clamp((v0.GetValue() + 1), 0, 3);
 		},
 		() => "In",
 		p => {
