@@ -4376,20 +4376,22 @@ WaypointYAt(i){return this._GetWaypointYAt(i)}}};
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.Audio.Acts.StopAll,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowFullscreen,
-		C3.Plugins.Eponesh_GameScore.Acts.PlayerAdd,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSet,
+		C3.Plugins.System.Acts.WaitForPreviousActions,
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerSync,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardFetchPlayerRating,
-		C3.Plugins.System.Acts.WaitForPreviousActions,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
+		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.Text.Acts.SetText,
-		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
 		C3.Plugins.Text.Acts.SetX,
 		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardPlayerPosition,
-		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
+		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
+		C3.Plugins.LocalStorage.Acts.SetItem,
+		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.LocalStorage.Cnds.CompareValue,
 		C3.Plugins.Audio.Acts.SetMasterVolume,
 		C3.Plugins.System.Cnds.Else,
@@ -4399,7 +4401,6 @@ WaypointYAt(i){return this._GetWaypointYAt(i)}}};
 		C3.Plugins.Eponesh_GameScore.Acts.SocialsInvite,
 		C3.Plugins.Eponesh_GameScore.Acts.SocialsPost,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
-		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.Sprite.Exps.Count,
 		C3.Plugins.Sprite.Exps.BBoxLeft,
 		C3.Plugins.Sprite.Exps.BBoxRight,
@@ -4767,12 +4768,17 @@ WaypointYAt(i){return this._GetWaypointYAt(i)}}};
 		() => "",
 		() => "menu",
 		() => "Menu",
+		() => "restore1",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("hight");
+		},
 		() => "restore",
 		() => "Score",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => and(((and("Счет: ", v0.GetValue()) + "\n") + "Лучший счет: "), f1("hight"));
+			const v1 = p._GetNode(1).GetVar();
+			return () => and(((and("Счет: ", v0.GetValue()) + "\n") + "Лучший счет: "), v1.GetValue());
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -4783,6 +4789,7 @@ WaypointYAt(i){return this._GetWaypointYAt(i)}}};
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => and("Рейтинг: ", f0());
 		},
+		() => "posososi",
 		() => "hiscore",
 		() => "sound",
 		() => "1",
