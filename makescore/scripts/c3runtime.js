@@ -5938,7 +5938,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Date.Exps.Now,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnSocialsInvite,
-		C3.ScriptsInEvents.Achievements_Event12_Act1,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnAchievementsAnyUnlock,
 		C3.ScriptsInEvents.Achievements_Event13_Act1,
 		C3.ScriptsInEvents.Achievements_Event14_Act1,
 		C3.ScriptsInEvents.Achievements_Event15_Act1,
@@ -5946,7 +5946,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.ScriptsInEvents.Achievements_Event17_Act1,
 		C3.ScriptsInEvents.Achievements_Event18_Act1,
 		C3.ScriptsInEvents.Achievements_Event19_Act1,
-		C3.Plugins.Eponesh_GameScore.Cnds.OnAchievementsAnyUnlock
+		C3.ScriptsInEvents.Achievements_Event20_Act1
 	];
 };
 self.C3_JsPropNameTable = [
@@ -6543,10 +6543,10 @@ self.C3_ExpressionFuncs = [
 		() => 15000,
 		() => 36,
 		() => 28,
+		() => "Realistic",
 		() => "Confetti",
 		() => "Basic",
 		() => "Random",
-		() => "Realistic",
 		() => "Fireworks",
 		() => "Snow",
 		() => "School",
