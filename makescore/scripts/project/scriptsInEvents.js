@@ -138,10 +138,10 @@ const scriptsInEvents = {
 
 		async Achievements_Event19_Act1(runtime, localVars)
 		{
-			var end = Date.now() + (15 * 1000);
+			var end = Date.now() + (1 * 1000);
 			
 			// go Buckeyes!
-			var colors = ['#bb0000', '#ffffff'];
+			var colors = ['#3cd037', '#ffffff'];
 			
 			(function frame() {
 			  confetti({
