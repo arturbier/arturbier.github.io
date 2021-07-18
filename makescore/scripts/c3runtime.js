@@ -5944,6 +5944,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Arr.Acts.SetX,
 		C3.Plugins.System.Exps.right,
 		C3.Plugins.System.Cnds.Every,
+		C3.Plugins.Eponesh_GameScore.Acts.AdsShowSticky,
 		C3.Plugins.Date.Exps.GetDate,
 		C3.Plugins.Date.Exps.Now,
 		C3.Plugins.Text.Acts.Destroy,
