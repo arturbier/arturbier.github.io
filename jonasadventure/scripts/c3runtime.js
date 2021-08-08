@@ -6678,45 +6678,6 @@ this.GetBehaviorType().GetName(),properties:[{name:"behaviors.solid.properties.e
 }
 
 {
-'use strict';const C3=self.C3;C3.Behaviors.Anchor=class AnchorBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}};
-
-}
-
-{
-'use strict';const C3=self.C3;C3.Behaviors.Anchor.Type=class AnchorType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}};
-
-}
-
-{
-'use strict';const C3=self.C3;const ANCHOR_LEFT=0;const ANCHOR_TOP=1;const ANCHOR_RIGHT=2;const ANCHOR_BOTTOM=3;const ENABLE=4;
-C3.Behaviors.Anchor.Instance=class AnchorInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._anchorLeft=2;this._anchorTop=2;this._anchorRight=0;this._anchorBottom=0;this._isEnabled=true;const bbox=this._inst.GetWorldInfo().GetBoundingBox();this._xLeft=bbox.getLeft();this._yTop=bbox.getTop();this._xRight=this._runtime.GetOriginalViewportWidth()-bbox.getLeft();this._yBottom=this._runtime.GetOriginalViewportHeight()-bbox.getTop();this._rDiff=this._runtime.GetOriginalViewportWidth()-
-bbox.getRight();this._bDiff=this._runtime.GetOriginalViewportHeight()-bbox.getBottom();if(properties){this._anchorLeft=properties[ANCHOR_LEFT];this._anchorTop=properties[ANCHOR_TOP];this._anchorRight=properties[ANCHOR_RIGHT];this._anchorBottom=properties[ANCHOR_BOTTOM];this._isEnabled=!!properties[ENABLE]}const rt=this._runtime.Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,"layoutchange",()=>this._OnLayoutChange()));if(this._isEnabled)this._StartTicking()}Release(){super.Release()}SaveToJson(){return{"xl":this._xLeft,
-"yt":this._yTop,"xr":this._xRight,"yb":this._yBottom,"rd":this._rDiff,"bd":this._bDiff,"al":this._anchorLeft,"at":this._anchorTop,"ar":this._anchorRight,"ab":this._anchorBottom,"e":this._isEnabled}}LoadFromJson(o){this._xLeft=o["xl"];this._yTop=o["yt"];this._xRight=o["xr"];this._yBottom=o["yb"];this._rDiff=o["rd"];this._bDiff=o["bd"];this._anchorLeft=o["al"];this._anchorTop=o["at"];this._anchorRight=o["ar"];this._anchorBottom=o["ab"];this._isEnabled=o["e"];if(this._isEnabled)this._StartTicking();
-else this._StopTicking()}_UpdatePosition(){if(!this._isEnabled)return;const wi=this._inst.GetWorldInfo();const viewport=wi.GetLayer().GetViewport();if(this._anchorLeft===0){const n=viewport.getLeft()+this._xLeft-wi.GetBoundingBox().getLeft();if(n!==0){wi.OffsetX(n);wi.SetBboxChanged()}}else if(this._anchorLeft===1){const n=viewport.getRight()-this._xRight-wi.GetBoundingBox().getLeft();if(n!==0){wi.OffsetX(n);wi.SetBboxChanged()}}if(this._anchorTop===0){const n=viewport.getTop()+this._yTop-wi.GetBoundingBox().getTop();
-if(n!==0){wi.OffsetY(n);wi.SetBboxChanged()}}else if(this._anchorTop===1){const n=viewport.getBottom()-this._yBottom-wi.GetBoundingBox().getTop();if(n!==0){wi.OffsetY(n);wi.SetBboxChanged()}}if(this._anchorRight===1){const n=viewport.getRight()-this._rDiff-wi.GetBoundingBox().getRight();if(n!==0){wi.OffsetX(wi.GetOriginX()*n);wi.SetWidth(Math.max(wi.GetWidth()+n),0);wi.SetBboxChanged();this._rDiff=viewport.getRight()-wi.GetBoundingBox().getRight()}}if(this._anchorBottom===1){const n=viewport.getBottom()-
-this._bDiff-wi.GetBoundingBox().getBottom();if(n!==0){wi.OffsetY(wi.GetOriginY()*n);wi.SetHeight(Math.max(wi.GetHeight()+n,0));wi.SetBboxChanged();this._bDiff=viewport.getBottom()-wi.GetBoundingBox().getBottom()}}}Tick(){this._UpdatePosition()}_OnLayoutChange(){this._UpdatePosition()}GetPropertyValueByIndex(index){switch(index){case ANCHOR_LEFT:return this._anchorLeft;case ANCHOR_TOP:return this._anchorTop;case ANCHOR_RIGHT:return this._anchorRight;case ANCHOR_BOTTOM:return this._anchorBottom;case ENABLE:return this._isEnabled}}SetPropertyValueByIndex(index,
-value){switch(index){case ANCHOR_LEFT:this._anchorLeft=value;break;case ANCHOR_TOP:this._anchorTop=value;break;case ANCHOR_RIGHT:this._anchorRight=value;break;case ANCHOR_BOTTOM:this._anchorBottom=value;break;case ENABLE:this._isEnabled=!!value;if(this._isEnabled)this._StartTicking();else this._StopTicking();break}}};
-
-}
-
-{
-'use strict';const C3=self.C3;C3.Behaviors.Anchor.Cnds={IsEnabled(){return this._isEnabled}};
-
-}
-
-{
-'use strict';const C3=self.C3;
-C3.Behaviors.Anchor.Acts={SetEnabled(e){if(this._isEnabled&&e===0){this._isEnabled=false;this._StopTicking()}else if(!this._isEnabled&&e!==0){const bbox=this._inst.GetWorldInfo().GetBoundingBox();this._xLeft=bbox.getLeft();this._yTop=bbox.getTop();this._xRight=this._runtime.GetOriginalViewportWidth()-bbox.getLeft();this._yBottom=this._runtime.GetOriginalViewportHeight()-bbox.getTop();this._rDiff=this._runtime.GetOriginalViewportWidth()-bbox.getRight();this._bDiff=this._runtime.GetOriginalViewportHeight()-bbox.getBottom();
-this._isEnabled=true;this._StartTicking()}}};
-
-}
-
-{
-'use strict';const C3=self.C3;C3.Behaviors.Anchor.Exps={};
-
-}
-
-{
 'use strict';const C3=self.C3;C3.Behaviors.Sin=class SinBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}};
 
 }
@@ -6863,6 +6824,45 @@ for(const propertyTypeFunctionObject of TYPE_CHECK_OBJECTS)if(propertyTypeFuncti
 
 {
 'use strict';const C3=self.C3;const NAMESPACE=C3.Behaviors.Tween;NAMESPACE.ValueGetters=class ValueGetters{constructor(){}static _GetPropertyAngleValue(value){const r=C3.toRadians(parseFloat(value));return C3.clampAngle(r)}static _GetColorPropertyValue(value){return value.slice(0)}static _GetPropertyValue(value){return value}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.Anchor=class AnchorBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.Anchor.Type=class AnchorType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}};
+
+}
+
+{
+'use strict';const C3=self.C3;const ANCHOR_LEFT=0;const ANCHOR_TOP=1;const ANCHOR_RIGHT=2;const ANCHOR_BOTTOM=3;const ENABLE=4;
+C3.Behaviors.Anchor.Instance=class AnchorInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._anchorLeft=2;this._anchorTop=2;this._anchorRight=0;this._anchorBottom=0;this._isEnabled=true;const bbox=this._inst.GetWorldInfo().GetBoundingBox();this._xLeft=bbox.getLeft();this._yTop=bbox.getTop();this._xRight=this._runtime.GetOriginalViewportWidth()-bbox.getLeft();this._yBottom=this._runtime.GetOriginalViewportHeight()-bbox.getTop();this._rDiff=this._runtime.GetOriginalViewportWidth()-
+bbox.getRight();this._bDiff=this._runtime.GetOriginalViewportHeight()-bbox.getBottom();if(properties){this._anchorLeft=properties[ANCHOR_LEFT];this._anchorTop=properties[ANCHOR_TOP];this._anchorRight=properties[ANCHOR_RIGHT];this._anchorBottom=properties[ANCHOR_BOTTOM];this._isEnabled=!!properties[ENABLE]}const rt=this._runtime.Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,"layoutchange",()=>this._OnLayoutChange()));if(this._isEnabled)this._StartTicking()}Release(){super.Release()}SaveToJson(){return{"xl":this._xLeft,
+"yt":this._yTop,"xr":this._xRight,"yb":this._yBottom,"rd":this._rDiff,"bd":this._bDiff,"al":this._anchorLeft,"at":this._anchorTop,"ar":this._anchorRight,"ab":this._anchorBottom,"e":this._isEnabled}}LoadFromJson(o){this._xLeft=o["xl"];this._yTop=o["yt"];this._xRight=o["xr"];this._yBottom=o["yb"];this._rDiff=o["rd"];this._bDiff=o["bd"];this._anchorLeft=o["al"];this._anchorTop=o["at"];this._anchorRight=o["ar"];this._anchorBottom=o["ab"];this._isEnabled=o["e"];if(this._isEnabled)this._StartTicking();
+else this._StopTicking()}_UpdatePosition(){if(!this._isEnabled)return;const wi=this._inst.GetWorldInfo();const viewport=wi.GetLayer().GetViewport();if(this._anchorLeft===0){const n=viewport.getLeft()+this._xLeft-wi.GetBoundingBox().getLeft();if(n!==0){wi.OffsetX(n);wi.SetBboxChanged()}}else if(this._anchorLeft===1){const n=viewport.getRight()-this._xRight-wi.GetBoundingBox().getLeft();if(n!==0){wi.OffsetX(n);wi.SetBboxChanged()}}if(this._anchorTop===0){const n=viewport.getTop()+this._yTop-wi.GetBoundingBox().getTop();
+if(n!==0){wi.OffsetY(n);wi.SetBboxChanged()}}else if(this._anchorTop===1){const n=viewport.getBottom()-this._yBottom-wi.GetBoundingBox().getTop();if(n!==0){wi.OffsetY(n);wi.SetBboxChanged()}}if(this._anchorRight===1){const n=viewport.getRight()-this._rDiff-wi.GetBoundingBox().getRight();if(n!==0){wi.OffsetX(wi.GetOriginX()*n);wi.SetWidth(Math.max(wi.GetWidth()+n),0);wi.SetBboxChanged();this._rDiff=viewport.getRight()-wi.GetBoundingBox().getRight()}}if(this._anchorBottom===1){const n=viewport.getBottom()-
+this._bDiff-wi.GetBoundingBox().getBottom();if(n!==0){wi.OffsetY(wi.GetOriginY()*n);wi.SetHeight(Math.max(wi.GetHeight()+n,0));wi.SetBboxChanged();this._bDiff=viewport.getBottom()-wi.GetBoundingBox().getBottom()}}}Tick(){this._UpdatePosition()}_OnLayoutChange(){this._UpdatePosition()}GetPropertyValueByIndex(index){switch(index){case ANCHOR_LEFT:return this._anchorLeft;case ANCHOR_TOP:return this._anchorTop;case ANCHOR_RIGHT:return this._anchorRight;case ANCHOR_BOTTOM:return this._anchorBottom;case ENABLE:return this._isEnabled}}SetPropertyValueByIndex(index,
+value){switch(index){case ANCHOR_LEFT:this._anchorLeft=value;break;case ANCHOR_TOP:this._anchorTop=value;break;case ANCHOR_RIGHT:this._anchorRight=value;break;case ANCHOR_BOTTOM:this._anchorBottom=value;break;case ENABLE:this._isEnabled=!!value;if(this._isEnabled)this._StartTicking();else this._StopTicking();break}}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.Anchor.Cnds={IsEnabled(){return this._isEnabled}};
+
+}
+
+{
+'use strict';const C3=self.C3;
+C3.Behaviors.Anchor.Acts={SetEnabled(e){if(this._isEnabled&&e===0){this._isEnabled=false;this._StopTicking()}else if(!this._isEnabled&&e!==0){const bbox=this._inst.GetWorldInfo().GetBoundingBox();this._xLeft=bbox.getLeft();this._yTop=bbox.getTop();this._xRight=this._runtime.GetOriginalViewportWidth()-bbox.getLeft();this._yBottom=this._runtime.GetOriginalViewportHeight()-bbox.getTop();this._rDiff=this._runtime.GetOriginalViewportWidth()-bbox.getRight();this._bDiff=this._runtime.GetOriginalViewportHeight()-bbox.getBottom();
+this._isEnabled=true;this._StartTicking()}}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.Anchor.Exps={};
 
 }
 
@@ -7198,10 +7198,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.gamepad,
 		C3.Plugins.Keyboard,
 		C3.Plugins.Touch,
-		C3.Behaviors.Anchor,
 		C3.Behaviors.Sin,
 		C3.Plugins.Text,
 		C3.Behaviors.Tween,
+		C3.Behaviors.Anchor,
 		C3.Plugins.LocalStorage,
 		C3.Plugins.Audio,
 		C3.Behaviors.Physics,
@@ -7233,6 +7233,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.Scroll,
 		C3.Plugins.System.Exps.originalviewportwidth,
 		C3.Plugins.System.Exps.scrolly,
+		C3.Plugins.Sprite.Acts.SetY,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Sprite.Exps.Count,
 		C3.Plugins.System.Cnds.ForEach,
@@ -7266,6 +7267,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
+		C3.Plugins.Browser.Acts.Vibrate,
 		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Behaviors.Platform.Exps.VectorY,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
@@ -7287,7 +7289,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SetVar,
 		C3.Behaviors.Platform.Acts.SimulateControl,
 		C3.Behaviors.Platform.Cnds.OnFall,
-		C3.Plugins.Browser.Acts.Vibrate,
 		C3.Plugins.Sprite.Cnds.IsOverlappingOffset,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.System.Cnds.CompareVar,
@@ -7423,7 +7424,6 @@ self.C3_JsPropNameTable = [
 	{Gamepad: 0},
 	{Keyboard: 0},
 	{Touch: 0},
-	{Anchor: 0},
 	{Sine: 0},
 	{Move_Buttons: 0},
 	{Start: 0},
@@ -7432,6 +7432,7 @@ self.C3_JsPropNameTable = [
 	{state: 0},
 	{Tween: 0},
 	{Text_Logo: 0},
+	{Anchor: 0},
 	{Text_All: 0},
 	{LocalStorage: 0},
 	{Logo: 0},
@@ -7624,6 +7625,7 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
 		},
+		() => 690,
 		() => "IN",
 		() => "Player_Anim",
 		() => "Fall",
@@ -7661,12 +7663,14 @@ self.C3_ExpressionFuncs = [
 		() => "Open",
 		() => 3,
 		() => "Collected",
+		() => "100,50,100",
 		() => "Fly",
 		() => 25,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpBehavior() / 2);
 		},
+		() => 0.3,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (10 + Math.abs((n0.ExpBehavior() / 8)));
@@ -7713,7 +7717,6 @@ self.C3_ExpressionFuncs = [
 		() => 50,
 		() => "Player_Hurt",
 		() => "Finished",
-		() => 0.3,
 		() => "Menu",
 		() => "Enemies_Collision",
 		p => {
