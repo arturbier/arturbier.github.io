@@ -2990,15 +2990,15 @@ self["C3_Shaders"]["bulge"] = {
 	animated: false,
 	parameters: [["radius",0,"percent"],["scale",0,"percent"]]
 };
-self["C3_Shaders"]["vignette"] = {
-	src: "varying mediump vec2 vTex;\nuniform lowp sampler2D samplerFront;\nuniform mediump vec2 srcStart;\nuniform mediump vec2 srcEnd;\nuniform mediump float vignetteStart;\nuniform mediump float vignetteEnd;\nvoid main(void)\n{\nlowp vec4 front = texture2D(samplerFront, vTex);\nlowp float a = front.a;\nif (a != 0.0)\nfront.rgb /= a;\nmediump vec2 tex = (vTex - srcStart) / (srcEnd - srcStart);\nlowp float d = distance(tex, vec2(0.5, 0.5));\nfront.rgb *= smoothstep(vignetteEnd, vignetteStart, d);\nfront.rgb *= a;\ngl_FragColor = front;\n}",
+self["C3_Shaders"]["grayscale"] = {
+	src: "varying mediump vec2 vTex;\nuniform lowp sampler2D samplerFront;\nuniform lowp float intensity;\nvoid main(void)\n{\nlowp vec4 front = texture2D(samplerFront, vTex);\nlowp float gray = front.r * 0.299 + front.g * 0.587 + front.b * 0.114;\ngl_FragColor = mix(front, vec4(gray, gray, gray, front.a), intensity);\n}",
 	extendBoxHorizontal: 0,
 	extendBoxVertical: 0,
 	crossSampling: false,
 	mustPreDraw: false,
 	preservesOpaqueness: true,
 	animated: false,
-	parameters: [["vignetteStart",0,"percent"],["vignetteEnd",0,"percent"]]
+	parameters: [["intensity",0,"percent"]]
 };
 
 }
@@ -7235,6 +7235,11 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Exps.scrolly,
 		C3.Plugins.Sprite.Acts.SetY,
 		C3.Plugins.System.Cnds.Compare,
+		C3.Plugins.System.Exps.layoutname,
+		C3.Plugins.System.Acts.CreateObject,
+		C3.Plugins.System.Exps.viewportright,
+		C3.Plugins.System.Exps.viewporttop,
+		C3.Plugins.System.Exps.viewportleft,
 		C3.Plugins.Sprite.Exps.Count,
 		C3.Plugins.System.Cnds.ForEach,
 		C3.Plugins.Sprite.Cnds.OnAnimFinished,
@@ -7295,10 +7300,14 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Platform.Acts.FallThrough,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
 		C3.Plugins.Sprite.Acts.SetOpacity,
+		C3.Plugins.System.Acts.GoToLayout,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSet,
+		C3.Plugins.LocalStorage.Acts.ClearStorage,
+		C3.Plugins.System.Acts.RestartLayout,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSync,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowFullscreen,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
-		C3.Plugins.System.Exps.layoutname,
-		C3.Plugins.System.Acts.RestartLayout,
 		C3.Plugins.Sprite.Cnds.CompareY,
 		C3.Plugins.Sprite.Exps.ImagePointY,
 		C3.Behaviors.MoveTo.Cnds.IsMoving,
@@ -7319,14 +7328,12 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Exps.Width,
 		C3.Plugins.Sprite.Acts.SetSize,
 		C3.Plugins.Sprite.Exps.Height,
-		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Behaviors.Platform.Acts.SetVectorX,
 		C3.Plugins.Audio.Acts.PlayAtObject,
 		C3.Plugins.Sprite.Cnds.OnCreated,
 		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Audio.Acts.PlayAtObjectByName,
 		C3.Behaviors.Platform.Cnds.CompareSpeed,
-		C3.Plugins.System.Acts.CreateObject,
 		C3.Behaviors.Bullet.Acts.SetSpeed,
 		C3.Plugins.System.Cnds.Repeat,
 		C3.Behaviors.Bullet.Acts.SetAngleOfMotion,
@@ -7362,34 +7369,43 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowSticky,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.Text.Acts.SetText,
-		C3.Plugins.System.Exps.viewportleft,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
 		C3.Plugins.System.Cnds.CompareBoolVar,
-		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.System.Acts.GoToLayoutByName,
+		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
-		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
+		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.System.Acts.SetBoolVar,
-		C3.Plugins.LocalStorage.Acts.ClearStorage,
 		C3.Plugins.Text.Acts.SetPos,
 		C3.Plugins.System.Exps.originalviewportheight,
 		C3.Plugins.TiledBg.Acts.SetVisible,
 		C3.Behaviors.Tween.Cnds.OnAnyTweensFinished,
 		C3.Plugins.TiledBg.Acts.Destroy,
+		C3.ScriptsInEvents.Effects_Event11_Act1,
+		C3.ScriptsInEvents.Effects_Event12_Act1,
+		C3.ScriptsInEvents.Effects_Event13_Act1,
+		C3.ScriptsInEvents.Effects_Event14_Act1,
+		C3.ScriptsInEvents.Effects_Event15_Act1,
+		C3.ScriptsInEvents.Effects_Event16_Act1,
+		C3.ScriptsInEvents.Effects_Event17_Act1,
+		C3.ScriptsInEvents.Effects_Event18_Act1,
 		C3.Plugins.TiledBg.Acts.SetSize,
 		C3.Plugins.TiledBg.Acts.SetPos,
 		C3.Plugins.TiledBg.Acts.SetX,
 		C3.Plugins.System.Exps.layoutheight,
 		C3.Plugins.TiledBg.Acts.SetY,
 		C3.Plugins.System.Exps.layoutwidth,
-		C3.Plugins.System.Exps.viewportright,
-		C3.Plugins.System.Exps.viewporttop,
 		C3.Plugins.System.Exps.viewportbottom,
+		C3.Plugins.Text.Exps.Width,
+		C3.Plugins.System.Acts.WaitForSignal,
+		C3.Plugins.Browser.Acts.GoToURLWindow,
+		C3.Plugins.System.Acts.Signal,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAchievementsAnyUnlock,
-		C3.Plugins.Eponesh_GameScore.Acts.AchievementsOpen
+		C3.Plugins.Eponesh_GameScore.Acts.AchievementsOpen,
+		C3.Plugins.Eponesh_GameScore.Acts.SocialsInvite
 	];
 };
 self.C3_JsPropNameTable = [
@@ -7482,12 +7498,16 @@ self.C3_JsPropNameTable = [
 	{Gun: 0},
 	{Solid_Fall: 0},
 	{Started: 0},
+	{Dell: 0},
 	{Start_Game: 0},
 	{GameScore: 0},
 	{Button_Copter: 0},
 	{GUI_Crystall: 0},
 	{Achievements: 0},
 	{PlatformInfo: 0},
+	{Btn_Restart: 0},
+	{Back: 0},
+	{Friends: 0},
 	{Rotate: 0},
 	{Enemies: 0},
 	{Jump2X: 0},
@@ -7498,6 +7518,7 @@ self.C3_JsPropNameTable = [
 	{Enemies_UID: 0},
 	{LVL: 0},
 	{Coin: 0},
+	{Type: 0},
 	{Crystalled: 0},
 	{Tutorial: 0},
 	{Lvl_ompleted: 0}
@@ -7626,6 +7647,13 @@ self.C3_ExpressionFuncs = [
 			return () => f0();
 		},
 		() => 690,
+		() => "Menu",
+		() => "Tutorial",
+		() => "End_Game",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("GUI");
+		},
 		() => "IN",
 		() => "Player_Anim",
 		() => "Fall",
@@ -7715,9 +7743,9 @@ self.C3_ExpressionFuncs = [
 		() => "Right",
 		() => 100,
 		() => 50,
+		() => "level",
 		() => "Player_Hurt",
 		() => "Finished",
-		() => "Menu",
 		() => "Enemies_Collision",
 		p => {
 			const n0 = p._GetNode(0);
@@ -7867,12 +7895,14 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 10);
 		},
-		() => "Tutorial",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("LVL", v0.GetValue());
 		},
-		() => "level",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("level");
+		},
 		() => "bg",
 		() => -3,
 		p => {
@@ -7892,6 +7922,14 @@ self.C3_ExpressionFuncs = [
 		() => "in",
 		() => 3333,
 		() => -444,
+		() => "Confetti",
+		() => "Basic",
+		() => "Random",
+		() => "Realistic",
+		() => "Fireworks",
+		() => "Snow",
+		() => "School",
+		() => "Custom",
 		() => "Close",
 		() => "Finish",
 		() => "In",
@@ -7909,13 +7947,30 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("GUI");
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0("GUI") / 2);
 		},
-		() => 65
+		() => "ВОЙДИ В ПОРТАЛ",
+		() => "text",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => (n0.ExpObject() - (n1.ExpObject() / 1.5));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 152);
+		},
+		() => "shadow",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 150);
+		},
+		() => "end",
+		() => "link",
+		() => "https://vk.com/a_b_vstudio",
+		() => "NewWindow",
+		() => 65,
+		() => "Врывайся в игру 'Приключение Йонаса'"
 ];
 
 
