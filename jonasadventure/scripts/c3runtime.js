@@ -7281,6 +7281,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Exps.scrolly,
 		C3.Plugins.Sprite.Acts.SetY,
 		C3.Plugins.System.Exps.viewportbottom,
+		C3.Plugins.Sprite.Acts.SetScale,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.System.Acts.CreateObject,
@@ -7290,6 +7291,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Exps.Count,
 		C3.Plugins.System.Cnds.ForEach,
 		C3.Plugins.PlatformInfo.Cnds.IsOnMobile,
+		C3.Plugins.Text.Cnds.CompareInstanceVar,
+		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Sprite.Cnds.OnAnimFinished,
 		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
@@ -7341,6 +7344,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Touch.Cnds.HasNthTouch,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Behaviors.Platform.Acts.SimulateControl,
+		C3.Plugins.Text.Acts.Destroy,
 		C3.Behaviors.Platform.Cnds.OnFall,
 		C3.Plugins.Sprite.Cnds.IsOverlappingOffset,
 		C3.Plugins.System.Acts.AddVar,
@@ -7414,8 +7418,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Bullet.Exps.Speed,
 		C3.Behaviors.Bullet.Acts.SetGravity,
 		C3.Behaviors.Tween.Acts.TweenTwoProperties,
-		C3.Plugins.Text.Cnds.CompareInstanceVar,
-		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Eponesh_GameScore.Cnds.PlatformType,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowSticky,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
@@ -7451,10 +7453,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.WaitForSignal,
 		C3.Plugins.Browser.Acts.GoToURLWindow,
 		C3.Plugins.System.Acts.Signal,
+		C3.Plugins.Keyboard.Cnds.OnAnyKey,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAchievementsAnyUnlock,
 		C3.Plugins.Eponesh_GameScore.Acts.AchievementsOpen,
-		C3.Plugins.Eponesh_GameScore.Acts.SocialsInvite,
-		C3.Plugins.Eponesh_GameScore.Acts.FullscreenOpen
+		C3.Plugins.Eponesh_GameScore.Acts.SocialsInvite
 	];
 };
 self.C3_JsPropNameTable = [
@@ -7562,6 +7564,7 @@ self.C3_JsPropNameTable = [
 	{YY: 0},
 	{Fade: 0},
 	{intro_: 0},
+	{Tilemap2: 0},
 	{Rotate: 0},
 	{Enemies: 0},
 	{Jump2X: 0},
@@ -7704,14 +7707,18 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0("GUI") - 40);
 		},
+		() => 1.8,
 		() => "Menu",
 		() => "Tutorial",
 		() => "End_Game",
+		() => 1.4,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("GUI");
 		},
 		() => "IN",
+		() => "Jump",
+		() => "Управление стрелками!",
 		() => "Player_Anim",
 		() => "Fall",
 		() => 0.2,
@@ -7791,7 +7798,6 @@ self.C3_ExpressionFuncs = [
 		() => "fall",
 		() => "landen",
 		() => "DoubleJump",
-		() => "Jump",
 		() => -5,
 		() => 2,
 		() => -6,
