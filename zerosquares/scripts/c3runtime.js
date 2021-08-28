@@ -6582,7 +6582,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore,
 		C3.Plugins.ValerypopoffTouchPlusPlugin,
 		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.Plugins.Eponesh_GameScore.Acts.AdsShowSticky,
 		C3.Plugins.System.Acts.SetLayerParallax,
 		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Behaviors.TileMovement.Acts.SetSpeed,
