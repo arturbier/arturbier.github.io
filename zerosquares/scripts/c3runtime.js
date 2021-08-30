@@ -6674,6 +6674,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.System.Acts.ToggleBoolVar,
 		C3.Plugins.Eponesh_GameScore.Acts.FullscreenToggle,
+		C3.Plugins.Eponesh_GameScore.Cnds.IsAdsFullscreenPlaying,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowFullscreen,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
 		C3.Plugins.System.Acts.ResetPersisted,
@@ -6756,7 +6757,8 @@ self.C3_JsPropNameTable = [
 	{SHAKE_Y: 0},
 	{SHAKE_X: 0},
 	{SHAKE_AMMOUNTS: 0},
-	{Menu: 0}
+	{Menu: 0},
+	{ADS: 0}
 ];
 }
 
@@ -6983,6 +6985,8 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => ((n0.ExpObject()) ? (0) : (1));
 		},
+		() => "home",
+		() => "none",
 		() => "Start",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -7013,6 +7017,7 @@ self.C3_ExpressionFuncs = [
 			return () => and("LVL_", v0.GetValue());
 		},
 		() => "Play",
+		() => "start",
 		() => "Add"
 ];
 
