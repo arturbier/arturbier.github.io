@@ -8037,6 +8037,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetPos,
 		C3.Plugins.System.Exps.viewportright,
 		C3.Plugins.System.Exps.viewportbottom,
+		C3.Plugins.System.Acts.SetLayerScale,
+		C3.Plugins.System.Cnds.ForEach,
+		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Plugins.Keyboard.Cnds.OnAnyKey,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Plugins.gamepad.Cnds.OnAnyButtonDown,
@@ -8105,7 +8108,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Platform.Cnds.IsMoving,
 		C3.Plugins.Particles.Acts.SetPos,
 		C3.Behaviors.Platform.Cnds.OnLand,
-		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Plugins.Sprite.Acts.SetHeight,
 		C3.Plugins.System.Acts.Scroll,
 		C3.Plugins.System.Exps.scrollx,
@@ -8170,7 +8172,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Exps.dt,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
-		C3.Plugins.System.Cnds.ForEach,
 		C3.Behaviors.EightDir.Acts.SimulateControl,
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
 		C3.Plugins.System.Acts.WaitForPreviousActions,
@@ -8234,6 +8235,7 @@ self.C3_JsPropNameTable = [
 	{Solid: 0},
 	{Tilemap2_1: 0},
 	{Tilemap3_1: 0},
+	{Anchor: 0},
 	{AlertBackg: 0},
 	{BlackLine: 0},
 	{DecoBottonforRight: 0},
@@ -8241,7 +8243,6 @@ self.C3_JsPropNameTable = [
 	{ExitToMenu_BT: 0},
 	{Facebook_BT: 0},
 	{GPlus_BT: 0},
-	{Anchor: 0},
 	{GUI_Plash: 0},
 	{GUI_Stars: 0},
 	{LoadLine: 0},
@@ -8530,6 +8531,12 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0(0) / 2);
 		},
+		() => "win level",
+		() => 0.85,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0);
+		},
 		() => 0,
 		() => "Timer",
 		() => "Start",
@@ -8569,7 +8576,6 @@ self.C3_ExpressionFuncs = [
 		() => 60,
 		() => 4,
 		() => "Win_Bottons_Functions",
-		() => "win level",
 		() => "loose level",
 		p => {
 			const n0 = p._GetNode(0);
