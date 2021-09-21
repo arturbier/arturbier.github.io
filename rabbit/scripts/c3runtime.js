@@ -8033,6 +8033,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore,
 		C3.Plugins.VKBridge,
 		C3.Plugins.PlatformInfo,
+		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.Sprite.Acts.SetPos,
+		C3.Plugins.System.Exps.viewportright,
+		C3.Plugins.System.Exps.viewportbottom,
 		C3.Plugins.Keyboard.Cnds.OnAnyKey,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Plugins.gamepad.Cnds.OnAnyButtonDown,
@@ -8055,7 +8059,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.LocalStorage.Acts.SetItem,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
-		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.Audio.Acts.PlayByName,
 		C3.Plugins.System.Cnds.CompareBetween,
@@ -8069,9 +8072,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Behaviors.Platform.Acts.SetEnabled,
 		C3.Plugins.Sprite.Acts.SetSize,
-		C3.Plugins.System.Exps.viewportright,
-		C3.Plugins.System.Exps.viewportbottom,
-		C3.Plugins.Sprite.Acts.SetPos,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
 		C3.Behaviors.Platform.Acts.SimulateControl,
@@ -8526,6 +8526,10 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0(0) / 2);
+		},
 		() => 0,
 		() => "Timer",
 		() => "Start",
