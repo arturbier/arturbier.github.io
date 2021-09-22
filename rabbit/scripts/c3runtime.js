@@ -8187,8 +8187,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Dictionary.Acts.AddKey,
 		C3.Plugins.Function.Acts.CallFunction,
 		C3.Plugins.Function.Cnds.OnFunction,
-		C3.Plugins.Dictionary.Cnds.CompareValue,
 		C3.Plugins.AJAX.Acts.RequestFile,
+		C3.Plugins.Dictionary.Cnds.CompareValue,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Plugins.Dictionary.Acts.JSONLoad,
 		C3.Plugins.AJAX.Exps.LastData,
@@ -8222,7 +8222,13 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
-		C3.Plugins.Dictionary.Exps.AsJSON
+		C3.Plugins.LocalStorage.Acts.ClearStorage,
+		C3.Plugins.Dictionary.Acts.Clear,
+		C3.Plugins.Dictionary.Exps.AsJSON,
+		C3.Plugins.System.Acts.SnapshotCanvas,
+		C3.Plugins.System.Cnds.OnCanvasSnapshot,
+		C3.Plugins.Browser.Acts.InvokeDownload,
+		C3.Plugins.System.Exps.canvassnapshot
 	];
 };
 self.C3_JsPropNameTable = [
@@ -8890,8 +8896,8 @@ self.C3_ExpressionFuncs = [
 		() => "0EN",
 		() => "ChangeLang",
 		() => "Lang",
-		() => "EN",
 		() => "RU",
+		() => "EN",
 		() => "ESP",
 		() => "DCH",
 		() => "FRA",
@@ -9129,7 +9135,10 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpBehavior();
 		},
 		() => "Save_ALL",
-		() => "MainScreen"
+		() => "MainScreen",
+		() => 1920,
+		() => 1080,
+		() => "screenshot_"
 ];
 
 
