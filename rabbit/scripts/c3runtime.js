@@ -8038,6 +8038,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Exps.viewportright,
 		C3.Plugins.System.Exps.viewportbottom,
 		C3.Plugins.System.Acts.SetLayerScale,
+		C3.Plugins.PlatformInfo.Cnds.IsOnMobile,
+		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.System.Cnds.ForEach,
 		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Plugins.Keyboard.Cnds.OnAnyKey,
@@ -8122,7 +8124,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Cnds.OnAnimFinished,
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.Sprite.Acts.Spawn,
-		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Sprite.Acts.StartAnim,
@@ -8185,6 +8186,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Browser.Acts.CancelFullScreen,
 		C3.Plugins.Browser.Acts.RequestFullScreen,
 		C3.Plugins.Dictionary.Acts.AddKey,
+		C3.Plugins.Eponesh_GameScore.Acts.ChangeLanguage,
 		C3.Plugins.Function.Acts.CallFunction,
 		C3.Plugins.Function.Cnds.OnFunction,
 		C3.Plugins.AJAX.Acts.RequestFile,
@@ -8194,7 +8196,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Plugins.Eponesh_GameScore.Cnds.PlatformType,
 		C3.Plugins.VKBridge.Acts.JoinGroup,
-		C3.Plugins.PlatformInfo.Cnds.IsOnMobile,
 		C3.Plugins.Browser.Acts.GoToURLWindow,
 		C3.Behaviors.scrollto.Acts.SetEnabled,
 		C3.Plugins.LocalStorage.Acts.GetItem,
@@ -8222,8 +8223,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.VKBridge.Acts.BridgeConnect,
 		C3.Plugins.VKBridge.Cnds.BridgeConnectSuccess,
 		C3.Plugins.VKBridge.Acts.Authorization,
-		C3.Plugins.LocalStorage.Acts.ClearStorage,
-		C3.Plugins.Dictionary.Acts.Clear,
 		C3.Plugins.Dictionary.Exps.AsJSON,
 		C3.Plugins.System.Acts.SnapshotCanvas,
 		C3.Plugins.System.Cnds.OnCanvasSnapshot,
@@ -8595,6 +8594,11 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => and(and(n0.ExpObject("AlertHeader"), " "), v1.GetValue());
 		},
+		() => "pause",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("Pause");
+		},
 		() => "StartLevelText",
 		() => "win score",
 		p => {
@@ -8920,6 +8924,16 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("Bot2");
+		},
+		() => "gamename",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("Name");
+		},
+		() => "prava",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("Prava");
 		},
 		() => 204017056,
 		() => "https://vk.com/a_b_vstudio",
