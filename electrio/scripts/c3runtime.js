@@ -5713,6 +5713,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
 		C3.Plugins.System.Acts.RestartLayout,
+		C3.Plugins.Eponesh_GameScore.Acts.SocialsJoinCommunity,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.System.Exps.int,
@@ -5785,6 +5786,7 @@ self.C3_JsPropNameTable = [
 	{Tips_2: 0},
 	{ShareButton: 0},
 	{GameScore: 0},
+	{Logo: 0},
 	{Elements: 0},
 	{LAST_LEVEL: 0},
 	{WIN: 0},
@@ -5947,8 +5949,11 @@ self.C3_ExpressionFuncs = [
 		() => 140,
 		() => 170,
 		() => 150,
+		() => 0.2,
 		() => "WIN LOGIC",
 		() => "Tips",
+		() => 108,
+		() => 978,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
@@ -5968,7 +5973,6 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "SAVE LEVELS",
 		() => "music",
-		() => 0.2,
 		() => "SOUND CONTROL",
 		() => "SAVE LEVELS2",
 		() => "MENU",
