@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<set>
+	<twitter> 
+		<text> Wow. ELECTRIO is amazing game!</text>
+	</twitter>
+	<facebook>
+		<app_id>188612828210399</app_id>
+		<caption>Hi! I love this game!</caption>
+		<name>ELECTRIO game</name>
+		<picture>https://0.s3.envato.com/files/202655871/Logo80.png </picture>
+		<description>ELECTRIO is amazing! More games: https://codecanyon.net/user/flikes/portfolio</description>	
+		<link>https://codecanyon.net/user/flikes/</link>
+	</facebook>
+	
+</set>
