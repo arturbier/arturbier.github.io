@@ -3377,65 +3377,6 @@ C3.CanvasToBlob(canvas)).then(blob=>{const url=URL.createObjectURL(blob);const c
 }
 
 {
-'use strict';const C3=self.C3;C3.Plugins.Text=class TextPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}};
-
-}
-
-{
-'use strict';const C3=self.C3;C3.Plugins.Text.Type=class TextType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}LoadTextures(renderer){}ReleaseTextures(){}};
-
-}
-
-{
-'use strict';const C3=self.C3;const C3X=self.C3X;const TEMP_COLOR_ARRAY=[0,0,0];const TEXT=0;const ENABLE_BBCODE=1;const FONT=2;const SIZE=3;const LINE_HEIGHT=4;const BOLD=5;const ITALIC=6;const COLOR=7;const HORIZONTAL_ALIGNMENT=8;const VERTICAL_ALIGNMENT=9;const WRAPPING=10;const INITIALLY_VISIBLE=11;const ORIGIN=12;const HORIZONTAL_ALIGNMENTS=["left","center","right"];const VERTICAL_ALIGNMENTS=["top","center","bottom"];const WORD_WRAP=0;const CHARACTER_WRAP=1;const tempRect=new C3.Rect;
-const tempQuad=new C3.Quad;const tempColor=new C3.Color;
-C3.Plugins.Text.Instance=class TextInstance extends C3.SDKWorldInstanceBase{constructor(inst,properties){super(inst);this._text="";this._enableBBcode=true;this._faceName="Arial";this._ptSize=12;this._lineHeightOffset=0;this._isBold=false;this._isItalic=false;this._color=C3.New(C3.Color);this._horizontalAlign=0;this._verticalAlign=0;this._wrapByWord=true;this._typewriterStartTime=-1;this._typewriterEndTime=-1;this._typewriterLength=0;this._rendererText=C3.New(C3.Gfx.RendererText,this._runtime.GetRenderer(),
-{timeout:5});this._rendererText.ontextureupdate=()=>this._runtime.UpdateRender();this._rendererText.SetIsAsync(false);if(properties){this._text=properties[TEXT];this._enableBBcode=!!properties[ENABLE_BBCODE];this._faceName=properties[FONT];this._ptSize=properties[SIZE];this._lineHeightOffset=properties[LINE_HEIGHT];this._isBold=!!properties[BOLD];this._isItalic=!!properties[ITALIC];this._horizontalAlign=properties[HORIZONTAL_ALIGNMENT];this._verticalAlign=properties[VERTICAL_ALIGNMENT];this._wrapByWord=
-properties[WRAPPING]===WORD_WRAP;const v=properties[COLOR];this._color.setRgb(v[0],v[1],v[2]);this.GetWorldInfo().SetVisible(properties[INITIALLY_VISIBLE])}this._UpdateTextSettings()}Release(){this._CancelTypewriter();this._rendererText.Release();this._rendererText=null;super.Release()}_UpdateTextSettings(){const rendererText=this._rendererText;rendererText.SetText(this._text);rendererText.SetBBCodeEnabled(this._enableBBcode);rendererText.SetFontName(this._faceName);rendererText.SetLineHeight(this._lineHeightOffset);
-rendererText.SetBold(this._isBold);rendererText.SetItalic(this._isItalic);rendererText.SetColor(this._color);rendererText.SetHorizontalAlignment(HORIZONTAL_ALIGNMENTS[this._horizontalAlign]);rendererText.SetVerticalAlignment(VERTICAL_ALIGNMENTS[this._verticalAlign]);rendererText.SetWordWrapMode(this._wrapByWord?"word":"character")}_UpdateTextSize(){const wi=this.GetWorldInfo();this._rendererText.SetFontSize(this._ptSize);this._rendererText.SetFontSizeScale(wi.GetSceneGraphScale());const layer=wi.GetLayer();
-const textZoom=layer.GetRenderScale()*layer.Get2DScaleFactorToZ(wi.GetTotalZElevation());this._rendererText.SetSize(wi.GetWidth(),wi.GetHeight(),textZoom)}Draw(renderer){const wi=this.GetWorldInfo();this._UpdateTextSize();const texture=this._rendererText.GetTexture();if(!texture)return;const layer=wi.GetLayer();if(wi.GetAngle()===0&&layer.GetAngle()===0&&wi.GetTotalZElevation()===0&&!wi.HasMesh()&&layer.RendersIn2DMode()){const quad=wi.GetBoundingQuad();const [dl,dt]=layer.LayerToDrawSurface(quad.getTlx(),
-quad.getTly());const [dr,db]=layer.LayerToDrawSurface(quad.getBrx(),quad.getBry());const offX=dl-Math.round(dl);const offY=dt-Math.round(dt);tempRect.set(dl,dt,dr,db);tempRect.offset(-offX,-offY);tempQuad.setFromRect(tempRect);const [rtWidth,rtHeight]=renderer.GetRenderTargetSize(renderer.GetRenderTarget());this._runtime.GetCanvasManager().SetDeviceTransform(renderer,rtWidth,rtHeight);renderer.SetTexture(texture);renderer.Quad3(tempQuad,this._rendererText.GetTexRect());layer._SetTransform(renderer)}else{renderer.SetTexture(texture);
-if(wi.HasMesh())this._DrawMesh(wi,renderer);else this._DrawStandard(wi,renderer)}}_DrawStandard(wi,renderer){let quad=wi.GetBoundingQuad();if(this._runtime.IsPixelRoundingEnabled())quad=this._PixelRoundQuad(quad);renderer.Quad3(quad,this._rendererText.GetTexRect())}_DrawMesh(wi,renderer){const transformedMesh=wi.GetTransformedMesh();if(wi.IsMeshChanged()){wi.CalculateBbox(tempRect,tempQuad,false);let quad=tempQuad;if(this._runtime.IsPixelRoundingEnabled())quad=this._PixelRoundQuad(quad);transformedMesh.CalculateTransformedMesh(wi.GetSourceMesh(),
-quad,this._rendererText.GetTexRect());wi.SetMeshChanged(false)}transformedMesh.Draw(renderer)}_PixelRoundQuad(quad){const offX=quad.getTlx()-Math.round(quad.getTlx());const offY=quad.getTly()-Math.round(quad.getTly());if(offX===0&&offY===0)return quad;else{tempQuad.copy(quad);tempQuad.offset(-offX,-offY);return tempQuad}}SaveToJson(){const o={"t":this._text,"c":this._color.toJSON(),"fn":this._faceName,"ps":this._ptSize};if(this._enableBBcode)o["bbc"]=this._enableBBcode;if(this._horizontalAlign!==
-0)o["ha"]=this._horizontalAlign;if(this._verticalAlign!==0)o["va"]=this._verticalAlign;if(!this._wrapByWord)o["wr"]=this._wrapByWord;if(this._lineHeightOffset!==0)o["lho"]=this._lineHeightOffset;if(this._isBold)o["b"]=this._isBold;if(this._isItalic)o["i"]=this._isItalic;if(this._typewriterEndTime!==-1)o["tw"]={"st":this._typewriterStartTime,"en":this._typewriterEndTime,"l":this._typewriterLength};return o}LoadFromJson(o){this._CancelTypewriter();this._text=o["t"],this._color.setFromJSON(o["c"]);this._faceName=
-o["fn"],this._ptSize=o["ps"];this._enableBBcode=o.hasOwnProperty("bbc")?o["bbc"]:false;this._horizontalAlign=o.hasOwnProperty("ha")?o["ha"]:0;this._verticalAlign=o.hasOwnProperty("va")?o["va"]:0;this._wrapByWord=o.hasOwnProperty("wr")?o["wr"]:true;this._lineHeightOffset=o.hasOwnProperty("lho")?o["lho"]:0;this._isBold=o.hasOwnProperty("b")?o["b"]:false;this._isItalic=o.hasOwnProperty("i")?o["i"]:false;if(o.hasOwnProperty("tw")){const tw=o["tw"];this._typewriterStartTime=tw["st"];this._typewriterEndTime=
-tw["en"];this._typewriterLength=tw["l"]}this._UpdateTextSettings();if(this._typewriterEndTime!==-1)this._StartTicking()}GetPropertyValueByIndex(index){switch(index){case TEXT:return this._text;case ENABLE_BBCODE:return this._enableBBcode;case FONT:return this._faceName;case SIZE:return this._ptSize;case LINE_HEIGHT:return this._lineHeightOffset;case BOLD:return this._isBold;case ITALIC:return this._isItalic;case COLOR:TEMP_COLOR_ARRAY[0]=this._color.getR();TEMP_COLOR_ARRAY[1]=this._color.getG();TEMP_COLOR_ARRAY[2]=
-this._color.getB();return TEMP_COLOR_ARRAY;case HORIZONTAL_ALIGNMENT:return this._horizontalAlign;case VERTICAL_ALIGNMENT:return this._verticalAlign;case WRAPPING:return this._wrapByWord?CHARACTER_WRAP:WORD_WRAP}}SetPropertyValueByIndex(index,value){switch(index){case TEXT:if(this._text===value)return;this._text=value;this._UpdateTextSettings();break;case ENABLE_BBCODE:if(this._enableBBcode===!!value)return;this._enableBBcode=!!value;this._UpdateTextSettings();break;case FONT:if(this._faceName===
-value)return;this._faceName=value;this._UpdateTextSettings();break;case SIZE:if(this._ptSize===value)return;this._ptSize=value;this._UpdateTextSettings();break;case LINE_HEIGHT:if(this._lineHeightOffset===value)return;this._lineHeightOffset=value;this._UpdateTextSettings();break;case BOLD:if(this._isBold===!!value)return;this._isBold=!!value;this._UpdateTextSettings();break;case ITALIC:if(this._isItalic===!!value)return;this._isItalic=!!value;this._UpdateTextSettings();break;case COLOR:const c=this._color;
-const v=value;if(c.getR()===v[0]&&c.getG()===v[1]&&c.getB()===v[2])return;this._color.setRgb(v[0],v[1],v[2]);this._UpdateTextSettings();break;case HORIZONTAL_ALIGNMENT:if(this._horizontalAlign===value)return;this._horizontalAlign=value;this._UpdateTextSettings();break;case VERTICAL_ALIGNMENT:if(this._verticalAlign===value)return;this._verticalAlign=value;this._UpdateTextSettings();break;case WRAPPING:if(this._wrapByWord===(value===WORD_WRAP))return;this._wrapByWord=value===WORD_WRAP;this._UpdateTextSettings();
-break}}SetPropertyColorOffsetValueByIndex(index,r,g,b){if(r===0&&g===0&&b===0)return;switch(index){case COLOR:this._color.addRgb(r,g,b);this._UpdateTextSettings();break}}_SetText(text){if(this._text===text)return;this._text=text;this._rendererText.SetText(text);this._runtime.UpdateRender()}GetText(){return this._text}_StartTypewriter(text,duration){this._SetText(text);this._typewriterStartTime=this._runtime.GetWallTime();this._typewriterEndTime=this._typewriterStartTime+duration/this.GetInstance().GetActiveTimeScale();
-this._typewriterLength=C3.BBString.StripAnyTags(text).length;this._rendererText.SetDrawMaxCharacterCount(0);this._StartTicking()}_CancelTypewriter(){this._typewriterStartTime=-1;this._typewriterEndTime=-1;this._typewriterLength=0;this._rendererText.SetDrawMaxCharacterCount(-1);this._StopTicking()}_FinishTypewriter(){if(this._typewriterEndTime===-1)return;this._CancelTypewriter();this.Trigger(C3.Plugins.Text.Cnds.OnTypewriterTextFinished);this._runtime.UpdateRender()}_SetFontFace(face){if(this._faceName===
-face)return;this._faceName=face;this._rendererText.SetFontName(face);this._runtime.UpdateRender()}_GetFontFace(){return this._faceName}_SetBold(b){b=!!b;if(this._isBold===b)return;this._isBold=b;this._rendererText.SetBold(b);this._runtime.UpdateRender()}_IsBold(){return this._isBold}_SetItalic(i){i=!!i;if(this._isItalic===i)return;this._isItalic=i;this._rendererText.SetItalic(i);this._runtime.UpdateRender()}_IsItalic(){return this._isItalic}_SetFontSize(size){if(this._ptSize===size)return;this._ptSize=
-size;this._runtime.UpdateRender()}_GetFontSize(){return this._ptSize}_SetFontColor(color){if(this._color.equalsIgnoringAlpha(color))return;this._color.copyRgb(color);this._rendererText.SetColor(this._color);this._runtime.UpdateRender()}_GetFontColor(){return this._color}_SetLineHeight(lho){if(this._lineHeightOffset===lho)return;this._lineHeightOffset=lho;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetLineHeight(){return this._lineHeightOffset}_SetHAlign(h){if(this._horizontalAlign===
-h)return;this._horizontalAlign=h;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetHAlign(){return this._horizontalAlign}_SetVAlign(v){if(this._verticalAlign===v)return;this._verticalAlign=v;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetVAlign(){return this._verticalAlign}_SetWrapByWord(w){w=!!w;if(this._wrapByWord===w)return;this._wrapByWord=w;this._UpdateTextSettings();this._runtime.UpdateRender()}_IsWrapByWord(){return this._wrapByWord}Tick(){const wallTime=this._runtime.GetWallTime();
-if(wallTime>=this._typewriterEndTime){this._CancelTypewriter();this.Trigger(C3.Plugins.Text.Cnds.OnTypewriterTextFinished);this._runtime.UpdateRender()}else{let displayLength=C3.relerp(this._typewriterStartTime,this._typewriterEndTime,wallTime,0,this._typewriterLength);displayLength=Math.floor(displayLength);if(displayLength!==this._rendererText.GetDrawMaxCharacterCount()){this._rendererText.SetDrawMaxCharacterCount(displayLength);this._runtime.UpdateRender()}}}GetDebuggerProperties(){const prefix=
-"plugins.text";return[{title:prefix+".name",properties:[{name:prefix+".properties.text.name",value:this._text,onedit:v=>this._SetText(v)}]}]}GetScriptInterfaceClass(){return self.ITextInstance}};const map=new WeakMap;const SCRIPT_HORIZONTAL_ALIGNMENTS=new Map([["left",0],["center",1],["right",2]]);const SCRIPT_VERTICAL_ALIGNMENTS=new Map([["top",0],["center",1],["bottom",2]]);const SCRIPT_WRAP_MODES=new Map([["word",true],["character",false]]);
-self.ITextInstance=class ITextInstance extends self.IWorldInstance{constructor(){super();map.set(this,self.IInstance._GetInitInst().GetSdkInstance())}get text(){return map.get(this).GetText()}set text(str){C3X.RequireString(str);const inst=map.get(this);inst._CancelTypewriter();inst._SetText(str)}typewriterText(str,duration){C3X.RequireString(str);C3X.RequireFiniteNumber(duration);const inst=map.get(this);inst._CancelTypewriter();inst._StartTypewriter(str,duration)}typewriterFinish(){map.get(this)._FinishTypewriter()}set fontFace(str){C3X.RequireString(str);
-map.get(this)._SetFontFace(str)}get fontFace(){return map.get(this)._GetFontFace()}set isBold(b){map.get(this)._SetBold(b)}get isBold(){return map.get(this)._IsBold()}set isItalic(i){map.get(this)._SetItalic(i)}get isItalic(){return map.get(this)._IsItalic()}set sizePt(pt){C3X.RequireFiniteNumber(pt);map.get(this)._SetFontSize(pt)}get sizePt(){return map.get(this)._GetFontSize()}set fontColor(arr){C3X.RequireArray(arr);if(arr.length<3)throw new Error("expected 3 elements");tempColor.setRgb(arr[0],
-arr[1],arr[2]);map.get(this)._SetFontColor(tempColor)}get fontColor(){const c=map.get(this)._GetFontColor();return[c.getR(),c.getG(),c.getB()]}set lineHeight(lho){C3X.RequireFiniteNumber(lho);map.get(this)._SetLineHeight(lho)}get lineHeight(){return map.get(this)._GetLineHeight()}set horizontalAlign(str){C3X.RequireString(str);const h=SCRIPT_HORIZONTAL_ALIGNMENTS.get(str);if(typeof h==="undefined")throw new Error("invalid mode");map.get(this)._SetHAlign(h)}get horizontalAlign(){return HORIZONTAL_ALIGNMENTS[map.get(this)._GetHAlign()]}set verticalAlign(str){C3X.RequireString(str);
-const v=SCRIPT_VERTICAL_ALIGNMENTS.get(str);if(typeof v==="undefined")throw new Error("invalid mode");map.get(this)._SetVAlign(v)}get verticalAlign(){return VERTICAL_ALIGNMENTS[map.get(this)._GetVAlign()]}set wordWrapMode(str){C3X.RequireString(str);const isWrapByWord=SCRIPT_WRAP_MODES.get(str);if(typeof isWrapByWord==="undefined")throw new Error("invalid mode");map.get(this)._SetWrapByWord(isWrapByWord)}get wordWrapMode(){return map.get(this)._IsWrapByWord()?"word":"character"}};
-
-}
-
-{
-'use strict';const C3=self.C3;C3.Plugins.Text.Cnds={CompareText(str,caseSensitive){if(caseSensitive)return this._text===str;else return C3.equalsNoCase(this._text,str)},IsRunningTypewriterText(){return this._typewriterEndTime!==-1},OnTypewriterTextFinished(){return true}};
-
-}
-
-{
-'use strict';const C3=self.C3;const tempColor=C3.New(C3.Color);
-C3.Plugins.Text.Acts={SetText(param){this._CancelTypewriter();if(typeof param==="number"&&param<1E9)param=Math.round(param*1E10)/1E10;this._SetText(param.toString())},AppendText(param){this._CancelTypewriter();if(typeof param==="number"&&param<1E9)param=Math.round(param*1E10)/1E10;param=param.toString();if(!param)return;this._SetText(this._text+param)},TypewriterText(param,duration){this._CancelTypewriter();if(typeof param==="number"&&param<1E9)param=Math.round(param*1E10)/1E10;this._StartTypewriter(param.toString(),
-duration)},SetFontFace(face,style){let bold=false;let italic=false;switch(style){case 1:bold=true;break;case 2:italic=true;break;case 3:bold=true;italic=true;break}if(face===this._faceName&&bold===this._isBold&&italic===this._isItalic)return;this._SetFontFace(face);this._SetBold(bold);this._SetItalic(italic)},SetFontSize(size){this._SetFontSize(size)},SetFontColor(rgb){tempColor.setFromRgbValue(rgb);tempColor.clamp();this._SetFontColor(tempColor)},SetWebFont(familyName,cssUrl){console.warn("[Text] 'Set web font' action is deprecated and no longer has any effect")},
-SetEffect(effect){this.GetWorldInfo().SetBlendMode(effect);this._runtime.UpdateRender()},TypewriterFinish(){this._FinishTypewriter()},SetLineHeight(lho){this._SetLineHeight(lho)},SetHAlign(h){this._SetHAlign(h)},SetVAlign(v){this._SetVAlign(v)},SetWrapping(w){this._SetWrapByWord(w===0)}};
-
-}
-
-{
-'use strict';const C3=self.C3;C3.Plugins.Text.Exps={Text(){return this._text},PlainText(){if(this._enableBBcode)return C3.BBString.StripAnyTags(this._text);else return this._text},FaceName(){return this._faceName},FaceSize(){return this._ptSize},TextWidth(){this._UpdateTextSize();return this._rendererText.GetTextWidth()},TextHeight(){this._UpdateTextSize();return this._rendererText.GetTextHeight()},LineHeight(){return this._lineHeightOffset}};
-
-}
-
-{
 'use strict';const C3=self.C3;C3.Plugins.Particles=class ParticlesPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}};
 
 }
@@ -3860,6 +3801,65 @@ Hash(){if(this._runtime.IsInWorker())return(new URL(this._initLocationStr)).hash
 Title(){return this._docTitle},Language(){return navigator.language},Platform(){return navigator.platform},UserAgent(){return navigator.userAgent},ExecJS(jsStr){let result=0;try{result=eval(jsStr)}catch(err){console.error("Error executing JavaScript: ",err)}if(typeof result==="number"||typeof result==="string")return result;if(typeof result==="boolean")return result?1:0;else return 0},Name(){return navigator.appName},Version(){return navigator.appVersion},Product(){return navigator.product},Vendor(){return navigator.vendor},
 BatteryLevel(){return 1},BatteryTimeLeft(){return Infinity},Bandwidth(){const connection=navigator["connection"];if(connection)return connection["downlink"]||connection["downlinkMax"]||connection["bandwidth"]||Infinity;else return Infinity},ConnectionType(){const connection=navigator["connection"];if(connection)return connection["type"]||"unknown";else return"unknown"},DevicePixelRatio(){return self.devicePixelRatio},ScreenWidth(){return this._screenWidth},ScreenHeight(){return this._screenHeight},
 WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},WindowInnerHeight(){return this._runtime.GetCanvasManager().GetLastHeight()},WindowOuterWidth(){return this._windowOuterWidth},WindowOuterHeight(){return this._windowOuterWidth}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.Text=class TextPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.Text.Type=class TextType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}LoadTextures(renderer){}ReleaseTextures(){}};
+
+}
+
+{
+'use strict';const C3=self.C3;const C3X=self.C3X;const TEMP_COLOR_ARRAY=[0,0,0];const TEXT=0;const ENABLE_BBCODE=1;const FONT=2;const SIZE=3;const LINE_HEIGHT=4;const BOLD=5;const ITALIC=6;const COLOR=7;const HORIZONTAL_ALIGNMENT=8;const VERTICAL_ALIGNMENT=9;const WRAPPING=10;const INITIALLY_VISIBLE=11;const ORIGIN=12;const HORIZONTAL_ALIGNMENTS=["left","center","right"];const VERTICAL_ALIGNMENTS=["top","center","bottom"];const WORD_WRAP=0;const CHARACTER_WRAP=1;const tempRect=new C3.Rect;
+const tempQuad=new C3.Quad;const tempColor=new C3.Color;
+C3.Plugins.Text.Instance=class TextInstance extends C3.SDKWorldInstanceBase{constructor(inst,properties){super(inst);this._text="";this._enableBBcode=true;this._faceName="Arial";this._ptSize=12;this._lineHeightOffset=0;this._isBold=false;this._isItalic=false;this._color=C3.New(C3.Color);this._horizontalAlign=0;this._verticalAlign=0;this._wrapByWord=true;this._typewriterStartTime=-1;this._typewriterEndTime=-1;this._typewriterLength=0;this._rendererText=C3.New(C3.Gfx.RendererText,this._runtime.GetRenderer(),
+{timeout:5});this._rendererText.ontextureupdate=()=>this._runtime.UpdateRender();this._rendererText.SetIsAsync(false);if(properties){this._text=properties[TEXT];this._enableBBcode=!!properties[ENABLE_BBCODE];this._faceName=properties[FONT];this._ptSize=properties[SIZE];this._lineHeightOffset=properties[LINE_HEIGHT];this._isBold=!!properties[BOLD];this._isItalic=!!properties[ITALIC];this._horizontalAlign=properties[HORIZONTAL_ALIGNMENT];this._verticalAlign=properties[VERTICAL_ALIGNMENT];this._wrapByWord=
+properties[WRAPPING]===WORD_WRAP;const v=properties[COLOR];this._color.setRgb(v[0],v[1],v[2]);this.GetWorldInfo().SetVisible(properties[INITIALLY_VISIBLE])}this._UpdateTextSettings()}Release(){this._CancelTypewriter();this._rendererText.Release();this._rendererText=null;super.Release()}_UpdateTextSettings(){const rendererText=this._rendererText;rendererText.SetText(this._text);rendererText.SetBBCodeEnabled(this._enableBBcode);rendererText.SetFontName(this._faceName);rendererText.SetLineHeight(this._lineHeightOffset);
+rendererText.SetBold(this._isBold);rendererText.SetItalic(this._isItalic);rendererText.SetColor(this._color);rendererText.SetHorizontalAlignment(HORIZONTAL_ALIGNMENTS[this._horizontalAlign]);rendererText.SetVerticalAlignment(VERTICAL_ALIGNMENTS[this._verticalAlign]);rendererText.SetWordWrapMode(this._wrapByWord?"word":"character")}_UpdateTextSize(){const wi=this.GetWorldInfo();this._rendererText.SetFontSize(this._ptSize);this._rendererText.SetFontSizeScale(wi.GetSceneGraphScale());const layer=wi.GetLayer();
+const textZoom=layer.GetRenderScale()*layer.Get2DScaleFactorToZ(wi.GetTotalZElevation());this._rendererText.SetSize(wi.GetWidth(),wi.GetHeight(),textZoom)}Draw(renderer){const wi=this.GetWorldInfo();this._UpdateTextSize();const texture=this._rendererText.GetTexture();if(!texture)return;const layer=wi.GetLayer();if(wi.GetAngle()===0&&layer.GetAngle()===0&&wi.GetTotalZElevation()===0&&!wi.HasMesh()&&layer.RendersIn2DMode()){const quad=wi.GetBoundingQuad();const [dl,dt]=layer.LayerToDrawSurface(quad.getTlx(),
+quad.getTly());const [dr,db]=layer.LayerToDrawSurface(quad.getBrx(),quad.getBry());const offX=dl-Math.round(dl);const offY=dt-Math.round(dt);tempRect.set(dl,dt,dr,db);tempRect.offset(-offX,-offY);tempQuad.setFromRect(tempRect);const [rtWidth,rtHeight]=renderer.GetRenderTargetSize(renderer.GetRenderTarget());this._runtime.GetCanvasManager().SetDeviceTransform(renderer,rtWidth,rtHeight);renderer.SetTexture(texture);renderer.Quad3(tempQuad,this._rendererText.GetTexRect());layer._SetTransform(renderer)}else{renderer.SetTexture(texture);
+if(wi.HasMesh())this._DrawMesh(wi,renderer);else this._DrawStandard(wi,renderer)}}_DrawStandard(wi,renderer){let quad=wi.GetBoundingQuad();if(this._runtime.IsPixelRoundingEnabled())quad=this._PixelRoundQuad(quad);renderer.Quad3(quad,this._rendererText.GetTexRect())}_DrawMesh(wi,renderer){const transformedMesh=wi.GetTransformedMesh();if(wi.IsMeshChanged()){wi.CalculateBbox(tempRect,tempQuad,false);let quad=tempQuad;if(this._runtime.IsPixelRoundingEnabled())quad=this._PixelRoundQuad(quad);transformedMesh.CalculateTransformedMesh(wi.GetSourceMesh(),
+quad,this._rendererText.GetTexRect());wi.SetMeshChanged(false)}transformedMesh.Draw(renderer)}_PixelRoundQuad(quad){const offX=quad.getTlx()-Math.round(quad.getTlx());const offY=quad.getTly()-Math.round(quad.getTly());if(offX===0&&offY===0)return quad;else{tempQuad.copy(quad);tempQuad.offset(-offX,-offY);return tempQuad}}SaveToJson(){const o={"t":this._text,"c":this._color.toJSON(),"fn":this._faceName,"ps":this._ptSize};if(this._enableBBcode)o["bbc"]=this._enableBBcode;if(this._horizontalAlign!==
+0)o["ha"]=this._horizontalAlign;if(this._verticalAlign!==0)o["va"]=this._verticalAlign;if(!this._wrapByWord)o["wr"]=this._wrapByWord;if(this._lineHeightOffset!==0)o["lho"]=this._lineHeightOffset;if(this._isBold)o["b"]=this._isBold;if(this._isItalic)o["i"]=this._isItalic;if(this._typewriterEndTime!==-1)o["tw"]={"st":this._typewriterStartTime,"en":this._typewriterEndTime,"l":this._typewriterLength};return o}LoadFromJson(o){this._CancelTypewriter();this._text=o["t"],this._color.setFromJSON(o["c"]);this._faceName=
+o["fn"],this._ptSize=o["ps"];this._enableBBcode=o.hasOwnProperty("bbc")?o["bbc"]:false;this._horizontalAlign=o.hasOwnProperty("ha")?o["ha"]:0;this._verticalAlign=o.hasOwnProperty("va")?o["va"]:0;this._wrapByWord=o.hasOwnProperty("wr")?o["wr"]:true;this._lineHeightOffset=o.hasOwnProperty("lho")?o["lho"]:0;this._isBold=o.hasOwnProperty("b")?o["b"]:false;this._isItalic=o.hasOwnProperty("i")?o["i"]:false;if(o.hasOwnProperty("tw")){const tw=o["tw"];this._typewriterStartTime=tw["st"];this._typewriterEndTime=
+tw["en"];this._typewriterLength=tw["l"]}this._UpdateTextSettings();if(this._typewriterEndTime!==-1)this._StartTicking()}GetPropertyValueByIndex(index){switch(index){case TEXT:return this._text;case ENABLE_BBCODE:return this._enableBBcode;case FONT:return this._faceName;case SIZE:return this._ptSize;case LINE_HEIGHT:return this._lineHeightOffset;case BOLD:return this._isBold;case ITALIC:return this._isItalic;case COLOR:TEMP_COLOR_ARRAY[0]=this._color.getR();TEMP_COLOR_ARRAY[1]=this._color.getG();TEMP_COLOR_ARRAY[2]=
+this._color.getB();return TEMP_COLOR_ARRAY;case HORIZONTAL_ALIGNMENT:return this._horizontalAlign;case VERTICAL_ALIGNMENT:return this._verticalAlign;case WRAPPING:return this._wrapByWord?CHARACTER_WRAP:WORD_WRAP}}SetPropertyValueByIndex(index,value){switch(index){case TEXT:if(this._text===value)return;this._text=value;this._UpdateTextSettings();break;case ENABLE_BBCODE:if(this._enableBBcode===!!value)return;this._enableBBcode=!!value;this._UpdateTextSettings();break;case FONT:if(this._faceName===
+value)return;this._faceName=value;this._UpdateTextSettings();break;case SIZE:if(this._ptSize===value)return;this._ptSize=value;this._UpdateTextSettings();break;case LINE_HEIGHT:if(this._lineHeightOffset===value)return;this._lineHeightOffset=value;this._UpdateTextSettings();break;case BOLD:if(this._isBold===!!value)return;this._isBold=!!value;this._UpdateTextSettings();break;case ITALIC:if(this._isItalic===!!value)return;this._isItalic=!!value;this._UpdateTextSettings();break;case COLOR:const c=this._color;
+const v=value;if(c.getR()===v[0]&&c.getG()===v[1]&&c.getB()===v[2])return;this._color.setRgb(v[0],v[1],v[2]);this._UpdateTextSettings();break;case HORIZONTAL_ALIGNMENT:if(this._horizontalAlign===value)return;this._horizontalAlign=value;this._UpdateTextSettings();break;case VERTICAL_ALIGNMENT:if(this._verticalAlign===value)return;this._verticalAlign=value;this._UpdateTextSettings();break;case WRAPPING:if(this._wrapByWord===(value===WORD_WRAP))return;this._wrapByWord=value===WORD_WRAP;this._UpdateTextSettings();
+break}}SetPropertyColorOffsetValueByIndex(index,r,g,b){if(r===0&&g===0&&b===0)return;switch(index){case COLOR:this._color.addRgb(r,g,b);this._UpdateTextSettings();break}}_SetText(text){if(this._text===text)return;this._text=text;this._rendererText.SetText(text);this._runtime.UpdateRender()}GetText(){return this._text}_StartTypewriter(text,duration){this._SetText(text);this._typewriterStartTime=this._runtime.GetWallTime();this._typewriterEndTime=this._typewriterStartTime+duration/this.GetInstance().GetActiveTimeScale();
+this._typewriterLength=C3.BBString.StripAnyTags(text).length;this._rendererText.SetDrawMaxCharacterCount(0);this._StartTicking()}_CancelTypewriter(){this._typewriterStartTime=-1;this._typewriterEndTime=-1;this._typewriterLength=0;this._rendererText.SetDrawMaxCharacterCount(-1);this._StopTicking()}_FinishTypewriter(){if(this._typewriterEndTime===-1)return;this._CancelTypewriter();this.Trigger(C3.Plugins.Text.Cnds.OnTypewriterTextFinished);this._runtime.UpdateRender()}_SetFontFace(face){if(this._faceName===
+face)return;this._faceName=face;this._rendererText.SetFontName(face);this._runtime.UpdateRender()}_GetFontFace(){return this._faceName}_SetBold(b){b=!!b;if(this._isBold===b)return;this._isBold=b;this._rendererText.SetBold(b);this._runtime.UpdateRender()}_IsBold(){return this._isBold}_SetItalic(i){i=!!i;if(this._isItalic===i)return;this._isItalic=i;this._rendererText.SetItalic(i);this._runtime.UpdateRender()}_IsItalic(){return this._isItalic}_SetFontSize(size){if(this._ptSize===size)return;this._ptSize=
+size;this._runtime.UpdateRender()}_GetFontSize(){return this._ptSize}_SetFontColor(color){if(this._color.equalsIgnoringAlpha(color))return;this._color.copyRgb(color);this._rendererText.SetColor(this._color);this._runtime.UpdateRender()}_GetFontColor(){return this._color}_SetLineHeight(lho){if(this._lineHeightOffset===lho)return;this._lineHeightOffset=lho;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetLineHeight(){return this._lineHeightOffset}_SetHAlign(h){if(this._horizontalAlign===
+h)return;this._horizontalAlign=h;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetHAlign(){return this._horizontalAlign}_SetVAlign(v){if(this._verticalAlign===v)return;this._verticalAlign=v;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetVAlign(){return this._verticalAlign}_SetWrapByWord(w){w=!!w;if(this._wrapByWord===w)return;this._wrapByWord=w;this._UpdateTextSettings();this._runtime.UpdateRender()}_IsWrapByWord(){return this._wrapByWord}Tick(){const wallTime=this._runtime.GetWallTime();
+if(wallTime>=this._typewriterEndTime){this._CancelTypewriter();this.Trigger(C3.Plugins.Text.Cnds.OnTypewriterTextFinished);this._runtime.UpdateRender()}else{let displayLength=C3.relerp(this._typewriterStartTime,this._typewriterEndTime,wallTime,0,this._typewriterLength);displayLength=Math.floor(displayLength);if(displayLength!==this._rendererText.GetDrawMaxCharacterCount()){this._rendererText.SetDrawMaxCharacterCount(displayLength);this._runtime.UpdateRender()}}}GetDebuggerProperties(){const prefix=
+"plugins.text";return[{title:prefix+".name",properties:[{name:prefix+".properties.text.name",value:this._text,onedit:v=>this._SetText(v)}]}]}GetScriptInterfaceClass(){return self.ITextInstance}};const map=new WeakMap;const SCRIPT_HORIZONTAL_ALIGNMENTS=new Map([["left",0],["center",1],["right",2]]);const SCRIPT_VERTICAL_ALIGNMENTS=new Map([["top",0],["center",1],["bottom",2]]);const SCRIPT_WRAP_MODES=new Map([["word",true],["character",false]]);
+self.ITextInstance=class ITextInstance extends self.IWorldInstance{constructor(){super();map.set(this,self.IInstance._GetInitInst().GetSdkInstance())}get text(){return map.get(this).GetText()}set text(str){C3X.RequireString(str);const inst=map.get(this);inst._CancelTypewriter();inst._SetText(str)}typewriterText(str,duration){C3X.RequireString(str);C3X.RequireFiniteNumber(duration);const inst=map.get(this);inst._CancelTypewriter();inst._StartTypewriter(str,duration)}typewriterFinish(){map.get(this)._FinishTypewriter()}set fontFace(str){C3X.RequireString(str);
+map.get(this)._SetFontFace(str)}get fontFace(){return map.get(this)._GetFontFace()}set isBold(b){map.get(this)._SetBold(b)}get isBold(){return map.get(this)._IsBold()}set isItalic(i){map.get(this)._SetItalic(i)}get isItalic(){return map.get(this)._IsItalic()}set sizePt(pt){C3X.RequireFiniteNumber(pt);map.get(this)._SetFontSize(pt)}get sizePt(){return map.get(this)._GetFontSize()}set fontColor(arr){C3X.RequireArray(arr);if(arr.length<3)throw new Error("expected 3 elements");tempColor.setRgb(arr[0],
+arr[1],arr[2]);map.get(this)._SetFontColor(tempColor)}get fontColor(){const c=map.get(this)._GetFontColor();return[c.getR(),c.getG(),c.getB()]}set lineHeight(lho){C3X.RequireFiniteNumber(lho);map.get(this)._SetLineHeight(lho)}get lineHeight(){return map.get(this)._GetLineHeight()}set horizontalAlign(str){C3X.RequireString(str);const h=SCRIPT_HORIZONTAL_ALIGNMENTS.get(str);if(typeof h==="undefined")throw new Error("invalid mode");map.get(this)._SetHAlign(h)}get horizontalAlign(){return HORIZONTAL_ALIGNMENTS[map.get(this)._GetHAlign()]}set verticalAlign(str){C3X.RequireString(str);
+const v=SCRIPT_VERTICAL_ALIGNMENTS.get(str);if(typeof v==="undefined")throw new Error("invalid mode");map.get(this)._SetVAlign(v)}get verticalAlign(){return VERTICAL_ALIGNMENTS[map.get(this)._GetVAlign()]}set wordWrapMode(str){C3X.RequireString(str);const isWrapByWord=SCRIPT_WRAP_MODES.get(str);if(typeof isWrapByWord==="undefined")throw new Error("invalid mode");map.get(this)._SetWrapByWord(isWrapByWord)}get wordWrapMode(){return map.get(this)._IsWrapByWord()?"word":"character"}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.Text.Cnds={CompareText(str,caseSensitive){if(caseSensitive)return this._text===str;else return C3.equalsNoCase(this._text,str)},IsRunningTypewriterText(){return this._typewriterEndTime!==-1},OnTypewriterTextFinished(){return true}};
+
+}
+
+{
+'use strict';const C3=self.C3;const tempColor=C3.New(C3.Color);
+C3.Plugins.Text.Acts={SetText(param){this._CancelTypewriter();if(typeof param==="number"&&param<1E9)param=Math.round(param*1E10)/1E10;this._SetText(param.toString())},AppendText(param){this._CancelTypewriter();if(typeof param==="number"&&param<1E9)param=Math.round(param*1E10)/1E10;param=param.toString();if(!param)return;this._SetText(this._text+param)},TypewriterText(param,duration){this._CancelTypewriter();if(typeof param==="number"&&param<1E9)param=Math.round(param*1E10)/1E10;this._StartTypewriter(param.toString(),
+duration)},SetFontFace(face,style){let bold=false;let italic=false;switch(style){case 1:bold=true;break;case 2:italic=true;break;case 3:bold=true;italic=true;break}if(face===this._faceName&&bold===this._isBold&&italic===this._isItalic)return;this._SetFontFace(face);this._SetBold(bold);this._SetItalic(italic)},SetFontSize(size){this._SetFontSize(size)},SetFontColor(rgb){tempColor.setFromRgbValue(rgb);tempColor.clamp();this._SetFontColor(tempColor)},SetWebFont(familyName,cssUrl){console.warn("[Text] 'Set web font' action is deprecated and no longer has any effect")},
+SetEffect(effect){this.GetWorldInfo().SetBlendMode(effect);this._runtime.UpdateRender()},TypewriterFinish(){this._FinishTypewriter()},SetLineHeight(lho){this._SetLineHeight(lho)},SetHAlign(h){this._SetHAlign(h)},SetVAlign(v){this._SetVAlign(v)},SetWrapping(w){this._SetWrapByWord(w===0)}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.Text.Exps={Text(){return this._text},PlainText(){if(this._enableBBcode)return C3.BBString.StripAnyTags(this._text);else return this._text},FaceName(){return this._faceName},FaceSize(){return this._ptSize},TextWidth(){this._UpdateTextSize();return this._rendererText.GetTextWidth()},TextHeight(){this._UpdateTextSize();return this._rendererText.GetTextHeight()},LineHeight(){return this._lineHeightOffset}};
 
 }
 
@@ -5584,688 +5584,6 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 }
 
 {
-"use strict";
-
-{
-	C3.Plugins.ValerypopoffTouchPlusPlugin = class SingleGlobalPlugin extends C3.SDKPluginBase
-	{
-		constructor(opts)
-		{
-			super(opts);
-		}
-		
-		Release()
-		{
-			super.Release();
-		}
-	};
-}
-}
-
-{
-"use strict";
-
-{
-	C3.Plugins.ValerypopoffTouchPlusPlugin.Type = class SingleGlobalType extends C3.SDKTypeBase
-	{
-		constructor(objectClass)
-		{
-			super(objectClass);
-		}
-		
-		Release()
-		{
-			super.Release();
-		}
-		
-		OnCreate()
-		{	
-		}
-	};
-}
-}
-
-{
-"use strict";
-
-{
-	C3.Plugins.ValerypopoffTouchPlusPlugin.Instance = class SingleGlobalInstance extends C3.SDKInstanceBase
-	{
-		
-		constructor(inst, properties)
-		{
-			super(inst);
-			
-			// Initialise object properties
-			this.dontClickThroughObjects = false;
-			this.dontClickThroughObjectsOnOtherLayers = false;
-			this.dontClickThroughLayers = false;
-			this.ignoreInvisibleObjects = false;
-			this.ignoreInvisibleLayers = false;			
-			
-			if (properties)
-			{
-				this.dontClickThroughObjects = properties[0];
-				this.dontClickThroughObjectsOnOtherLayers = properties[1];
-				this.dontClickThroughLayers = properties[2];
-				this.ignoreInvisibleObjects = properties[3];
-				this.ignoreInvisibleLayers = properties[4];
-			}
-
-			
-
-			// Highjack System Touch Plugin's conditions
-
-			//console.log(this);
-
-			const touch_condition_names = ["IsTouchingObject"];
-			const touch_trigger_names = ["OnDoubleTapGestureObject", "OnHoldGestureObject", "OnTapGestureObject", "OnTouchObject"];
-			
-			this.TypesLayersWithCoords = function(ptx, pty)
-			{
-				var TypesLayers = [];
-				var JustTypes = [];
-				var curr_layout = this._runtime._layoutManager.GetMainRunningLayout();
-				var topmost_layer = undefined;
-
-				for(var i=0; i<curr_layout.GetLayers().length; i++)
-				{
-					var curr_layer = curr_layout.GetLayers()[i];
-
-						//console.log(curr_layer)
-
-					// Ignore Invisible layers
-					if( !(this.ignoreInvisibleLayers && (!curr_layer.IsVisible() || curr_layer.GetOpacity()==0 ) ) )
-					{
-						//if( topmost_layer === undefined )
-							topmost_layer = curr_layer;
-
-						for(var k=0; k<curr_layer._GetInstances().length; k++)
-						{
-							var curr_instance = curr_layer._GetInstances()[k];
-
-							var xy_arr = curr_instance._worldInfo.GetLayer()._CanvasToLayer(ptx, pty, curr_instance._worldInfo.GetTotalZElevation(), this._runtime.GetDisplayScale());
-
-							// Ignore Invisible objects
-							var flag = true;
-							if( this.ignoreInvisibleObjects && (!curr_instance._worldInfo.IsVisible() || curr_instance._worldInfo.GetOpacity()==0) )
-								flag = false;
-
-							if( flag && curr_instance._worldInfo.ContainsPoint(xy_arr[0], xy_arr[1]) )
-							{
-								TypesLayers.push( [curr_instance.GetObjectClass(), curr_layer] );
-								JustTypes.push( curr_instance.GetObjectClass() );
-							}
-						}
-					}
-				}
-
-				return { TypesLayers: TypesLayers, topmost_layer: topmost_layer, JustTypes: JustTypes };
-			}
-			
-
-			function FamilyHasMember( obj, member )
-			{
-				var family_members_arr = obj.GetFamilyMembers();
-
-				if( !family_members_arr || family_members_arr.length == 0 )
-					return false;
-
-				if( family_members_arr.indexOf(member) >= 0 )
-					return true;
-
-				return false;
-			}
-
-			function FamilyHasMemberFromList( obj, members_list )
-			{
-				var family_members_arr = obj.GetFamilyMembers();
-
-				if( !family_members_arr || family_members_arr.length == 0 )
-					return false;
-
-				//var has = false;
-				var exception_found = {}
-
-				try
-				{
-					family_members_arr.forEach( family_member =>
-					{
-						members_list.forEach( member => 
-						{
-							if( family_member == member[0] )
-							{
-								throw exception_found;
-								//has = true;
-							}
-						})
-					})
-				} catch( e )
-				{
-					if( e === exception_found )
-						return true
-					else
-						throw e;
-				}
-
-				return false;
-			}
-
-			var ValerypopoffTouchPlusPluginInstance = this;
-
-			this.highjack = function()
-			{
-				//console.log("highjack")
-				// Triggers
-
-				//for( var sheet_key of this._runtime._eventSheetManager._sheetsByName.keys() )
-				for( var sheet_key of this._runtime.GetEventSheetManager()._sheetsByName.keys() )
-				{
-					//console.log( "-------------------------" )
-					//console.log( "sheet_key", sheet_key )
-
-					var sheet = this._runtime.GetEventSheetManager()._sheetsByName.get(sheet_key);
-					//console.log( "sheet._triggers", sheet._triggers )
-
-					for( var ObjectClass_key of sheet._triggers.keys() )
-					{
-						// Skip plugins other than C3.Plugins.Touch
-						if( !ObjectClass_key || !( ObjectClass_key.GetPlugin() instanceof C3.Plugins.Touch ) )
-							continue;
-
-						var trigger_map = sheet._triggers.get(ObjectClass_key);
-						//console.log( "trigger_map", trigger_map )
-						//console.log( "ObjectClass_key", ObjectClass_key )
-
-						if( ! (trigger_map instanceof Map) )
-							trigger_map = trigger_map.methodMap;
-
-						var trigger_keys = Array.from(trigger_map.keys());
-
-						/*
-						if( trigger_map instanceof Map )
-							var trigger_keys = Array.from(trigger_map.keys());
-						else
-							var trigger_keys = Array.from(trigger_map.methodMap.keys());
-						*/
-						
-						trigger_keys.forEach( trigger_key => 
-						{
-							//console.log( "-----" )
-							//console.log( "trigger_key", trigger_key )
-
-							touch_trigger_names.forEach((trigger_name)=>
-							{  
-								//console.log( "trigger_name", trigger_name )
-								
-								//console.log( C3.Plugins.Touch.Cnds )
-
-								//console.log( trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ] || C3.Plugins.Touch.Cnds[ trigger_name ].name == "new_ace" )
-
-								//if( trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ] /*|| C3.Plugins.Touch.Cnds[ trigger_name ].name == "new_ace"*/ )
-								if( trigger_key.name == trigger_name /*|| C3.Plugins.Touch.Cnds[ trigger_name ].name == "new_ace"*/ )
-								{
-									//console.log( "trigger_name", trigger_name )
-
-									//if( C3.Plugins.Touch.Cnds[ trigger_name ].name != "new_ace" )
-
-									{
-										//console.log( "altering trigger_name", trigger_name )
-										//console.log( "C3.Plugins.Touch.Cnds[ trigger_name ]: ↓ " )
-										//console.log( C3.Plugins.Touch.Cnds[ trigger_name ] )
-
-										//console.log( C3.Plugins.Touch.Cnds )
-										//console.log( "C3.Plugins.Touch.Cnds[ trigger_name ]" )
-										//console.log( C3.Plugins.Touch.Cnds[ trigger_name ] )
-										//console.log(trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ])
-
-
-										// changing for the first time
-										if( trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ] )
-											C3.Plugins.Touch.Cnds[ "old_" + trigger_name ] = C3.Plugins.Touch.Cnds[ trigger_name ];
-
-										//console.log("trigger_map.keys")
-										//console.log( Array.from((trigger_map.keys())) )
-										var arr = trigger_map.get(trigger_key);
-										//console.log( "arr", arr )
-
-										
-										trigger_map.delete( trigger_key );
-
-
-										function new_ace(type)
-										{
-											//console.log( "this", this )
-											//console.log( "type", type )
-
-											var ret = C3.Plugins.Touch.Cnds[ "old_" + trigger_name ].apply(this, [type] );
-
-											if( !ret )
-												return ret;
-											else // ret == true
-											{
-												var obj = ValerypopoffTouchPlusPluginInstance.TypesLayersWithCoords(this._curTouchX, this._curTouchY);
-												var TypesLayers = obj.TypesLayers;
-												var JustTypes = obj.JustTypes;
-
-													//console.log(obj);
-
-												if( ValerypopoffTouchPlusPluginInstance.dontClickThroughObjects )
-												{
-													if( TypesLayers.length == 0 || ( TypesLayers[TypesLayers.length-1][0]!=type && !FamilyHasMember(type, TypesLayers[TypesLayers.length-1][0]) ) )
-														return false;
-												} 
-
-												if( ValerypopoffTouchPlusPluginInstance.dontClickThroughObjectsOnOtherLayers )
-												{
-													if( TypesLayers.length == 0 )
-														return false;
-
-													var target_layer = undefined;
-													TypesLayers.forEach( TypeLayer =>
-													{
-														if( target_layer == undefined && TypeLayer[0] == type )
-															target_layer = TypeLayer[1]; 
-													})
-
-
-													for( var i=TypesLayers.length-1; i>=0; i-- )
-													{
-														if( TypesLayers[i][0]==type && TypesLayers[i][1] == target_layer)
-															break;
-
-														if( TypesLayers[i][0]!=type && !FamilyHasMember(type, TypesLayers[i][0]) && TypesLayers[i][1] != target_layer )
-															return false;
-													}
-												} 
-
-												if( ValerypopoffTouchPlusPluginInstance.dontClickThroughLayers )
-												{
-														//console.log("dontClickThroughLayers")
-
-													if( TypesLayers.length == 0 )
-														return false;
-
-													if( TypesLayers[TypesLayers.length-1][1] != obj.topmost_layer )
-														return false;
-												} 
-												
-												if( JustTypes.indexOf(type) == -1 && !FamilyHasMemberFromList(type, TypesLayers) )
-													return false;												
-
-												return ret;
-											}
-										}
-
-										// changing for the first time
-										if( trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ] )
-											C3.Plugins.Touch.Cnds[ trigger_name ] = new_ace;
-
-										trigger_map.set( C3.Plugins.Touch.Cnds[ trigger_name ], arr );
-										//trigger_map.set( new_ace, arr );
-
-										//console.log( "arr", trigger_map.get(C3.Plugins.Touch.Cnds[ trigger_name ]) )
-									} /*else
-									{
-										//console.log("trigger_map.keys alternative")
-										//console.log( Array.from((trigger_map.keys())) )
-										var arr = trigger_map.get(trigger_key);
-									} */
-																		
-									arr.forEach(val=>
-									{
-										var conditions = val[0].GetConditions();
-
-										conditions.forEach(condition=>
-										{
-											//console.log( condition );
-
-											if( condition._objectClass && condition._objectClass._plugin instanceof C3.Plugins.Touch )
-											{
-												condition._func = C3.Plugins.Touch.Cnds[ trigger_name ];
-
-												condition.Run = C3.Plugins.Touch.Cnds[ trigger_name ].
-													bind( this._runtime.GetPluginManager().
-														GetPluginByConstructorFunction(C3.Plugins.Touch).
-														GetSingleGlobalInstance().
-														GetSdkInstance(), condition._parameters[0].GetObjectClass() )
-											}
-										})
-									})
-									
-									
-								}
-								
-							})
-						})
-					}
-				}
-
-
-				// Conditions
-
-				//var lyouts_arr = this._runtime.GetLayoutManager().GetAllLayouts();
-
-				//lyouts_arr.forEach( layout => 
-				//{
-					//var cnds_map = layout.GetEventSheet().GetEventSheetManager()._cndsBySid;
-					var cnds_map = this._runtime.GetEventSheetManager()._cndsBySid;
-
-					touch_condition_names.forEach( touch_condition_name => 
-					{
-						C3.Plugins.Touch.Cnds[ "old_" + touch_condition_name ] = C3.Plugins.Touch.Cnds[ touch_condition_name ];
-
-						C3.Plugins.Touch.Cnds[ touch_condition_name ] = function(type)
-						{
-							var ret = C3.Plugins.Touch.Cnds[ "old_" + touch_condition_name ].apply(this, [type] );
-
-							if( !ret )
-								return ret;
-							else // ret == true
-							{
-								var obj = ValerypopoffTouchPlusPluginInstance.TypesLayersWithCoords(this._curTouchX, this._curTouchY);
-								var TypesLayers = obj.TypesLayers;
-								var JustTypes = obj.JustTypes;
-
-									//console.log(obj);
-
-								if( ValerypopoffTouchPlusPluginInstance.dontClickThroughObjects )
-								{
-									if( TypesLayers.length == 0 || ( TypesLayers[TypesLayers.length-1][0]!=type && !FamilyHasMember(type, TypesLayers[TypesLayers.length-1][0]) ) )
-										return false;
-								} 
-
-								if( ValerypopoffTouchPlusPluginInstance.dontClickThroughObjectsOnOtherLayers )
-								{
-										if( TypesLayers.length == 0 )
-											return false;
-
-										var target_layer = undefined;
-										TypesLayers.forEach( TypeLayer =>
-										{
-											if( target_layer == undefined && TypeLayer[0] == type )
-												target_layer = TypeLayer[1]; 
-										})
-
-
-										for( var i=TypesLayers.length-1; i>=0; i-- )
-										{
-											if( TypesLayers[i][0]==type && TypesLayers[i][1] == target_layer)
-												break;
-
-											if( TypesLayers[i][0]!=type && !FamilyHasMember(type, TypesLayers[i][0]) && TypesLayers[i][1] != target_layer )
-												return false;
-										}
-								} 
-
-								if( ValerypopoffTouchPlusPluginInstance.dontClickThroughLayers )
-								{
-										//console.log("dontClickThroughLayers")
-
-									if( TypesLayers.length == 0 )
-										return false;
-
-									if( TypesLayers[TypesLayers.length-1][1] != obj.topmost_layer )
-										return false;
-								} 
-								
-								if( JustTypes.indexOf(type) == -1 && !FamilyHasMemberFromList(type, TypesLayers) )
-									return false;												
-
-								return ret;
-							}
-						}
-
-						for( var cnd_key of cnds_map.keys() )
-						{
-							var cnd = cnds_map.get(cnd_key);
-
-							if( cnd && cnd._objectClass && cnd._objectClass._plugin instanceof C3.Plugins.Touch &&
-								cnd._func.name == touch_condition_name)
-							{
-								//console.log(cnd._func)
-
-								cnd._func = C3.Plugins.Touch.Cnds[ touch_condition_name ];							
-							}
-						}
-					})
-					
-					
-				//})
-
-				/*
-				this._runtime.GetLayoutManager()._allLayouts[0]._eventSheet._eventSheetManager._allSheets.forEach( sheet =>
-				{
-					sheet._PostInit()
-				})	
-				*/
-
-				//this._runtime.GetLayoutManager()._allLayouts[0]._eventSheet._eventSheetManager._allSheets.forEach( sheet =>
-				this._runtime.GetEventSheetManager()._allSheets.forEach( sheet =>
-				{
-					function _PostInit()
-					{
-						function _PostInit(a)
-						{
-				            //-------
-				            if( this instanceof C3.EventScript )
-				            	return;
-
-				            if( this instanceof C3.EventInclude )
-				            	return;
-
-				            if( this instanceof C3.EventVariable )
-				            	return;
-				            //---------
-
-				            this._hasElseBlock = !!a,
-				            this._IdentifyTopLevelGroup(),
-				            this._IdentifySolModifiersIncludingParents(),
-				            this._IdentifyTriggerParents();
-				            
-				            for (const b of this._conditions)
-				            {
-				            	//-----
-				            	if( b.GetObjectClass() && b.GetObjectClass().GetPlugin() instanceof C3.Plugins.Touch )
-				            	//------
-				                	b._PostInit();
-				            }
-				            
-				            /*
-				            if (0 < this._actions.length) {
-				                let b = !1;
-				                for (const c of this._actions)
-				                    //c._PostInit(),
-				                    c.HasReturnType() && (b = !0);
-				                b ? (this._RunActions = this._RunActions_ReturnValue,
-				                this._DebugRunActions = this._DebugRunActions_ReturnValue) : (this._RunActions = this._RunActions_Fast,
-				                this._DebugRunActions = this._DebugRunActions_Fast)
-				            }
-				            */
-				            
-				            const b = this._subEvents;
-				            
-				            for (let c = 0, d = b.length; c < d; ++c) {
-				                const a = c < d - 1 && b[c + 1].IsElseBlock();
-				                //b[c]._PostInit(a)
-				                _PostInit.call(b[c], a)
-				            }
-				            
-				            this._debugData && this._UpdateCanRunFast(),
-				            this._perfRecord && this._GetPerfRecordParent()._GetPerfRecord().children.push(this._perfRecord)
-				        }
-
-				        const a = this._events;
-				        for (let b = 0, c = a.length; b < c; ++b) {
-				            const d = b < c - 1 && a[b + 1]instanceof C3.EventBlock && a[b + 1].IsElseBlock();
-				            
-				            //a[b]._PostInit(d)
-				            _PostInit.call( a[b], d )
-					    }
-    				}
-
-					_PostInit.call( sheet )
-				})	
-
-			
-			}
-
-			var initalizer_timer = setInterval( ()=>
-			{
-				if( !this._runtime.GetPluginManager().GetPluginByConstructorFunction(C3.Plugins.Touch) )
-					return;
-
-				
-				var lyouts_arr = this._runtime.GetLayoutManager().GetAllLayouts();
-
-				if( !lyouts_arr )
-					return;
-
-				var notready = false;
-
-/*				lyouts_arr.forEach( layout => 
-				{
-					var event_sheet_name = layout._eventSheetName;
-
-					if( !this._runtime.GetLayoutManager().GetMainRunningLayout() ||
-						!event_sheet_name || 
-						!this._runtime.GetEventSheetManager() ||
-						!this._runtime.GetEventSheetManager().GetEventSheetByName(event_sheet_name) || 
-						!this._runtime.GetEventSheetManager()._cndsBySid  
-					  )
-						notready = true;
-
-					// if( !layout.GetEventSheet() || !layout.GetEventSheet().GetEventSheetManager() || !layout.GetEventSheet().GetEventSheetManager()._cndsBySid  )
-					// 	notready = true;
-				})*/
-
-				var mainRunningLayout = this._runtime.GetLayoutManager().GetMainRunningLayout();
-
-				if( !mainRunningLayout ||
-					!mainRunningLayout._eventSheetName || 
-					!this._runtime.GetEventSheetManager() ||
-					!this._runtime.GetEventSheetManager().GetEventSheetByName(mainRunningLayout._eventSheetName) || 
-					!this._runtime.GetEventSheetManager()._cndsBySid  
-				)
-					notready = true;
-					  
-
-
-				if( notready )
-					return;
-				
-				clearTimeout(initalizer_timer);
-
-				this.highjack();
-				
-			}, 200)
-		}
-
-		
-		Release()
-		{
-			super.Release();
-		}
-		
-		SaveToJson()
-		{
-			return {
-				// data to be saved for savegames
-			};
-		}
-		
-		LoadFromJson(o)
-		{
-			// load state for savegames
-		}
-	};
-}
-}
-
-{
-"use strict";
-
-{
-	C3.Plugins.ValerypopoffTouchPlusPlugin.Cnds =
-	{
-
-	};
-
-
-}
-}
-
-{
-"use strict";
-
-{
-	C3.Plugins.ValerypopoffTouchPlusPlugin.Acts =
-	{
-		SetDontClickThroughObjects( param )
-		{
-			switch( param )
-			{
-				case 0: this.dontClickThroughObjects = false; break;
-				case 1: this.dontClickThroughObjects = true; break;
-				case 2: this.dontClickThroughObjects = !this.dontClickThroughObjects; break;
-			}
-		},
-
-		SetDontClickThroughObjectsOnOtherLayers( param )
-		{
-			switch( param )
-			{
-				case 0: this.dontClickThroughObjectsOnOtherLayers = false; break;
-				case 1: this.dontClickThroughObjectsOnOtherLayers = true; break;
-				case 2: this.dontClickThroughObjectsOnOtherLayers = !this.dontClickThroughObjectsOnOtherLayers; break;
-			}
-		},
-
-		SetDontClickThroughLayers( param )
-		{
-			switch( param )
-			{
-				case 0: this.dontClickThroughLayers = false; break;
-				case 1: this.dontClickThroughLayers = true; break;
-				case 2: this.dontClickThroughLayers = !this.dontClickThroughLayers; break;
-			}
-		},
-
-		SetIgnoreInvisibleObjects( param )
-		{
-			switch( param )
-			{
-				case 0: this.ignoreInvisibleObjects = false; break;
-				case 1: this.ignoreInvisibleObjects = true; break;
-				case 2: this.ignoreInvisibleObjects = !this.ignoreInvisibleObjects; break;
-			}
-		},
-
-		SetIgnoreInvisibleLayers( param )
-		{
-			switch( param )
-			{
-				case 0: this.ignoreInvisibleLayers = false; break;
-				case 1: this.ignoreInvisibleLayers = true; break;
-				case 2: this.ignoreInvisibleLayers = !this.ignoreInvisibleLayers; break;
-			}
-		}
-	};
-}
-}
-
-{
-"use strict";
-
-{
-	C3.Plugins.ValerypopoffTouchPlusPlugin.Exps =
-	{
-
-	};
-}
-}
-
-{
 'use strict';const C3=self.C3;C3.Plugins.PlatformInfo=class PlatformInfoPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}};
 
 }
@@ -6432,7 +5750,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.destroy,
 		C3.Plugins.Mouse,
 		C3.Behaviors.Anchor,
-		C3.Plugins.Text,
 		C3.Plugins.Particles,
 		C3.Plugins.Spritefont2,
 		C3.Plugins.LocalStorage,
@@ -6440,8 +5757,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.XML,
 		C3.Plugins.AJAX,
 		C3.Plugins.Browser,
+		C3.Plugins.Text,
 		C3.Plugins.Eponesh_GameScore,
-		C3.Plugins.ValerypopoffTouchPlusPlugin,
 		C3.Plugins.PlatformInfo,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
@@ -6490,8 +5807,11 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Exps.int,
 		C3.Plugins.System.Exps.layoutname,
 		C3.Plugins.LocalStorage.Acts.SetItem,
-		C3.Plugins.System.Acts.WaitForPreviousActions,
+		C3.Plugins.Text.Acts.SetVisible,
 		C3.Plugins.Text.Acts.SetText,
+		C3.Plugins.System.Acts.ScrollToObject,
+		C3.Plugins.System.Acts.SetLayerParallax,
+		C3.Plugins.System.Acts.SetLayerScale,
 		C3.Plugins.System.Acts.NextPrevLayout,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.Sprite.Acts.SetVisible,
@@ -6501,7 +5821,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.Audio.Acts.StopAll,
-		C3.Plugins.Text.Acts.SetVisible,
 		C3.Plugins.Eponesh_GameScore.Acts.SocialsInvite,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
@@ -6536,7 +5855,6 @@ self.C3_JsPropNameTable = [
 	{Line2: 0},
 	{MenuButton: 0},
 	{RestartButton: 0},
-	{PROJECT_TIPS: 0},
 	{Particles: 0},
 	{CompleteSprite: 0},
 	{NextLevelButton: 0},
@@ -6561,7 +5879,6 @@ self.C3_JsPropNameTable = [
 	{ShareButton: 0},
 	{GameScore: 0},
 	{Logo: 0},
-	{ValerypopoffTouchPlus: 0},
 	{Restart: 0},
 	{PlatformInfo: 0},
 	{Elements: 0},
@@ -6686,7 +6003,7 @@ self.C3_ExpressionFuncs = [
 		() => "minus",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
+			return () => f0("Game");
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -6697,7 +6014,7 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			const f2 = p._GetNode(2).GetBoundMethod();
 			const f3 = p._GetNode(3).GetBoundMethod();
-			return () => C3.distanceTo(n0.ExpObject(), n1.ExpObject(), f2(), f3());
+			return () => C3.distanceTo(n0.ExpObject(), n1.ExpObject(), f2("Game"), f3("Game"));
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -6753,12 +6070,18 @@ self.C3_ExpressionFuncs = [
 			return () => (f0(f1()) + 1);
 		},
 		() => "LEVELS CONTROL",
-		() => 32,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => ("уровень : " + f0());
 		},
+		() => "Particles",
+		() => "Background",
+		() => 0.7,
 		() => "SAVE LEVELS",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
 		() => "music",
 		() => "SOUND CONTROL",
 		() => "SAVE LEVELS2",
