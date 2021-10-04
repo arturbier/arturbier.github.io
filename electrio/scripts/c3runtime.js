@@ -5584,6 +5584,729 @@ WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},Windo
 }
 
 {
+"use strict";
+
+{
+	C3.Plugins.ValerypopoffTouchPlusPlugin = class SingleGlobalPlugin extends C3.SDKPluginBase
+	{
+		constructor(opts)
+		{
+			super(opts);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+	};
+}
+}
+
+{
+"use strict";
+
+{
+	C3.Plugins.ValerypopoffTouchPlusPlugin.Type = class SingleGlobalType extends C3.SDKTypeBase
+	{
+		constructor(objectClass)
+		{
+			super(objectClass);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		OnCreate()
+		{	
+		}
+	};
+}
+}
+
+{
+"use strict";
+
+{
+	C3.Plugins.ValerypopoffTouchPlusPlugin.Instance = class SingleGlobalInstance extends C3.SDKInstanceBase
+	{
+		
+		constructor(inst, properties)
+		{
+			super(inst);
+			
+			// Initialise object properties
+			this.dontClickThroughObjects = false;
+			this.dontClickThroughObjectsOnOtherLayers = false;
+			this.dontClickThroughLayers = false;
+			this.ignoreInvisibleObjects = false;
+			this.ignoreInvisibleLayers = false;			
+			
+			if (properties)
+			{
+				this.dontClickThroughObjects = properties[0];
+				this.dontClickThroughObjectsOnOtherLayers = properties[1];
+				this.dontClickThroughLayers = properties[2];
+				this.ignoreInvisibleObjects = properties[3];
+				this.ignoreInvisibleLayers = properties[4];
+			}
+
+			
+
+			// Highjack System Touch Plugin's conditions
+
+			//console.log(this);
+
+			const touch_condition_names = ["IsTouchingObject"];
+			const touch_trigger_names = ["OnDoubleTapGestureObject", "OnHoldGestureObject", "OnTapGestureObject", "OnTouchObject"];
+			
+			this.TypesLayersWithCoords = function(ptx, pty)
+			{
+				var TypesLayers = [];
+				var JustTypes = [];
+				var curr_layout = this._runtime._layoutManager.GetMainRunningLayout();
+				var topmost_layer = undefined;
+
+				for(var i=0; i<curr_layout.GetLayers().length; i++)
+				{
+					var curr_layer = curr_layout.GetLayers()[i];
+
+						//console.log(curr_layer)
+
+					// Ignore Invisible layers
+					if( !(this.ignoreInvisibleLayers && (!curr_layer.IsVisible() || curr_layer.GetOpacity()==0 ) ) )
+					{
+						//if( topmost_layer === undefined )
+							topmost_layer = curr_layer;
+
+						for(var k=0; k<curr_layer._GetInstances().length; k++)
+						{
+							var curr_instance = curr_layer._GetInstances()[k];
+
+							var xy_arr = curr_instance._worldInfo.GetLayer()._CanvasToLayer(ptx, pty, curr_instance._worldInfo.GetTotalZElevation(), this._runtime.GetDisplayScale());
+
+							// Ignore Invisible objects
+							var flag = true;
+							if( this.ignoreInvisibleObjects && (!curr_instance._worldInfo.IsVisible() || curr_instance._worldInfo.GetOpacity()==0) )
+								flag = false;
+
+							if( flag && curr_instance._worldInfo.ContainsPoint(xy_arr[0], xy_arr[1]) )
+							{
+								TypesLayers.push( [curr_instance.GetObjectClass(), curr_layer] );
+								JustTypes.push( curr_instance.GetObjectClass() );
+							}
+						}
+					}
+				}
+
+				return { TypesLayers: TypesLayers, topmost_layer: topmost_layer, JustTypes: JustTypes };
+			}
+			
+
+			function FamilyHasMember( obj, member )
+			{
+				var family_members_arr = obj.GetFamilyMembers();
+
+				if( !family_members_arr || family_members_arr.length == 0 )
+					return false;
+
+				if( family_members_arr.indexOf(member) >= 0 )
+					return true;
+
+				return false;
+			}
+
+			function FamilyHasMemberFromList( obj, members_list )
+			{
+				var family_members_arr = obj.GetFamilyMembers();
+
+				if( !family_members_arr || family_members_arr.length == 0 )
+					return false;
+
+				//var has = false;
+				var exception_found = {}
+
+				try
+				{
+					family_members_arr.forEach( family_member =>
+					{
+						members_list.forEach( member => 
+						{
+							if( family_member == member[0] )
+							{
+								throw exception_found;
+								//has = true;
+							}
+						})
+					})
+				} catch( e )
+				{
+					if( e === exception_found )
+						return true
+					else
+						throw e;
+				}
+
+				return false;
+			}
+
+			var ValerypopoffTouchPlusPluginInstance = this;
+
+			this.highjack = function()
+			{
+				//console.log("highjack")
+				// Triggers
+
+				//for( var sheet_key of this._runtime._eventSheetManager._sheetsByName.keys() )
+				for( var sheet_key of this._runtime.GetEventSheetManager()._sheetsByName.keys() )
+				{
+					//console.log( "-------------------------" )
+					//console.log( "sheet_key", sheet_key )
+
+					var sheet = this._runtime.GetEventSheetManager()._sheetsByName.get(sheet_key);
+					//console.log( "sheet._triggers", sheet._triggers )
+
+					for( var ObjectClass_key of sheet._triggers.keys() )
+					{
+						// Skip plugins other than C3.Plugins.Touch
+						if( !ObjectClass_key || !( ObjectClass_key.GetPlugin() instanceof C3.Plugins.Touch ) )
+							continue;
+
+						var trigger_map = sheet._triggers.get(ObjectClass_key);
+						//console.log( "trigger_map", trigger_map )
+						//console.log( "ObjectClass_key", ObjectClass_key )
+
+						if( ! (trigger_map instanceof Map) )
+							trigger_map = trigger_map.methodMap;
+
+						var trigger_keys = Array.from(trigger_map.keys());
+
+						/*
+						if( trigger_map instanceof Map )
+							var trigger_keys = Array.from(trigger_map.keys());
+						else
+							var trigger_keys = Array.from(trigger_map.methodMap.keys());
+						*/
+						
+						trigger_keys.forEach( trigger_key => 
+						{
+							//console.log( "-----" )
+							//console.log( "trigger_key", trigger_key )
+
+							touch_trigger_names.forEach((trigger_name)=>
+							{  
+								//console.log( "trigger_name", trigger_name )
+								
+								//console.log( C3.Plugins.Touch.Cnds )
+
+								//console.log( trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ] || C3.Plugins.Touch.Cnds[ trigger_name ].name == "new_ace" )
+
+								//if( trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ] /*|| C3.Plugins.Touch.Cnds[ trigger_name ].name == "new_ace"*/ )
+								if( trigger_key.name == trigger_name /*|| C3.Plugins.Touch.Cnds[ trigger_name ].name == "new_ace"*/ )
+								{
+									//console.log( "trigger_name", trigger_name )
+
+									//if( C3.Plugins.Touch.Cnds[ trigger_name ].name != "new_ace" )
+
+									{
+										//console.log( "altering trigger_name", trigger_name )
+										//console.log( "C3.Plugins.Touch.Cnds[ trigger_name ]: ↓ " )
+										//console.log( C3.Plugins.Touch.Cnds[ trigger_name ] )
+
+										//console.log( C3.Plugins.Touch.Cnds )
+										//console.log( "C3.Plugins.Touch.Cnds[ trigger_name ]" )
+										//console.log( C3.Plugins.Touch.Cnds[ trigger_name ] )
+										//console.log(trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ])
+
+
+										// changing for the first time
+										if( trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ] )
+											C3.Plugins.Touch.Cnds[ "old_" + trigger_name ] = C3.Plugins.Touch.Cnds[ trigger_name ];
+
+										//console.log("trigger_map.keys")
+										//console.log( Array.from((trigger_map.keys())) )
+										var arr = trigger_map.get(trigger_key);
+										//console.log( "arr", arr )
+
+										
+										trigger_map.delete( trigger_key );
+
+
+										function new_ace(type)
+										{
+											//console.log( "this", this )
+											//console.log( "type", type )
+
+											var ret = C3.Plugins.Touch.Cnds[ "old_" + trigger_name ].apply(this, [type] );
+
+											if( !ret )
+												return ret;
+											else // ret == true
+											{
+												var obj = ValerypopoffTouchPlusPluginInstance.TypesLayersWithCoords(this._curTouchX, this._curTouchY);
+												var TypesLayers = obj.TypesLayers;
+												var JustTypes = obj.JustTypes;
+
+													//console.log(obj);
+
+												if( ValerypopoffTouchPlusPluginInstance.dontClickThroughObjects )
+												{
+													if( TypesLayers.length == 0 || ( TypesLayers[TypesLayers.length-1][0]!=type && !FamilyHasMember(type, TypesLayers[TypesLayers.length-1][0]) ) )
+														return false;
+												} 
+
+												if( ValerypopoffTouchPlusPluginInstance.dontClickThroughObjectsOnOtherLayers )
+												{
+													if( TypesLayers.length == 0 )
+														return false;
+
+													var target_layer = undefined;
+													TypesLayers.forEach( TypeLayer =>
+													{
+														if( target_layer == undefined && TypeLayer[0] == type )
+															target_layer = TypeLayer[1]; 
+													})
+
+
+													for( var i=TypesLayers.length-1; i>=0; i-- )
+													{
+														if( TypesLayers[i][0]==type && TypesLayers[i][1] == target_layer)
+															break;
+
+														if( TypesLayers[i][0]!=type && !FamilyHasMember(type, TypesLayers[i][0]) && TypesLayers[i][1] != target_layer )
+															return false;
+													}
+												} 
+
+												if( ValerypopoffTouchPlusPluginInstance.dontClickThroughLayers )
+												{
+														//console.log("dontClickThroughLayers")
+
+													if( TypesLayers.length == 0 )
+														return false;
+
+													if( TypesLayers[TypesLayers.length-1][1] != obj.topmost_layer )
+														return false;
+												} 
+												
+												if( JustTypes.indexOf(type) == -1 && !FamilyHasMemberFromList(type, TypesLayers) )
+													return false;												
+
+												return ret;
+											}
+										}
+
+										// changing for the first time
+										if( trigger_key == C3.Plugins.Touch.Cnds[ trigger_name ] )
+											C3.Plugins.Touch.Cnds[ trigger_name ] = new_ace;
+
+										trigger_map.set( C3.Plugins.Touch.Cnds[ trigger_name ], arr );
+										//trigger_map.set( new_ace, arr );
+
+										//console.log( "arr", trigger_map.get(C3.Plugins.Touch.Cnds[ trigger_name ]) )
+									} /*else
+									{
+										//console.log("trigger_map.keys alternative")
+										//console.log( Array.from((trigger_map.keys())) )
+										var arr = trigger_map.get(trigger_key);
+									} */
+																		
+									arr.forEach(val=>
+									{
+										var conditions = val[0].GetConditions();
+
+										conditions.forEach(condition=>
+										{
+											//console.log( condition );
+
+											if( condition._objectClass && condition._objectClass._plugin instanceof C3.Plugins.Touch )
+											{
+												condition._func = C3.Plugins.Touch.Cnds[ trigger_name ];
+
+												condition.Run = C3.Plugins.Touch.Cnds[ trigger_name ].
+													bind( this._runtime.GetPluginManager().
+														GetPluginByConstructorFunction(C3.Plugins.Touch).
+														GetSingleGlobalInstance().
+														GetSdkInstance(), condition._parameters[0].GetObjectClass() )
+											}
+										})
+									})
+									
+									
+								}
+								
+							})
+						})
+					}
+				}
+
+
+				// Conditions
+
+				//var lyouts_arr = this._runtime.GetLayoutManager().GetAllLayouts();
+
+				//lyouts_arr.forEach( layout => 
+				//{
+					//var cnds_map = layout.GetEventSheet().GetEventSheetManager()._cndsBySid;
+					var cnds_map = this._runtime.GetEventSheetManager()._cndsBySid;
+
+					touch_condition_names.forEach( touch_condition_name => 
+					{
+						C3.Plugins.Touch.Cnds[ "old_" + touch_condition_name ] = C3.Plugins.Touch.Cnds[ touch_condition_name ];
+
+						C3.Plugins.Touch.Cnds[ touch_condition_name ] = function(type)
+						{
+							var ret = C3.Plugins.Touch.Cnds[ "old_" + touch_condition_name ].apply(this, [type] );
+
+							if( !ret )
+								return ret;
+							else // ret == true
+							{
+								var obj = ValerypopoffTouchPlusPluginInstance.TypesLayersWithCoords(this._curTouchX, this._curTouchY);
+								var TypesLayers = obj.TypesLayers;
+								var JustTypes = obj.JustTypes;
+
+									//console.log(obj);
+
+								if( ValerypopoffTouchPlusPluginInstance.dontClickThroughObjects )
+								{
+									if( TypesLayers.length == 0 || ( TypesLayers[TypesLayers.length-1][0]!=type && !FamilyHasMember(type, TypesLayers[TypesLayers.length-1][0]) ) )
+										return false;
+								} 
+
+								if( ValerypopoffTouchPlusPluginInstance.dontClickThroughObjectsOnOtherLayers )
+								{
+										if( TypesLayers.length == 0 )
+											return false;
+
+										var target_layer = undefined;
+										TypesLayers.forEach( TypeLayer =>
+										{
+											if( target_layer == undefined && TypeLayer[0] == type )
+												target_layer = TypeLayer[1]; 
+										})
+
+
+										for( var i=TypesLayers.length-1; i>=0; i-- )
+										{
+											if( TypesLayers[i][0]==type && TypesLayers[i][1] == target_layer)
+												break;
+
+											if( TypesLayers[i][0]!=type && !FamilyHasMember(type, TypesLayers[i][0]) && TypesLayers[i][1] != target_layer )
+												return false;
+										}
+								} 
+
+								if( ValerypopoffTouchPlusPluginInstance.dontClickThroughLayers )
+								{
+										//console.log("dontClickThroughLayers")
+
+									if( TypesLayers.length == 0 )
+										return false;
+
+									if( TypesLayers[TypesLayers.length-1][1] != obj.topmost_layer )
+										return false;
+								} 
+								
+								if( JustTypes.indexOf(type) == -1 && !FamilyHasMemberFromList(type, TypesLayers) )
+									return false;												
+
+								return ret;
+							}
+						}
+
+						for( var cnd_key of cnds_map.keys() )
+						{
+							var cnd = cnds_map.get(cnd_key);
+
+							if( cnd && cnd._objectClass && cnd._objectClass._plugin instanceof C3.Plugins.Touch &&
+								cnd._func.name == touch_condition_name)
+							{
+								//console.log(cnd._func)
+
+								cnd._func = C3.Plugins.Touch.Cnds[ touch_condition_name ];							
+							}
+						}
+					})
+					
+					
+				//})
+
+				/*
+				this._runtime.GetLayoutManager()._allLayouts[0]._eventSheet._eventSheetManager._allSheets.forEach( sheet =>
+				{
+					sheet._PostInit()
+				})	
+				*/
+
+				//this._runtime.GetLayoutManager()._allLayouts[0]._eventSheet._eventSheetManager._allSheets.forEach( sheet =>
+				this._runtime.GetEventSheetManager()._allSheets.forEach( sheet =>
+				{
+					function _PostInit()
+					{
+						function _PostInit(a)
+						{
+				            //-------
+				            if( this instanceof C3.EventScript )
+				            	return;
+
+				            if( this instanceof C3.EventInclude )
+				            	return;
+
+				            if( this instanceof C3.EventVariable )
+				            	return;
+				            //---------
+
+				            this._hasElseBlock = !!a,
+				            this._IdentifyTopLevelGroup(),
+				            this._IdentifySolModifiersIncludingParents(),
+				            this._IdentifyTriggerParents();
+				            
+				            for (const b of this._conditions)
+				            {
+				            	//-----
+				            	if( b.GetObjectClass() && b.GetObjectClass().GetPlugin() instanceof C3.Plugins.Touch )
+				            	//------
+				                	b._PostInit();
+				            }
+				            
+				            /*
+				            if (0 < this._actions.length) {
+				                let b = !1;
+				                for (const c of this._actions)
+				                    //c._PostInit(),
+				                    c.HasReturnType() && (b = !0);
+				                b ? (this._RunActions = this._RunActions_ReturnValue,
+				                this._DebugRunActions = this._DebugRunActions_ReturnValue) : (this._RunActions = this._RunActions_Fast,
+				                this._DebugRunActions = this._DebugRunActions_Fast)
+				            }
+				            */
+				            
+				            const b = this._subEvents;
+				            
+				            for (let c = 0, d = b.length; c < d; ++c) {
+				                const a = c < d - 1 && b[c + 1].IsElseBlock();
+				                //b[c]._PostInit(a)
+				                _PostInit.call(b[c], a)
+				            }
+				            
+				            this._debugData && this._UpdateCanRunFast(),
+				            this._perfRecord && this._GetPerfRecordParent()._GetPerfRecord().children.push(this._perfRecord)
+				        }
+
+				        const a = this._events;
+				        for (let b = 0, c = a.length; b < c; ++b) {
+				            const d = b < c - 1 && a[b + 1]instanceof C3.EventBlock && a[b + 1].IsElseBlock();
+				            
+				            //a[b]._PostInit(d)
+				            _PostInit.call( a[b], d )
+					    }
+    				}
+
+					_PostInit.call( sheet )
+				})	
+
+			
+			}
+
+			var initalizer_timer = setInterval( ()=>
+			{
+				if( !this._runtime.GetPluginManager().GetPluginByConstructorFunction(C3.Plugins.Touch) )
+					return;
+
+				
+				var lyouts_arr = this._runtime.GetLayoutManager().GetAllLayouts();
+
+				if( !lyouts_arr )
+					return;
+
+				var notready = false;
+
+/*				lyouts_arr.forEach( layout => 
+				{
+					var event_sheet_name = layout._eventSheetName;
+
+					if( !this._runtime.GetLayoutManager().GetMainRunningLayout() ||
+						!event_sheet_name || 
+						!this._runtime.GetEventSheetManager() ||
+						!this._runtime.GetEventSheetManager().GetEventSheetByName(event_sheet_name) || 
+						!this._runtime.GetEventSheetManager()._cndsBySid  
+					  )
+						notready = true;
+
+					// if( !layout.GetEventSheet() || !layout.GetEventSheet().GetEventSheetManager() || !layout.GetEventSheet().GetEventSheetManager()._cndsBySid  )
+					// 	notready = true;
+				})*/
+
+				var mainRunningLayout = this._runtime.GetLayoutManager().GetMainRunningLayout();
+
+				if( !mainRunningLayout ||
+					!mainRunningLayout._eventSheetName || 
+					!this._runtime.GetEventSheetManager() ||
+					!this._runtime.GetEventSheetManager().GetEventSheetByName(mainRunningLayout._eventSheetName) || 
+					!this._runtime.GetEventSheetManager()._cndsBySid  
+				)
+					notready = true;
+					  
+
+
+				if( notready )
+					return;
+				
+				clearTimeout(initalizer_timer);
+
+				this.highjack();
+				
+			}, 200)
+		}
+
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		SaveToJson()
+		{
+			return {
+				// data to be saved for savegames
+			};
+		}
+		
+		LoadFromJson(o)
+		{
+			// load state for savegames
+		}
+	};
+}
+}
+
+{
+"use strict";
+
+{
+	C3.Plugins.ValerypopoffTouchPlusPlugin.Cnds =
+	{
+
+	};
+
+
+}
+}
+
+{
+"use strict";
+
+{
+	C3.Plugins.ValerypopoffTouchPlusPlugin.Acts =
+	{
+		SetDontClickThroughObjects( param )
+		{
+			switch( param )
+			{
+				case 0: this.dontClickThroughObjects = false; break;
+				case 1: this.dontClickThroughObjects = true; break;
+				case 2: this.dontClickThroughObjects = !this.dontClickThroughObjects; break;
+			}
+		},
+
+		SetDontClickThroughObjectsOnOtherLayers( param )
+		{
+			switch( param )
+			{
+				case 0: this.dontClickThroughObjectsOnOtherLayers = false; break;
+				case 1: this.dontClickThroughObjectsOnOtherLayers = true; break;
+				case 2: this.dontClickThroughObjectsOnOtherLayers = !this.dontClickThroughObjectsOnOtherLayers; break;
+			}
+		},
+
+		SetDontClickThroughLayers( param )
+		{
+			switch( param )
+			{
+				case 0: this.dontClickThroughLayers = false; break;
+				case 1: this.dontClickThroughLayers = true; break;
+				case 2: this.dontClickThroughLayers = !this.dontClickThroughLayers; break;
+			}
+		},
+
+		SetIgnoreInvisibleObjects( param )
+		{
+			switch( param )
+			{
+				case 0: this.ignoreInvisibleObjects = false; break;
+				case 1: this.ignoreInvisibleObjects = true; break;
+				case 2: this.ignoreInvisibleObjects = !this.ignoreInvisibleObjects; break;
+			}
+		},
+
+		SetIgnoreInvisibleLayers( param )
+		{
+			switch( param )
+			{
+				case 0: this.ignoreInvisibleLayers = false; break;
+				case 1: this.ignoreInvisibleLayers = true; break;
+				case 2: this.ignoreInvisibleLayers = !this.ignoreInvisibleLayers; break;
+			}
+		}
+	};
+}
+}
+
+{
+"use strict";
+
+{
+	C3.Plugins.ValerypopoffTouchPlusPlugin.Exps =
+	{
+
+	};
+}
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.PlatformInfo=class PlatformInfoPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.PlatformInfo.Type=class PlatformInfoType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}};
+
+}
+
+{
+'use strict';const C3=self.C3;const DOM_COMPONENT_ID="platform-info";
+C3.Plugins.PlatformInfo.Instance=class PlatformInfoInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst,DOM_COMPONENT_ID);this._screenWidth=0;this._screenHeight=0;this._windowOuterWidth=0;this._windowOuterHeight=0;this._safeAreaInset=[0,0,0,0];this._supportsWakeLock=false;this._isWakeLockActive=false;this.AddDOMMessageHandlers([["window-resize",e=>this._OnWindowResize(e)],["wake-lock-acquired",e=>this._OnWakeLockAcquired(e)],["wake-lock-error",e=>this._OnWakeLockError(e)],["wake-lock-released",
+e=>this._OnWakeLockReleased(e)]]);if(navigator.connection)navigator.connection.addEventListener("change",()=>this._OnNetworkChange());this._runtime.AddLoadPromise(this.PostToDOMAsync("get-initial-state").then(data=>{this._screenWidth=data["screenWidth"];this._screenHeight=data["screenHeight"];this._windowOuterWidth=data["windowOuterWidth"];this._windowOuterHeight=data["windowOuterHeight"];this._safeAreaInset=data["safeAreaInset"];this._supportsWakeLock=data["supportsWakeLock"]}))}Release(){super.Release()}_OnWindowResize(e){this._windowOuterWidth=
+e["windowOuterWidth"];this._windowOuterHeight=e["windowOuterHeight"];this._safeAreaInset=e["safeAreaInset"]}async _OnNetworkChange(){await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnNetworkChange)}async _OnWakeLockAcquired(){this._isWakeLockActive=true;await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockAcquired)}async _OnWakeLockError(){this._isWakeLockActive=false;await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockError)}async _OnWakeLockReleased(){this._isWakeLockActive=
+false;await this.TriggerAsync(C3.Plugins.PlatformInfo.Cnds.OnWakeLockReleased)}};
+
+}
+
+{
+'use strict';const C3=self.C3;
+C3.Plugins.PlatformInfo.Cnds={IsOnMobile(){return C3.Platform.IsMobile},IsOnWindows(){return C3.Platform.OS==="Windows"},IsOnMacOS(){return C3.Platform.OS==="Mac OS X"},IsOnLinux(){return C3.Platform.OS==="Linux"},IsOnChromeOS(){return C3.Platform.OS==="Chrome OS"},IsOnAndroid(){return C3.Platform.OS==="Android"},IsOniOS(){return C3.Platform.OS==="iOS"},IsWebExport(){const exportType=this._runtime.GetExportType();return exportType==="html5"||exportType==="scirra-arcade"||exportType==="preview"||exportType===
+"instant-games"},IsCordovaExport(){return this._runtime.IsCordova()},IsNWjsExport(){return this._runtime.GetExportType()==="nwjs"},IsWindowsUWPExport(){return this._runtime.GetExportType()==="windows-uwp"},IsWindowsWebView2Export(){return this._runtime.GetExportType()==="windows-webview2"},IsMacOSWKWebView2Export(){return this._runtime.GetExportType()==="macos-wkwebview"},OnNetworkChange(){return true},OnWakeLockAcquired(){return true},OnWakeLockError(){return true},OnWakeLockReleased(){return true},
+IsWakeLockActive(){return this._isWakeLockActive},IsWakeLockSupported(){return this._supportsWakeLock}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.PlatformInfo.Acts={RequestWakeLock(){if(!this._supportsWakeLock)return;this._PostToDOMMaybeSync("request-wake-lock")},ReleaseWakeLock(){if(!this._supportsWakeLock)return;this._isWakeLockActive=false;this.PostToDOM("release-wake-lock")}};
+
+}
+
+{
+'use strict';const C3=self.C3;
+C3.Plugins.PlatformInfo.Exps={Renderer(){let ret="";if(this._runtime.GetWebGPURenderer())ret="webgpu";else ret="webgl"+this._runtime.GetWebGLRenderer().GetWebGLVersionNumber();if(this._runtime.GetRenderer().HasMajorPerformanceCaveat())ret+="-software";return ret},RendererDetail(){return this._runtime.GetWebGLRenderer().GetUnmaskedRenderer()},DevicePixelRatio(){return self.devicePixelRatio},ScreenWidth(){return this._screenWidth},ScreenHeight(){return this._screenHeight},WindowInnerWidth(){return this._runtime.GetCanvasManager().GetLastWidth()},
+WindowInnerHeight(){return this._runtime.GetCanvasManager().GetLastHeight()},WindowOuterWidth(){return this._windowOuterWidth},WindowOuterHeight(){return this._windowOuterHeight},CanvasCssWidth(){return this._runtime.GetCanvasManager().GetCssWidth()},CanvasCssHeight(){return this._runtime.GetCanvasManager().GetCssHeight()},CanvasDeviceWidth(){return this._runtime.GetCanvasManager().GetDeviceWidth()},CanvasDeviceHeight(){return this._runtime.GetCanvasManager().GetDeviceHeight()},Downlink(){if(navigator.connection)return navigator.connection["downlink"]||
+0;else return 0},DownlinkMax(){if(navigator.connection)return navigator.connection["downlinkMax"]||0;else return 0},ConnectionType(){if(navigator.connection)return navigator.connection["type"]||"unknown";else return"unknown"},ConnectionEffectiveType(){if(navigator.connection)return navigator.connection["effectiveType"]||"unknown";else return"unknown"},ConnectionRTT(){if(navigator.connection)return navigator.connection["rtt"]||0;else return 0},HardwareConcurrency(){return navigator.hardwareConcurrency||
+0},DeviceMemory(){return navigator.deviceMemory||0},SafeAreaInsetTop(){return this._safeAreaInset[0]},SafeAreaInsetRight(){return this._safeAreaInset[1]},SafeAreaInsetBottom(){return this._safeAreaInset[2]},SafeAreaInsetLeft(){return this._safeAreaInset[3]}};
+
+}
+
+{
 'use strict';const C3=self.C3;C3.Behaviors.Sin=class SinBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}};
 
 }
@@ -5661,6 +6384,45 @@ const i=VALID_MOVEMENTS.indexOf(m);if(i===-1)throw new Error("invalid movement")
 }
 
 {
+'use strict';const C3=self.C3;C3.Behaviors.Anchor=class AnchorBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.Anchor.Type=class AnchorType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}};
+
+}
+
+{
+'use strict';const C3=self.C3;const ANCHOR_LEFT=0;const ANCHOR_TOP=1;const ANCHOR_RIGHT=2;const ANCHOR_BOTTOM=3;const ENABLE=4;
+C3.Behaviors.Anchor.Instance=class AnchorInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._anchorLeft=2;this._anchorTop=2;this._anchorRight=0;this._anchorBottom=0;this._isEnabled=true;const bbox=this._inst.GetWorldInfo().GetBoundingBox();this._xLeft=bbox.getLeft();this._yTop=bbox.getTop();this._xRight=this._runtime.GetOriginalViewportWidth()-bbox.getLeft();this._yBottom=this._runtime.GetOriginalViewportHeight()-bbox.getTop();this._rDiff=this._runtime.GetOriginalViewportWidth()-
+bbox.getRight();this._bDiff=this._runtime.GetOriginalViewportHeight()-bbox.getBottom();if(properties){this._anchorLeft=properties[ANCHOR_LEFT];this._anchorTop=properties[ANCHOR_TOP];this._anchorRight=properties[ANCHOR_RIGHT];this._anchorBottom=properties[ANCHOR_BOTTOM];this._isEnabled=!!properties[ENABLE]}const rt=this._runtime.Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,"layoutchange",()=>this._OnLayoutChange()));if(this._isEnabled)this._StartTicking()}Release(){super.Release()}SaveToJson(){return{"xl":this._xLeft,
+"yt":this._yTop,"xr":this._xRight,"yb":this._yBottom,"rd":this._rDiff,"bd":this._bDiff,"al":this._anchorLeft,"at":this._anchorTop,"ar":this._anchorRight,"ab":this._anchorBottom,"e":this._isEnabled}}LoadFromJson(o){this._xLeft=o["xl"];this._yTop=o["yt"];this._xRight=o["xr"];this._yBottom=o["yb"];this._rDiff=o["rd"];this._bDiff=o["bd"];this._anchorLeft=o["al"];this._anchorTop=o["at"];this._anchorRight=o["ar"];this._anchorBottom=o["ab"];this._isEnabled=o["e"];if(this._isEnabled)this._StartTicking();
+else this._StopTicking()}_UpdatePosition(){if(!this._isEnabled)return;const wi=this._inst.GetWorldInfo();const viewport=wi.GetLayer().GetViewport();if(this._anchorLeft===0){const n=viewport.getLeft()+this._xLeft-wi.GetBoundingBox().getLeft();if(n!==0){wi.OffsetX(n);wi.SetBboxChanged()}}else if(this._anchorLeft===1){const n=viewport.getRight()-this._xRight-wi.GetBoundingBox().getLeft();if(n!==0){wi.OffsetX(n);wi.SetBboxChanged()}}if(this._anchorTop===0){const n=viewport.getTop()+this._yTop-wi.GetBoundingBox().getTop();
+if(n!==0){wi.OffsetY(n);wi.SetBboxChanged()}}else if(this._anchorTop===1){const n=viewport.getBottom()-this._yBottom-wi.GetBoundingBox().getTop();if(n!==0){wi.OffsetY(n);wi.SetBboxChanged()}}if(this._anchorRight===1){const n=viewport.getRight()-this._rDiff-wi.GetBoundingBox().getRight();if(n!==0){wi.OffsetX(wi.GetOriginX()*n);wi.SetWidth(Math.max(wi.GetWidth()+n),0);wi.SetBboxChanged();this._rDiff=viewport.getRight()-wi.GetBoundingBox().getRight()}}if(this._anchorBottom===1){const n=viewport.getBottom()-
+this._bDiff-wi.GetBoundingBox().getBottom();if(n!==0){wi.OffsetY(wi.GetOriginY()*n);wi.SetHeight(Math.max(wi.GetHeight()+n,0));wi.SetBboxChanged();this._bDiff=viewport.getBottom()-wi.GetBoundingBox().getBottom()}}}Tick(){this._UpdatePosition()}_OnLayoutChange(){this._UpdatePosition()}GetPropertyValueByIndex(index){switch(index){case ANCHOR_LEFT:return this._anchorLeft;case ANCHOR_TOP:return this._anchorTop;case ANCHOR_RIGHT:return this._anchorRight;case ANCHOR_BOTTOM:return this._anchorBottom;case ENABLE:return this._isEnabled}}SetPropertyValueByIndex(index,
+value){switch(index){case ANCHOR_LEFT:this._anchorLeft=value;break;case ANCHOR_TOP:this._anchorTop=value;break;case ANCHOR_RIGHT:this._anchorRight=value;break;case ANCHOR_BOTTOM:this._anchorBottom=value;break;case ENABLE:this._isEnabled=!!value;if(this._isEnabled)this._StartTicking();else this._StopTicking();break}}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.Anchor.Cnds={IsEnabled(){return this._isEnabled}};
+
+}
+
+{
+'use strict';const C3=self.C3;
+C3.Behaviors.Anchor.Acts={SetEnabled(e){if(this._isEnabled&&e===0){this._isEnabled=false;this._StopTicking()}else if(!this._isEnabled&&e!==0){const bbox=this._inst.GetWorldInfo().GetBoundingBox();this._xLeft=bbox.getLeft();this._yTop=bbox.getTop();this._xRight=this._runtime.GetOriginalViewportWidth()-bbox.getLeft();this._yBottom=this._runtime.GetOriginalViewportHeight()-bbox.getTop();this._rDiff=this._runtime.GetOriginalViewportWidth()-bbox.getRight();this._bDiff=this._runtime.GetOriginalViewportHeight()-bbox.getBottom();
+this._isEnabled=true;this._StartTicking()}}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Behaviors.Anchor.Exps={};
+
+}
+
+{
 const C3 = self.C3;
 self.C3_GetObjectRefTable = function () {
 	return [
@@ -5669,6 +6431,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Sin,
 		C3.Behaviors.destroy,
 		C3.Plugins.Mouse,
+		C3.Behaviors.Anchor,
 		C3.Plugins.Text,
 		C3.Plugins.Particles,
 		C3.Plugins.Spritefont2,
@@ -5678,8 +6441,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.AJAX,
 		C3.Plugins.Browser,
 		C3.Plugins.Eponesh_GameScore,
+		C3.Plugins.ValerypopoffTouchPlusPlugin,
+		C3.Plugins.PlatformInfo,
 		C3.Plugins.System.Cnds.IsGroupActive,
-		C3.Plugins.Touch.Cnds.OnTapGestureObject,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.System.Acts.CreateObject,
@@ -5690,7 +6455,12 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SetVar,
 		C3.Behaviors.Sin.Acts.SetEnabled,
 		C3.Plugins.Audio.Acts.Play,
+		C3.Plugins.Touch.Cnds.OnTouchStart,
+		C3.Plugins.Touch.Cnds.IsTouchingObject,
+		C3.Plugins.Touch.Exps.X,
+		C3.Plugins.Touch.Exps.Y,
 		C3.Plugins.System.Cnds.EveryTick,
+		C3.Plugins.PlatformInfo.Cnds.IsOnMobile,
 		C3.Plugins.System.Cnds.PickByComparison,
 		C3.Plugins.Sprite.Acts.SetWidth,
 		C3.Plugins.Mouse.Exps.X,
@@ -5698,6 +6468,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.SetTowardPosition,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.Sprite.Acts.Destroy,
+		C3.Plugins.Touch.Cnds.OnDoubleTapGestureObject,
 		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.Mouse.Cnds.IsOverObject,
@@ -5707,12 +6478,12 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Cnds.IsOnLayer,
 		C3.Plugins.Sprite.Acts.SetSize,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowFullscreen,
-		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Plugins.Text.Acts.Destroy,
 		C3.Plugins.System.Acts.ResetGlobals,
 		C3.Plugins.System.Acts.GoToLayout,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
 		C3.Plugins.System.Acts.RestartLayout,
+		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.Eponesh_GameScore.Acts.SocialsJoinCommunity,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.System.Cnds.Compare,
@@ -5723,6 +6494,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.System.Acts.NextPrevLayout,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
+		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.LocalStorage.Cnds.OnItemMissing,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Acts.GetItem,
@@ -5761,6 +6533,7 @@ self.C3_JsPropNameTable = [
 	{Mouse: 0},
 	{Background: 0},
 	{Line2: 0},
+	{Anchor: 0},
 	{MenuButton: 0},
 	{RestartButton: 0},
 	{PROJECT_TIPS: 0},
@@ -5783,15 +6556,22 @@ self.C3_JsPropNameTable = [
 	{MoreGames: 0},
 	{Browser: 0},
 	{LevelsText_2: 0},
+	{Type: 0},
 	{Tips_2: 0},
 	{ShareButton: 0},
 	{GameScore: 0},
 	{Logo: 0},
+	{ValerypopoffTouchPlus: 0},
+	{Restart: 0},
+	{PlatformInfo: 0},
 	{Elements: 0},
+	{Btns: 0},
 	{LAST_LEVEL: 0},
 	{WIN: 0},
 	{LineNum: 0},
-	{Start: 0}
+	{Start: 0},
+	{xxxxx: 0},
+	{yyyy: 0}
 ];
 }
 
@@ -5905,6 +6685,10 @@ self.C3_ExpressionFuncs = [
 		() => "",
 		() => "minus",
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
+		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpInstVar();
 		},
@@ -5916,8 +6700,15 @@ self.C3_ExpressionFuncs = [
 			return () => C3.distanceTo(n0.ExpObject(), n1.ExpObject(), f2(), f3());
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			return () => C3.distanceTo(n0.ExpObject(), n1.ExpObject(), v2.GetValue(), v3.GetValue());
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
 		},
 		() => 2,
 		p => {
@@ -5930,10 +6721,6 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() + 1);
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
 		},
 		p => {
 			const n0 = p._GetNode(0);
