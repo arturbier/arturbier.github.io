@@ -576,15 +576,15 @@ C3.Event=class Event{constructor(type,cancelable){this.type=type;this.cancelable
 // ../lib/events/handler.js
 {
 'use strict';const C3=self.C3;const assert=self.assert;
-C3.Event.Handler=class EventHandler extends C3.DefendedBase{constructor(type){super();this._type=type;this._captureListeners=[];this._captureListenersSet=new Set;this._listeners=[];this._listenersSet=new Set;this._fireDepth=0;this._queueAddListeners=[];this._queueRemoveCaptureListeners=[];this._queueRemoveListeners=[]}Release(){if(this._fireDepth>0)return;C3.clearArray(this._captureListeners);this._captureListenersSet.clear();C3.clearArray(this._listeners);this._listenersSet.clear();C3.clearArray(this._queueAddListeners);
-C3.clearArray(this._queueRemoveCaptureListeners);C3.clearArray(this._queueRemoveListeners);C3.Release(this)}_AddListener(func,capture){if(this._IsFiring()){this._queueAddListeners.push([func,capture]);return}if(capture){if(this._captureListenersSet.has(func))return;this._captureListeners.push(func);this._captureListenersSet.add(func)}else{if(this._listenersSet.has(func))return;this._listeners.push(func);this._listenersSet.add(func)}}_RemoveListener(func,capture){if(this._IsFiring()){if(capture)this._queueRemoveCaptureListeners.push(func);
-else this._queueRemoveListeners.push(func);return}if(capture){if(this._captureListenersSet.has(func)){this._captureListenersSet.delete(func);C3.arrayFindRemove(this._captureListeners,func)}}else if(this._listenersSet.has(func)){this._listenersSet.delete(func);C3.arrayFindRemove(this._listeners,func)}}_IsEmpty(){return!this._captureListeners.length&&!this._listeners.length}_IsFiring(){return this._fireDepth>0}_ProcessQueuedListeners(){for(let q of this._queueAddListeners)this._AddListener(...q);C3.clearArray(this._queueAddListeners);
-for(const func of this._queueRemoveListeners)this._listenersSet.delete(func);for(const func of this._queueRemoveCaptureListeners)this._captureListenersSet.delete(func);const removeListenersSet=new Set(this._queueRemoveListeners);const removeCaptureListenersSet=new Set(this._queueRemoveCaptureListeners);C3.arrayRemoveAllInSet(this._listeners,removeListenersSet);C3.arrayRemoveAllInSet(this._captureListeners,removeCaptureListenersSet);C3.clearArray(this._queueRemoveCaptureListeners);C3.clearArray(this._queueRemoveListeners)}_FireCancellable(event){this._IncreaseFireDepth();
-let isStopped=false;for(let i=0,len=this._captureListeners.length;i<len;++i){this._captureListeners[i](event);if(event.propagationStopped){isStopped=true;break}}if(!isStopped)for(let i=0,len=this._listeners.length;i<len;++i){this._listeners[i](event);if(event.propagationStopped)break}this._DecreaseFireDepth();return!event.defaultPrevented}_FireNonCancellable(event){this._IncreaseFireDepth();for(let i=0,len=this._captureListeners.length;i<len;++i)this._captureListeners[i](event);for(let i=0,len=this._listeners.length;i<
-len;++i)this._listeners[i](event);this._DecreaseFireDepth();return true}_IncreaseFireDepth(){this._fireDepth++}_DecreaseFireDepth(){this._fireDepth--;if(this._fireDepth===0&&(this._queueAddListeners.length||this._queueRemoveCaptureListeners.length||this._queueRemoveListeners.length))this._ProcessQueuedListeners()}SetDelayRemoveEventsEnabled(e){if(e)this._IncreaseFireDepth();else this._DecreaseFireDepth()}_FireAsync(event){let callbackPromises=[];for(let i=0,len=this._captureListeners.length;i<len;++i){let func=
-this._captureListeners[i];callbackPromises.push(C3.Asyncify(()=>func(event)))}for(let i=0,len=this._listeners.length;i<len;++i){let func=this._listeners[i];callbackPromises.push(C3.Asyncify(()=>func(event)))}return Promise.all(callbackPromises).then(()=>!event.defaultPrevented)}_FireAndWait_AsyncOptional(event){const results=[];this._IncreaseFireDepth();for(let i=0,len=this._captureListeners.length;i<len;++i){const ret=this._captureListeners[i](event);if(ret instanceof Promise)results.push(ret)}for(let i=
-0,len=this._listeners.length;i<len;++i){const ret=this._listeners[i](event);if(ret instanceof Promise)results.push(ret)}this._DecreaseFireDepth();if(results.length)return Promise.all(results).then(()=>!event.defaultPrevented);else return!event.defaultPrevented}async _FireAndWaitAsync(event){return await this._FireAndWait_AsyncOptional(event)}async _FireAndWaitAsyncSequential(event){this._IncreaseFireDepth();for(let i=0,len=this._captureListeners.length;i<len;++i){const ret=this._captureListeners[i](event);
-if(ret instanceof Promise)await ret}for(let i=0,len=this._listeners.length;i<len;++i){const ret=this._listeners[i](event);if(ret instanceof Promise)await ret}this._DecreaseFireDepth();return!event.defaultPrevented}*_FireAsGenerator(event){this._IncreaseFireDepth();for(let i=0,len=this._captureListeners.length;i<len;++i){const ret=this._captureListeners[i](event);if(C3.IsIterator(ret))yield*ret}for(let i=0,len=this._listeners.length;i<len;++i){const ret=this._listeners[i](event);if(C3.IsIterator(ret))yield*ret}this._DecreaseFireDepth()}};
+C3.Event.Handler=class EventHandler extends C3.DefendedBase{constructor(type){super();this._type=type;this._captureListeners=[];this._captureListenersSet=new Set;this._listeners=[];this._listenersSet=new Set;this._fireDepth=0;this._queueModifyListeners=[]}Release(){if(this._fireDepth>0)return;C3.clearArray(this._captureListeners);this._captureListenersSet.clear();C3.clearArray(this._listeners);this._listenersSet.clear();C3.clearArray(this._queueModifyListeners);C3.Release(this)}_AddListener(func,
+capture){if(this._IsFiring()){this._queueModifyListeners.push({op:"add",func,capture});return}if(capture){if(this._captureListenersSet.has(func))return;this._captureListeners.push(func);this._captureListenersSet.add(func)}else{if(this._listenersSet.has(func))return;this._listeners.push(func);this._listenersSet.add(func)}}_RemoveListener(func,capture){if(this._IsFiring()){this._queueModifyListeners.push({op:"remove",func,capture});return}if(capture){if(this._captureListenersSet.has(func)){this._captureListenersSet.delete(func);
+C3.arrayFindRemove(this._captureListeners,func)}}else if(this._listenersSet.has(func)){this._listenersSet.delete(func);C3.arrayFindRemove(this._listeners,func)}}_IsEmpty(){return!this._captureListeners.length&&!this._listeners.length}_IsFiring(){return this._fireDepth>0}_ProcessQueuedListeners(){const removeListenersSet=new Set;const removeCaptureListenersSet=new Set;for(const q of this._queueModifyListeners)if(q.op==="add"){this._AddListener(q.func,q.capture);if(q.capture)removeCaptureListenersSet.delete(q.func);
+else removeListenersSet.delete(q.func)}else if(q.op==="remove")if(q.capture){this._captureListenersSet.delete(q.func);removeCaptureListenersSet.add(q.func)}else{this._listenersSet.delete(q.func);removeListenersSet.add(q.func)}else throw new Error("invalid op");C3.arrayRemoveAllInSet(this._listeners,removeListenersSet);C3.arrayRemoveAllInSet(this._captureListeners,removeCaptureListenersSet);C3.clearArray(this._queueModifyListeners)}_FireCancellable(event){this._IncreaseFireDepth();let isStopped=false;
+for(let i=0,len=this._captureListeners.length;i<len;++i){this._captureListeners[i](event);if(event.propagationStopped){isStopped=true;break}}if(!isStopped)for(let i=0,len=this._listeners.length;i<len;++i){this._listeners[i](event);if(event.propagationStopped)break}this._DecreaseFireDepth();return!event.defaultPrevented}_FireNonCancellable(event){this._IncreaseFireDepth();for(let i=0,len=this._captureListeners.length;i<len;++i)this._captureListeners[i](event);for(let i=0,len=this._listeners.length;i<
+len;++i)this._listeners[i](event);this._DecreaseFireDepth();return true}_IncreaseFireDepth(){this._fireDepth++}_DecreaseFireDepth(){this._fireDepth--;if(this._fireDepth===0&&this._queueModifyListeners.length>0)this._ProcessQueuedListeners()}SetDelayRemoveEventsEnabled(e){if(e)this._IncreaseFireDepth();else this._DecreaseFireDepth()}_FireAsync(event){let callbackPromises=[];for(let i=0,len=this._captureListeners.length;i<len;++i){let func=this._captureListeners[i];callbackPromises.push(C3.Asyncify(()=>
+func(event)))}for(let i=0,len=this._listeners.length;i<len;++i){let func=this._listeners[i];callbackPromises.push(C3.Asyncify(()=>func(event)))}return Promise.all(callbackPromises).then(()=>!event.defaultPrevented)}_FireAndWait_AsyncOptional(event){const results=[];this._IncreaseFireDepth();for(let i=0,len=this._captureListeners.length;i<len;++i){const ret=this._captureListeners[i](event);if(ret instanceof Promise)results.push(ret)}for(let i=0,len=this._listeners.length;i<len;++i){const ret=this._listeners[i](event);
+if(ret instanceof Promise)results.push(ret)}this._DecreaseFireDepth();if(results.length)return Promise.all(results).then(()=>!event.defaultPrevented);else return!event.defaultPrevented}async _FireAndWaitAsync(event){return await this._FireAndWait_AsyncOptional(event)}async _FireAndWaitAsyncSequential(event){this._IncreaseFireDepth();for(let i=0,len=this._captureListeners.length;i<len;++i){const ret=this._captureListeners[i](event);if(ret instanceof Promise)await ret}for(let i=0,len=this._listeners.length;i<
+len;++i){const ret=this._listeners[i](event);if(ret instanceof Promise)await ret}this._DecreaseFireDepth();return!event.defaultPrevented}*_FireAsGenerator(event){this._IncreaseFireDepth();for(let i=0,len=this._captureListeners.length;i<len;++i){const ret=this._captureListeners[i](event);if(C3.IsIterator(ret))yield*ret}for(let i=0,len=this._listeners.length;i<len;++i){const ret=this._listeners[i](event);if(C3.IsIterator(ret))yield*ret}this._DecreaseFireDepth()}};
 
 }
 
@@ -3273,13 +3273,14 @@ break}}SetPropertyColorOffsetValueByIndex(index,r,g,b){if(r===0&&g===0&&b===0)re
 this._typewriterLength=C3.BBString.StripAnyTags(text).length;this._rendererText.SetDrawMaxCharacterCount(0);this._StartTicking()}_CancelTypewriter(){this._typewriterStartTime=-1;this._typewriterEndTime=-1;this._typewriterLength=0;this._rendererText.SetDrawMaxCharacterCount(-1);this._StopTicking()}_FinishTypewriter(){if(this._typewriterEndTime===-1)return;this._CancelTypewriter();this.Trigger(C3.Plugins.Text.Cnds.OnTypewriterTextFinished);this._runtime.UpdateRender()}_SetFontFace(face){if(this._faceName===
 face)return;this._faceName=face;this._rendererText.SetFontName(face);this._runtime.UpdateRender()}_GetFontFace(){return this._faceName}_SetBold(b){b=!!b;if(this._isBold===b)return;this._isBold=b;this._rendererText.SetBold(b);this._runtime.UpdateRender()}_IsBold(){return this._isBold}_SetItalic(i){i=!!i;if(this._isItalic===i)return;this._isItalic=i;this._rendererText.SetItalic(i);this._runtime.UpdateRender()}_IsItalic(){return this._isItalic}_SetFontSize(size){if(this._ptSize===size)return;this._ptSize=
 size;this._runtime.UpdateRender()}_GetFontSize(){return this._ptSize}_SetFontColor(color){if(this._color.equalsIgnoringAlpha(color))return;this._color.copyRgb(color);this._rendererText.SetColor(this._color);this._runtime.UpdateRender()}_GetFontColor(){return this._color}_SetLineHeight(lho){if(this._lineHeightOffset===lho)return;this._lineHeightOffset=lho;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetLineHeight(){return this._lineHeightOffset}_SetHAlign(h){if(this._horizontalAlign===
-h)return;this._horizontalAlign=h;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetHAlign(){return this._horizontalAlign}_SetVAlign(v){if(this._verticalAlign===v)return;this._verticalAlign=v;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetVAlign(){return this._verticalAlign}_SetWrapByWord(w){w=!!w;if(this._wrapByWord===w)return;this._wrapByWord=w;this._UpdateTextSettings();this._runtime.UpdateRender()}_IsWrapByWord(){return this._wrapByWord}Tick(){const wallTime=this._runtime.GetWallTime();
-if(wallTime>=this._typewriterEndTime){this._CancelTypewriter();this.Trigger(C3.Plugins.Text.Cnds.OnTypewriterTextFinished);this._runtime.UpdateRender()}else{let displayLength=C3.relerp(this._typewriterStartTime,this._typewriterEndTime,wallTime,0,this._typewriterLength);displayLength=Math.floor(displayLength);if(displayLength!==this._rendererText.GetDrawMaxCharacterCount()){this._rendererText.SetDrawMaxCharacterCount(displayLength);this._runtime.UpdateRender()}}}GetDebuggerProperties(){const prefix=
-"plugins.text";return[{title:prefix+".name",properties:[{name:prefix+".properties.text.name",value:this._text,onedit:v=>this._SetText(v)}]}]}GetScriptInterfaceClass(){return self.ITextInstance}};const map=new WeakMap;const SCRIPT_HORIZONTAL_ALIGNMENTS=new Map([["left",0],["center",1],["right",2]]);const SCRIPT_VERTICAL_ALIGNMENTS=new Map([["top",0],["center",1],["bottom",2]]);const SCRIPT_WRAP_MODES=new Map([["word",true],["character",false]]);
+h)return;this._horizontalAlign=h;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetHAlign(){return this._horizontalAlign}_SetVAlign(v){if(this._verticalAlign===v)return;this._verticalAlign=v;this._UpdateTextSettings();this._runtime.UpdateRender()}_GetVAlign(){return this._verticalAlign}_SetWrapByWord(w){w=!!w;if(this._wrapByWord===w)return;this._wrapByWord=w;this._UpdateTextSettings();this._runtime.UpdateRender()}_IsWrapByWord(){return this._wrapByWord}_GetTextWidth(){this._UpdateTextSize();
+return this._rendererText.GetTextWidth()}_GetTextHeight(){this._UpdateTextSize();return this._rendererText.GetTextHeight()}Tick(){const wallTime=this._runtime.GetWallTime();if(wallTime>=this._typewriterEndTime){this._CancelTypewriter();this.Trigger(C3.Plugins.Text.Cnds.OnTypewriterTextFinished);this._runtime.UpdateRender()}else{let displayLength=C3.relerp(this._typewriterStartTime,this._typewriterEndTime,wallTime,0,this._typewriterLength);displayLength=Math.floor(displayLength);if(displayLength!==
+this._rendererText.GetDrawMaxCharacterCount()){this._rendererText.SetDrawMaxCharacterCount(displayLength);this._runtime.UpdateRender()}}}GetDebuggerProperties(){const prefix="plugins.text";return[{title:prefix+".name",properties:[{name:prefix+".properties.text.name",value:this._text,onedit:v=>this._SetText(v)}]}]}GetScriptInterfaceClass(){return self.ITextInstance}};const map=new WeakMap;const SCRIPT_HORIZONTAL_ALIGNMENTS=new Map([["left",0],["center",1],["right",2]]);
+const SCRIPT_VERTICAL_ALIGNMENTS=new Map([["top",0],["center",1],["bottom",2]]);const SCRIPT_WRAP_MODES=new Map([["word",true],["character",false]]);
 self.ITextInstance=class ITextInstance extends self.IWorldInstance{constructor(){super();map.set(this,self.IInstance._GetInitInst().GetSdkInstance())}get text(){return map.get(this).GetText()}set text(str){C3X.RequireString(str);const inst=map.get(this);inst._CancelTypewriter();inst._SetText(str)}typewriterText(str,duration){C3X.RequireString(str);C3X.RequireFiniteNumber(duration);const inst=map.get(this);inst._CancelTypewriter();inst._StartTypewriter(str,duration)}typewriterFinish(){map.get(this)._FinishTypewriter()}set fontFace(str){C3X.RequireString(str);
 map.get(this)._SetFontFace(str)}get fontFace(){return map.get(this)._GetFontFace()}set isBold(b){map.get(this)._SetBold(b)}get isBold(){return map.get(this)._IsBold()}set isItalic(i){map.get(this)._SetItalic(i)}get isItalic(){return map.get(this)._IsItalic()}set sizePt(pt){C3X.RequireFiniteNumber(pt);map.get(this)._SetFontSize(pt)}get sizePt(){return map.get(this)._GetFontSize()}set fontColor(arr){C3X.RequireArray(arr);if(arr.length<3)throw new Error("expected 3 elements");tempColor.setRgb(arr[0],
 arr[1],arr[2]);map.get(this)._SetFontColor(tempColor)}get fontColor(){const c=map.get(this)._GetFontColor();return[c.getR(),c.getG(),c.getB()]}set lineHeight(lho){C3X.RequireFiniteNumber(lho);map.get(this)._SetLineHeight(lho)}get lineHeight(){return map.get(this)._GetLineHeight()}set horizontalAlign(str){C3X.RequireString(str);const h=SCRIPT_HORIZONTAL_ALIGNMENTS.get(str);if(typeof h==="undefined")throw new Error("invalid mode");map.get(this)._SetHAlign(h)}get horizontalAlign(){return HORIZONTAL_ALIGNMENTS[map.get(this)._GetHAlign()]}set verticalAlign(str){C3X.RequireString(str);
-const v=SCRIPT_VERTICAL_ALIGNMENTS.get(str);if(typeof v==="undefined")throw new Error("invalid mode");map.get(this)._SetVAlign(v)}get verticalAlign(){return VERTICAL_ALIGNMENTS[map.get(this)._GetVAlign()]}set wordWrapMode(str){C3X.RequireString(str);const isWrapByWord=SCRIPT_WRAP_MODES.get(str);if(typeof isWrapByWord==="undefined")throw new Error("invalid mode");map.get(this)._SetWrapByWord(isWrapByWord)}get wordWrapMode(){return map.get(this)._IsWrapByWord()?"word":"character"}};
+const v=SCRIPT_VERTICAL_ALIGNMENTS.get(str);if(typeof v==="undefined")throw new Error("invalid mode");map.get(this)._SetVAlign(v)}get verticalAlign(){return VERTICAL_ALIGNMENTS[map.get(this)._GetVAlign()]}set wordWrapMode(str){C3X.RequireString(str);const isWrapByWord=SCRIPT_WRAP_MODES.get(str);if(typeof isWrapByWord==="undefined")throw new Error("invalid mode");map.get(this)._SetWrapByWord(isWrapByWord)}get wordWrapMode(){return map.get(this)._IsWrapByWord()?"word":"character"}get textWidth(){return map.get(this)._GetTextWidth()}get textHeight(){return map.get(this)._GetTextHeight()}};
 
 }
 
@@ -3297,7 +3298,7 @@ SetEffect(effect){this.GetWorldInfo().SetBlendMode(effect);this._runtime.UpdateR
 }
 
 {
-'use strict';const C3=self.C3;C3.Plugins.Text.Exps={Text(){return this._text},PlainText(){if(this._enableBBcode)return C3.BBString.StripAnyTags(this._text);else return this._text},FaceName(){return this._faceName},FaceSize(){return this._ptSize},TextWidth(){this._UpdateTextSize();return this._rendererText.GetTextWidth()},TextHeight(){this._UpdateTextSize();return this._rendererText.GetTextHeight()},LineHeight(){return this._lineHeightOffset}};
+'use strict';const C3=self.C3;C3.Plugins.Text.Exps={Text(){return this._text},PlainText(){if(this._enableBBcode)return C3.BBString.StripAnyTags(this._text);else return this._text},FaceName(){return this._faceName},FaceSize(){return this._ptSize},TextWidth(){return this._GetTextWidth()},TextHeight(){return this._GetTextHeight()},LineHeight(){return this._lineHeightOffset}};
 
 }
 
@@ -5088,6 +5089,90 @@ lastTapTime=-1E4;return"double-tap"}else{lastTapX=this._x;lastTapY=this._y;lastT
 }
 
 {
+'use strict';const C3=self.C3;C3.Plugins.LocalStorage=class LocalStoragePlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.LocalStorage.Type=class LocalStorageType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}};
+
+}
+
+{
+'use strict';const C3=self.C3;
+C3.Plugins.LocalStorage.Instance=class LocalStorageInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst);this._currentKey="";this._lastValue="";this._keyNamesList=[];this._errorMessage="";this._pendingGets=0;this._pendingSets=0;this._storage=this._runtime._GetProjectStorage();this._debugCache=new Map;this._isLoadingDebugCache=false}Release(){super.Release()}async _TriggerStorageError(err){this._errorMessage=this._GetErrorString(err);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnError)}_GetErrorString(err){if(!err)return"unknown error";else if(typeof err===
+"string")return err;else if(typeof err.message==="string")return err.message;else if(typeof err.name==="string")return err.name;else if(typeof err.data==="string")return err.data;else return"unknown error"}GetDebuggerProperties(){if(!this._isLoadingDebugCache)this._DebugCacheStorage();return[{title:"plugins.localstorage.name",properties:[...this._debugCache.entries()].map(entry=>({name:"$"+entry[0],value:entry[1],onedit:v=>this._storage.setItem(entry[0],v)}))}]}async _DebugCacheStorage(){this._isLoadingDebugCache=
+true;try{const keyList=await this._storage.keys();keyList.sort((a,b)=>{const la=a.toLowerCase();const lb=b.toLowerCase();if(la<lb)return-1;else if(lb<la)return 1;else return 0});const values=await Promise.all(keyList.map(key=>this._storage.getItem(key)));this._debugCache.clear();for(let i=0,len=keyList.length;i<len;++i)this._debugCache.set(keyList[i],values[i])}catch(err){console.warn("[C3 debugger] Error displaying local storage: ",err)}finally{this._isLoadingDebugCache=false}}};
+
+}
+
+{
+'use strict';const C3=self.C3;
+C3.Plugins.LocalStorage.Cnds={OnItemSet(key){return this._currentKey===key},OnAnyItemSet(){return true},OnItemGet(key){return this._currentKey===key},OnAnyItemGet(){return true},OnItemRemoved(key){return this._currentKey===key},OnAnyItemRemoved(){return true},OnCleared(){return true},OnAllKeyNamesLoaded(){return true},OnError(){return true},OnItemExists(key){return this._currentKey===key},OnItemMissing(key){return this._currentKey===key},CompareKey(cmp,key){return C3.compare(this._currentKey,cmp,
+key)},CompareValue(cmp,v){return C3.compare(this._lastValue,cmp,v)},IsProcessingSets(){return this._pendingSets>0},IsProcessingGets(){return this._pendingGets>0},OnAllSetsComplete(){return true},OnAllGetsComplete(){return true}};
+
+}
+
+{
+'use strict';const C3=self.C3;function IsExpressionType(x){return typeof x==="string"||typeof x==="number"}
+C3.Plugins.LocalStorage.Acts={async SetItem(key,value){this._pendingSets++;try{const valueSet=await this._storage.setItem(key,value);await this.ScheduleTriggers(async()=>{this._currentKey=key;this._lastValue=valueSet;await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemSet);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemSet)})}catch(err){await this._TriggerStorageError(err)}finally{this._pendingSets--;if(this._pendingSets===0)await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllSetsComplete)}},
+async SetBinaryItem(key,objectClass){if(!objectClass)return;const inst=objectClass.GetFirstPicked(this._inst);if(!inst)return;const sdkInst=inst.GetSdkInstance();if(!sdkInst)return;const buffer=sdkInst.GetArrayBufferReadOnly();this._pendingSets++;try{await this._storage.setItem(key,buffer);await this.ScheduleTriggers(async()=>{this._currentKey=key;this._lastValue="";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemSet);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemSet)})}catch(err){await this._TriggerStorageError(err)}finally{this._pendingSets--;
+if(this._pendingSets===0)await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllSetsComplete)}},async GetItem(key){this._pendingGets++;try{const value=await this._storage.getItem(key);await this.ScheduleTriggers(async()=>{this._currentKey=key;this._lastValue=IsExpressionType(value)?value:"";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemGet);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemGet)})}catch(err){await this._TriggerStorageError(err)}finally{this._pendingGets--;
+if(this._pendingGets===0)await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllGetsComplete)}},async GetBinaryItem(key,objectClass){if(!objectClass)return;const inst=objectClass.GetFirstPicked(this._inst);if(!inst)return;const sdkInst=inst.GetSdkInstance();this._pendingGets++;try{let value=await this._storage.getItem(key);value=value instanceof ArrayBuffer?value:new ArrayBuffer(0);await this.ScheduleTriggers(async()=>{this._lastValue="";this._currentKey=key;sdkInst.SetArrayBufferTransfer(value);
+await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemGet);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemGet)})}catch(err){await this._TriggerStorageError(err)}finally{this._pendingGets--;if(this._pendingGets===0)await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllGetsComplete)}},async CheckItemExists(key){try{const value=await this._storage.getItem(key);await this.ScheduleTriggers(async()=>{this._currentKey=key;if(typeof value==="undefined"||value===null){this._lastValue=
+"";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemMissing)}else{this._lastValue=IsExpressionType(value)?value:"";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemExists)}})}catch(err){await this._TriggerStorageError(err)}},async RemoveItem(key){try{await this._storage.removeItem(key);await this.ScheduleTriggers(async()=>{this._currentKey=key;this._lastValue="";await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAnyItemRemoved);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnItemRemoved)})}catch(err){await this._TriggerStorageError(err)}},
+async ClearStorage(){try{await this._storage.clear();await this.ScheduleTriggers(async()=>{this._currentKey="";this._lastValue="";C3.clearArray(this._keyNamesList);await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnCleared)})}catch(err){await this._TriggerStorageError(err)}},async GetAllKeyNames(){try{const keyList=await this._storage.keys();await this.ScheduleTriggers(async()=>{this._keyNamesList=keyList;await this.TriggerAsync(C3.Plugins.LocalStorage.Cnds.OnAllKeyNamesLoaded)})}catch(err){await this._TriggerStorageError(err)}}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.LocalStorage.Exps={ItemValue(){return this._lastValue},Key(){return this._currentKey},KeyCount(){return this._keyNamesList.length},KeyAt(i){i=Math.floor(i);if(i<0||i>=this._keyNamesList.length)return"";return this._keyNamesList[i]},ErrorMessage(){return this._errorMessage}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.Keyboard=class KeyboardPlugin extends C3.SDKPluginBase{constructor(opts){super(opts)}Release(){super.Release()}};
+
+}
+
+{
+'use strict';const C3=self.C3;const C3X=self.C3X;C3.Plugins.Keyboard.Type=class KeyboardType extends C3.SDKTypeBase{constructor(objectClass){super(objectClass)}Release(){super.Release()}OnCreate(){}GetScriptInterfaceClass(){return self.IKeyboardObjectType}};let keyboardObjectType=null;function GetKeyboardSdkInstance(){return keyboardObjectType.GetSingleGlobalInstance().GetSdkInstance()}
+self.IKeyboardObjectType=class IKeyboardObjectType extends self.IObjectClass{constructor(objectType){super(objectType);keyboardObjectType=objectType;objectType.GetRuntime()._GetCommonScriptInterfaces().keyboard=this}isKeyDown(keyOrCode){const keyboardInst=GetKeyboardSdkInstance();if(typeof keyOrCode==="string")return keyboardInst.IsKeyDown(keyOrCode);else if(typeof keyOrCode==="number")return keyboardInst.IsKeyCodeDown(keyOrCode);else throw new TypeError("expected string or number");}};
+
+}
+
+{
+'use strict';const C3=self.C3;
+C3.Plugins.Keyboard.Instance=class KeyboardInstance extends C3.SDKInstanceBase{constructor(inst,properties){super(inst);this._keysDownByString=new Set;this._keysDownByWhich=new Set;this._triggerWhich=0;this._triggerString="";this._triggerTypedKey="";const rt=this.GetRuntime().Dispatcher();this._disposables=new C3.CompositeDisposable(C3.Disposable.From(rt,"keydown",e=>this._OnKeyDown(e.data)),C3.Disposable.From(rt,"keyup",e=>this._OnKeyUp(e.data)),C3.Disposable.From(rt,"window-blur",()=>this._OnWindowOrKeyboardBlur()),
+C3.Disposable.From(rt,"keyboard-blur",()=>this._OnWindowOrKeyboardBlur()))}Release(){super.Release()}_OnKeyDown(e){const which=e["which"];const keyString=e["code"]||which.toString();const typedKey=e["key"];if(this._keysDownByString.has(keyString))return;this._keysDownByString.add(keyString);this._keysDownByWhich.add(which);this._triggerString=keyString;this._triggerWhich=which;this._triggerTypedKey=typedKey;this.Trigger(C3.Plugins.Keyboard.Cnds.OnAnyKey);this.Trigger(C3.Plugins.Keyboard.Cnds.OnKey);
+this.Trigger(C3.Plugins.Keyboard.Cnds.OnLeftRightKeyPressed);this.Trigger(C3.Plugins.Keyboard.Cnds.OnKeyCode)}_OnKeyUp(e){const which=e["which"];const keyString=e["code"]||which.toString();const typedKey=e["key"];this._keysDownByString.delete(keyString);this._keysDownByWhich.delete(which);this._triggerString=keyString;this._triggerWhich=which;this._triggerTypedKey=typedKey;this.Trigger(C3.Plugins.Keyboard.Cnds.OnAnyKeyReleased);this.Trigger(C3.Plugins.Keyboard.Cnds.OnKeyReleased);this.Trigger(C3.Plugins.Keyboard.Cnds.OnLeftRightKeyReleased);
+this.Trigger(C3.Plugins.Keyboard.Cnds.OnKeyCodeReleased)}_OnWindowOrKeyboardBlur(){for(const which of this._keysDownByWhich){this._keysDownByWhich.delete(which);this._triggerWhich=which;this.Trigger(C3.Plugins.Keyboard.Cnds.OnAnyKeyReleased);this.Trigger(C3.Plugins.Keyboard.Cnds.OnKeyReleased);this.Trigger(C3.Plugins.Keyboard.Cnds.OnKeyCodeReleased)}this._keysDownByString.clear()}IsKeyDown(str){return this._keysDownByString.has(str)}IsKeyCodeDown(which){return this._keysDownByWhich.has(which)}SaveToJson(){return{"tk":this._triggerWhich,
+"tkk":this._triggerTypedKey}}LoadFromJson(o){this._triggerWhich=o["tk"];if(o.hasOwnProperty("tkk"))this._triggerTypedKey=o["tkk"]}GetDebuggerProperties(){const prefix="plugins.keyboard";return[{title:prefix+".name",properties:[{name:prefix+".debugger.last-key-code",value:this._triggerWhich},{name:prefix+".debugger.last-key-string",value:C3.Plugins.Keyboard.Exps.StringFromKeyCode(this._triggerWhich)},{name:prefix+".debugger.last-typed-key",value:this._triggerTypedKey}]}]}};
+
+}
+
+{
+'use strict';const C3=self.C3;const LEFTRIGHT_KEY_STRINGS=["ShiftLeft","ShiftRight","ControlLeft","ControlRight","AltLeft","AltRight","MetaLeft","MetaRight"];
+C3.Plugins.Keyboard.Cnds={IsKeyDown(which){return this._keysDownByWhich.has(which)},OnKey(which){return this._triggerWhich===which},OnAnyKey(){return true},OnAnyKeyReleased(){return true},OnKeyReleased(which){return this._triggerWhich===which},IsKeyCodeDown(which){which=Math.floor(which);return this._keysDownByWhich.has(which)},OnKeyCode(which){return this._triggerWhich===which},OnKeyCodeReleased(which){return this._triggerWhich===which},OnLeftRightKeyPressed(index){const keyString=LEFTRIGHT_KEY_STRINGS[index];
+return this._triggerString===keyString},OnLeftRightKeyReleased(index){const keyString=LEFTRIGHT_KEY_STRINGS[index];return this._triggerString===keyString},IsLeftRightKeyDown(index){const keyString=LEFTRIGHT_KEY_STRINGS[index];return this._keysDownByString.has(keyString)}};
+
+}
+
+{
+'use strict';const C3=self.C3;C3.Plugins.Keyboard.Acts={};
+
+}
+
+{
+'use strict';const C3=self.C3;
+function StringFromCharCode(kc){kc=Math.floor(kc);switch(kc){case 8:return"backspace";case 9:return"tab";case 13:return"enter";case 16:return"shift";case 17:return"control";case 18:return"alt";case 19:return"pause";case 20:return"capslock";case 27:return"esc";case 33:return"pageup";case 34:return"pagedown";case 35:return"end";case 36:return"home";case 37:return"\u2190";case 38:return"\u2191";case 39:return"\u2192";case 40:return"\u2193";case 45:return"insert";case 46:return"del";case 91:return"left window key";
+case 92:return"right window key";case 93:return"select";case 96:return"numpad 0";case 97:return"numpad 1";case 98:return"numpad 2";case 99:return"numpad 3";case 100:return"numpad 4";case 101:return"numpad 5";case 102:return"numpad 6";case 103:return"numpad 7";case 104:return"numpad 8";case 105:return"numpad 9";case 106:return"numpad *";case 107:return"numpad +";case 109:return"numpad -";case 110:return"numpad .";case 111:return"numpad /";case 112:return"F1";case 113:return"F2";case 114:return"F3";
+case 115:return"F4";case 116:return"F5";case 117:return"F6";case 118:return"F7";case 119:return"F8";case 120:return"F9";case 121:return"F10";case 122:return"F11";case 123:return"F12";case 144:return"numlock";case 145:return"scroll lock";case 186:return";";case 187:return"=";case 188:return",";case 189:return"-";case 190:return".";case 191:return"/";case 192:return"'";case 219:return"[";case 220:return"\\";case 221:return"]";case 222:return"#";case 223:return"`";default:return String.fromCharCode(kc)}}
+C3.Plugins.Keyboard.Exps={LastKeyCode(){return this._triggerWhich},StringFromKeyCode(kc){return StringFromCharCode(kc)},TypedKey(){return this._triggerTypedKey}};
+
+}
+
+{
 'use strict';const C3=self.C3;C3.Behaviors.Tween=class TweenBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}};
 
 }
@@ -5287,19 +5372,15 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Bullet,
 		C3.Behaviors.Fade,
 		C3.Plugins.Eponesh_GameScore,
+		C3.Plugins.LocalStorage,
+		C3.Plugins.Keyboard,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowSticky,
+		C3.Plugins.System.Acts.SetVar,
+		C3.Plugins.Eponesh_GameScore.Exps.PlayerScore,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Behaviors.Tween.Acts.TweenTwoProperties,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
-		C3.Plugins.System.Acts.SetVar,
-		C3.Plugins.System.Exps.int,
-		C3.Plugins.System.Exps.random,
-		C3.Plugins.System.Acts.SubVar,
-		C3.Plugins.Sprite.Acts.Spawn,
-		C3.Behaviors.Bullet.Acts.SetAngleOfMotion,
-		C3.Behaviors.Bullet.Acts.SetSpeed,
-		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowRewarded,
@@ -5307,7 +5388,28 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsRewardedReward,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
 		C3.Plugins.System.Cnds.EveryTick,
-		C3.Plugins.Text.Cnds.CompareInstanceVar
+		C3.Plugins.Text.Cnds.CompareInstanceVar,
+		C3.Plugins.Text.Acts.SetText,
+		C3.Plugins.System.Exps.int,
+		C3.Plugins.System.Exps.random,
+		C3.Plugins.System.Acts.SubVar,
+		C3.Plugins.Sprite.Acts.Spawn,
+		C3.Behaviors.Bullet.Acts.SetAngleOfMotion,
+		C3.Behaviors.Bullet.Acts.SetSpeed,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSetScore,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSync,
+		C3.Plugins.Keyboard.Cnds.IsKeyDown,
+		C3.Plugins.System.Cnds.TriggerOnce,
+		C3.Plugins.System.Acts.GoToLayout,
+		C3.Plugins.LocalStorage.Acts.CheckItemExists,
+		C3.Plugins.System.Acts.Wait,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenStart,
+		C3.Plugins.System.Acts.AddVar,
+		C3.Plugins.LocalStorage.Acts.SetItem,
+		C3.Plugins.Keyboard.Cnds.OnKey,
+		C3.Plugins.LocalStorage.Acts.ClearStorage,
+		C3.Plugins.LocalStorage.Cnds.OnItemExists,
+		C3.Plugins.LocalStorage.Exps.ItemValue
 	];
 };
 self.C3_JsPropNameTable = [
@@ -5323,8 +5425,11 @@ self.C3_JsPropNameTable = [
 	{GameScore: 0},
 	{enemy_hit: 0},
 	{ADS: 0},
+	{LocalStorage: 0},
+	{Keyboard: 0},
 	{Health: 0},
-	{Value: 0}
+	{Value: 0},
+	{views: 0}
 ];
 }
 
@@ -5425,11 +5530,23 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
 		() => "tap",
 		() => 420,
 		() => 0.1,
 		() => "",
 		() => 385,
+		() => 1,
+		() => 0,
+		() => "score",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			return () => and("", f0((v1.GetValue()).toString()));
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
@@ -5441,7 +5558,6 @@ self.C3_ExpressionFuncs = [
 			return () => f0(v1.GetValue());
 		},
 		() => "Layer 1",
-		() => 0,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(270, 90);
@@ -5451,12 +5567,18 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("x", v0.GetValue());
 		},
-		() => 1,
-		() => "score",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
+		() => "VIEWS",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			const v1 = p._GetNode(1).GetVar();
-			return () => and("", f0((v1.GetValue()).toString()));
+			return () => f0(1);
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => and(("Показано:" + "\n"), v0.GetValue());
 		}
 ];
 
