@@ -6351,7 +6351,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text.Acts.Destroy,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
 		C3.Plugins.System.Exps.loadingprogress,
-		C3.Plugins.Eponesh_GameScore.Cnds.OnFullscreenClose,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnSocialsInvite,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnPaymentsPurchase
 	];
