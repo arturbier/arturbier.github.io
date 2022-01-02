@@ -6977,6 +6977,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text.Cnds.IsVisible,
 		C3.Plugins.Sprite.Acts.MoveToBottom,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowSticky,
+		C3.Plugins.Text.Acts.SetX,
+		C3.Plugins.System.Exps.viewportright,
 		C3.Plugins.Touch.Cnds.OnTouchStart
 	];
 };
@@ -7498,7 +7500,11 @@ self.C3_ExpressionFuncs = [
 			return () => f0((v1.GetValue() / 3));
 		},
 		() => 215,
-		() => "Splash"
+		() => "Splash",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0(0) / 2);
+		}
 ];
 
 
