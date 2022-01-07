@@ -6915,6 +6915,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Pin.Acts.PinByProperties,
 		C3.Plugins.System.Acts.SetLayerVisible,
 		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
+		C3.Plugins.Sprite.Acts.AddChild,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.System.Acts.CreateObject,
@@ -6959,6 +6960,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerSet,
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerSync,
 		C3.Plugins.Arr.Exps.Width,
+		C3.Plugins.TiledBg.Acts.AddChild,
 		C3.Plugins.System.Cnds.Every,
 		C3.Plugins.System.Acts.SubVar,
 		C3.Plugins.Sprite.Cnds.OnCollision,
@@ -7035,6 +7037,7 @@ self.C3_JsPropNameTable = [
 	{timer_bg: 0},
 	{timerbar: 0},
 	{background_timerbar_frame: 0},
+	{Type: 0},
 	{wood_tile2: 0},
 	{wood_tile1: 0},
 	{icon_heart: 0},
@@ -7377,7 +7380,6 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpObject(f1());
 		},
 		() => "Modal",
-		() => "clear_levels",
 		() => 560,
 		() => 415,
 		() => "Begin Configs",
@@ -7410,8 +7412,6 @@ self.C3_ExpressionFuncs = [
 			const n3 = p._GetNode(3);
 			return () => C3.toDegrees(C3.angleTo(n0.ExpObject(), n1.ExpObject(), n2.ExpObject(), n3.ExpObject()));
 		},
-		() => 1034,
-		() => 644,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (((("[color=#FFFFFF]Уровень " + f0()) + "[/color]") + "\n") + "Вы готовы?");

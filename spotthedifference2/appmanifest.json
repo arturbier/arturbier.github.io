@@ -1,6 +1,6 @@
 {
-	"name": "Spot the Difference",
-	"short_name": "Spot the Difference",
+	"name": "Найти отличия - игра для ума",
+	"short_name": "Найти отличия - игра для ума",
 	"description": "Spot the Difference game",
 	"start_url": "index.html",
 	"display": "fullscreen",
