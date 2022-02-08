@@ -11547,7 +11547,6 @@ self.C3_ExpressionFuncs = [
 		() => 350,
 		() => 2000,
 		() => 800,
-		() => 150,
 		() => "Finish",
 		() => 0.5,
 		() => "Drop",
@@ -11633,6 +11632,7 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => n0.ExpObject(n1.ExpInstVar(), 0);
 		},
+		() => 150,
 		() => "150",
 		() => 20,
 		() => "20",
