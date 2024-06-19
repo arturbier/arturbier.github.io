@@ -5864,12 +5864,16 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Browser,
 		C3.Plugins.HTMLElement,
 		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.Plugins.HTMLElement.Acts.SetContentCSSStyle,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.System.Exps.viewportheight,
 		C3.Plugins.System.Exps.viewportwidth,
 		C3.Plugins.System.Acts.SetLayerVisible,
+		C3.Plugins.System.Cnds.PickRandom,
+		C3.Behaviors.Tween.Acts.TweenTwoProperties,
+		C3.Plugins.Sprite.Exps.X,
+		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Mouse.Cnds.IsOverObject,
+		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Plugins.Sprite.Acts.SetPosToObject,
 		C3.Plugins.Sprite.Acts.ZMoveToObject,
 		C3.Plugins.System.Cnds.TriggerOnce,
@@ -5877,18 +5881,18 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Sprite.Acts.SetPos,
 		C3.Plugins.Mouse.Cnds.OnObjectClicked,
+		C3.Plugins.System.Cnds.CompareBoolVar,
+		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.SVGPicture.Acts.SetX,
-		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.Sprite.Exps.UID,
+		C3.Plugins.Sprite.Cnds.CompareInstanceVar,
 		C3.Plugins.Sprite.Cnds.CompareX,
 		C3.Plugins.Sprite.Acts.SetMirrored,
-		C3.Plugins.Sprite.Exps.Y,
 		C3.Plugins.Sprite.Acts.SetAnim,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
 		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.Sprite.Cnds.PickByUID,
-		C3.Behaviors.Tween.Acts.TweenTwoProperties,
 		C3.Plugins.Sprite.Exps.ImagePointX,
 		C3.Plugins.Sprite.Exps.ImagePointY,
 		C3.Plugins.System.Acts.CreateObject,
@@ -5901,11 +5905,13 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Browser.Cnds.OnResize,
-		C3.Plugins.HTMLElement.Acts.SetX
+		C3.Plugins.HTMLElement.Acts.SetX,
+		C3.Plugins.HTMLElement.Acts.SetContentCSSStyle
 	];
 };
 self.C3_JsPropNameTable = [
 	{BG: 0},
+	{type: 0},
 	{Tween: 0},
 	{Rope: 0},
 	{Anchor: 0},
@@ -5926,7 +5932,13 @@ self.C3_JsPropNameTable = [
 	{Text: 0},
 	{Browser: 0},
 	{HTMLElement: 0},
+	{Btn: 0},
+	{Btn_Text: 0},
+	{курсор: 0},
+	{Sprite: 0},
 	{Rope_UID: 0},
+	{Run: 0},
+	{Speed: 0},
 	{UID: 0}
 ];
 
@@ -5947,7 +5959,11 @@ self.InstanceType = {
 	RotateScreen: class extends self.ITiledBackgroundInstance {},
 	Text: class extends self.ITextInstance {},
 	Browser: class extends self.IInstance {},
-	HTMLElement: class extends self.IHTMLElementInstance {}
+	HTMLElement: class extends self.IHTMLElementInstance {},
+	Btn: class extends self.ISpriteInstance {},
+	Btn_Text: class extends self.ITextInstance {},
+	курсор: class extends self.ISpriteInstance {},
+	Sprite: class extends self.ISpriteInstance {}
 }
 }
 
@@ -6048,18 +6064,6 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
-		() => "font-size",
-		() => "10px",
-		() => "",
-		() => "text-align",
-		() => "center",
-		() => "font-family",
-		() => "Arial",
-		() => "padding-top",
-		() => "color",
-		() => "#fff",
-		() => "font-weight",
-		() => "bold",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("Screen");
@@ -6073,29 +6077,34 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0("Screen") / 1.4);
 		},
-		() => 0,
-		() => "Over",
-		() => 100,
-		() => 0.5,
-		() => 1,
-		() => -999,
-		() => "IsntOver",
-		() => 0.1,
+		() => "HowTo",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject();
 		},
+		() => 1,
+		() => 0,
+		() => "Over",
+		() => 100,
+		() => 0.5,
+		() => -999,
+		() => "IsntOver",
+		() => 0.1,
+		() => "",
+		() => 0.2,
+		() => 0.6,
+		() => 2,
+		() => 1.2,
+		() => 3,
+		() => 1.8,
 		() => "Go",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() - 50);
 		},
 		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			const n2 = p._GetNode(2);
-			const n3 = p._GetNode(3);
-			return () => (C3.distanceTo(n0.ExpObject(), n1.ExpObject(), n2.ExpObject(), n3.ExpObject()) / 100);
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
 		},
 		() => "Run",
 		p => {
@@ -6103,10 +6112,6 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() + 50);
 		},
 		() => "Drop",
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
-		},
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 20);
@@ -6116,7 +6121,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("Banana");
 		},
-		() => 2,
 		() => "Wait",
 		() => "Game",
 		() => -256,
@@ -6125,17 +6129,33 @@ self.C3_ExpressionFuncs = [
 		() => "Banana",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(1, 2, 3, 4, 5);
+			return () => (and("Ваша скидка = ", f0(1, 2, 3, 4, 5)) + "%");
 		},
 		() => "Create",
-		() => 166.895807,
-		() => 121.962321108,
+		() => 71.904393,
+		() => 55.635501,
 		() => "Opacity",
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() + 150);
+			return () => (n0.ExpObject() + 80);
 		},
-		() => "Sale"
+		() => "Sale",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("PopUp");
+		},
+		() => "font-size",
+		() => "8px",
+		() => "text-align",
+		() => "center",
+		() => "font-family",
+		() => "Arial",
+		() => "padding-top",
+		() => "10px",
+		() => "color",
+		() => "#fff",
+		() => "font-weight",
+		() => "bold"
 ];
 
 
