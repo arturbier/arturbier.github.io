@@ -6163,7 +6163,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 20);
 		},
-		() => 0.3,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("Banana");
@@ -6177,7 +6176,7 @@ self.C3_ExpressionFuncs = [
 		() => "Banana",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (and("Ваша скидка = ", f0(1, 2, 3, 4, 5)) + "%");
+			return () => (and("Ваша скидка ", f0(1, 2, 3, 4, 5)) + "%");
 		},
 		() => "Create",
 		() => 71.904393,
