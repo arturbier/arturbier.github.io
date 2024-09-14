@@ -11019,6 +11019,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.TextBox,
 		C3.Plugins.lostinmind_TWASDK,
 		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.Sprite.Acts.SetEffectEnabled,
+		C3.Plugins.Text.Acts.SetEffectEnabled,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
 		C3.Plugins.Sprite.Acts.SetAnim,
@@ -11234,6 +11236,7 @@ self.C3_JsPropNameTable = [
 	{timer_text: 0},
 	{Price: 0},
 	{TelegramMiniAppsSDK: 0},
+	{Text: 0},
 	{strong_click: 0},
 	{thousand: 0},
 	{coins: 0},
@@ -11296,7 +11299,8 @@ self.InstanceType = {
 	Timer: class extends self.ISpriteInstance {},
 	timer_text: class extends self.ITextInstance {},
 	Price: class extends self.ISpriteInstance {},
-	TelegramMiniAppsSDK: class extends self.C3.Plugins.lostinmind_TWASDK.Instance {}
+	TelegramMiniAppsSDK: class extends self.C3.Plugins.lostinmind_TWASDK.Instance {},
+	Text: class extends self.ITextInstance {}
 }
 }
 
@@ -11397,6 +11401,8 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		() => "BetterOutline",
+		() => "Outline",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("bg_sel");
@@ -11547,7 +11553,6 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => (and(n0.ExpInstVar(), "\n") + n1.ExpInstVar());
 		},
-		() => "BetterOutline",
 		() => 2358087,
 		() => "first_game",
 		() => 0.1,
@@ -11625,6 +11630,8 @@ self.C3_ExpressionFuncs = [
 		() => "60\n[size=12]ок[/size]",
 		() => "20\n[size=12]ян[/size]",
 		() => "30\n[size=12]ян[/size]",
+		() => "10\n[size=12]stars[/size]",
+		() => "15\n[size=12]stars[/size]",
 		() => "Money",
 		() => 489,
 		() => 490,
