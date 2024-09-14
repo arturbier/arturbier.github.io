@@ -1,0 +1,79 @@
+:root {
+    --gp-background-color: #1a1a1a;
+    --gp-text-color: #ffffff;
+	--gp-text-share-color: #ffffff;
+    --gp-border-color: #383838;
+    --gp-border-color: #383838;
+    --gp-scroll-color: #686868;
+	--gp-button-color: #9d7c44;
+	--gp-achievements-progress: #383631;
+	
+}
+
+body .gp-achievement__unlocked {
+  background-color: var(--gp-background-color);
+}
+
+
+body .gp-achievement {
+  background-color: var(--gp-button-color);
+}
+
+body .gp-achievements__main-progress {
+  background-color: var(--gp-achievements-progress);
+}
+
+
+body .gp-progress-bar__progress {
+  background-color: var(--gp-button-color);
+}
+
+
+body .gp-overlay-button {
+  background-color: var(--gp-button-color);
+}
+
+body .gp-overlay__container {
+    background-color: var(--gp-background-color);
+    color: var(--gp-text-color);
+}
+
+body .gp-overlay {
+    border-color: var(--gp-border-color);
+	color: var(--gp-text-share-color);
+}
+
+body .gp-overlay .gp-list-item::after {
+    background-color: var(--gp-border-color);
+	
+}
+
+body .gp-list-item_active {
+    background-color: var(--gp-border-color);
+}
+
+body .gp-overlay-divider::before,
+body .gp-overlay-divider::after {
+    background-color: var(--gp-border-color);
+}
+
+.gp-overlay ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.gp-overlay ::-webkit-scrollbar-thumb {
+    border-radius: 2px;
+}
+
+.gp-overlay ::-webkit-scrollbar-track {
+    background-color: var(--gp-border-color);
+}
+
+.gp-overlay ::-webkit-scrollbar-corner {
+    background-color: var(--gp-border-color);
+}
+
+.gs-overlay ::-webkit-scrollbar-thumb {
+    background-color: var(--gp-scroll-color);
+}
