@@ -16,6 +16,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text,
 		C3.Behaviors.Anchor,
 		C3.Plugins.Button,
+		C3.Plugins.CV_GFX,
+		C3.Plugins.TelegramMiniAppsSDK,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.System.Acts.SetLayerParallax,
@@ -77,6 +79,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Button.Acts.SetEnabled,
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.Button.Cnds.OnClicked,
+		C3.Plugins.TelegramMiniAppsSDK.Acts.ImpactOccurred,
 		C3.Plugins.Sparsha_FirebaseAuth.Acts.PopupOauthSafe,
 		C3.Behaviors.aekiro_button.Acts.SimulateClick,
 		C3.Plugins.Sparsha_FirebaseSDK.Cnds.OnLoaded
@@ -114,6 +117,8 @@ self.C3_JsPropNameTable = [
 	{Anchor: 0},
 	{State_Dark: 0},
 	{Avatar: 0},
+	{GFX: 0},
+	{TelegramMiniAppsSDK: 0},
 	{Day: 0},
 	{Year: 0}
 ];
@@ -142,5 +147,7 @@ self.InstanceType = {
 	Month_State_BG2: class extends self.ISpriteInstance {},
 	State_Dark: class extends self.ISpriteInstance {},
 	Avatar: class extends self.ISpriteInstance {},
-	Button: class extends self.IButtonInstance {}
+	Button: class extends self.IButtonInstance {},
+	GFX: class extends self.IInstance {},
+	TelegramMiniAppsSDK: class extends self.C3.Plugins.TelegramMiniAppsSDK.Instance {}
 }

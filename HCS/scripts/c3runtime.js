@@ -8426,6 +8426,626 @@ class IButtonInstance extends self.IDOMInstance{constructor(){super();map.set(th
 
 }
 
+// scripts/plugins/CV_GFX/c3runtime/plugin.js
+{
+"use strict";
+{
+    const C3 = self.C3;
+    
+    C3.Plugins.CV_GFX = class CV_GFXPlugin extends C3.SDKPluginBase
+    {
+        constructor(opts)
+        {
+            super(opts);
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+    };
+}
+}
+
+// scripts/plugins/CV_GFX/c3runtime/type.js
+{
+"use strict";
+{
+    const C3 = self.C3;
+    
+    C3.Plugins.CV_GFX.Type = class CV_GFXType extends C3.SDKTypeBase
+    {
+        constructor(objectClass)
+        {
+            super(objectClass);
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+
+        OnCreate()
+        {}
+    };
+}
+}
+
+// scripts/plugins/CV_GFX/c3runtime/instance.js
+{
+"use strict";
+{
+    const C3 = self.C3;
+    
+    C3.Plugins.CV_GFX.Instance = class CV_GFXInstance extends C3.SDKInstanceBase
+    {
+        constructor(inst, properties)
+        {
+            super(inst);
+
+            // Pre-defined properties
+            this._debugMode = true;
+            this._style = 0; // 0 === Automatic ; 1 === Manual ;
+
+            this._quality = 100;
+            this._method = 0; // 0 === Memory
+            this._limit = 0; // 0 === High-Quality (25) ; 1 === Low-Quality (50)
+            this._manualEnabled = false;
+            this._autoEnabled = false;
+
+            // Pre-defined variables
+            this._userDefinedW = 0;
+            this._userDefinedH = 0;
+            this._userDefinedS = 1.0;
+
+            // Plugin-defined variables
+            this._currentLayout = "";
+            this._hasAutomated = false;
+
+            // System References
+            const self = this;
+            this._system = C3.Plugins.System;
+            this._GFX = C3.Plugins.CV_GFX;
+            this._Conditions = this._GFX.Cnds;
+
+            // System Get
+            this._viewportW = this.CallExpression(this._system.Exps.originalwindowwidth);
+            this._viewportH = this.CallExpression(this._system.Exps.originalwindowheight);
+
+            // System Set
+            this._userDefinedW = this._viewportW;
+            this._userDefinedH = this._viewportH;
+
+
+
+            if (properties)
+            {
+                this._debugMode = properties[0];
+                this._style = properties[1];
+
+                this._method = properties[2];
+                this._limit = properties[3];
+
+                this._autoEnabled = properties[4];
+
+                this._quality = properties[5];
+                this._manualEnabled = properties[6];
+            }
+
+            // Listener Handlers
+            this.OnBeforeLayoutChange = function()
+            {
+                self.Debug("OnBeforeLayoutChange");
+            }
+
+            this.OnLayoutChange = function()
+            {
+                self.TriggerAnchor(false); // Trigger Anchor (Deactivate)
+                self.NormalizeCanvas();
+                self._currentLayout = "";
+
+                self.NormalizeLayoutScale();
+                self.Debug("OnLayoutChange");
+            }
+
+            // Listeners
+            this.GetRuntime().Dispatcher().addEventListener("beforelayoutchange", this.OnBeforeLayoutChange);
+            this.GetRuntime().Dispatcher().addEventListener("layoutchange", this.OnLayoutChange);
+
+            // Set System Dependencies
+            this.UpdateTick();
+
+            // If not pre-defined, then fake-fire.
+            if (!this._autoEnabled || this._style !== 0)
+            {
+                this._hasAutomated = true;
+            }
+        }
+
+        Release()
+        {
+            super.Release();
+        }
+
+        SaveToJson()
+        {
+            return {
+                // data to be saved for savegames
+            };
+        }
+
+        LoadFromJson(o)
+        {
+            // load state for savegames
+        }
+
+        GetDebuggerProperties()
+        {
+            return [
+            {
+                title: "CV_GFX",
+                properties: [
+                    //{name: ".current-animation",	value: this._currentAnimation.GetName(),	onedit: v => this.CallAction(Acts.SetAnim, v, 0) },
+                ]
+            }];
+        }
+
+        Tick()
+        {
+            if (!this._hasAutomated && this._style === 0)
+            {
+                this._userDefinedS = this.GetRuntime().GetMainRunningLayout().GetScale();
+
+                this.Automate();
+                this._hasAutomated = true;
+            }
+            else if (this.GetRuntime().GetMainRunningLayout().GetName() !== this._currentLayout)
+            {
+
+                this._userDefinedS = this.GetRuntime().GetMainRunningLayout().GetScale();
+
+                this.ApplyScale();
+                this._currentLayout = this.GetRuntime().GetMainRunningLayout().GetName();
+            }
+        }
+
+        SetBaseCanvasSize(width, height) // Only Referenced
+        {
+            this.CallAction(this._system.Acts.SetCanvasSize, width, height);
+        }
+
+        SetBaseLayoutScale(scale) // Only Referenced
+        {
+            this.GetRuntime().GetMainRunningLayout().SetScale(scale);
+        }
+
+        SetGFXCanvasSize() // Only Referenced
+        {
+            const coreScale = this.CoreScale(this._quality);
+
+            const newW = this._userDefinedW * coreScale;
+            const newH = this._userDefinedH * coreScale;
+
+            this.SetBaseCanvasSize(newW, newH); // Apply Changes
+        }
+
+        SetGFXLayoutScale() // Only Referenced
+        {
+            const coreScale = this.CoreScale(this._quality);
+
+            const scale = this._userDefinedS * coreScale;
+
+            this.SetBaseLayoutScale(scale);
+        }
+
+        NormalizeCanvas()
+        {
+            this.SetBaseCanvasSize(this._viewportW, this._viewportH);
+        }
+
+        NormalizeLayoutScale()
+        {
+            this.SetBaseLayoutScale(1.0);
+        }
+
+        ApplyScale() // Only Referenced
+        {
+            this.AdjustFullscreenScaling(this._quality); // Apply Dependenices
+
+            // this.TriggerAnchor(false); // Trigger Anchor (Deactivate)
+            this.SetGFXCanvasSize();
+            this.SetGFXLayoutScale();
+            this.TriggerAnchor(true); // Trigger Anchor (Activate)
+        }
+
+        SetQuality(quality) // Action Method
+        {
+            this._quality = this.Clamp(quality, 0, 100);
+
+            this.ApplyScale();
+        }
+
+        SetRelativeCanvasSize(width, height) // Action Method
+        {
+            this._userDefinedW = width;
+            this._userDefinedH = height;
+
+            this.ApplyScale();
+        }
+
+        SetRelativeLayoutScale(scale) // Action Method
+        {
+            this._userDefinedS = scale;
+
+            this.ApplyScale();
+        }
+
+        SetStyle(toggle)
+        {
+            if (this._style !== toggle)
+            {
+                this._style = toggle;
+
+                if (this.style === 0)
+                {
+                    this.Automate();
+                }
+                else
+                {
+                    this.SetQuality(this._quality);
+                }
+            }
+        }
+
+        SetAutomatic(toggle)
+        {
+            if (this._style === 0) // isAutomatic
+            {
+                if (toggle === 0) // isEnabled
+                {
+                    if (this._autoEnabled !== toggle) // isEnabled before
+                    {
+                        this._autoEnabled = true;
+
+                        this._currentLayout = this.GetRuntime().GetMainRunningLayout().GetName();
+                        this.UpdateTick();
+                        this.Automate();
+                    }
+                }
+                else
+                {
+                    this._autoEnabled = false;
+                    this.UpdateTick();
+                    this._quality = 100;
+                    this.NormalizeCanvas();
+                    this.NormalizeLayoutScale();
+                }
+            }
+        }
+
+        SetManual(toggle)
+        {
+            if (this._style === 1) // isManual
+            {
+                if (toggle === 0) // isEnabled
+                {
+                    if (this._manualEnabled !== toggle) // isEnabled before
+                    {
+                        this._manualEnabled = true;
+
+                        this._currentLayout = this.GetRuntime().GetMainRunningLayout().GetName();
+                        this.UpdateTick();
+                        this.ApplyScale();
+                    }
+                }
+                else
+                {
+                    this._manualEnabled = false;
+                    this.UpdateTick();
+                    this._quality = 100;
+                    this.NormalizeCanvas();
+                    this.NormalizeLayoutScale();
+                }
+            }
+        }
+
+        UpdateTick()
+        {
+            if ((this._autoEnabled && this._style === 0) || (this._manualEnabled && this._style === 1))
+            {
+                this._StartTicking();
+            }
+            else
+            {
+                this._StopTicking();
+            }
+        }
+
+        GetMemorySpecs()
+        {
+            const memory = globalThis["navigator"]["deviceMemory"];
+            return memory;
+        }
+
+        MemoryProtocol(memory)
+        {
+            const HD = 8;
+            const HQ = 6;
+            const MQ = 4;
+            const LQ = 2;
+
+            if (memory >= HD)
+            {
+                return 100;
+            }
+            else if (memory >= HQ && memory < HD)
+            {
+                return 75;
+            }
+            else if (memory >= MQ && memory < HQ)
+            {
+                return 50;
+            }
+            else if (memory >= LQ && memory < MQ)
+            {
+                return 25;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        CoreScale(rawPerc)
+        {
+            const limit = this._limit === 0 ? 25 : 50;
+            const base = 100 - limit;
+
+            const rawScale = (rawPerc / 100);
+            const volPerc = (rawScale * limit)
+
+            const coreScale = (base + volPerc) / 100;
+
+            return coreScale;
+        }
+
+        Automate()
+        {
+            if (this._style === 0 && this._autoEnabled) // isAutomatic & enabled
+            {
+                if (this._method === 0)
+                {
+                    const specQ = this.MemoryProtocol(this.GetMemorySpecs());
+                    this.SetQuality(specQ);
+                }
+            }
+        }
+
+        AdjustFullscreenScaling(percentage)
+        {
+            let opt = 1;
+            if (percentage === 100)
+            {
+                opt = 1;
+            }
+            else
+            {
+                opt = 0;
+            }
+            this.CallAction(this._system.Acts.SetFullscreenQuality, opt);
+        }
+
+        TriggerAnchor(activate)
+        {
+            if (this._extendAnchor)
+            {
+                if (activate)
+                {
+                    this.Trigger(this._Conditions.OnAnchorActivate);
+                }
+                else
+                {
+                    this.Trigger(this._Conditions.OnAnchorDeactivate);
+                }
+            }
+        }
+
+        Clamp(value, min, max)
+        {
+            return Math.min(Math.max(value, min), max);
+        }
+
+        Debug(msg)
+        {
+            if (this._debugMode)
+            {
+                console.log(msg);
+            }
+        }
+
+        get gfxQuality()
+        {
+            return this._quality;
+        }
+
+        get relativeCanvasWidth()
+        {
+            return this._userDefinedW * this.CoreScale(this._quality);
+        }
+
+        get relativeCanvasHeight()
+        {
+            return this._userDefinedH * this.CoreScale(this._quality);
+        }
+
+        get relativeLayoutScale()
+        {
+            return this._userDefinedS * this.CoreScale(this._quality);
+        }
+
+        get baseCanvasWidth()
+        {
+            return this._userDefinedW;
+        }
+
+        get baseCanvasHeight()
+        {
+            return this._userDefinedH;
+        }
+
+        get baseLayoutScale()
+        {
+            return this._userDefinedS;
+        }
+
+        get originalCanvasWidth()
+        {
+            return this._viewportW;
+        }
+
+        get originalCanvasHeight()
+        {
+            return this._viewportH;
+        }
+    };
+}
+}
+
+// scripts/plugins/CV_GFX/c3runtime/conditions.js
+{
+"use strict";
+{
+    const C3 = self.C3;
+    
+    C3.Plugins.CV_GFX.Cnds = {
+
+        };
+}
+}
+
+// scripts/plugins/CV_GFX/c3runtime/actions.js
+{
+"use strict";
+{
+    const C3 = self.C3;
+    
+    C3.Plugins.CV_GFX.Acts = {
+        SetQuality(percentage)
+        {
+            if (this._style === 1 && this._manualEnabled) // isManual & isManualEnabled
+            {
+                this.SetQuality(percentage);
+            }
+        },
+
+        SetCanvasSize(width, height)
+        {
+            if ((this._autoEnabled && this._style === 0) || (this._manualEnabled && this._style === 1))
+            {
+                this.SetRelativeCanvasSize(width, height);
+            }
+            else
+            {
+                this.SetBaseCanvasSize(width, height);
+            }
+        },
+
+        SetLayoutScale(scale)
+        {
+            if ((this._autoEnabled && this._style === 0) || (this._manualEnabled && this._style === 1))
+            {
+                this._userDefinedS = scale;
+                this.SetGFXLayoutScale();
+            }
+            else
+            {
+                this.SetBaseLayoutScale(scale);
+            }
+        },
+
+        Refresh()
+        {
+            this.Automate();
+        },
+
+        SetStyle(style)
+        {
+            this.SetStyle(style);
+        },
+
+        SetManual(toggle)
+        {
+            this.SetManual(toggle);
+        },
+
+        SetAutomatic(toggle)
+        {
+            this.SetAutomatic(toggle);
+        }
+    };
+}
+}
+
+// scripts/plugins/CV_GFX/c3runtime/expressions.js
+{
+"use strict";
+{
+    const C3 = self.C3;
+    
+    C3.Plugins.CV_GFX.Exps = {
+        QualityScale()
+        {
+            return this.gfxQuality / 100;
+        },
+
+        QualityPercentage()
+        {
+            return this.gfxQuality;
+        },
+
+        RelativeCanvasWidth()
+        {
+            return this.relativeCanvasWidth;
+        },
+
+        RelativeCanvasHeight()
+        {
+            return this.relativeCanvasHeight;
+        },
+
+        RelativeLayoutScale()
+        {
+            return this.relativeLayoutScale;
+        },
+
+        BaseCanvasWidth()
+        {
+            return this.baseCanvasWidth;
+        },
+
+        BaseCanvasHeight()
+        {
+            return this.baseCanvasHeight;
+        },
+
+        BaseLayoutScale()
+        {
+            return this.baseLayoutScale;
+        },
+
+        OriginalCanvasWidth()
+        {
+            return this.originalCanvasWidth;
+        },
+
+        OriginalCanvasHeight()
+        {
+            return this.originalCanvasHeight;
+        }
+    };
+}
+}
+
 // scripts/behaviors/Tween/c3runtime/runtime.js
 {
 'use strict';{const C3=self.C3;C3.Behaviors.Tween=class TweenBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}}{const C3=self.C3;C3.Behaviors.Tween.Type=class TweenType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}}
