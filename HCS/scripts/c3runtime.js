@@ -9925,13 +9925,7 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
-		() => "Layer",
 		() => 0,
-		() => 6,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Layer");
-		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();

@@ -22,9 +22,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.bound,
 		C3.Plugins.MixonGames_EasyGestures,
 		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.Plugins.System.Cnds.For,
-		C3.Plugins.System.Acts.SetLayerParallax,
-		C3.Plugins.System.Exps.loopindex,
 		C3.Plugins.Sprite.Acts.SetSize,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.Date.Exps.GetYear,
@@ -139,6 +136,7 @@ self.C3_JsPropNameTable = [
 	{BoundToLayout: 0},
 	{Popup_Price: 0},
 	{EasyGestures: 0},
+	{Buttons: 0},
 	{Day: 0},
 	{Year: 0},
 	{Type_Popup: 0}
@@ -174,5 +172,6 @@ self.InstanceType = {
 	MobileNotch: class extends self.IInstance {},
 	sel_Home: class extends self.ISpriteInstance {},
 	Popup_Price: class extends self.ISpriteInstance {},
-	EasyGestures: class extends self.IInstance {}
+	EasyGestures: class extends self.IInstance {},
+	Buttons: class extends self.ISpriteInstance {}
 }
