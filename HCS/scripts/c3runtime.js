@@ -6086,489 +6086,6 @@ globalThis.aekiro_dialogManager = {
 
 }
 
-// scripts/plugins/Chadori_CloudSave/c3runtime/plugin.js
-{
-"use strict";
-{
-    const C3 = self.C3;
-
-    C3.Plugins.Chadori_CloudSave = class Chadori_CloudSave_Plugin extends C3.SDKPluginBase
-    {
-        constructor(opts)
-        {
-            super(opts);
-        }
-
-        Release()
-        {
-            super.Release();
-        }
-    };
-}
-}
-
-// scripts/plugins/Chadori_CloudSave/c3runtime/type.js
-{
-"use strict";
-{
-    const C3 = self.C3;
-
-    C3.Plugins.Chadori_CloudSave.Type = class Chadori_CloudSave_Type extends C3.SDKTypeBase
-    {
-        constructor(objectClass)
-        {
-            super(objectClass);
-        }
-
-        Release()
-        {
-            super.Release();
-        }
-
-        OnCreate()
-        {}
-    };
-}
-}
-
-// scripts/plugins/Chadori_CloudSave/c3runtime/instance.js
-{
-"use strict";
-{
-    const C3 = self.C3;
-
-    const DOM_COMPONENT_ID = "chadori-mobile-cloud-save";
-
-    C3.Plugins.Chadori_CloudSave.Instance = class Chadori_CloudSave_Instance extends C3.SDKInstanceBase
-    {
-        constructor(inst, properties)
-        {
-            super(inst, DOM_COMPONENT_ID);
-
-            this._isDebug = false;
-
-            if (properties)
-            {
-                this._isDebug = properties[0];
-            }
-
-            ///////////////////////////////////////
-            // Current References
-            this._isSDKReady = false;
-
-            this._pendingInitialization = false;
-            this._initialized = false;
-
-            this._errorMessage = "";
-
-            ///////////////////////////////////////
-            // Memory References
-            this._isDebugging = false; // Native Cloud SDK debugger
-            this._hasRecord = false;
-            this._accountData = {};
-
-            this._saveDictionary = {};
-
-            ///////////////////////////////////////
-            // System References
-            this.AddDOMMessageHandlers([
-				["on-mobile-sdk", e => this._OnMobileSDK(...e)],
-
-                ["on-initialized", e => this._OnInitialized(...e)],
-
-                ["on-saved", e => this._OnSaved(...e)],
-                ["on-save-failed", e => this._OnSaveFailed(...e)],
-                ["on-loaded", e => this._OnLoaded(...e)],
-                ["on-load-failed", e => this._OnLoadFailed(...e)],
-
-                ["on-update", e => this._OnUpdate(...e)],
-                ["on-debugger", e => this._OnDebugger(...e)]
-            ]);
-
-            this._Conditions = C3.Plugins.Chadori_CloudSave.Cnds;
-
-            ///////////////////////////////////////
-            // Start SDK
-            this.StartSDK();
-        }
-
-        Release()
-        {
-            super.Release();
-        }
-
-        SaveToJson()
-        {
-            return {};
-        }
-
-        LoadFromJson(o)
-        {
-        }
-
-        ///////////////////////////////////////
-        // Utilities
-        _Log(str) { if (!this._isDebug) { return; } console.log("[Cloud Save]", str); }
-
-        _toOverwriteToggle(method)
-        {
-            // Combo option to 'overwrite' toggle: ["merge", "overwrite"]
-            return method === 0 ? false : true;
-        }
-
-        ///////////////////////////////////////
-        // Silent DOM Callbacks
-        _OnMobileSDK()
-        {
-            this._isSDKReady = true;
-        }
-
-        _OnUpdate()
-        {
-            this.Trigger(this._Conditions.OnUpdate);
-        }
-
-        _OnDebugger()
-        {
-            this._isDebugging = true;
-            this.Trigger(this._Conditions.OnDebugger);
-        }
-
-        _OnSaved(data)
-        {
-            this._accountData = data;
-            this.Trigger(this._Conditions.OnSaved);
-        }
-        _OnSaveFailed(error)
-        {
-            this._errorMessage = error;
-
-            this.Trigger(this._Conditions.OnSaveFailed);
-            this.Trigger(this._Conditions.OnError);
-        }
-        _OnLoaded(data)
-        {
-            this._accountData = data;
-            this.Trigger(this._Conditions.OnLoaded);
-        }
-        _OnLoadFailed(error)
-        {
-            this._errorMessage = error;
-
-            this.Trigger(this._Conditions.OnLoadFailed);
-            this.Trigger(this._Conditions.OnError);
-        }
-
-        ///////////////////////////////////////
-        // DOM Callbacks
-        _OnInitialized(hasRecord)
-        {
-            if (this._initialized) { return; } // Avoid redundancies, it most probably will not happen, 
-                                               // but just in case.
-                                               
-            this._hasRecord = hasRecord;
-
-            this._pendingInitialization = false;
-            this._initialized = true;
-
-            this.Trigger(this._Conditions.OnInitialized);
-        }
-
-        ///////////////////////////////////////
-        // Core Methods
-        StartSDK()
-        {
-            this.PostToDOM("start-sdk", [this._isDebug]);
-        }
-
-        ///////////////////////////////////////
-        // DOM Methods
-        _Initialize()
-        {
-            // Check if the Cloud Save SDK is ready to initialize.
-            if (!this._isSDKReady)
-            {
-                this._Log("SDK is not ready.");
-                return;
-            }
-            // Check if the Cloud Save SDK has already been initialized.
-            else if (this._initialized)
-            {
-                this._Log("SDK has already been initialized.");
-                return;
-            }
-            // Check if Cloud Save SDK initialization is already in progress.
-            else if (this._pendingInitialization)
-            {
-                this._Log("SDK initialization is already in progress.");
-                return;
-            }
-
-            // Set initialization in-progress.
-            this._pendingInitialization = true;
-
-            this.PostToDOM("initialize", []);
-        }
-
-        _Save(data, overwrite)
-        {
-            if (!this._initialized) { return; }
-            this.PostToDOM("save", [data, overwrite]);
-        }
-
-        _Load()
-        {
-            if (!this._initialized) { return; }
-            this.PostToDOM("load", []);
-        }
-
-        ///////////////////////////////////////
-        // Action Methods
-        AddKey(key, value)
-        {
-            this._saveDictionary[key] = value;
-        }
-
-        SaveDictionary(method)
-        {
-            // Get 'overwrite' toggle from a dropdown list.
-            const overwrite = this._toOverwriteToggle(method);
-
-            // Apply Cloud Save
-            this._Save(this._saveDictionary, overwrite);
-            // Clear stack dictionary
-            this._saveDictionary = {};
-        }
-
-        SaveJSON(json, method)
-        {
-            // Get 'overwrite' toggle from a dropdown list.
-            const overwrite = this._toOverwriteToggle(method);
-            // Convert to object from JSON string.
-            const data = JSON.parse(json);
-             // Apply Cloud Save
-            this._Save(data, overwrite);
-        }
-
-        ///////////////////////////////////////
-        // Expression Methods
-        GetTimestamp()
-        {
-            return typeof this._accountData["timestamp"] === "number" ? this._accountData["timestamp"] : 0;
-        }
-
-        GetValue(key)
-        {
-            if (typeof this._accountData[key] === "number" || typeof this._accountData[key] === "string") 
-            { return this._accountData[key]; }
-
-            return "";
-        }
-
-        ///////////////////////////////////////
-        // System Interface Methods
-		GetScriptInterfaceClass()
-		{
-			return self.ICloudSave;
-		}
-
-    };
-
-	// Script interface. Use a WeakMap to safely hide the internal implementation details from the
-	// caller using the script interface.
-	const map = new WeakMap();
-	
-	self.ICloudSave = class ICloudSaveInstance extends self.IInstance {
-		constructor()
-		{
-			super();
-			
-			// Map by SDK instance
-			map.set(this, self.IInstance._GetInitInst().GetSdkInstance());
-		}
-
-        ///////////////////////////////////////
-        // Conditions
-
-        isInitialized()
-        { return map.get(this)._initialized; }    
-
-        hasRecord()
-        { return map.get(this)._hasRecord; }        
-    
-        isDebugging()
-        { return map.get(this)._isDebugging; }
-
-        ///////////////////////////////////////
-        // Expressions
-
-        getTimestamp()
-        { return map.get(this).GetTimestamp(); }
-
-        data()
-        { return map.get(this)._accountData; }
-
-        error()
-        { return map.get(this)._errorMessage; }
-
-        ///////////////////////////////////////
-        // Actions
-
-        initialize()
-        { map.get(this)._Initialize(); }
-
-        save(data, method)
-        { 
-            const overwrite = isCloudSaveOverwrite(method);
-            map.get(this)._Save(data, overwrite); 
-        }     
-        
-        load()
-        { map.get(this)._Load(); }
-	};
-
-    ///////////////////////////////////////
-    // Utility Functions
-
-    function isCloudSaveOverwrite(method)
-    {
-        switch (method)
-        {
-            case "merge":
-                return false;
-            case "overwrite":
-                return true;
-            default:
-                return false;
-        }
-    }
-}
-}
-
-// scripts/plugins/Chadori_CloudSave/c3runtime/conditions.js
-{
-"use strict";
-{
-    self.C3.Plugins.Chadori_CloudSave.Cnds = {
-        HasRecord()
-        {
-            return this._hasRecord;
-        },
-
-        OnUpdate()
-        {
-            return true;
-        },
-
-        OnInitialized()
-        {
-            return true;
-        },
-
-        OnLoaded()
-        {
-            return true;
-        },
-
-        OnSaved()
-        {
-            return true;
-        },
-
-        OnError()
-        {
-            return true;
-        },
-
-        OnDebugger()
-        {
-            return true;
-        },
-
-        IsDebugging()
-        {
-            return this._isDebugging;
-        },
-
-        OnLoadFailed()
-        {
-            return true;
-        },
-
-        OnSaveFailed()
-        {
-            return true;
-        },
-
-        IsInitialized()
-        {
-            return this._initialized;
-        }
-    };
-}
-}
-
-// scripts/plugins/Chadori_CloudSave/c3runtime/actions.js
-{
-"use strict";
-{
-    self.C3.Plugins.Chadori_CloudSave.Acts = {
-        Initialize()
-        {
-            this._Initialize();
-        },
-
-        Load()
-        {
-            this._Load();
-        },
-
-        Save(json, method)
-        {
-            this.SaveJSON(json, method);
-        },
-
-        AddKey(key, value)
-        {
-            this.AddKey(key, value);
-        },
-
-        SaveDictionary(method)
-        {
-            this.SaveDictionary(method);
-        }
-    };
-}
-}
-
-// scripts/plugins/Chadori_CloudSave/c3runtime/expressions.js
-{
-"use strict";
-{
-    self.C3.Plugins.Chadori_CloudSave.Exps = {
-        Timestamp()
-        {
-            return this.GetTimestamp();
-        },
-
-        Data()
-        {
-            return JSON.stringify(this._accountData);
-        },
-
-        Get(key)
-        {
-            return this.GetValue(key); 
-        },
-
-        Error()
-        {
-            return JSON.stringify(this._errorMessage);
-        }
-    };
-}
-}
-
 // scripts/plugins/Sparsha_FirestoreBasic/c3runtime/plugin.js
 {
 "use strict";
@@ -9827,6 +9344,302 @@ layout.GetHeight()));isChanged=true}}if(isChanged)wi.SetBboxChanged()}GetPropert
 
 }
 
+// scripts/behaviors/aekiro_checkbox/c3runtime/behavior.js
+{
+"use strict";
+
+{
+	const C3 = self.C3;
+	C3.Behaviors.aekiro_checkbox = class aekiro_checkboxBehavior extends C3.SDKBehaviorBase
+	{
+		constructor(a)
+		{
+			super(a);
+			const b = this._runtime.Dispatcher();
+			this._disposables = new C3.CompositeDisposable(
+				C3.Disposable.From(b, "pointerdown", (a)=>this._OnPointerDown(a.data)),
+				C3.Disposable.From(b, "pointermove", (a)=>this._OnPointerMove(a.data)),
+				C3.Disposable.From(b, "pointerup", (a)=>this._OnPointerUp(a.data, !1)),
+				C3.Disposable.From(b, "pointercancel", (a)=>this._OnPointerUp(a.data, !0)))
+		}
+		
+		Release()
+		{
+			this._disposables.Release(),
+			this._disposables = null,
+			super.Release()
+		}
+		_OnPointerDown(a) {
+			this._OnInputDown(a["pointerId"].toString(), a["clientX"] - this._runtime.GetCanvasClientX(), a["clientY"] - this._runtime.GetCanvasClientY())
+		}
+		_OnPointerMove(a) {
+			this._OnInputMove(a["pointerId"].toString(), a["clientX"] - this._runtime.GetCanvasClientX(), a["clientY"] - this._runtime.GetCanvasClientY())
+		}
+		_OnPointerUp(a) {
+			this._OnInputUp(a["pointerId"].toString(), a["clientX"] - this._runtime.GetCanvasClientX(), a["clientY"] - this._runtime.GetCanvasClientY())
+		}
+		async _OnInputDown(source, b, c) {
+			const insts = this.GetInstances();
+			for (const inst of insts) {
+				const beh = inst.GetBehaviorSdkInstanceFromCtor(C3.Behaviors.aekiro_checkbox);
+				const wi = inst.GetWorldInfo(),
+				layer = wi.GetLayer(),
+				[x,y] = layer.CanvasCssToLayer(b, c, wi.GetTotalZElevation());
+				if(beh.OnAnyInputDown)
+					await beh.OnAnyInputDown(x,y,source);
+			}
+		}
+		_OnInputMove(source, b, c) {
+			const insts = this.GetInstances();
+			for (const inst of insts) {
+				const beh = inst.GetBehaviorSdkInstanceFromCtor(C3.Behaviors.aekiro_checkbox);
+				/*if (!d.IsEnabled() || !d.IsDragging() || d.IsDragging() && d.GetDragSource() !== a)
+					continue;*/
+				const wi = inst.GetWorldInfo() 
+				  , layer = wi.GetLayer()
+				  , [x,y] = layer.CanvasCssToLayer(b, c, wi.GetTotalZElevation());
+				if(beh.OnAnyInputMove)
+					beh.OnAnyInputMove(x, y,source);
+			}
+		}
+		async _OnInputUp(a,b,c) {
+			const insts = this.GetInstances();
+			for (const inst of insts) {
+				const beh = inst.GetBehaviorSdkInstanceFromCtor(C3.Behaviors.aekiro_checkbox);
+				const wi = inst.GetWorldInfo(),
+				layer = wi.GetLayer(),
+				[x,y] = layer.CanvasCssToLayer(b, c, wi.GetTotalZElevation());
+				
+				if(beh.OnAnyInputUp)
+					await beh.OnAnyInputUp(x,y);
+			}
+		}
+	};
+}
+
+}
+
+// scripts/behaviors/aekiro_checkbox/c3runtime/type.js
+{
+"use strict";
+
+{
+	const C3 = self.C3;
+	
+	C3.Behaviors.aekiro_checkbox.Type = class aekiro_checkboxType extends C3.SDKBehaviorTypeBase
+	{
+		constructor(behaviorType)
+		{
+			super(behaviorType);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+		
+		OnCreate()
+		{	
+		}
+	};
+}
+
+}
+
+// scripts/behaviors/aekiro_checkbox/c3runtime/instance.js
+{
+"use strict";
+
+{
+	const C3 = self.C3;
+	C3.Behaviors.aekiro_checkbox.Instance = class aekiro_checkboxInstance extends globalThis.Aekiro.checkbox
+	{
+		constructor(behInst, properties){
+			super(behInst,properties);
+			
+			//properties
+			this.isEnabled = properties[0];
+			this.value  = properties[1];
+
+			this.frame_normal = properties[2];
+			this.frame_hover = properties[3];
+			this.frame_disabled = properties[4];
+			this.frame_focus = properties[5];
+			
+			this.clickSound = properties[6];
+			this.hoverSound = properties[7];
+			this.focusSound = properties[8];
+
+			this.clickAnimation = properties[9];
+			this.hoverAnimation = properties[10];
+			this.focusAnimation = properties[11];
+
+			this.color_normal = properties[12];
+			this.color_hover = properties[13];
+			this.color_clicked = properties[14];
+			this.color_disabled = properties[15];
+			this.color_focus = properties[16];
+
+			this.clickAnimationFactor = properties[17];
+			this.hoverAnimationFactor = properties[18];
+			this.focusAnimationFactor = properties[19];
+
+			this.ignoreInput = properties[20];
+			
+			this.checkbox_constructor();
+
+		}
+		
+		
+		OnAnyInputUpC(){
+			this.setValue(1-this.value);
+			this.Trigger(C3.Behaviors.aekiro_checkbox.Cnds.OnClicked);
+		}
+		
+		OnMouseEnterC(){
+			this.Trigger(C3.Behaviors.aekiro_checkbox.Cnds.OnMouseEnter);
+		}
+		
+		OnMouseLeaveC(){
+			this.Trigger(C3.Behaviors.aekiro_checkbox.Cnds.OnMouseLeave);
+		}
+
+		OnFocusedC(){
+			this.Trigger(C3.Behaviors.aekiro_checkbox.Cnds.OnFocused);
+		}
+
+		OnUnFocusedC(){
+			this.Trigger(C3.Behaviors.aekiro_checkbox.Cnds.OnUnFocused);
+		}
+		
+		Release()
+		{
+			super.Release();
+		}
+	
+		SaveToJson()
+		{
+			return {
+				"isEnabled":this.isEnabled,
+				"value":this.value,
+				
+				"frame_normal":this.frame_normal,
+				"frame_hover":this.frame_hover,
+				"frame_disabled":this.frame_disabled,
+				"frame_focus":this.frame_focus,
+				
+				"clickSound":this.clickSound,
+				"hoverSound":this.hoverSound,
+				"focusSound":this.focusSound,
+				
+				"clickAnimation":this.clickAnimation,
+				"hoverAnimation":this.hoverAnimation,
+				"focusAnimation":this.focusAnimation,
+				
+				"color_normal":this.color_normal,
+				"color_hover":this.color_hover,
+				"color_clicked":this.color_clicked,
+				"color_disabled":this.color_disabled,
+				"color_focus":this.color_focus,
+				
+				"ignoreInput":this.ignoreInput,
+
+				"initProps":this.initProps
+			};
+		}
+	
+		LoadFromJson(o){
+			this.isEnabled = o["isEnabled"];
+			this.value  = o["value"];
+			
+			this.frame_normal = o["frame_normal"];
+			this.frame_hover = o["frame_hover"];
+			this.frame_disabled = o["frame_disabled"];
+			this.frame_focus = o["frame_focus"];
+			
+			this.clickSound = o["clickSound"];
+			this.hoverSound = o["hoverSound"];
+			this.focusSound = o["focusSound"];
+			
+			this.clickAnimation = o["clickAnimation"];
+			this.hoverAnimation = o["hoverAnimation"];
+			this.focusAnimation = o["focusAnimation"];
+			
+			this.color_normal = o["color_normal"];
+			this.color_hover = o["color_hover"];
+			this.color_clicked = o["color_clicked"];
+			this.color_disabled = o["color_disabled"];
+			this.color_focus = o["color_focus"];
+			
+			this.ignoreInput = o["ignoreInput"];
+
+			this.initProps = o["initProps"];
+			
+			this.onInitPropsLoaded();
+			this.onPropsLoaded();
+		}
+	};
+}
+
+}
+
+// scripts/behaviors/aekiro_checkbox/c3runtime/conditions.js
+{
+"use strict";
+
+{
+	const C3 = self.C3;
+	C3.Behaviors.aekiro_checkbox.Cnds =
+	{
+		IsChecked(){ return this.value; }
+	};
+
+	Object.assign(C3.Behaviors.aekiro_checkbox.Cnds, globalThis.Aekiro.button.Cnds);
+}
+
+}
+
+// scripts/behaviors/aekiro_checkbox/c3runtime/actions.js
+{
+"use strict";
+
+{
+	const C3 = self.C3;
+	C3.Behaviors.aekiro_checkbox.Acts =
+	{
+		setValue(value){
+			this.setValue(value);
+		},
+		SetIgnoreInput(s){
+			this.setIgnoreInput(s);
+		},
+		SetClickSoundVolume(v){
+			this.audioSources.click.setVolume(v);
+		},
+		SetHoverSoundVolume(v){
+			this.audioSources.hover.setVolume(v);
+		}
+	};
+
+	Object.assign(C3.Behaviors.aekiro_checkbox.Acts, globalThis.Aekiro.button.Acts);
+}
+
+}
+
+// scripts/behaviors/aekiro_checkbox/c3runtime/expressions.js
+{
+"use strict";
+
+{
+	const C3 = self.C3;
+	C3.Behaviors.aekiro_checkbox.Exps =
+	{
+		value(){ return this.value; }
+	};
+}
+
+}
+
 // scripts/expTable.js
 {
 
@@ -9931,10 +9744,7 @@ self.C3_ExpressionFuncs = [
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => f0(f1());
 		},
-		() => "Water_Price",
-		() => 0.1,
-		() => "Electric_Price",
-		() => "Gas_Price",
+		() => "FirstStart",
 		() => 1,
 		p => {
 			const n0 = p._GetNode(0);
@@ -9945,12 +9755,32 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => ("Привет, " + n0.ExpObject());
 		},
+		() => "Water",
+		() => "Electric",
+		() => "Gas",
+		() => "Water_Price",
+		() => "Electric_Price",
+		() => "Gas_Price",
+		() => "",
+		() => "True",
 		() => "Get_Date",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
 		},
-		() => "Water",
+		() => 0.11,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("Water", "Water");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("Electric", "Electric");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("Gas", "Gas");
+		},
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -9960,11 +9790,10 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject(1);
 		},
-		() => "",
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
-			return () => n0.ExpObject(n1.ExpObject(), 2);
+			return () => n0.ExpObject(n1.ExpObject(), 0);
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -9975,8 +9804,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpInstVar();
 		},
-		() => "Electric",
-		() => "Gas",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
@@ -9985,9 +9812,9 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() / 15);
 		},
-		() => "Popup",
+		() => "Open_State",
 		() => "Main",
-		() => "Bokeh",
+		() => "Base",
 		() => 415,
 		() => 115,
 		() => 0.2,
@@ -9998,7 +9825,7 @@ self.C3_ExpressionFuncs = [
 		() => 0.4,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Main");
+			return () => f0("Base");
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -10015,10 +9842,14 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() - 100);
 		},
 		() => 100,
+		() => 143.05283,
+		() => 92.710843,
+		() => 0.1,
+		() => 7368816,
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
-			return () => C3.lerp(n0.ExpObject(), n1.ExpObject(), 0.2);
+			return () => C3.lerp(n0.ExpObject(), n1.ExpObject(), 0.1);
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -10029,6 +9860,26 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => and(n0.ExpInstVar(), "р");
 		},
+		() => 16777215,
+		() => 0.5,
+		() => 280,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 90);
+		},
+		() => -220,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 90);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 450);
+		},
+		() => "CalculatePrice",
+		() => 15249929,
+		() => 178430,
+		() => 2448374,
 		() => "Login"
 ];
 
