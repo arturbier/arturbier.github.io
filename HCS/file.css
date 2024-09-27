@@ -1,0 +1,54 @@
+
+/* Стили для элемента с id price */
+#number {
+    background-color: transparent; /* Прозрачный фон */
+    border: none; /* Убирает границу */
+    outline: none; /* Убирает обводку при фокусировке */
+    text-align: center; /* Выравнивание текста по центру */
+    padding: 10px; /* Добавляет отступы для лучшего вида */
+    -moz-appearance: textfield; /* Убирает стрелки в Firefox */
+    -webkit-appearance: none; /* Убирает стрелки в Chrome и Safari */
+    font-family: 'SFProText-Medium', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Эпловский шрифт */
+    font-size: 18px; /* Размер шрифта, можете изменить по желанию */
+	color: rgb(125, 125, 125); /* Цвет шрифта */
+}
+
+/* Изменение стиля плейсхолдера */
+#number::placeholder {
+    font-size: 14px; /* Размер шрифта плейсхолдера */
+    color: rgb(140, 140, 140); /* Цвет плейсхолдера */
+}
+
+/* Убирает стрелки в браузерах, поддерживающих псевдоэлементы */
+#number::-webkit-inner-spin-button,
+#number::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Стили для элемента с id price */
+#price {
+    background-color: transparent; /* Прозрачный фон */
+    border: none; /* Убирает границу */
+    outline: none; /* Убирает обводку при фокусировке */
+    text-align: center; /* Выравнивание текста по центру */
+    padding: 10px; /* Добавляет отступы для лучшего вида */
+    -moz-appearance: textfield; /* Убирает стрелки в Firefox */
+    -webkit-appearance: none; /* Убирает стрелки в Chrome и Safari */
+    font-family: 'SFProText-Medium', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; /* Эпловский шрифт */
+    font-size: 16px; /* Размер шрифта, можете изменить по желанию */
+	color: rgb(125, 125, 125); /* Цвет шрифта */
+}
+
+/* Изменение стиля плейсхолдера */
+#price::placeholder {
+    font-size: 13px; /* Размер шрифта плейсхолдера */
+    color: rgb(140, 140, 140); /* Цвет плейсхолдера */
+}
+
+/* Убирает стрелки в браузерах, поддерживающих псевдоэлементы */
+#price::-webkit-inner-spin-button,
+#price::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
