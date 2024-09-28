@@ -4180,21 +4180,6 @@ err)}}};
 // scripts/shaders.js
 {
 self["C3_Shaders"] = {};
-self["C3_Shaders"]["@XorDev_DiskBlur"] = {
-	glsl: "precision highp float;\nuniform mediump float u_radius;\nvarying mediump vec2 vTex;\nuniform mediump vec2 srcOriginStart;\nuniform mediump vec2 srcOriginEnd;\nuniform mediump vec2 layoutStart;\nuniform mediump vec2 layoutEnd;\nuniform lowp sampler2D samplerFront;\n#define SAMPLES 24.0\nvoid main(void)\n{\nmediump vec4 blur = vec4(0.0, 0.0, 0.0, 0.0);\nmediump float total = 0.0;\nmediump float mip = log2(u_radius);\nmediump float scale = u_radius * inversesqrt(SAMPLES);\nhighp vec2 point = vec2(scale, 0.0);\nmediump vec2 layout_size = layoutEnd - layoutStart;\nmediump vec2 texel_size = (srcOriginEnd - srcOriginStart) / layout_size;\nmediump float rad = 1.0;\nhighp mat2 ang = mat2(-0.7373688, -0.6754904, 0.6754904,  -0.7373688);\nfor(float i = 0.0; i<SAMPLES; i++)\n{\npoint *= ang;\nrad += 1.0 / rad;\nmediump vec2 coord = vTex + point * (rad - 1.0) * texel_size;\nmediump float weight = 1.0 / rad;\nlowp vec4 samp = (clamp(vTex, 0.0, 1.0) == vTex)?\ntexture2D(samplerFront, coord, mip) : vec4(0.0, 0.0, 0.0, 0.0);\nblur += samp * weight;\ntotal += weight;\n}\nblur /= total;\ngl_FragColor = blur;\n}",
-	glslWebGL2: "",
-	wgsl: "",
-	blendsBackground: false,
-	usesDepth: false,
-	extendBoxHorizontal: 0,
-	extendBoxVertical: 0,
-	crossSampling: false,
-	mustPreDraw: false,
-	preservesOpaqueness: false,
-	supports3dDirectRendering: false,
-	animated: false,
-	parameters: [["u_radius",0,"float"]]
-};
 
 }
 
@@ -9294,6 +9279,18 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpObject(n1.ExpObject(), 0);
 		},
 		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 1);
+		},
+		() => "Water_Last_Price",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => n0.ExpObject((n1.ExpObject() - 1), 0);
+		},
+		() => "Electric_Last_Price",
+		() => "Gas_Last_Price",
+		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
 		},
@@ -9409,6 +9406,7 @@ self.C3_ExpressionFuncs = [
 		() => 606,
 		() => 861,
 		() => "True",
+		() => 50,
 		() => "Login"
 ];
 
