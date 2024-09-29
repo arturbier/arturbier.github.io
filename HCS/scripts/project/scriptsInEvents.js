@@ -21,7 +21,7 @@ style.innerHTML = `
         -moz-appearance: textfield;
         -webkit-appearance: none;
         font-family: 'SFProText-Medium', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        font-size: 18px;
+        font-size: clamp(20px, 3vw, 30px);
         color: rgb(125, 125, 125);
     }
     #number::placeholder {
@@ -44,11 +44,11 @@ style.innerHTML = `
         -moz-appearance: textfield;
         -webkit-appearance: none;
         font-family: 'SFProText-Medium', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-        font-size: 16px;
+        font-size: clamp(15px, 2vw, 20px);
         color: rgb(125, 125, 125);
     }
     #price::placeholder {
-        font-size: 13px;
+        font-size: clamp(12px, 2vw, 18px);
         color: rgb(140, 140, 140);
     }
     #price::-webkit-inner-spin-button,

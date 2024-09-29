@@ -139,6 +139,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Tween.Cnds.OnAnyTweensFinished,
 		C3.Plugins.Sprite.Cnds.CompareOpacity,
 		C3.ScriptsInEvents.E_app_Event149_Act1,
+		C3.Plugins.HTMLElement.Acts.SetVisible,
 		C3.ScriptsInEvents.E_app_Event150_Act1,
 		C3.Plugins.Browser.Acts.RequestFullScreen,
 		C3.Plugins.Sparsha_FirebaseAuth.Cnds.OnSignedIn,
