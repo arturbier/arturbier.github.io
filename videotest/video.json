@@ -1,11 +1,6 @@
 {
 	     "videoUrl":
-	"https://arturbier.github.io/videotest/videoplayback.mp4",
-	     
-		 
-		 
-		 "README":
-	"чтобы видео не отображалось сразу - заменить videoUrl например на none, видео должно быть форматом MP4"
+	"https://arturbier.github.io/videotest/videoplayback.mp4"
 }
 
 
