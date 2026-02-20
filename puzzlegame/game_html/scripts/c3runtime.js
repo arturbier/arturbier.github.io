@@ -1151,6 +1151,21 @@ self["C3_Shaders"]["overlay"] = {
 	animated: false,
 	parameters: []
 };
+self["C3_Shaders"]["lumblend"] = {
+	glsl: "varying mediump vec2 vTex;\nuniform lowp sampler2D samplerFront;\nuniform mediump vec2 srcStart;\nuniform mediump vec2 srcEnd;\nuniform lowp sampler2D samplerBack;\nuniform mediump vec2 destStart;\nuniform mediump vec2 destEnd;\nprecision mediump float;\nvec3 rgb_to_hsl(vec3 color)\n{\nvec3 hsl = vec3(0.0, 0.0, 0.0);\nfloat fmin = min(min(color.r, color.g), color.b);\nfloat fmax = max(max(color.r, color.g), color.b);\nfloat delta = fmax - fmin;\nhsl.z = (fmax + fmin) / 2.0;\nif (delta == 0.0)\n{\nhsl.x = 0.0;\nhsl.y = 0.0;\n}\nelse\n{\nif (hsl.z < 0.5)\nhsl.y = delta / (fmax + fmin);\nelse\nhsl.y = delta / (2.0 - fmax - fmin);\nfloat dR = (((fmax - color.r) / 6.0) + (delta / 2.0)) / delta;\nfloat dG = (((fmax - color.g) / 6.0) + (delta / 2.0)) / delta;\nfloat dB = (((fmax - color.b) / 6.0) + (delta / 2.0)) / delta;\nif (color.r == fmax)\nhsl.x = dB - dG;\nelse if (color.g == fmax)\nhsl.x = (1.0 / 3.0) + dR - dB;\nelse if (color.b == fmax)\nhsl.x = (2.0 / 3.0) + dG - dR;\nif (hsl.x < 0.0)\nhsl.x += 1.0;\nelse if (hsl.x > 1.0)\nhsl.x -= 1.0;\n}\nreturn hsl;\n}\nfloat hue_to_rgb(float f1, float f2, float hue)\n{\nif (hue < 0.0)\nhue += 1.0;\nelse if (hue > 1.0)\nhue -= 1.0;\nfloat ret;\nif ((6.0 * hue) < 1.0)\nret = f1 + (f2 - f1) * 6.0 * hue;\nelse if ((2.0 * hue) < 1.0)\nret = f2;\nelse if ((3.0 * hue) < 2.0)\nret = f1 + (f2 - f1) * ((2.0 / 3.0) - hue) * 6.0;\nelse\nret = f1;\nreturn ret;\n}\nvec3 hsl_to_rgb(vec3 hsl)\n{\nvec3 rgb = vec3(hsl.z);\nif (hsl.y != 0.0)\n{\nfloat f2;\nif (hsl.z < 0.5)\nf2 = hsl.z * (1.0 + hsl.y);\nelse\nf2 = (hsl.z + hsl.y) - (hsl.y * hsl.z);\nfloat f1 = 2.0 * hsl.z - f2;\nrgb.r = hue_to_rgb(f1, f2, hsl.x + (1.0 / 3.0));\nrgb.g = hue_to_rgb(f1, f2, hsl.x);\nrgb.b = hue_to_rgb(f1, f2, hsl.x - (1.0 / 3.0));\n}\nreturn rgb;\n}\nvoid main(void)\n{\nvec4 front = texture2D(samplerFront, vTex);\nvec3 fronthsl = rgb_to_hsl(front.rgb / front.a);\nmediump vec2 tex = (vTex - srcStart) / (srcEnd - srcStart);\nvec4 back = texture2D(samplerBack, mix(destStart, destEnd, tex));\nvec3 backhsl = rgb_to_hsl(back.rgb / back.a);\nfronthsl = hsl_to_rgb(vec3(backhsl.x, backhsl.y, fronthsl.z));\nfronthsl *= front.a;\ngl_FragColor = vec4(fronthsl.r, fronthsl.g, fronthsl.b, front.a) * back.a;\n}",
+	glslWebGL2: "",
+	wgsl: "%%SAMPLERFRONT_BINDING%% var samplerFront : sampler;\n%%TEXTUREFRONT_BINDING%% var textureFront : texture_2d<f32>;\n%%SAMPLERBACK_BINDING%% var samplerBack : sampler;\n%%TEXTUREBACK_BINDING%% var textureBack : texture_2d<f32>;\n%%C3_UTILITY_FUNCTIONS%%\n%%FRAGMENTINPUT_STRUCT%%\n%%FRAGMENTOUTPUT_STRUCT%%\n@fragment\nfn main(input : FragmentInput) -> FragmentOutput\n{\nvar front : vec4<f32> = c3_unpremultiply(textureSample(textureFront, samplerFront, input.fragUV));\nvar fronthsl : vec3<f32> = c3_RGBtoHSL(front.rgb);\nvar back : vec4<f32> = c3_unpremultiply(textureSample(textureBack, samplerBack, c3_getBackUV(input.fragPos.xy, textureBack)));\nvar backhsl : vec3<f32> = c3_RGBtoHSL(back.rgb);\nvar output : FragmentOutput;\noutput.color = vec4<f32>(\nc3_HSLtoRGB(vec3<f32>(backhsl.x, backhsl.y, fronthsl.z)) * front.a,\nfront.a\n) * back.a;\nreturn output;\n}",
+	blendsBackground: true,
+	usesDepth: false,
+	extendBoxHorizontal: 0,
+	extendBoxVertical: 0,
+	crossSampling: false,
+	mustPreDraw: false,
+	preservesOpaqueness: false,
+	supports3dDirectRendering: false,
+	animated: false,
+	parameters: []
+};
 
 }
 
@@ -1590,6 +1605,10 @@ self.C3_ExpressionFuncs = [
 		() => 16777215,
 		() => 25,
 		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() + 5);
+		},
+		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			const n2 = p._GetNode(2);
@@ -1600,10 +1619,8 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(0, 360);
 		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() + 5);
-		},
+		() => "Flip",
+		() => 0.3,
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -1642,6 +1659,7 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => (n0.ExpObject() - (v1.GetValue() / 2));
 		},
+		() => 0.2,
 		() => "AngleReset",
 		() => 0.25,
 		() => -1,
@@ -1660,11 +1678,6 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 4,
 		() => "HeightUp",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (f0(0) * 0.15);
-		},
-		() => 0.35,
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -1725,12 +1738,16 @@ self.C3_ExpressionFuncs = [
 		() => "nextBtn",
 		p => {
 			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() * 1.5);
+		},
+		() => 0.35,
+		p => {
+			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() / 2);
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => ((n0.ExpObject() - 10) + ((f1(0) * 0.15) / 2));
+			return () => (n0.ExpObject() - 15);
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1777,7 +1794,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() * 0.8);
 		},
-		() => 0.2,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() * 0.9);
@@ -1872,7 +1888,7 @@ self.C3_ExpressionFuncs = [
 			const n2 = p._GetNode(2);
 			const v3 = p._GetNode(3).GetVar();
 			const n4 = p._GetNode(4);
-			return () => Math.floor(multiply(divide(n0.ExpObject(n1.ExpObject(n2.ExpObject())), v3.GetValue()), n4.ExpInstVar()));
+			return () => Math.round(multiply(divide(n0.ExpObject(n1.ExpObject(n2.ExpObject())), v3.GetValue()), n4.ExpInstVar()));
 		},
 		() => "first",
 		p => {
@@ -1886,7 +1902,7 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			const n2 = p._GetNode(2);
 			const v3 = p._GetNode(3).GetVar();
-			return () => and(Math.floor(multiply(divide(n0.ExpObject(n1.ExpObject(n2.ExpObject())), v3.GetValue()), 100)), "%");
+			return () => and(Math.round(multiply(divide(n0.ExpObject(n1.ExpObject(n2.ExpObject())), v3.GetValue()), 100)), "%");
 		},
 		() => "canUnlock",
 		p => {
