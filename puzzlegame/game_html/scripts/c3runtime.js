@@ -1441,14 +1441,36 @@ self.C3_ExpressionFuncs = [
 		() => "Categories",
 		() => "Pieces",
 		() => "orderCategories",
-		() => "savedData",
+		() => "Data",
+		() => "",
+		() => "coins",
+		() => 0,
+		() => "savedTime",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0();
 		},
+		() => "shows",
+		() => 3,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("shows");
+		},
+		() => "show_cat",
+		() => "savedData",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => n0.ExpObject(n1.ExpObject());
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Data");
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1458,21 +1480,119 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => Math.floor(divide(n0.ExpObject("savedTime"), (((24 * 60) * 60) * 100)));
 		},
-		() => "shows",
 		() => 10,
-		() => "savedTime",
+		() => "UpdateUI",
 		p => {
 			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
+			return () => n0.ExpObject();
 		},
-		() => 0,
-		() => "coins",
-		() => 3,
+		() => "CategoriesFrame",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => (f0(0) - (n1.ExpObject() / 2));
+		},
+		() => "categoriesDone",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => ((f0(0) + (f1(0) / 3)) + 25);
+		},
+		() => 2.2,
+		() => 1,
+		() => "Btn",
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
-			return () => n0.ExpObject(n1.ExpObject());
+			return () => ((n0.ExpObject() + 350) + (n1.ExpObject() * 250));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			return () => n0.ExpObject(n1.ExpObject(n2.ExpObject()));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			return () => f0(n1.ExpObject(n2.ExpObject(), 1));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => n0.ExpObject(n1.ExpObject(), 1);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() * 1.1);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0(0) / 1.5);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 25);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			return () => n0.ExpObject(and("unlock_", n1.ExpObject(n2.ExpObject())));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (40 + (n0.ExpObject() * 20));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			const v3 = p._GetNode(3).GetVar();
+			const n4 = p._GetNode(4);
+			return () => Math.round(multiply(divide(n0.ExpObject(n1.ExpObject(n2.ExpObject())), v3.GetValue()), n4.ExpInstVar()));
+		},
+		() => "first",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => (and("[b][size=53]", n0.ExpObject(n1.ExpObject())) + "[/size][/b]");
+		},
+		() => "two",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			const v3 = p._GetNode(3).GetVar();
+			return () => and(Math.round(multiply(divide(n0.ExpObject(n1.ExpObject(n2.ExpObject())), v3.GetValue()), 100)), "%");
+		},
+		() => "canUnlock",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (and("[icon=0] [size=47]", n0.ExpInstVar()) + "[/size]");
+		},
+		() => 50,
+		() => "lock",
+		() => "[size=45]закрыто[/size]",
+		() => 100,
+		() => "Unlocked",
+		() => 0.005,
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => ((n0.ExpObject() + 350) + (n1.ExpInstVar() * 250));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			const n3 = p._GetNode(3);
+			return () => ((-(n0.ExpObject() * ((n1.ExpObject() + 1) - (n2.ExpObject() / n3.ExpObject())))) - 135);
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -1481,10 +1601,6 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => C3.clamp((2 + v0.GetValue()), 2, 5);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject();
 		},
 		() => "Background",
 		() => "Frame",
@@ -1503,7 +1619,6 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => Math.round(f0(0));
 		},
-		() => "",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
@@ -1511,7 +1626,6 @@ self.C3_ExpressionFuncs = [
 			return () => (((f0(0) + (n1.ExpObject() / 2)) + n2.ExpObject()) + 20);
 		},
 		() => 2,
-		() => 1,
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -1549,10 +1663,6 @@ self.C3_ExpressionFuncs = [
 			return () => (and((("https://arturbier.github.io/puzzlegame/images/" + v0.GetValue()) + "/"), v1.GetValue()) + ".jpg");
 		},
 		() => "getImage",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() + 25);
-		},
 		() => "loocked",
 		p => {
 			const n0 = p._GetNode(0);
@@ -1564,10 +1674,6 @@ self.C3_ExpressionFuncs = [
 			const v2 = p._GetNode(2).GetVar();
 			const v3 = p._GetNode(3).GetVar();
 			return () => and((and((v0.GetValue() + ": "), n1.ExpObject(v2.GetValue())) + "/"), v3.GetValue());
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1754,7 +1860,6 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => f0(v1.GetValue());
 		},
-		() => 100,
 		() => "WidthUp",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -1827,105 +1932,6 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 0.1,
 		() => 80,
-		() => "UpdateUI",
-		() => "CategoriesFrame",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const n1 = p._GetNode(1);
-			return () => (f0(0) - (n1.ExpObject() / 2));
-		},
-		() => "categoriesDone",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => ((f0(0) + (f1(0) / 3)) + 25);
-		},
-		() => 2.2,
-		() => "Btn",
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => ((n0.ExpObject() + 350) + (n1.ExpObject() * 250));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			const n2 = p._GetNode(2);
-			return () => n0.ExpObject(n1.ExpObject(n2.ExpObject()));
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const n1 = p._GetNode(1);
-			const n2 = p._GetNode(2);
-			return () => f0(n1.ExpObject(n2.ExpObject(), 1));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => n0.ExpObject(n1.ExpObject(), 1);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() * 1.1);
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (f0(0) / 1.5);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			const n2 = p._GetNode(2);
-			return () => n0.ExpObject(and("unlock_", n1.ExpObject(n2.ExpObject())));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (40 + (n0.ExpObject() * 20));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			const n2 = p._GetNode(2);
-			const v3 = p._GetNode(3).GetVar();
-			const n4 = p._GetNode(4);
-			return () => Math.round(multiply(divide(n0.ExpObject(n1.ExpObject(n2.ExpObject())), v3.GetValue()), n4.ExpInstVar()));
-		},
-		() => "first",
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => (and("[b][size=53]", n0.ExpObject(n1.ExpObject())) + "[/size][/b]");
-		},
-		() => "two",
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			const n2 = p._GetNode(2);
-			const v3 = p._GetNode(3).GetVar();
-			return () => and(Math.round(multiply(divide(n0.ExpObject(n1.ExpObject(n2.ExpObject())), v3.GetValue()), 100)), "%");
-		},
-		() => "canUnlock",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (and("[icon=0] [size=47]", n0.ExpInstVar()) + "[/size]");
-		},
-		() => 50,
-		() => "lock",
-		() => "[size=45]закрыто[/size]",
-		() => "Unlocked",
-		() => 0.005,
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => ((n0.ExpObject() + 350) + (n1.ExpInstVar() * 250));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			const n2 = p._GetNode(2);
-			const n3 = p._GetNode(3);
-			return () => ((-(n0.ExpObject() * ((n1.ExpObject() + 1) - (n2.ExpObject() / n3.ExpObject())))) - 135);
-		},
 		() => "Debug",
 		p => {
 			const n0 = p._GetNode(0);
