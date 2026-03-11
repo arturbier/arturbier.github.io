@@ -1136,6 +1136,36 @@ const C3=self.C3;C3.JobSchedulerRuntime=class extends C3.DefendedBase{constructo
 // scripts/shaders.js
 {
 self["C3_Shaders"] = {};
+self["C3_Shaders"]["ultimatedropshadowcolor"] = {
+	glsl: "#ifdef GL_ES\nprecision highp float;\n#endif\nvarying vec2 vTex;\nuniform sampler2D samplerFront;\nuniform float uDistance;\nuniform float uAngle;\nuniform float uOpacity;\nuniform float uHue;\nuniform float uSaturation;\nuniform float uBrightness;\nuniform float uBlurRadius;\nvec3 rgb2hsv(vec3 c);\nvec3 hsv2rgb(vec3 c);\nvoid main(void) {\nfloat angleRad = uAngle * 3.14159265 / 180.0;\nvec2 offset = uDistance * 0.001 * vec2(cos(angleRad), sin(angleRad));\nvec4 shadow = vec4(0.0);\nfor(int i = -4; i <= 4; i++) {\nfor(int j = -4; j <= 4; j++) {\nvec2 sampledCoord = vTex + offset + vec2(i, j) * (uBlurRadius * 0.01) * 0.001;\nshadow += texture2D(samplerFront, sampledCoord);\n}\n}\nshadow /= 81.0;\nshadow.a *= uOpacity;\nshadow.rgb = vec3(1.0, 0.0, 0.0);\nvec3 shadowHSV = rgb2hsv(shadow.rgb);\nshadowHSV.x = mod(shadowHSV.x + uHue / 360.0, 1.0); // Normalize hue to [0, 1] range and ensure it wraps around\nshadowHSV.y = uSaturation;\nshadowHSV.z = uBrightness;\nshadow.rgb = hsv2rgb(shadowHSV);\nvec4 col = texture2D(samplerFront, vTex);\nvec4 shadowColor = mix(col, shadow, shadow.a);\ngl_FragColor = mix(shadowColor, col, col.a);\n}\nvec3 rgb2hsv(vec3 c) {\nvec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\nvec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));\nvec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));\nfloat d = q.x - min(q.w, q.y);\nfloat e = 1.0e-10;\nreturn vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\nvec3 hsv2rgb(vec3 c) {\nvec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\nvec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\nreturn c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}",
+	glslWebGL2: "#version 300 es\nprecision highp float;\nin vec2 vTex;\nout vec4 outColor;\nuniform sampler2D samplerFront;\nuniform float uDistance;\nuniform float uAngle;\nuniform float uOpacity;\nuniform float uHue;\nuniform float uSaturation;\nuniform float uBrightness;\nuniform float uBlurRadius;\nvec3 rgb2hsv(vec3 c);\nvec3 hsv2rgb(vec3 c);\nvoid main(void) {\nfloat angleRad = uAngle * 3.14159265 / 180.0;\nvec2 offset = uDistance * 0.001 * vec2(cos(angleRad), sin(angleRad));\nvec4 shadow = vec4(0.0);\nfor (int i = -4; i <= 4; i++) {\nfor (int j = -4; j <= 4; j++) {\nvec2 sampledCoord = vTex + offset + vec2(float(i), float(j)) * (uBlurRadius * 0.01) * 0.001;\nshadow += texture(samplerFront, sampledCoord);\n}\n}\nshadow /= 81.0;\nshadow.a *= uOpacity;\nshadow.rgb = vec3(1.0, 0.0, 0.0);\nvec3 shadowHSV = rgb2hsv(shadow.rgb);\nshadowHSV.x = mod(shadowHSV.x + uHue / 360.0, 1.0);\nshadowHSV.y = uSaturation;\nshadowHSV.z = uBrightness;\nshadow.rgb = hsv2rgb(shadowHSV);\nvec4 col = texture(samplerFront, vTex);\nvec4 shadowColor = mix(col, shadow, shadow.a);\noutColor = mix(shadowColor, col, col.a);\n}\nvec3 rgb2hsv(vec3 c) {\nvec4 K = vec4(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\nvec4 p = mix(vec4(c.bg, K.wz), vec4(c.gb, K.xy), step(c.b, c.g));\nvec4 q = mix(vec4(p.xyw, c.r), vec4(c.r, p.yzx), step(p.x, c.r));\nfloat d = q.x - min(q.w, q.y);\nfloat e = 1.0e-10;\nreturn vec3(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\nvec3 hsv2rgb(vec3 c) {\nvec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\nvec3 p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\nreturn c.z * mix(K.xxx, clamp(p - K.xxx, 0.0, 1.0), c.y);\n}",
+	wgsl: "%%SAMPLERFRONT_BINDING%% var samplerFront : sampler;\n%%TEXTUREFRONT_BINDING%% var textureFront : texture_2d<f32>;\nstruct ShaderParams {\nuDistance : f32,\nuAngle : f32,\nuOpacity : f32,\nuHue : f32,\nuSaturation : f32,\nuBrightness : f32,\nuBlurRadius : f32\n};\n%%SHADERPARAMS_BINDING%% var<uniform> shaderParams : ShaderParams;\n%%FRAGMENTINPUT_STRUCT%%\n%%FRAGMENTOUTPUT_STRUCT%%\nfn rgb2hsv(c : vec3<f32>) -> vec3<f32>\n{\nlet K = vec4<f32>(0.0, -1.0 / 3.0, 2.0 / 3.0, -1.0);\nlet p = select(vec4<f32>(c.bg, K.wz), vec4<f32>(c.gb, K.xy), c.b < c.g);\nlet q = select(vec4<f32>(p.xyw, c.r), vec4<f32>(c.r, p.yzx), p.x < c.r);\nlet d = q.x - min(q.w, q.y);\nlet e = 1.0e-10;\nreturn vec3<f32>(abs(q.z + (q.w - q.y) / (6.0 * d + e)), d / (q.x + e), q.x);\n}\nfn hsv2rgb(c : vec3<f32>) -> vec3<f32>\n{\nlet K = vec4<f32>(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);\nlet p = abs(fract(c.xxx + K.xyz) * 6.0 - K.www);\nreturn c.z * mix(K.xxx, clamp(p - K.xxx, vec3<f32>(0.0), vec3<f32>(1.0)), c.y);\n}\n@fragment\nfn main(input : FragmentInput) -> FragmentOutput\n{\nvar angleRad : f32 = shaderParams.uAngle * 3.14159265 / 180.0;\nvar offset : vec2<f32> = shaderParams.uDistance * 0.001 * vec2<f32>(cos(angleRad), sin(angleRad));\nvar shadow : vec4<f32> = vec4<f32>(0.0);\nfor (var i : i32 = -4; i <= 4; i = i + 1)\n{\nfor (var j : i32 = -4; j <= 4; j = j + 1)\n{\nlet sampledCoord : vec2<f32> = input.fragUV + offset + vec2<f32>(f32(i), f32(j)) * (shaderParams.uBlurRadius * 0.01) * 0.001;\nshadow = shadow + textureSample(textureFront, samplerFront, sampledCoord);\n}\n}\nshadow = shadow / 81.0;\nshadow.a = shadow.a * shaderParams.uOpacity;\nshadow = vec4<f32>(1.0, 0.0, 0.0, shadow.a);\nvar shadowHSV : vec3<f32> = rgb2hsv(shadow.rgb);\nshadowHSV.x = fract(shadowHSV.x + shaderParams.uHue / 360.0);\nshadowHSV.y = shaderParams.uSaturation;\nshadowHSV.z = shaderParams.uBrightness;\nshadow = vec4<f32>(hsv2rgb(shadowHSV), shadow.a);\nlet col : vec4<f32> = textureSample(textureFront, samplerFront, input.fragUV);\nlet shadowColor : vec4<f32> = mix(col, shadow, shadow.a);\nvar output : FragmentOutput;\noutput.color = mix(shadowColor, col, col.a);\nreturn output;\n}",
+	blendsBackground: true,
+	usesDepth: false,
+	extendBoxHorizontal: 55,
+	extendBoxVertical: 55,
+	crossSampling: true,
+	mustPreDraw: false,
+	preservesOpaqueness: false,
+	supports3dDirectRendering: false,
+	animated: false,
+	parameters: [["uDistance",0,"float"],["uAngle",0,"float"],["uOpacity",0,"percent"],["uHue",0,"float"],["uSaturation",0,"percent"],["uBrightness",0,"percent"],["uBlurRadius",0,"float"]]
+};
+self["C3_Shaders"]["skymen_BetterOutline"] = {
+	glsl: "uniform lowp vec3 outlinecolor;\nuniform lowp float width;\nuniform lowp float precisionStep;\nuniform lowp float samples;\nuniform lowp float outlineOpacity;\nvarying mediump vec2 vTex;\nuniform lowp sampler2D samplerFront;\nuniform mediump vec2 srcStart;\nuniform mediump vec2 srcEnd;\nuniform mediump vec2 srcOriginStart;\nuniform mediump vec2 srcOriginEnd;\nuniform mediump vec2 layoutStart;\nuniform mediump vec2 layoutEnd;\nuniform lowp sampler2D samplerBack;\nuniform mediump vec2 destStart;\nuniform mediump vec2 destEnd;\nuniform mediump float seconds;\nuniform mediump vec2 pixelSize;\nuniform mediump float layerScale;\nuniform mediump float layerAngle;\n#define PI 3.14159265359\n#define SAMPLES 96\n#define PASSES 64\nvoid main(void)\n{\nif (width <= 0.0 || outlineOpacity <= 0.0) {\ngl_FragColor = texture2D( samplerFront, vTex );\nreturn;\n}\nmediump float outlineAlpha = 0.0;\nmediump vec2 actualWidth;\nmediump float widthCopy = width;\nmediump vec4 color = vec4(outlinecolor.x, outlinecolor.y, outlinecolor.z, 1.0);\nmediump float angle;\nmediump vec2 layoutSize = abs(vec2(layoutEnd.x-layoutStart.x,(layoutEnd.y-layoutStart.y)));\nmediump vec2 texelSize = abs(srcOriginEnd-srcOriginStart)/layoutSize;\nmediump vec4 fragColor;\nmediump vec2 testPoint;\nmediump float sampledAlpha;\nint passes = int(clamp(width / precisionStep, 1.0, float(PASSES)));\nfor (int j=0; j<PASSES; j++) {\nif (j >= passes ) break;\nwidthCopy = mix(0.0, width, float(j)/float(passes));\nactualWidth = widthCopy * texelSize;\nangle = 0.0;\nfor( int i=0; i<SAMPLES; i++ ){\nif (i >= int(samples)) break;\nangle += 1.0/(clamp(samples, 0.0, float(SAMPLES))/2.0) * PI;\ntestPoint = vTex + actualWidth * vec2(cos(angle), sin(angle));\nsampledAlpha = texture2D( samplerFront,  testPoint ).a;\noutlineAlpha = max( outlineAlpha, sampledAlpha );\n}\n}\nfragColor = color * outlineAlpha * outlineOpacity;\nmediump vec4 tex0 = texture2D( samplerFront, vTex );\ngl_FragColor = fragColor * (1. - tex0.a) + tex0;\n}",
+	glslWebGL2: "#version 300 es\nin mediump vec2 vTex;\nout lowp vec4 outColor;\n#ifdef GL_FRAGMENT_PRECISION_HIGH\n#define highmedp highp\n#else\n#define highmedp mediump\n#endif\nprecision lowp float;\nuniform lowp sampler2D samplerFront;\nuniform mediump vec2 srcStart;\nuniform mediump vec2 srcEnd;\nuniform mediump vec2 srcOriginStart;\nuniform mediump vec2 srcOriginEnd;\nuniform mediump vec2 layoutStart;\nuniform mediump vec2 layoutEnd;\nuniform lowp sampler2D samplerBack;\nuniform lowp sampler2D samplerDepth;\nuniform mediump vec2 destStart;\nuniform mediump vec2 destEnd;\nuniform highmedp float seconds;\nuniform mediump vec2 pixelSize;\nuniform mediump float layerScale;\nuniform mediump float layerAngle;\nuniform mediump float devicePixelRatio;\nuniform mediump float zNear;\nuniform mediump float zFar;\nuniform lowp vec3 outlinecolor;\nuniform lowp float width;\nuniform lowp float precisionStep;\nuniform lowp float samples;\nuniform lowp float outlineOpacity;\n#define PI 3.14159265359\n#define SAMPLES 96\n#define PASSES 64\nvoid main(void)\n{\nif (width <= 0.0 || outlineOpacity <= 0.0) {\noutColor = texture( samplerFront, vTex );\nreturn;\n}\nmediump float outlineAlpha = 0.0;\nmediump vec2 actualWidth;\nmediump float widthCopy = width;\nmediump vec4 color = vec4(outlinecolor.x, outlinecolor.y, outlinecolor.z, 1.0);\nmediump float angle;\nmediump vec2 layoutSize = abs(vec2(layoutEnd.x-layoutStart.x,(layoutEnd.y-layoutStart.y)));\nmediump vec2 texelSize = abs(srcOriginEnd-srcOriginStart)/layoutSize;\nmediump vec4 fragColor;\nmediump vec2 testPoint;\nmediump float sampledAlpha;\nint passes = int(clamp(width / precisionStep, 1.0, float(PASSES)));\nint sampleCount = int(clamp(samples, 0.0, float(SAMPLES)));\nfor (int j = 0; j <= passes; j++) {\nwidthCopy = mix(0.0, width, float(j)/float(passes));\nactualWidth = widthCopy * texelSize;\nangle = 0.0;\nfor( int i = 0; i < sampleCount; i++ ) {\nangle += 1.0/(float(sampleCount)/2.0) * PI;\ntestPoint = vTex + actualWidth * vec2(cos(angle), sin(angle));\nsampledAlpha = texture( samplerFront,  testPoint ).a;\noutlineAlpha = max( outlineAlpha, sampledAlpha );\n}\n}\nfragColor = color * outlineAlpha * outlineOpacity;\nmediump vec4 tex0 = texture( samplerFront, vTex );\noutColor = fragColor * (1. - tex0.a) + tex0;\n}",
+	wgsl: "%%FRAGMENTINPUT_STRUCT%%\n/* input struct contains the following fields:\nfragUV : vec2<f32>\nfragPos : vec4<f32>\nfn c3_getBackUV(fragPos : vec2<f32>, texBack : texture_2d<f32>) -> vec2<f32>\nfn c3_getDepthUV(fragPos : vec2<f32>, texDepth : texture_depth_2d) -> vec2<f32>\n*/\n%%FRAGMENTOUTPUT_STRUCT%%\n%%SAMPLERFRONT_BINDING%% var samplerFront : sampler;\n%%TEXTUREFRONT_BINDING%% var textureFront : texture_2d<f32>;\nstruct ShaderParams {\noutlinecolor : vec3<f32>,\nwidth : f32,\nprecisionStep : f32,\nsamples : f32,\noutlineOpacity : f32\n};\n%%SHADERPARAMS_BINDING%% var<uniform> shaderParams : ShaderParams;\n%%C3PARAMS_STRUCT%%\n/* c3Params struct contains the following fields:\nsrcStart : vec2<f32>,\nsrcEnd : vec2<f32>,\nsrcOriginStart : vec2<f32>,\nsrcOriginEnd : vec2<f32>,\nlayoutStart : vec2<f32>,\nlayoutEnd : vec2<f32>,\ndestStart : vec2<f32>,\ndestEnd : vec2<f32>,\ndevicePixelRatio : f32,\nlayerScale : f32,\nlayerAngle : f32,\nseconds : f32,\nzNear : f32,\nzFar : f32,\nisSrcTexRotated : u32\nfn c3_srcToNorm(p : vec2<f32>) -> vec2<f32>\nfn c3_normToSrc(p : vec2<f32>) -> vec2<f32>\nfn c3_srcOriginToNorm(p : vec2<f32>) -> vec2<f32>\nfn c3_normToSrcOrigin(p : vec2<f32>) -> vec2<f32>\nfn c3_clampToSrc(p : vec2<f32>) -> vec2<f32>\nfn c3_clampToSrcOrigin(p : vec2<f32>) -> vec2<f32>\nfn c3_getLayoutPos(p : vec2<f32>) -> vec2<f32>\nfn c3_srcToDest(p : vec2<f32>) -> vec2<f32>\nfn c3_clampToDest(p : vec2<f32>) -> vec2<f32>\nfn c3_linearizeDepth(depthSample : f32) -> f32\n*/\n/*\nfn c3_premultiply(c : vec4<f32>) -> vec4<f32>\nfn c3_unpremultiply(c : vec4<f32>) -> vec4<f32>\nfn c3_grayscale(rgb : vec3<f32>) -> f32\nfn c3_getPixelSize(t : texture_2d<f32>) -> vec2<f32>\nfn c3_RGBtoHSL(color : vec3<f32>) -> vec3<f32>\nfn c3_HSLtoRGB(hsl : vec3<f32>) -> vec3<f32>\n*/\nconst PI:f32 = 3.14159265359;\nconst SAMPLES:i32 = 96;\nconst PASSES:i32 = 64;\n@fragment\nfn main(input : FragmentInput) -> FragmentOutput\n{\nvar output : FragmentOutput;\nif (shaderParams.width <= 0.0 || shaderParams.outlineOpacity <= 0.0) {\noutput.color = textureSample(textureFront, samplerFront, input.fragUV );\nreturn output;\n}\nvar outlineAlpha: f32 = 0.0;\nvar actualWidth: vec2<f32>;\nvar widthCopy: f32 = shaderParams.width;\nvar color: vec4<f32> = vec4<f32>(shaderParams.outlinecolor.x, shaderParams.outlinecolor.y, shaderParams.outlinecolor.z, 1.0);\nvar angle: f32;\nlet layoutSize: vec2<f32> = abs(vec2<f32>(c3Params.layoutEnd.x - c3Params.layoutStart.x, c3Params.layoutEnd.y - c3Params.layoutStart.y));\nlet texelSize: vec2<f32> = abs(c3Params.srcOriginEnd - c3Params.srcOriginStart) / layoutSize;\nvar fragColor: vec4<f32>;\nvar testPoint: vec2<f32>;\nvar sampledAlpha: f32;\nlet passes: u32 = u32(clamp(shaderParams.width / shaderParams.precisionStep, 1.0, f32(SAMPLES)));\nlet sampleCount: u32 = u32(clamp(shaderParams.samples, 0.0, f32(SAMPLES)));\nfor (var j: u32 = 0u; j <= passes; j = j + 1u) {\nwidthCopy = mix(0.0, shaderParams.width, f32(j) / f32(passes));\nactualWidth = widthCopy * texelSize;\nangle = 0.0;\nfor (var i: u32 = 0u; i < sampleCount; i = i + 1u) {\nangle = angle + 1.0 / (f32(sampleCount) / 2.0) * PI;\ntestPoint = input.fragUV + actualWidth * vec2<f32>(cos(angle), sin(angle));\nsampledAlpha = textureSample(textureFront, samplerFront, testPoint).a; // Assuming 'samplerFrontSampler' is the sampler associated with 'samplerFront'\noutlineAlpha = max(outlineAlpha, sampledAlpha);\n}\n}\nfragColor = color * outlineAlpha * shaderParams.outlineOpacity;\nvar tex0 : vec4<f32> = textureSample(textureFront, samplerFront, input.fragUV );\noutput.color = fragColor * (1. - tex0.a) + tex0;\nreturn output;\n}",
+	blendsBackground: false,
+	usesDepth: false,
+	extendBoxHorizontal: 50,
+	extendBoxVertical: 50,
+	crossSampling: true,
+	mustPreDraw: true,
+	preservesOpaqueness: false,
+	supports3dDirectRendering: false,
+	animated: false,
+	parameters: [["outlinecolor",0,"color"],["width",0,"float"],["precisionStep",0,"float"],["samples",0,"float"],["outlineOpacity",0,"percent"]]
+};
 self["C3_Shaders"]["overlay"] = {
 	glsl: "precision mediump float;\nvarying mediump vec2 vTex;\nuniform lowp sampler2D samplerFront;\nuniform mediump vec2 srcStart;\nuniform mediump vec2 srcEnd;\nuniform lowp sampler2D samplerBack;\nuniform mediump vec2 destStart;\nuniform mediump vec2 destEnd;\nvoid main(void)\n{\nlowp vec4 front = texture2D(samplerFront, vTex);\nmediump vec2 tex = (vTex - srcStart) / (srcEnd - srcStart);\nlowp vec4 back = texture2D(samplerBack, mix(destStart, destEnd, tex));\nfront.r = back.r < 0.5 ? 2.0 * back.r * front.r : 2.0 * (front.r + back.r * front.a - back.r * front.r) - front.a;\nfront.g = back.g < 0.5 ? 2.0 * back.g * front.g : 2.0 * (front.g + back.g * front.a - back.g * front.g) - front.a;\nfront.b = back.b < 0.5 ? 2.0 * back.b * front.b : 2.0 * (front.b + back.b * front.a - back.b * front.b) - front.a;\nfront *= back.a;\ngl_FragColor = front;\n}",
 	glslWebGL2: "",
@@ -1666,6 +1696,13 @@ self.C3_ExpressionFuncs = [
 		() => "getImage",
 		() => 0.45,
 		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			return () => and((and((v0.GetValue() + ": "), n1.ExpObject(v2.GetValue())) + "/"), v3.GetValue());
+		},
+		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
 			return () => (n0.ExpObject() / v1.GetValue());
@@ -1686,13 +1723,6 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => and("[size=65][icon=0][/size] : ", n0.ExpObject("coins"));
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			const n1 = p._GetNode(1);
-			const v2 = p._GetNode(2).GetVar();
-			const v3 = p._GetNode(3).GetVar();
-			return () => and((and((v0.GetValue() + ": "), n1.ExpObject(v2.GetValue())) + "/"), v3.GetValue());
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1836,10 +1866,7 @@ self.C3_ExpressionFuncs = [
 			const n2 = p._GetNode(2);
 			return () => n0.ExpObject(and("unlock_", n1.ExpObject((n2.ExpObject() + 1))));
 		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (("Вы завершили: " + v0.GetValue()) + ". Открыта новая категория!");
-		},
+		() => "Завершено!",
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -1848,10 +1875,6 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => ("unlock_" + v0.GetValue());
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (("Вы завершили: " + v0.GetValue()) + ".");
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -1959,16 +1982,25 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
 			const v2 = p._GetNode(2).GetVar();
-			return () => C3.clamp(add(n0.ExpObject(n1.ExpInstVar()), 1), 0, v2.GetValue());
+			return () => C3.clamp(add(n0.ExpObject(n1.ExpInstVar()), 79), 0, v2.GetValue());
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			return () => add(n0.ExpObject("coins"), 20);
+			return () => add(n0.ExpObject("coins"), 200);
 		},
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
 			return () => n0.ExpObject(n1.ExpInstVar());
+		},
+		() => "x",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 1);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("x");
 		},
 		() => "showRef",
 		() => 0.5,
