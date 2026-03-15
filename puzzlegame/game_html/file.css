@@ -1,0 +1,49 @@
+:root {
+	--gp-background-color: #fbf8f0;
+	--gp-text-color: #625754;
+	--gp-border-color: #f8e7d5;
+	--gp-scroll-color: #f8e7d5;
+}
+
+body .gp-overlay__container {
+	background-color: var(--gp-background-color);
+	color: var(--gp-text-color);
+}
+
+body .gp-overlay * {
+	border-color: var(--gp-border-color);
+}
+
+body .gp-overlay .gp-list-item::after {
+	background-color: var(--gp-border-color);
+}
+
+body .gp-list-item_active {
+	background-color: var(--gp-border-color);
+}
+
+body .gp-overlay-divider::before,
+body .gp-overlay-divider::after {
+	background-color: var(--gp-border-color);
+}
+
+.gp-overlay ::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+.gp-overlay ::-webkit-scrollbar-thumb {
+	border-radius: 2px;
+}
+
+.gp-overlay ::-webkit-scrollbar-track {
+	background-color: var(--gp-border-color);
+}
+
+.gp-overlay ::-webkit-scrollbar-corner {
+	background-color: var(--gp-border-color);
+}
+
+.gp-overlay ::-webkit-scrollbar-thumb {
+	background-color: var(--gp-scroll-color);
+}
