@@ -1681,14 +1681,7 @@ self.C3_ExpressionFuncs = [
 			const v2 = p._GetNode(2).GetVar();
 			return () => f0(0, (n1.ExpObject() - v2.GetValue()));
 		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => Math.floor((v0.GetValue() / 20));
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => C3.clamp((2 + v0.GetValue()), 2, 5);
-		},
+		() => 4,
 		() => "Background",
 		() => "Frame",
 		p => {
@@ -1735,7 +1728,7 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "getImage",
 		() => 0.45,
-		() => "Ежедневный пазл",
+		() => "Пазл дня!",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -1750,6 +1743,14 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const v1 = p._GetNode(1).GetVar();
 			return () => (("https://arturbier.github.io/puzzlegame/images/365_images/image_" + f0(v1.GetValue(), 3)) + ".jpg");
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => Math.floor((v0.GetValue() / 20));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => C3.clamp((2 + v0.GetValue()), 2, 5);
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -1769,6 +1770,11 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => and("[size=65][icon=0][/size] : ", n0.ExpObject("coins"));
+		},
+		() => "Daily Timer",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1878,9 +1884,20 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => (n0.ExpObject() + (n1.ExpObject() / 2));
 		},
-		() => 4,
 		() => "HeightUp",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Ура!", "Ты супер!", "Так держать!", "Отлично!", "Это победа!", "Ты молодец!");
+		},
 		() => "dailyPuzzle",
+		() => "dailyTime",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			const v3 = p._GetNode(3).GetVar();
+			return () => ((f0(Math.floor((v1.GetValue() % 60)), 2) + ".") + f2(Math.floor(((v3.GetValue() % 1) * 1000)), 3));
+		},
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2067,10 +2084,6 @@ self.C3_ExpressionFuncs = [
 		() => "Scroll",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
 			const v1 = p._GetNode(1).GetVar();
 			return () => (f0() - v1.GetValue());
 		},
@@ -2176,6 +2189,7 @@ self.C3_ExpressionFuncs = [
 		() => -15,
 		() => 0.15,
 		() => "Play",
+		() => "Leaders",
 		() => "bottom",
 		() => "menuProgress",
 		p => {
