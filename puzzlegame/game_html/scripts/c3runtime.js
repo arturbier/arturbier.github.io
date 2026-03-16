@@ -1537,6 +1537,10 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		() => "Categories",
+		() => "Pieces",
+		() => "",
+		() => 0,
 		() => "UpdateUI",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1548,8 +1552,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject();
 		},
-		() => 0,
-		() => "Categories",
 		() => -999,
 		() => "Btn",
 		() => "CategoriesFrame",
@@ -1575,7 +1577,6 @@ self.C3_ExpressionFuncs = [
 		() => 2.2,
 		() => 1,
 		() => -5,
-		() => "",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 85);
@@ -1688,7 +1689,6 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => C3.clamp((2 + v0.GetValue()), 2, 5);
 		},
-		() => "Pieces",
 		() => "Background",
 		() => "Frame",
 		p => {
@@ -1735,13 +1735,7 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "getImage",
 		() => 0.45,
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			const n1 = p._GetNode(1);
-			const v2 = p._GetNode(2).GetVar();
-			const v3 = p._GetNode(3).GetVar();
-			return () => and((and((v0.GetValue() + ": "), n1.ExpObject(v2.GetValue())) + "/"), v3.GetValue());
-		},
+		() => "Ежедневный пазл",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -1751,6 +1745,18 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			const v1 = p._GetNode(1).GetVar();
 			return () => (Math.sqrt((v0.GetValue() * v1.GetValue())) / 3);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			return () => (("https://arturbier.github.io/puzzlegame/images/365_images/image_" + f0(v1.GetValue(), 3)) + ".jpg");
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			return () => and((and((v0.GetValue() + ": "), n1.ExpObject(v2.GetValue())) + "/"), v3.GetValue());
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -1874,6 +1880,7 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 4,
 		() => "HeightUp",
+		() => "dailyPuzzle",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2107,8 +2114,17 @@ self.C3_ExpressionFuncs = [
 			return () => (v0.GetValue() - (f1() * 2));
 		},
 		() => 0.7,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			const f3 = p._GetNode(3).GetBoundMethod();
+			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
+		},
 		() => "orderCategories",
 		() => "BG",
+		() => "done",
+		() => "undone",
 		() => "savedData",
 		() => "savedTime",
 		() => 5,
@@ -2139,6 +2155,8 @@ self.C3_ExpressionFuncs = [
 			return () => f0(3, 5);
 		},
 		() => "Daily",
+		() => -15,
+		() => 0.15,
 		() => "Play"
 ];
 
