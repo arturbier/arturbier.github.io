@@ -212,7 +212,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Exps.ServerTimeUnix,
 		C3.Plugins.Date.Exps.Parse,
 		C3.Plugins.Date.Exps.GetUTCYear,
-		C3.Plugins.System.Acts.ResetGlobals,
+		C3.Plugins.System.Acts.ResetEventVar,
 		C3.Plugins.AJAX.Acts.RequestFile,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.Eponesh_GameScore.Cnds.PlayerHasKey,
