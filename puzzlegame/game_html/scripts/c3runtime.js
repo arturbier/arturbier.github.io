@@ -2138,6 +2138,10 @@ self.C3_ExpressionFuncs = [
 			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
 		},
 		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() * 80);
+		},
+		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("Data");
 		},
@@ -2149,6 +2153,20 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => Math.floor(divide(n0.ExpObject("savedTime"), (((24 * 60) * 60) * 100)));
 		},
+		() => "progress",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			const v4 = p._GetNode(4).GetVar();
+			return () => f0((v1.GetValue() * 0.1), ((v2.GetValue() / v3.GetValue()) * v4.GetValue()));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => ((v0.GetValue() / v1.GetValue()) * 100);
+		},
 		() => "Buttons",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2157,7 +2175,13 @@ self.C3_ExpressionFuncs = [
 		() => "Daily",
 		() => -15,
 		() => 0.15,
-		() => "Play"
+		() => "Play",
+		() => "bottom",
+		() => "menuProgress",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % собрано");
+		}
 ];
 
 
