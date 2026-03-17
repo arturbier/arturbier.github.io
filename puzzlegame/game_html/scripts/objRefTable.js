@@ -190,12 +190,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Dictionary.Exps.AsJSON,
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Plugins.System.Acts.GoToLayout,
-		C3.Plugins.Keyboard.Cnds.OnKey,
-		C3.Plugins.Mouse.Cnds.IsOverObject,
-		C3.Plugins.LocalStorage.Acts.ClearStorage,
-		C3.Plugins.Keyboard.Cnds.IsKeyDown,
-		C3.Plugins.DrawingCanvas.Acts.SetPosToObject,
-		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardOpen,
 		C3.Plugins.Sprite.Cnds.CompareFrame,
 		C3.Plugins.Sprite.Cnds.IsVisible,
 		C3.Plugins.Sprite.Acts.SetAnimFrame,
@@ -230,7 +224,17 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Dictionary.Acts.JSONLoad,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
 		C3.Plugins.Dictionary.Cnds.HasKey,
-		C3.Plugins.NinePatch.Cnds.HasTags
+		C3.Plugins.NinePatch.Cnds.HasTags,
+		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardOpen,
+		C3.Plugins.Eponesh_GameScore.Acts.AchievementsOpen,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnSchedulersClaimDay,
+		C3.Plugins.Eponesh_GameScore.Acts.SchedulersClaimDay,
+		C3.Plugins.Keyboard.Cnds.OnKey,
+		C3.Plugins.Mouse.Cnds.IsOverObject,
+		C3.Plugins.LocalStorage.Acts.ClearStorage,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerSetName,
+		C3.Plugins.Keyboard.Cnds.IsKeyDown,
+		C3.Plugins.DrawingCanvas.Acts.SetPosToObject
 	];
 };
 self.C3_JsPropNameTable = [
@@ -364,7 +368,8 @@ self.C3_JsPropNameTable = [
 	{progress: 0},
 	{maxProgress: 0},
 	{isDaily: 0},
-	{progressWidth: 0}
+	{progressWidth: 0},
+	{curProgressBar: 0}
 ];
 
 self.InstanceType = {

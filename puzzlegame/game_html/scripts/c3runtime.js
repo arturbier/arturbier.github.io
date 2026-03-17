@@ -2043,32 +2043,6 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 0.1,
 		() => "Data",
-		() => "Debug",
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			const v2 = p._GetNode(2).GetVar();
-			return () => C3.clamp(add(n0.ExpObject(n1.ExpInstVar()), 79), 0, v2.GetValue());
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => add(n0.ExpObject("coins"), 200);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => n0.ExpObject(n1.ExpInstVar());
-		},
-		() => "x",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() - 1);
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("x");
-		},
-		() => 10,
 		() => "showRef",
 		() => 0.5,
 		p => {
@@ -2166,14 +2140,18 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => Math.floor(divide(n0.ExpObject("savedTime"), (((24 * 60) * 60) * 100)));
 		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			return () => ((v0.GetValue() / v1.GetValue()) * v2.GetValue());
+		},
 		() => "progress",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const v1 = p._GetNode(1).GetVar();
 			const v2 = p._GetNode(2).GetVar();
-			const v3 = p._GetNode(3).GetVar();
-			const v4 = p._GetNode(4).GetVar();
-			return () => f0((v1.GetValue() * 0.1), ((v2.GetValue() / v3.GetValue()) * v4.GetValue()));
+			return () => f0((v1.GetValue() * 0.1), v2.GetValue());
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -2190,11 +2168,40 @@ self.C3_ExpressionFuncs = [
 		() => 0.15,
 		() => "Play",
 		() => "Leaders",
+		() => 10,
+		() => "Tasks",
 		() => "bottom",
 		() => "menuProgress",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % собрано");
+		},
+		() => "rewardPlanner",
+		() => "Debug",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			return () => C3.clamp(add(n0.ExpObject(n1.ExpInstVar()), 79), 0, v2.GetValue());
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => add(n0.ExpObject("coins"), 200);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => n0.ExpObject(n1.ExpInstVar());
+		},
+		() => "Вася Васильев",
+		() => "x",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 1);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("x");
 		}
 ];
 
