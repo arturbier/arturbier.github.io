@@ -1913,6 +1913,11 @@ self.C3_ExpressionFuncs = [
 			const n4 = p._GetNode(4);
 			return () => add(n0.ExpObject("coins"), f1(1, Math.round((((v2.GetValue() * v3.GetValue()) * 0.08) * (1 + (n4.ExpObject() * 0.03))))));
 		},
+		() => "lvlsCompleted",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => add(n0.ExpObject("lvlsCompleted"), 1);
+		},
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2043,6 +2048,10 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 0.1,
 		() => "Data",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("lvlsCompleted");
+		},
 		() => "showRef",
 		() => 0.5,
 		p => {
@@ -2146,6 +2155,10 @@ self.C3_ExpressionFuncs = [
 			const v2 = p._GetNode(2).GetVar();
 			return () => ((v0.GetValue() / v1.GetValue()) * v2.GetValue());
 		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 1);
+		},
 		() => "progress",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2195,10 +2208,6 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "Вася Васильев",
 		() => "x",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() - 1);
-		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("x");

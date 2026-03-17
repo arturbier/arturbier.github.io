@@ -1,8 +1,8 @@
 :root {
-	--gp-background-color: #fbf8f0;
+	--gp-background-color: #f6ebcc;
 	--gp-text-color: #625754;
-	--gp-border-color: #f8e7d5;
-	--gp-scroll-color: #f8e7d5;
+	--gp-border-color: #e3d6b1;
+	--gp-scroll-color: #d5c599;
 }
 
 body .gp-overlay__container {
