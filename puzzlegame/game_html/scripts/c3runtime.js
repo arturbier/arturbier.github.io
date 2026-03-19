@@ -2126,13 +2126,18 @@ self.C3_ExpressionFuncs = [
 		() => "done",
 		() => "undone",
 		() => "Scoped Leaderboard",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => ((v0.GetValue() - 1)).toString();
+		},
 		() => "lastRewardedDay",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("dailyTime");
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => f0(f1("dailyTime"));
 		},
 		() => "Корона победителя!",
-		() => "вчераты был/a №1 ",
+		() => "вчера ты был/a №1 ",
 		() => "crown",
 		() => "savedData",
 		() => "savedTime",
@@ -2223,16 +2228,16 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("x");
 		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => ((f0(0) + n1.ExpObject()) + 25);
+		},
 		() => "top",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			return () => ((f0(0) - n1.ExpObject()) + 25);
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const n1 = p._GetNode(1);
-			return () => ((f0(0) + n1.ExpObject()) + 25);
 		}
 ];
 
