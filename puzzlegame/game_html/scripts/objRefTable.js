@@ -1,6 +1,7 @@
 const C3 = self.C3;
 self.C3_GetObjectRefTable = function () {
 	return [
+		C3.Plugins.Spritefont2,
 		C3.Plugins.Sprite,
 		C3.Behaviors.Tween,
 		C3.Behaviors.Timer,
@@ -23,10 +24,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.PlatformInfo,
 		C3.Plugins.Date,
 		C3.Plugins.Eponesh_GameScore,
-		C3.Plugins.Text,
 		C3.Plugins.Audio,
 		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.Plugins.Text.Acts.SetText,
+		C3.Plugins.Spritefont2.Cnds.HasTags,
+		C3.Plugins.Spritefont2.Acts.SetText,
 		C3.Plugins.System.Exps.projectversion,
 		C3.Plugins.System.Cnds.CompareBoolVar,
 		C3.Plugins.System.Acts.SetLayerInteractive,
@@ -41,6 +42,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.NinePatch.Exps.Count,
 		C3.Plugins.NinePatch.Acts.Destroy,
 		C3.Plugins.Sprite.Acts.Destroy,
+		C3.Plugins.Spritefont2.Acts.Destroy,
 		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.System.Exps.viewportmidx,
 		C3.Plugins.Sprite.Exps.Y,
@@ -69,6 +71,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.TiledBg.Acts.SetInstanceVar,
 		C3.Plugins.TiledBg.Exps.Width,
+		C3.Plugins.Spritefont2.Acts.MoveToLayer,
+		C3.Plugins.Spritefont2.Acts.SetY,
 		C3.Plugins.NinePatch.Acts.SetBoolInstanceVar,
 		C3.Plugins.System.Acts.SetBoolVar,
 		C3.Plugins.TiledBg.Acts.SetWidth,
@@ -104,11 +108,15 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.DrawingCanvas.Acts.SetOpacity,
 		C3.Behaviors.Tween.Cnds.OnTweensFinished,
 		C3.Behaviors.Timer.Acts.StartTimer,
+		C3.Plugins.Spritefont2.Acts.ZMoveToObject,
 		C3.Behaviors.Timer.Cnds.OnTimer,
 		C3.Plugins.Audio.Acts.Stop,
 		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.System.Exps.dt,
 		C3.Behaviors.Timer.Cnds.IsTimerRunning,
+		C3.Plugins.System.Exps.int,
+		C3.Behaviors.Timer.Exps.Duration,
+		C3.Behaviors.Timer.Exps.CurrentTime,
 		C3.Behaviors.DragnDrop.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.System.Exps.loopindex,
@@ -157,6 +165,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.DrawingCanvas.Cnds.CompareInstanceVar,
 		C3.Plugins.DrawingCanvas.Exps.Count,
 		C3.Plugins.TiledBg.Acts.SetSize,
+		C3.Plugins.System.Exps.choose,
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerSetFlag,
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardSetRecord,
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardPublishRecord,
@@ -207,7 +216,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardFetchPlayerRatingScoped,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnLeaderboardFetchPlayer,
 		C3.Plugins.Eponesh_GameScore.Cnds.PlayerCompare,
-		C3.Plugins.System.Exps.int,
 		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardCurPlayerField,
 		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardPlayerPosition,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
@@ -234,6 +242,10 @@ self.C3_GetObjectRefTable = function () {
 	];
 };
 self.C3_JsPropNameTable = [
+	{sfBold: 0},
+	{sfSemiBold: 0},
+	{sfBold2xOutline: 0},
+	{sfBold2x: 0},
 	{Tween: 0},
 	{Timer: 0},
 	{puzzle: 0},
@@ -301,7 +313,6 @@ self.C3_JsPropNameTable = [
 	{showCounterBG: 0},
 	{max: 0},
 	{catProcentage: 0},
-	{projectVers: 0},
 	{topPoint: 0},
 	{Audio: 0},
 	{backToMenu: 0},
@@ -313,7 +324,8 @@ self.C3_JsPropNameTable = [
 	{crown: 0},
 	{popup: 0},
 	{popup_bg: 0},
-	{Family1: 0},
+	{puzzlePieceFamily: 0},
+	{allText: 0},
 	{PiecesPerLine: 0},
 	{PiecesWidth: 0},
 	{PiecesHeight: 0},
@@ -366,6 +378,10 @@ self.C3_JsPropNameTable = [
 ];
 
 self.InstanceType = {
+	sfBold: class extends self.ISpriteFontInstance {},
+	sfSemiBold: class extends self.ISpriteFontInstance {},
+	sfBold2xOutline: class extends self.ISpriteFontInstance {},
+	sfBold2x: class extends self.ISpriteFontInstance {},
 	puzzle: class extends self.ISpriteInstance {},
 	framePuzzle: class extends self.I9PatchInstance {},
 	puzzlePiece: class extends self.IDrawingCanvasInstance {},
@@ -405,7 +421,6 @@ self.InstanceType = {
 	GamePush: class extends C3.Plugins.Eponesh_GameScore.Instance {},
 	showCounterBG: class extends self.I9PatchInstance {},
 	catProcentage: class extends self.ITiledBackgroundInstance {},
-	projectVers: class extends self.ITextInstance {},
 	topPoint: class extends self.ISpriteInstance {},
 	Audio: class extends self.IInstance {},
 	backToMenu: class extends self.ISpriteInstance {},
@@ -417,5 +432,6 @@ self.InstanceType = {
 	crown: class extends self.ISpriteInstance {},
 	popup: class extends self.ISpriteInstance {},
 	popup_bg: class extends self.ITiledBackgroundInstance {},
-	Family1: class extends self.IDrawingCanvasInstance {}
+	puzzlePieceFamily: class extends self.IDrawingCanvasInstance {},
+	allText: class extends self.ISpriteFontInstance {}
 }
