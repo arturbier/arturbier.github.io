@@ -1537,6 +1537,10 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
 		() => "Categories",
 		() => "Pieces",
 		() => "",
@@ -1774,10 +1778,6 @@ self.C3_ExpressionFuncs = [
 		() => "Daily Timer",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			const f2 = p._GetNode(2).GetBoundMethod();
 			const n3 = p._GetNode(3);
@@ -1890,6 +1890,11 @@ self.C3_ExpressionFuncs = [
 			return () => f0("Ура!", "Ты супер!", "Так держать!", "Отлично!", "Это победа!", "Ты молодец!");
 		},
 		() => "dailyPuzzle",
+		() => "BEST_TODAY",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue()).toString();
+		},
 		() => "dailyTime",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2062,8 +2067,7 @@ self.C3_ExpressionFuncs = [
 		() => "shows",
 		() => "rewarded",
 		() => "hideRef",
-		() => "Triggers",
-		() => "3days",
+		() => 5,
 		() => "Scroll",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2121,9 +2125,17 @@ self.C3_ExpressionFuncs = [
 		() => "BG",
 		() => "done",
 		() => "undone",
+		() => "Scoped Leaderboard",
+		() => "lastRewardedDay",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("dailyTime");
+		},
+		() => "Корона победителя!",
+		() => "вчераты был/a №1 ",
+		() => "crown",
 		() => "savedData",
 		() => "savedTime",
-		() => 5,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("shows");
@@ -2181,15 +2193,14 @@ self.C3_ExpressionFuncs = [
 		() => 0.15,
 		() => "Play",
 		() => "Leaders",
-		() => 10,
 		() => "Tasks",
+		() => "Progress",
 		() => "bottom",
 		() => "menuProgress",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % собрано");
 		},
-		() => "rewardPlanner",
 		() => "Debug",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2211,6 +2222,17 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("x");
+		},
+		() => "top",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => ((f0(0) - n1.ExpObject()) + 25);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => ((f0(0) + n1.ExpObject()) + 25);
 		}
 ];
 
