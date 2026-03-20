@@ -1741,11 +1741,11 @@ self.C3_ExpressionFuncs = [
 		() => "Пазл дня!",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => Math.floor((v0.GetValue() / 20));
+			return () => Math.floor((v0.GetValue() / 19));
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => C3.clamp((2 + v0.GetValue()), 2, 5);
+			return () => C3.clamp((2 + v0.GetValue()), 2, 6);
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -1947,12 +1947,18 @@ self.C3_ExpressionFuncs = [
 			return () => ("unlock_" + v0.GetValue());
 		},
 		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => Math.floor(Math.sqrt((v0.GetValue() / 7)));
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Отличная новость", "Категория завершена");
 		},
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Возвращайся в меню", "Выбирай новую", "Новая уже открыта");
+		},
+		() => "completed",
+		() => "School",
+		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => Math.floor((Math.sqrt((v0.GetValue() - 1)) / 7));
+			return () => Math.floor(((v0.GetValue() - 1) / 19));
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1960,7 +1966,7 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Больше кусочков", "Погнали", "Новый челлендж");
+			return () => f0("Больше кусочков", "Погнали собирать", "Новый челлендж");
 		},
 		() => "up",
 		() => "nextBtn",
@@ -2264,7 +2270,14 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			return () => ((f0(0) - n1.ExpObject()) + 25);
-		}
+		},
+		() => "Confetti",
+		() => "Basic",
+		() => "Random",
+		() => "Realistic",
+		() => "Fireworks",
+		() => "Snow",
+		() => "Custom"
 ];
 
 

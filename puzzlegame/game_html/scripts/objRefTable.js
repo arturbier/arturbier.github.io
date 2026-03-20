@@ -239,7 +239,16 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
 		C3.Plugins.DrawingCanvas.Acts.SetPosToObject,
 		C3.Plugins.Spritefont2.Acts.SetScale,
-		C3.Plugins.Touch.Cnds.OnTouchStart
+		C3.Plugins.Touch.Cnds.OnTouchStart,
+		C3.JavaScriptInEvents.E_popup_Event9_Act1,
+		C3.JavaScriptInEvents.E_popup_Event10_Act1,
+		C3.JavaScriptInEvents.E_popup_Event11_Act1,
+		C3.JavaScriptInEvents.E_popup_Event12_Act1,
+		C3.JavaScriptInEvents.E_popup_Event13_Act1,
+		C3.JavaScriptInEvents.E_popup_Event14_Act1,
+		C3.JavaScriptInEvents.E_popup_Event15_Act1,
+		C3.JavaScriptInEvents.E_popup_Event16_Act1,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnAchievementsAnyUnlock
 	];
 };
 self.C3_JsPropNameTable = [
@@ -377,7 +386,8 @@ self.C3_JsPropNameTable = [
 	{top_text: 0},
 	{bottom_text: 0},
 	{icon: 0},
-	{fontScale: 0}
+	{fontScale: 0},
+	{Type: 0}
 ];
 
 self.InstanceType = {
