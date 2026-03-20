@@ -1745,7 +1745,8 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => C3.clamp((2 + v0.GetValue()), 2, 6);
+			const v1 = p._GetNode(1).GetVar();
+			return () => (C3.clamp((2 + v0.GetValue()), 2, 5) + ((v1.GetValue()) === (79) ? 1 : 0));
 		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
