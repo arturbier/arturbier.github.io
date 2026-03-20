@@ -1571,6 +1571,10 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() + 85);
 		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 100);
+		},
 		() => 2,
 		p => {
 			const n0 = p._GetNode(0);
@@ -1641,15 +1645,11 @@ self.C3_ExpressionFuncs = [
 		() => "canUnlock",
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (and("[icon=0] [size=47]", n0.ExpInstVar()) + "[/size]");
+			return () => (and("*[size=47]", n0.ExpInstVar()) + "[/size]");
 		},
 		() => 50,
 		() => "lock",
 		() => "[size=45]закрыто[/size]",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() + 75);
-		},
 		() => 100,
 		() => "Unlocked",
 		() => 0.005,
@@ -1761,7 +1761,7 @@ self.C3_ExpressionFuncs = [
 		() => "txtCoinGame",
 		p => {
 			const n0 = p._GetNode(0);
-			return () => and("[size=65][icon=0][/size] : ", n0.ExpObject("coins"));
+			return () => n0.ExpObject("coins");
 		},
 		() => "Daily Timer",
 		() => "puzzleTimer",
@@ -1993,10 +1993,6 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() + 100);
-		},
-		p => {
-			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() - 10);
 		},
 		() => "Open",
@@ -2020,10 +2016,6 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => ("unlock_" + n0.ExpInstVar());
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("coins");
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -2128,7 +2120,10 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "Корона победителя!",
 		() => "вчера ты был/a №1 ",
-		() => "crown",
+		() => "crown_1",
+		() => "Почти на вершине!",
+		() => "вчера ты был/a №2 ",
+		() => "crown_2",
 		() => "savedData",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2179,6 +2174,9 @@ self.C3_ExpressionFuncs = [
 		() => -15,
 		() => 0.15,
 		() => "Play",
+		() => "Упс, пазл собран",
+		() => "возвращайся завтра!",
+		() => "morgen",
 		() => "Leaders",
 		() => "Tasks",
 		() => "Progress",
