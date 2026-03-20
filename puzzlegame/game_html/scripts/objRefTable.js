@@ -42,7 +42,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.NinePatch.Exps.Count,
 		C3.Plugins.NinePatch.Acts.Destroy,
 		C3.Plugins.Sprite.Acts.Destroy,
-		C3.Plugins.Spritefont2.Acts.Destroy,
 		C3.Plugins.System.Acts.CreateObject,
 		C3.Plugins.System.Exps.viewportmidx,
 		C3.Plugins.Sprite.Exps.Y,
@@ -58,6 +57,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.NinePatch.Exps.BBoxTop,
 		C3.Plugins.NinePatch.Acts.AddChild,
 		C3.Plugins.Sprite.Acts.SetZ,
+		C3.Plugins.NinePatch.Exps.BBoxRight,
 		C3.Plugins.Arr.Cnds.ArrForEach,
 		C3.Plugins.Arr.Exps.At,
 		C3.Plugins.Arr.Exps.CurX,
@@ -138,7 +138,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.DrawingCanvas.Exps.X,
 		C3.Plugins.DrawingCanvas.Exps.Y,
 		C3.Plugins.DrawingCanvas.Cnds.CompareX,
-		C3.Plugins.NinePatch.Exps.BBoxRight,
 		C3.Plugins.DrawingCanvas.Cnds.CompareY,
 		C3.Plugins.NinePatch.Exps.BBoxBottom,
 		C3.Plugins.DrawingCanvas.Cnds.IsBoolInstanceVarSet,
@@ -153,6 +152,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Behaviors.Tween.Cnds.IsPlaying,
 		C3.Plugins.DrawingCanvas.Cnds.HasChildren,
 		C3.Plugins.DrawingCanvas.Cnds.PickChildren,
+		C3.Behaviors.Tween.Cnds.IsAnyPlaying,
 		C3.Plugins.NinePatch.Cnds.PickByUID,
 		C3.Plugins.DrawingCanvas.Acts.SetBoolInstanceVar,
 		C3.Behaviors.DragnDrop.Cnds.OnDrop,
@@ -183,7 +183,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SetLayoutAngle,
 		C3.Behaviors.Tween.Exps.Value,
 		C3.Plugins.Touch.Cnds.OnTapGestureObject,
-		C3.Behaviors.Tween.Cnds.IsAnyPlaying,
 		C3.Plugins.NinePatch.Exps.LayerName,
 		C3.Plugins.Dictionary.Cnds.CompareValue,
 		C3.Plugins.Dictionary.Acts.SetKey,
@@ -218,6 +217,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Cnds.PlayerCompare,
 		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardCurPlayerField,
 		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardPlayerPosition,
+		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.System.Acts.RestartLayout,
@@ -238,6 +238,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerSetName,
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
 		C3.Plugins.DrawingCanvas.Acts.SetPosToObject,
+		C3.Plugins.Spritefont2.Acts.SetScale,
 		C3.Plugins.Touch.Cnds.OnTouchStart
 	];
 };
@@ -299,7 +300,7 @@ self.C3_JsPropNameTable = [
 	{color: 0},
 	{categoriesBtn: 0},
 	{frameHeader: 0},
-	{starIcon: 0},
+	{starGame: 0},
 	{frameBottom: 0},
 	{index: 0},
 	{catImage: 0},
@@ -321,9 +322,10 @@ self.C3_JsPropNameTable = [
 	{dailyState: 0},
 	{menuProgress: 0},
 	{menuProgressIndicator: 0},
-	{crown: 0},
+	{Leader: 0},
 	{popup: 0},
 	{popup_bg: 0},
+	{starMenu: 0},
 	{puzzlePieceFamily: 0},
 	{allText: 0},
 	{PiecesPerLine: 0},
@@ -374,7 +376,8 @@ self.C3_JsPropNameTable = [
 	{isPopupShowing: 0},
 	{top_text: 0},
 	{bottom_text: 0},
-	{icon: 0}
+	{icon: 0},
+	{fontScale: 0}
 ];
 
 self.InstanceType = {
@@ -409,7 +412,7 @@ self.InstanceType = {
 	PlatformInfo: class extends self.IInstance {},
 	categoriesBtn: class extends self.I9PatchInstance {},
 	frameHeader: class extends self.I9PatchInstance {},
-	starIcon: class extends self.ISpriteInstance {},
+	starGame: class extends self.ISpriteInstance {},
 	frameBottom: class extends self.I9PatchInstance {},
 	catImage: class extends self.ISpriteInstance {},
 	catLock: class extends self.ISpriteInstance {},
@@ -429,9 +432,10 @@ self.InstanceType = {
 	dailyState: class extends self.ISpriteInstance {},
 	menuProgress: class extends self.I9PatchInstance {},
 	menuProgressIndicator: class extends self.ISpriteInstance {},
-	crown: class extends self.ISpriteInstance {},
+	Leader: class extends self.ISpriteInstance {},
 	popup: class extends self.ISpriteInstance {},
 	popup_bg: class extends self.ITiledBackgroundInstance {},
+	starMenu: class extends self.ISpriteInstance {},
 	puzzlePieceFamily: class extends self.IDrawingCanvasInstance {},
 	allText: class extends self.ISpriteFontInstance {}
 }

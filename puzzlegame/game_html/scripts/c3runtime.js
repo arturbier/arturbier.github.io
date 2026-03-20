@@ -1578,6 +1578,11 @@ self.C3_ExpressionFuncs = [
 		() => 2,
 		p => {
 			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 85);
+		},
+		() => "1",
+		p => {
+			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
 			return () => n0.ExpObject(n1.ExpObject());
 		},
@@ -1763,6 +1768,7 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("coins");
 		},
+		() => "txtCoinMenu",
 		() => "Daily Timer",
 		() => "puzzleTimer",
 		p => {
@@ -1948,6 +1954,15 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => Math.floor((Math.sqrt((v0.GetValue() - 1)) / 7));
 		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Ой, стало сложнее", "Уже не так просто", "Снова вызов");
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Больше кусочков", "Погнали", "Новый челлендж");
+		},
+		() => "up",
 		() => "nextBtn",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2029,10 +2044,35 @@ self.C3_ExpressionFuncs = [
 		() => 0.22,
 		p => {
 			const n0 = p._GetNode(0);
+			return () => ("Урааа! " + n0.ExpInstVar());
+		},
+		() => "Давай поиграем уже",
+		() => "opened",
+		p => {
+			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => (n0.ExpObject() - f1(15, 30));
 		},
 		() => 0.1,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Не так быстро :)", "Закрыто... пока)");
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			const n2 = p._GetNode(2);
+			return () => f0((and("Не хватает ", subtract(n1.ExpInstVar(), n2.ExpObject("coins"))) + " монет"), "Ты почти там");
+		},
+		() => "locked",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Не продается!", "Деньги не помогут :)");
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Сначала заслужи", "Придется поиграть");
+		},
 		() => "Data",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2118,12 +2158,15 @@ self.C3_ExpressionFuncs = [
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => f0(f1("dailyTime"));
 		},
-		() => "Корона победителя!",
-		() => "вчера ты был/a №1 ",
-		() => "crown_1",
-		() => "Почти на вершине!",
-		() => "вчера ты был/a №2 ",
-		() => "crown_2",
+		() => "Корона твоя! №1",
+		() => "Отличный результат",
+		() => "coup_1",
+		() => "crown",
+		() => "Кубок твой! №2",
+		() => "Почти у цели",
+		() => "В тройке лучших! №3",
+		() => "Еще один заход?",
+		() => "coup_2",
 		() => "savedData",
 		p => {
 			const n0 = p._GetNode(0);
