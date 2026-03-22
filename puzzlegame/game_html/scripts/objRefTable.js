@@ -249,7 +249,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.TiledBg.Acts.SetOpacity,
 		C3.Plugins.Spritefont2.Acts.SetScale,
 		C3.Behaviors.Tween.Cnds.IsAnyPingPong,
-		C3.JavaScriptInEvents.E_popup_Event10_Act1,
 		C3.JavaScriptInEvents.E_popup_Event11_Act1,
 		C3.JavaScriptInEvents.E_popup_Event12_Act1,
 		C3.JavaScriptInEvents.E_popup_Event13_Act1,
@@ -257,6 +256,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.E_popup_Event15_Act1,
 		C3.JavaScriptInEvents.E_popup_Event16_Act1,
 		C3.JavaScriptInEvents.E_popup_Event17_Act1,
+		C3.JavaScriptInEvents.E_popup_Event18_Act1,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAchievementsAnyUnlock
 	];
 };

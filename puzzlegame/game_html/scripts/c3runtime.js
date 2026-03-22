@@ -2326,6 +2326,7 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => ((f0(0) - n1.ExpObject()) + 25);
 		},
+		() => "showPopup",
 		() => "Confetti",
 		() => "Basic",
 		() => "Random",
