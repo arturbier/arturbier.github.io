@@ -1,5 +1,6 @@
 :root {
 	--gp-background-color: #f6ebcc;
+	--gp-achievement-color: #f88119;
 	--gp-text-color: #625754;
 	--gp-border-color: #e3d6b1;
 	--gp-scroll-color: #d5c599;
@@ -9,7 +10,9 @@ body .gp-overlay__container {
 	background-color: var(--gp-background-color);
 	color: var(--gp-text-color);
 }
-
+body .gp-achievement {
+    background-color: var(--gp-achievement-color);
+}
 body .gp-overlay * {
 	border-color: var(--gp-border-color);
 }
@@ -21,7 +24,6 @@ body .gp-overlay .gp-list-item::after {
 body .gp-list-item_active {
 	background-color: var(--gp-border-color);
 }
-
 body .gp-overlay-divider::before,
 body .gp-overlay-divider::after {
 	background-color: var(--gp-border-color);
@@ -47,3 +49,4 @@ body .gp-overlay-divider::after {
 .gp-overlay ::-webkit-scrollbar-thumb {
 	background-color: var(--gp-scroll-color);
 }
+

@@ -2010,11 +2010,18 @@ self.C3_ExpressionFuncs = [
 			return () => add(n0.ExpObject(v1.GetValue()), 1);
 		},
 		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() * 0.85);
+		},
+		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			const n2 = p._GetNode(2);
 			return () => (((f0(0) + (n1.ExpObject() / 2)) + n2.ExpObject()) + 20);
 		},
+		() => "friend",
+		() => "666",
+		() => "share",
 		() => "ScreenShake",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2264,10 +2271,6 @@ self.C3_ExpressionFuncs = [
 		() => "Daily",
 		() => -15,
 		() => 0.15,
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() * 0.85);
-		},
 		() => "Play",
 		() => "Упс, пазл собран",
 		() => "возвращайся завтра!",
