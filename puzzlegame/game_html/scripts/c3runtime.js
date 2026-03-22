@@ -1900,6 +1900,15 @@ self.C3_ExpressionFuncs = [
 			return () => ((f0(Math.floor((v1.GetValue() % 60)), 2) + ".") + f2(Math.floor(((v3.GetValue() % 1) * 1000)), 3));
 		},
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Пазл дня? Легко", "Вот это скорость!");
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Отличный результат", "Завтра новый вызов", "Корона твоя? Или..");
+		},
+		() => "daily",
+		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
 			const v2 = p._GetNode(2).GetVar();
@@ -1970,7 +1979,7 @@ self.C3_ExpressionFuncs = [
 			return () => f0("Больше кусочков", "Погнали собирать", "Новый челлендж");
 		},
 		() => "up",
-		() => "nextBtn",
+		() => "Next",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() * 1.5);
@@ -2069,7 +2078,10 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			const n2 = p._GetNode(2);
-			return () => f0((and("Не хватает ", subtract(n1.ExpInstVar(), n2.ExpObject("coins"))) + " монет"), "Ты почти там");
+			const f3 = p._GetNode(3).GetBoundMethod();
+			const n4 = p._GetNode(4);
+			const n5 = p._GetNode(5);
+			return () => f0((and("Не хватает ", subtract(n1.ExpInstVar(), n2.ExpObject("coins"))) + f3(subtract(n4.ExpInstVar(), n5.ExpObject("coins")))), "Ты почти там");
 		},
 		() => "locked",
 		p => {
@@ -2096,6 +2108,20 @@ self.C3_ExpressionFuncs = [
 		() => "rewarded",
 		() => "hideRef",
 		() => 5,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			return () => (f0(v1.GetValue()) % 10);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			return () => (f0(v1.GetValue()) % 100);
+		},
+		() => 11,
+		() => 14,
+		() => " монет",
+		() => " монеты",
 		() => "Scroll",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2149,6 +2175,17 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
 		},
+		() => "Option",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => (f0(0) - (n1.ExpObject() / 1.5));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => (f0(0) - (n1.ExpObject() / 6));
+		},
 		() => "bottom",
 		() => "orderCategories",
 		() => "BG",
@@ -2201,6 +2238,10 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => Math.floor(divide(n0.ExpObject("savedTime"), (((24 * 60) * 60) * 100)));
 		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("sound");
+		},
 		() => "progress",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2223,6 +2264,10 @@ self.C3_ExpressionFuncs = [
 		() => "Daily",
 		() => -15,
 		() => 0.15,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() * 0.85);
+		},
 		() => "Play",
 		() => "Упс, пазл собран",
 		() => "возвращайся завтра!",
@@ -2235,6 +2280,15 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % собрано");
 		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 1.7);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => ((n0.ExpObject()) ? (0) : (1));
+		},
+		() => "sound",
 		() => "Debug",
 		p => {
 			const n0 = p._GetNode(0);

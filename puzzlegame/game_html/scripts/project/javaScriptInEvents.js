@@ -9,12 +9,12 @@
 
 const scriptsInEvents = {
 
-	async E_popup_Event9_Act1(runtime, localVars)
+	async E_popup_Event10_Act1(runtime, localVars)
 	{
 		confetti.start(3000)
 	},
 
-	async E_popup_Event10_Act1(runtime, localVars)
+	async E_popup_Event11_Act1(runtime, localVars)
 	{
 		confetti({
 		  particleCount: 100,
@@ -23,7 +23,7 @@ const scriptsInEvents = {
 		});
 	},
 
-	async E_popup_Event11_Act1(runtime, localVars)
+	async E_popup_Event12_Act1(runtime, localVars)
 	{
 		function randomInRange(min, max) {
 		  return Math.random() * (max - min) + min;
@@ -37,7 +37,7 @@ const scriptsInEvents = {
 		});
 	},
 
-	async E_popup_Event12_Act1(runtime, localVars)
+	async E_popup_Event13_Act1(runtime, localVars)
 	{
 		var count = 200;
 		var defaults = {
@@ -74,7 +74,7 @@ const scriptsInEvents = {
 		});
 	},
 
-	async E_popup_Event13_Act1(runtime, localVars)
+	async E_popup_Event14_Act1(runtime, localVars)
 	{
 		var duration = 15 * 1000;
 		var animationEnd = Date.now() + duration;
@@ -98,7 +98,7 @@ const scriptsInEvents = {
 		}, 250);
 	},
 
-	async E_popup_Event14_Act1(runtime, localVars)
+	async E_popup_Event15_Act1(runtime, localVars)
 	{
 		var duration = 15 * 1000;
 		var animationEnd = Date.now() + duration;
@@ -135,7 +135,7 @@ const scriptsInEvents = {
 		}());
 	},
 
-	async E_popup_Event15_Act1(runtime, localVars)
+	async E_popup_Event16_Act1(runtime, localVars)
 	{
 		var end = Date.now() + (1 * 1000);
 		
@@ -164,7 +164,7 @@ const scriptsInEvents = {
 		}());
 	},
 
-	async E_popup_Event16_Act1(runtime, localVars)
+	async E_popup_Event17_Act1(runtime, localVars)
 	{
 		var canvas = document.getElementById('my-canvas');
 		
