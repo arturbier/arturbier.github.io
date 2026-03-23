@@ -182,7 +182,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Exps.viewportbottom,
 		C3.Plugins.Sprite.Cnds.IsAnimPlaying,
 		C3.Plugins.Eponesh_GameScore.Acts.SocialsInvite,
-		C3.Plugins.Eponesh_GameScore.Acts.SocialsShare,
+		C3.Plugins.Eponesh_GameScore.Cnds.PlatformType,
+		C3.Plugins.Eponesh_GameScore.Acts.SocialsPost,
 		C3.Behaviors.Tween.Acts.TweenValue,
 		C3.Plugins.System.Acts.SetLayoutAngle,
 		C3.Behaviors.Tween.Exps.Value,
@@ -237,6 +238,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
 		C3.Plugins.Audio.Acts.SetMuted,
 		C3.Plugins.Dictionary.Cnds.HasKey,
+		C3.Plugins.Eponesh_GameScore.Acts.AdsShowFullscreen,
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardOpenScoped,
 		C3.Plugins.Eponesh_GameScore.Acts.AchievementsOpen,
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
@@ -244,11 +246,15 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Exps.AnimationFrame,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
 		C3.Plugins.Keyboard.Cnds.OnKey,
 		C3.Plugins.Mouse.Cnds.IsOverObject,
 		C3.Plugins.LocalStorage.Acts.ClearStorage,
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerReset,
 		C3.Plugins.Eponesh_GameScore.Acts.PlayerSetName,
+		C3.Plugins.System.Acts.SnapshotCanvas,
+		C3.Plugins.Browser.Acts.InvokeDownload,
+		C3.Plugins.System.Exps.canvassnapshot,
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
 		C3.Plugins.DrawingCanvas.Acts.SetPosToObject,
 		C3.Plugins.TiledBg.Acts.SetOpacity,
@@ -262,7 +268,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.E_popup_Event16_Act1,
 		C3.JavaScriptInEvents.E_popup_Event17_Act1,
 		C3.JavaScriptInEvents.E_popup_Event18_Act1,
-		C3.Plugins.Eponesh_GameScore.Cnds.OnAchievementsAnyUnlock
+		C3.Plugins.Eponesh_GameScore.Cnds.OnAchievementsAnyUnlock,
+		C3.Plugins.System.Exps.time
 	];
 };
 self.C3_JsPropNameTable = [
@@ -409,7 +416,8 @@ self.C3_JsPropNameTable = [
 	{bottom_text: 0},
 	{icon: 0},
 	{fontScale: 0},
-	{Type: 0}
+	{Type: 0},
+	{lastAdTime: 0}
 ];
 
 self.InstanceType = {

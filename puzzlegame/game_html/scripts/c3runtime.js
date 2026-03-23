@@ -2035,8 +2035,12 @@ self.C3_ExpressionFuncs = [
 			return () => (((f0(0) + (n1.ExpObject() / 2)) + n2.ExpObject()) + 20);
 		},
 		() => "friend",
-		() => "666",
+		() => "Новая игре с пазлами! 🧩\nПрисоединяйся",
 		() => "share",
+		() => "Новая игра с пазлами! 🧩\nПрисоединяйся",
+		() => "https://vk.com/app54459437",
+		() => "https://arturbier.github.io/puzzlegame/images/snippet.png",
+		() => "https://ok.ru/app/512004873357",
 		() => "ScreenShake",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2340,6 +2344,8 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0((32).toString());
 		},
+		() => 75,
+		() => "scr.png",
 		() => "x",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2367,7 +2373,12 @@ self.C3_ExpressionFuncs = [
 		() => "Realistic",
 		() => "Fireworks",
 		() => "Snow",
-		() => "Custom"
+		() => "Custom",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() % 3);
+		},
+		() => 30
 ];
 
 
