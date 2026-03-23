@@ -1537,7 +1537,6 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
-		() => "BetterOutline",
 		() => "projectVers",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2226,6 +2225,7 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (and("Ты № ", f0()) + " в лидерах");
 		},
+		() => "BetterOutline",
 		() => "Привет!",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
