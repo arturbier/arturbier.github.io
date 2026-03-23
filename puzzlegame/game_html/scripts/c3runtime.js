@@ -2201,8 +2201,6 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
 		},
-		() => "playerPos",
-		() => "Scoped Leaderboard",
 		() => "Option",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2219,22 +2217,13 @@ self.C3_ExpressionFuncs = [
 		() => "BG",
 		() => "done",
 		() => "undone",
-		() => "lastRewardedDay",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("dailyTime");
-		},
-		() => "curPosition",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (and("Ты № ", f0()) + " в лидерах");
-		},
-		() => "BetterOutline",
-		() => "Привет!",
+		() => "Scoped Leaderboard",
+		() => "playerPos",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => ((v0.GetValue() - 1)).toString();
 		},
+		() => "lastRewardedDay",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
