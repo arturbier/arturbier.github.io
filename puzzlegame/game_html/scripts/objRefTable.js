@@ -254,6 +254,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SnapshotCanvas,
 		C3.Plugins.Browser.Acts.InvokeDownload,
 		C3.Plugins.System.Exps.canvassnapshot,
+		C3.Plugins.Browser.Acts.Alert,
 		C3.Plugins.Keyboard.Cnds.IsKeyDown,
 		C3.Plugins.DrawingCanvas.Acts.SetPosToObject,
 		C3.Plugins.Eponesh_GameScore.Cnds.IsDev,

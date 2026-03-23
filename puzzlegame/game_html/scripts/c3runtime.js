@@ -1912,7 +1912,7 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			const f2 = p._GetNode(2).GetBoundMethod();
 			const v3 = p._GetNode(3).GetVar();
-			return () => ((f0(Math.floor((v1.GetValue() / 60)), 2) + ":") + f2(Math.floor((v3.GetValue() % 60)), 2));
+			return () => ((f0(Math.floor((v1.GetValue() / 60)), 1) + ".") + f2(Math.floor((v3.GetValue() % 60)), 2));
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2331,6 +2331,7 @@ self.C3_ExpressionFuncs = [
 		() => "Вася Васильев",
 		() => 75,
 		() => "scr.png",
+		() => "0.01",
 		() => "x",
 		p => {
 			const n0 = p._GetNode(0);
