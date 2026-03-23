@@ -2340,10 +2340,6 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpObject(n1.ExpInstVar());
 		},
 		() => "Вася Васильев",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0((32).toString());
-		},
 		() => 75,
 		() => "scr.png",
 		() => "x",
