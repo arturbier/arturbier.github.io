@@ -243,6 +243,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
 		C3.Plugins.Sprite.Exps.AnimationFrame,
+		C3.Plugins.Audio.Acts.SetSilent,
 		C3.Plugins.Touch.Cnds.OnTouchStart,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,

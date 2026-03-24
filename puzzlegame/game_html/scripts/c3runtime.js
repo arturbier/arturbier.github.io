@@ -2331,7 +2331,6 @@ self.C3_ExpressionFuncs = [
 		() => "Вася Васильев",
 		() => 75,
 		() => "scr.png",
-		() => "0.01",
 		() => "x",
 		p => {
 			const n0 = p._GetNode(0);
