@@ -1537,6 +1537,7 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		() => 0,
 		() => "projectVers",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1545,7 +1546,6 @@ self.C3_ExpressionFuncs = [
 		() => "Categories",
 		() => "Pieces",
 		() => "",
-		() => 0,
 		() => "UpdateUI",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1786,6 +1786,13 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "txtCoinMenu",
 		() => "Daily Timer",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			const v3 = p._GetNode(3).GetVar();
+			return () => ((f0(Math.floor((v1.GetValue() / 60)), 1) + ":") + f2(Math.floor((v3.GetValue() % 60)), 2));
+		},
 		() => "puzzleTimer",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1896,10 +1903,6 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() + (n1.ExpObject() / 2));
 		},
 		() => "HeightUp",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Ура!", "Ты супер!", "Так держать!", "Отлично!", "Это победа!", "Ты молодец!");
-		},
 		() => "dailyPuzzle",
 		() => "BEST_TODAY",
 		p => {
