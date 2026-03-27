@@ -1379,6 +1379,11 @@ const C3=self.C3,GESTURE_HOLD_THRESHOLD=15,GESTURE_HOLD_TIMEOUT=500,GESTURE_TAP_
 {const t=self.C3,e=[];t.Plugins.Audio=class extends t.SDKPluginBase{constructor(t){super(t)}_AddActionPromise(t){e.push(t)}static async WaitForAllActionPromises(){await Promise.all(e),t.clearArray(e)}Release(){super.Release()}}}{const s=self.C3,i=self.C3X;s.Plugins.Audio.Type=class extends s.SDKTypeBase{constructor(t){super(t)}Release(){super.Release()}OnCreate(){}GetScriptInterfaceClass(){return self.IAudioObjectType}};let a=null;function GetAudioSdkInstance(){return a.GetSingleGlobalInstance().GetSdkInstance()}function GetAudioDOMInterface(){if(self["C3Audio_DOMInterface"])return self["C3Audio_DOMInterface"];throw new Error("audio scripting API cannot be used here - make sure the project is using DOM mode, not worker mode")}self.IAudioObjectType=class extends self.IObjectType{constructor(t){super(t),a=t}get audioContext(){return GetAudioDOMInterface()["GetAudioContextExtern"]()}get destinationNode(){return GetAudioDOMInterface()["GetDestinationNodeExtern"]()}get isSilent(){return GetAudioSdkInstance()._IsSilent()}set isSilent(t){GetAudioSdkInstance()._SetSilent(t)}get masterVolume(){return GetAudioSdkInstance()._GetMasterVolume()}set masterVolume(t){i.RequireFiniteNumber(t),GetAudioSdkInstance()._SetMasterVolume(t)}stopAll(){GetAudioSdkInstance()._StopAll()}}}{const n=self.C3,r="audio",o=["interactive","balanced","playback"];n.Plugins.Audio.Instance=class extends n.SDKInstanceBase{constructor(t,e){super(t,r),this._nextPlayTime=0,this._nextPlayOffset=0,this._triggerTags=[],this._enableMultiTags=!0,this._timeScaleMode=0,this._saveLoadMode=0,this._playInBackground=!1,this._panningModel=1,this._distanceModel=1,this._listenerPos=[this._runtime.GetViewportWidth()/2,this._runtime.GetViewportHeight()/2,600],this._listenerForwardVec=[0,0,-1],this._listenerUpVec=[0,1,0],this._referenceDistance=600,this._maxDistance=1e4,this._rolloffFactor=1,this._listenerInst=null,this._loadListenerUid=-1,this._masterVolume=1,this._isSilent=!1,this._sampleRate=0,this._audioContextState="suspended",this._outputLatency=0,this._effectCount=new Map,this._preloadTotal=0,this._preloadCount=0,this._bufferMetadata=new Map,this._remoteUrls=new Map;let s="interactive";e&&(this._timeScaleMode=e[0],this._saveLoadMode=e[1],this._playInBackground=e[2],s=o[e[3]],this._enableMultiTags=e[4],this._panningModel=e[5],this._distanceModel=e[6],this._listenerPos[2]=e[7],this._referenceDistance=e[8],this._maxDistance=e[9],this._rolloffFactor=e[10]),this._lastAIState=[],this._lastFxState=[],this._lastAnalysersData=[],this.AddDOMMessageHandlers([["state",t=>this._OnUpdateState(t)],["audiocontext-state",t=>this._OnAudioContextStateChanged(t)],["fxstate",t=>this._OnUpdateFxState(t)],["trigger",t=>this._OnTrigger(t)],["buffer-metadata",t=>this._OnBufferMetadata(t)]]);const i=this.GetRuntime().Dispatcher();this._disposables=new n.CompositeDisposable(n.Disposable.From(i,"instancedestroy",t=>this._OnInstanceDestroyed(t.instance)),n.Disposable.From(i,"afterload",()=>this._OnAfterLoad()),n.Disposable.From(i,"suspend",()=>this._OnSuspend()),n.Disposable.From(i,"resume",()=>this._OnResume()));const a=this._runtime.GetExportType(),l="Safari"===n.Platform.Browser,h=this._runtime.IsiOSWebView()||"macos-wkwebview"===a,u="playable-ad-single-file"===a,c="cordova"===a&&"Android"===n.Platform.OS,d=l||h||u||c;this._runtime.AddLoadPromise(this.PostToDOMAsync("create-audio-context",{"preloadList":this._runtime.GetAssetManager().GetAudioToPreload().map(t=>({"originalUrl":t.originalUrl,"url":t.url,"type":t.type,"fileSize":t.fileSize})),"timeScaleMode":this._timeScaleMode,"latencyHint":s,"panningModel":this._panningModel,"distanceModel":this._distanceModel,"refDistance":this._referenceDistance,"maxDistance":this._maxDistance,"rolloffFactor":this._rolloffFactor,"listenerPos":this._listenerPos,"usePlayMusicAsSoundWorkaround":d}).then(t=>{this._sampleRate=t["sampleRate"],this._audioContextState=t["audioContextState"],this._outputLatency=t["outputLatency"]})),this._StartTicking()}Release(){this._listenerInst=null,super.Release()}_SplitTags(t){return this._enableMultiTags?t.split(" ").filter(t=>!!t):t?[t]:[]}_MatchTagLists(t,e){for(const s of e){let e=!1;for(const i of t)if(n.equalsNoCase(i,s)){e=!0;break}if(!e)return!1}return!0}_MatchTagListToStr(t,e){return this._MatchTagLists(t,this._SplitTags(e))}_AddActionPromise(t){this.GetPlugin()._AddActionPromise(t)}_OnInstanceDestroyed(t){this._listenerInst===t&&(this._listenerInst=null)}DbToLinearNoCap(t){return Math.pow(10,t/20)}DbToLinear(t){const e=this.DbToLinearNoCap(t);return isFinite(e)?Math.max(Math.min(e,1),0):0}LinearToDbNoCap(t){return Math.log(t)/Math.log(10)*20}LinearToDb(t){return this.LinearToDbNoCap(Math.max(Math.min(t,1),0))}_GetScheduledPlayInfo(){let t=0;const e=!!self["C3_GetAudioContextCurrentTime"];return t=e?this._nextPlayTime:this._nextPlayOffset,this._nextPlayTime=0,this._nextPlayOffset=0,{playOffset:t,isTrueClock:e}}_OnSuspend(){this._playInBackground||this.PostToDOM("set-suspended",{"isSuspended":!0})}_OnResume(){this._playInBackground||this.PostToDOM("set-suspended",{"isSuspended":!1})}_OnUpdateState(t){const e=t["tickCount"];this._outputLatency=t["outputLatency"];const s=this._lastAIState.filter(t=>t.hasOwnProperty("placeholder")&&(t["placeholder"]>e||-1===t["placeholder"]));this._lastAIState=t["audioInstances"],this._lastAnalysersData=t["analysers"],s.length>0&&n.appendArray(this._lastAIState,s)}_OnBufferMetadata(t){this._bufferMetadata.set(t["originalUrl"],{duration:t["duration"]})}_OnAudioContextStateChanged(t){this._audioContextState=t["audioContextState"]}GetAudioContextState(){return this._runtime.IsExportToVideo()?"running":this._audioContextState}_OnUpdateFxState(t){this._lastFxState=t["fxstate"]}_GetFirstAudioStateByTags(t){const e=this._SplitTags(t);for(const t of this._lastAIState)if(this._MatchTagLists(t["tags"],e))return t;return null}_IsTagPlaying(t){const e=this._SplitTags(t);return this._lastAIState.some(t=>this._MatchTagLists(t["tags"],e)&&t["isPlaying"])}_MaybeMarkAsPlaying(t,e,s,i,a){if(this._IsTagPlaying(e))return null;const n=this._bufferMetadata.get(t),r={"tags":this._SplitTags(e),"duration":n?n.duration:0,"volume":a,"isPlaying":!0,"playbackTime":0,"playbackRate":1,"uid":-1,"bufferOriginalUrl":t,"bufferUrl":"","bufferType":"","isMusic":s,"isLooping":i,"isMuted":!1,"resumePosition":0,"pan":null,"placeholder":-1};return this._lastAIState.push(r),r}_MaybeMarkAsStopped(t){const e=this._SplitTags(t);for(const t of this._lastAIState)this._MatchTagLists(t["tags"],e)&&(t["isPlaying"]=!1)}async _OnTrigger(t){const e=t["type"];this._triggerTags=t["tags"];const s=t["aiid"];if("ended"===e){for(const t of this._lastAIState)if(t["aiid"]===s){t["isPlaying"]=!1;break}await this.TriggerAsync(n.Plugins.Audio.Cnds.OnEnded)}else"fade-ended"===e&&await this.TriggerAsync(n.Plugins.Audio.Cnds.OnFadeEnded)}_MatchTriggerTag(t){return this._MatchTagListToStr(this._triggerTags,t)}Tick(){const t={"timeScale":this._runtime.GetTimeScale(),"gameTime":this._runtime.GetGameTimeRaw(),"instPans":this.GetInstancePans(),"tickCount":this._runtime.GetTickCountNoSave()};if(this._listenerInst){const e=this._listenerInst.GetWorldInfo();this._listenerPos[0]=e.GetX(),this._listenerPos[1]=e.GetY(),t["listenerPos"]=this._listenerPos,t["listenerOrientation"]=[...this._listenerForwardVec,...this._listenerUpVec]}this.PostToDOM("tick",t)}rotatePtAround(t,e,s,i,a){if(0===s)return[t,e];const n=Math.sin(s),r=Math.cos(s),o=(t-=i)*n;return t=t*r-(e-=a)*n,e=e*r+o,[t+=i,e+=a]}GetInstancePans(){return this._lastAIState.filter(t=>-1!==t["uid"]).map(t=>this._runtime.GetInstanceByUID(t["uid"])).filter(t=>t).map(t=>{const e=t.GetWorldInfo(),s=e.GetLayer().GetAngle(),[i,a]=this.rotatePtAround(e.GetX(),e.GetY(),-s,this._listenerPos[0],this._listenerPos[1]);return{"uid":t.GetUID(),"x":i,"y":a,"z":e.GetTotalZ(),"angle":e.GetAngle()-s}})}GetAnalyserData(t,e){for(const s of this._lastAnalysersData)if(s.index===e&&n.equalsNoCase(s["tag"],t))return s;return null}_IncrementEffectCount(t){for(const e of this._SplitTags(t)){const t=e.toLowerCase();this._effectCount.set(t,(this._effectCount.get(t)||0)+1)}}_IsSilent(){return this._isSilent}_SetSilent(t){t=!!t,this._isSilent!==t&&(this._isSilent=t,this.PostToDOM("set-silent",{"isSilent":t}))}_GetMasterVolume(){return this._masterVolume}_SetMasterVolume(t){this._masterVolume!==t&&(this._masterVolume=t,this.PostToDOM("set-master-volume",{"vol":t}))}_StopAll(){this.PostToDOM("stop-all");for(const t of this._lastAIState)t["isPlaying"]=!1}_ShouldSave(t){return!t.hasOwnProperty("placeholder")&&(3!==this._saveLoadMode&&((!t["isMusic"]||1!==this._saveLoadMode)&&!(!t["isMusic"]&&2===this._saveLoadMode)))}SaveToJson(){return{"isSilent":this._isSilent,"masterVolume":this._masterVolume,"listenerZ":this._listenerPos[2],"listenerForwardVec":this._listenerForwardVec,"listenerUpVec":this._listenerUpVec,"listenerUid":this._listenerInst?this._listenerInst.GetUID():-1,"remoteUrls":[...this._remoteUrls.entries()],"playing":this._lastAIState.filter(t=>this._ShouldSave(t)),"effects":this._lastFxState,"analysers":this._lastAnalysersData}}LoadFromJson(t){if(this._isSilent=t["isSilent"],this._masterVolume=t["masterVolume"],this._listenerPos[2]=t["listenerZ"],this._listenerInst=null,this._loadListenerUid=t["listenerUid"],t.hasOwnProperty("listenerForwardVec")?this._listenerForwardVec=t["listenerForwardVec"]:this._listenerForwardVec=[0,0,-1],t.hasOwnProperty("listenerUpVec")?this._listenerUpVec=t["listenerUpVec"]:this._listenerUpVec=[0,1,0],this._remoteUrls.clear(),t["remoteUrls"])for(const[e,s]of t["remoteUrls"])this._remoteUrls.set(e,s);this._lastAIState=t["playing"];for(const t of this._lastAIState)t.hasOwnProperty("tag")&&!t.hasOwnProperty("tags")&&(t["tags"]=[t["tag"]].filter(t=>!!t));this._lastFxState=t["effects"],this._lastAnalysersData=t["analysers"]}_OnAfterLoad(){if(-1!==this._loadListenerUid&&(this._listenerInst=this._runtime.GetInstanceByUID(this._loadListenerUid),this._loadListenerUid=-1,this._listenerInst)){const t=this._listenerInst.GetWorldInfo();this._listenerPos[0]=t.GetX(),this._listenerPos[1]=t.GetY()}for(const t of this._lastAIState){const e=this._runtime.GetAssetManager().GetProjectAudioFileUrl(t["bufferOriginalUrl"]);e?(t["bufferUrl"]=e.url,t["bufferType"]=e.type):t["bufferUrl"]=null}for(const t of Object.values(this._lastFxState))for(const e of t)if(e.hasOwnProperty("bufferOriginalUrl")){const t=this._runtime.GetAssetManager().GetProjectAudioFileUrl(e["bufferOriginalUrl"]);t&&(e["bufferUrl"]=t.url,e["bufferType"]=t.type)}this.PostToDOM("load-state",{"saveLoadMode":this._saveLoadMode,"timeScale":this._runtime.GetTimeScale(),"gameTime":this._runtime.GetGameTimeRaw(),"listenerPos":this._listenerPos,"listenerOrientation":[...this._listenerForwardVec,...this._listenerUpVec],"isSilent":this._isSilent,"masterVolume":this._masterVolume,"playing":this._lastAIState.filter(t=>null!==t["bufferUrl"]),"effects":this._lastFxState})}GetDebuggerProperties(){const t=[];for(const[e,s]of Object.entries(this._lastFxState))t.push({name:"$"+e,value:s.map(t=>t["type"]).join(", ")});const e="plugins.audio.debugger";return[{title:e+".tag-effects",properties:t},{title:e+".currently-playing",properties:[{name:e+".currently-playing-count",value:this._lastAIState.length},...this._lastAIState.map((t,e)=>({name:"$#"+e,value:`${t["bufferOriginalUrl"]} ("${t["tags"]}") ${Math.round(10*t["playbackTime"])/10} / ${Math.round(10*t["duration"])/10}`}))]}]}}}self.C3.Plugins.Audio.Cnds={OnEnded(t){return this._MatchTriggerTag(t)},OnFadeEnded(t){return this._MatchTriggerTag(t)},PreloadsComplete(){return this._preloadCount===this._preloadTotal},AdvancedAudioSupported:()=>!0,IsSilent(){return this._IsSilent()},IsAnyPlaying(){for(const t of this._lastAIState)if(t["isPlaying"])return!0;return!1},IsTagPlaying(t){return this._IsTagPlaying(t)}};{const l=self.C3,h=["lowpass","highpass","bandpass","lowshelf","highshelf","peaking","notch","allpass"];l.Plugins.Audio.Acts={Play(t,e,s,i,a){const n=l.Plugins.Audio.Acts._DoPlay.call(this,t,e,s,i,a);return this._AddActionPromise(n),n},PlayFromTimeline(t,e,s,i){l.Plugins.Audio.Acts._DoPlay.call(this,t,0,e,0,s,i)},async _DoPlay(t,e,s,i,a,n){if(this._isSilent)return;const r=t[1],o=this._runtime.GetAssetManager().GetProjectAudioFileUrl(t[0]);if(!o)return;const{playOffset:h,isTrueClock:u}=this._GetScheduledPlayInfo(),c=this._MaybeMarkAsPlaying(t[0],a,r,0!==e,this.DbToLinear(s));try{await this.PostToDOMAsync("play",{"originalUrl":t[0],"url":o.url,"type":o.type,"isMusic":r,"tags":this._SplitTags(a),"isLooping":0!==e,"vol":this.DbToLinear(s),"stereoPan":l.clamp(i/100,-1,1),"pos":n||0,"off":h,"trueClock":u})}finally{c&&(c["placeholder"]=this._runtime.GetTickCountNoSave())}},async PlayAtPosition(t,e,s,i,a,n,r,o,h,u,c){if(this._isSilent)return;const d=t[1],_=this._runtime.GetAssetManager().GetProjectAudioFileUrl(t[0]);if(!_)return;const{playOffset:f,isTrueClock:p}=this._GetScheduledPlayInfo(),g=this._MaybeMarkAsPlaying(t[0],c,d,0!==e,this.DbToLinear(s));try{await this.PostToDOMAsync("play",{"originalUrl":t[0],"url":_.url,"type":_.type,"isMusic":d,"tags":this._SplitTags(c),"isLooping":0!==e,"vol":this.DbToLinear(s),"pos":0,"off":f,"trueClock":p,"panning":{"x":i,"y":a,"z":n,"angle":l.toRadians(r),"innerAngle":l.toRadians(o),"outerAngle":l.toRadians(h),"outerGain":this.DbToLinear(u)}})}finally{g&&(g["placeholder"]=this._runtime.GetTickCountNoSave())}},async PlayAtObject(t,e,s,i,a,n,r,o){if(this._isSilent)return;if(!i)return;const h=i.GetFirstPicked();if(!h||!h.GetWorldInfo())return;const u=h.GetWorldInfo(),c=u.GetLayer().GetAngle(),[d,_]=this.rotatePtAround(u.GetX(),u.GetY(),-c,this._listenerPos[0],this._listenerPos[1]),f=t[1],p=this._runtime.GetAssetManager().GetProjectAudioFileUrl(t[0]);if(!p)return;const{playOffset:g,isTrueClock:y}=this._GetScheduledPlayInfo(),m=this._MaybeMarkAsPlaying(t[0],o,f,0!==e,this.DbToLinear(s));try{await this.PostToDOMAsync("play",{"originalUrl":t[0],"url":p.url,"type":p.type,"isMusic":f,"tags":this._SplitTags(o),"isLooping":0!==e,"vol":this.DbToLinear(s),"pos":0,"off":g,"trueClock":y,"panning":{"x":d,"y":_,"z":u.GetTotalZ(),"angle":u.GetAngle()-c,"innerAngle":l.toRadians(a),"outerAngle":l.toRadians(n),"outerGain":this.DbToLinear(r),"uid":h.GetUID()}})}finally{m&&(m["placeholder"]=this._runtime.GetTickCountNoSave())}},async PlayByName(t,e,s,i,a,n){if(this._isSilent)return;const r=1===t,o=this._runtime.GetAssetManager().GetProjectAudioFileUrl(e)||this._remoteUrls.get(e.toLowerCase());if(!o)return;const{playOffset:h,isTrueClock:u}=this._GetScheduledPlayInfo(),c=this._MaybeMarkAsPlaying(e,n,r,0!==s,this.DbToLinear(i));try{await this.PostToDOMAsync("play",{"originalUrl":e,"url":o.url,"type":o.type,"isMusic":r,"tags":this._SplitTags(n),"isLooping":0!==s,"vol":this.DbToLinear(i),"stereoPan":l.clamp(a/100,-1,1),"pos":0,"off":h,"trueClock":u})}finally{c&&(c["placeholder"]=this._runtime.GetTickCountNoSave())}},async PlayAtPositionByName(t,e,s,i,a,n,r,o,h,u,c,d){if(this._isSilent)return;const _=1===t,f=this._runtime.GetAssetManager().GetProjectAudioFileUrl(e)||this._remoteUrls.get(e.toLowerCase());if(!f)return;const{playOffset:p,isTrueClock:g}=this._GetScheduledPlayInfo(),y=this._MaybeMarkAsPlaying(e,d,_,0!==s,this.DbToLinear(i));try{await this.PostToDOMAsync("play",{"originalUrl":e,"url":f.url,"type":f.type,"isMusic":_,"tags":this._SplitTags(d),"isLooping":0!==s,"vol":this.DbToLinear(i),"pos":0,"off":p,"trueClock":g,"panning":{"x":a,"y":n,"z":r,"angle":l.toRadians(o),"innerAngle":l.toRadians(h),"outerAngle":l.toRadians(u),"outerGain":this.DbToLinear(c)}})}finally{y&&(y["placeholder"]=this._runtime.GetTickCountNoSave())}},async PlayAtObjectByName(t,e,s,i,a,n,r,o,h){if(this._isSilent)return;if(this._isSilent)return;if(!a)return;const u=a.GetFirstPicked();if(!u||!u.GetWorldInfo())return;const c=u.GetWorldInfo(),d=c.GetLayer().GetAngle(),[_,f]=this.rotatePtAround(c.GetX(),c.GetY(),-d,this._listenerPos[0],this._listenerPos[1]),p=1===t,g=this._runtime.GetAssetManager().GetProjectAudioFileUrl(e)||this._remoteUrls.get(e.toLowerCase());if(!g)return;const{playOffset:y,isTrueClock:m}=this._GetScheduledPlayInfo(),T=this._MaybeMarkAsPlaying(e,h,p,0!==s,this.DbToLinear(i));try{await this.PostToDOMAsync("play",{"originalUrl":e,"url":g.url,"type":g.type,"isMusic":p,"tags":this._SplitTags(h),"isLooping":0!==s,"vol":this.DbToLinear(i),"pos":0,"off":y,"trueClock":m,"panning":{"x":_,"y":f,"z":c.GetTotalZ(),"angle":c.GetAngle()-d,"innerAngle":l.toRadians(n),"outerAngle":l.toRadians(r),"outerGain":this.DbToLinear(o),"uid":u.GetUID()}})}finally{T&&(T["placeholder"]=this._runtime.GetTickCountNoSave())}},SetLooping(t,e){this.PostToDOM("set-looping",{"tags":this._SplitTags(t),"isLooping":0===e})},SetMuted(t,e){this.PostToDOM("set-muted",{"tags":this._SplitTags(t),"isMuted":0===e})},SetVolume(t,e){this.PostToDOM("set-volume",{"tags":this._SplitTags(t),"vol":this.DbToLinear(e)})},FadeVolume(t,e,s,i){this.PostToDOM("fade-volume",{"tags":this._SplitTags(t),"vol":this.DbToLinear(e),"duration":s,"stopOnEnd":0===i})},SetStereoPan(t,e){this.PostToDOM("set-stereo-pan",{"tags":this._SplitTags(t),"p":l.clamp(e/100,-1,1)})},async Preload(t){const e=t[1],s=this._runtime.GetAssetManager().GetProjectAudioFileUrl(t[0]);s&&(this._preloadTotal++,await this.PostToDOMAsync("preload",{"originalUrl":t[0],"url":s.url,"type":s.type,"isMusic":e}),this._preloadCount++)},async PreloadByName(t,e){const s=1===t,i=this._runtime.GetAssetManager().GetProjectAudioFileUrl(e)||this._remoteUrls.get(e.toLowerCase());i&&(this._preloadTotal++,await this.PostToDOMAsync("preload",{"originalUrl":e,"url":i.url,"type":i.type,"isMusic":s}),this._preloadCount++)},SetPlaybackRate(t,e){this.PostToDOM("set-playback-rate",{"tags":this._SplitTags(t),"rate":Math.max(e,0)})},Stop(t){this._MaybeMarkAsStopped(t),this.PostToDOM("stop",{"tags":this._SplitTags(t)})},StopAll(){this._StopAll()},SetPaused(t,e){this.PostToDOM("set-paused",{"tags":this._SplitTags(t),"paused":0===e})},Seek(t,e){this.PostToDOM("seek",{"tags":this._SplitTags(t),"pos":e})},SetSilent(t){2===t&&(t=this._IsSilent()?1:0),this._SetSilent(0===t)},SetMasterVolume(t){const e=this.DbToLinear(t);this._SetMasterVolume(e)},AddFilterEffect(t,e,s,i,a,n,r){const o=h[e];this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"filter","tags":this._SplitTags(t),"params":[o,s,i,a,n,l.clamp(r/100,0,1)]})},AddDelayEffect(t,e,s,i){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"delay","tags":this._SplitTags(t),"params":[e,this.DbToLinear(s),l.clamp(i/100,0,1)]})},AddFlangerEffect(t,e,s,i,a,n){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"flanger","tags":this._SplitTags(t),"params":[e/1e3,s/1e3,i,a/100,l.clamp(n/100,0,1)]})},AddPhaserEffect(t,e,s,i,a,n,r){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"phaser","tags":this._SplitTags(t),"params":[e,s,i,a,n,l.clamp(r/100,0,1)]})},AddConvolutionEffect(t,e,s,i){const a=this._runtime.GetAssetManager().GetProjectAudioFileUrl(e[0]);a&&(this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"convolution","tags":this._SplitTags(t),"bufferOriginalUrl":e[0],"bufferUrl":a.url,"bufferType":a.type,"params":[0===s,l.clamp(i/100,0,1)]}))},AddGainEffect(t,e){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"gain","tags":this._SplitTags(t),"params":[this.DbToLinear(e)]})},AddStereoPanEffect(t,e){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"stereopan","tags":this._SplitTags(t),"params":[l.clamp(e/100,-1,1)]})},AddMuteEffect(t){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"gain","tags":this._SplitTags(t),"params":[0]})},AddTremoloEffect(t,e,s){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"tremolo","tags":this._SplitTags(t),"params":[e,l.clamp(s/100,0,1)]})},AddRingModEffect(t,e,s){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"ringmod","tags":this._SplitTags(t),"params":[e,l.clamp(s/100,0,1)]})},AddDistortionEffect(t,e,s,i,a,n){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"distortion","tags":this._SplitTags(t),"params":[this.DbToLinearNoCap(e),this.DbToLinearNoCap(s),i,this.DbToLinearNoCap(a),l.clamp(n/100,0,1)]})},AddCompressorEffect(t,e,s,i,a,n){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"compressor","tags":this._SplitTags(t),"params":[e,s,i,a/1e3,n/1e3]})},AddAnalyserEffect(t,e,s){this._IncrementEffectCount(t),this.PostToDOM("add-effect",{"type":"analyser","tags":this._SplitTags(t),"params":[e,s]})},RemoveEffects(t){const e=this._SplitTags(t);for(const t of e)this._effectCount.set(t.toLowerCase(),0);this.PostToDOM("remove-effects",{"tags":e}),this._lastFxState={}},SetEffectParameter(t,e,s,i,a,n){this.PostToDOM("set-effect-param",{"tags":this._SplitTags(t),"index":Math.floor(e),"param":s,"value":i,"ramp":a,"time":n})},SetListenerObject(t){if(!t)return;const e=t.GetFirstPicked();e&&e.GetWorldInfo()&&(this._listenerInst=e)},SetListenerZ(t){this._listenerPos[2]=t},SetListenerOrientation(t,e,s,i,a,n){this._listenerForwardVec[0]=t,this._listenerForwardVec[1]=e,this._listenerForwardVec[2]=-s,this._listenerUpVec[0]=i,this._listenerUpVec[1]=a,this._listenerUpVec[2]=-n},ScheduleNextPlay(t){this._nextPlayTime=Math.max(t,0),this._nextPlayOffset=Math.max(t-performance.now()/1e3,0)},UnloadAudio(t){const e=t[1],s=this._runtime.GetAssetManager().GetProjectAudioFileUrl(t[0]);s&&this.PostToDOM("unload",{"url":s.url,"type":s.type,"isMusic":e})},UnloadAudioByName(t,e){const s=1===t,i=this._runtime.GetAssetManager().GetProjectAudioFileUrl(e)||this._remoteUrls.get(e.toLowerCase());i&&this.PostToDOM("unload",{"url":i.url,"type":i.type,"isMusic":s})},UnloadAll(){this.PostToDOM("unload-all")},AddRemoteURL(t,e,s){this._remoteUrls.set(s.toLowerCase(),{url:t,type:e})}}}{const u=self.C3;u.Plugins.Audio.Exps={Duration(t){const e=this._GetFirstAudioStateByTags(t);return e?e["duration"]:0},PlaybackTime(t){const e=this._GetFirstAudioStateByTags(t);return e?e["playbackTime"]:0},PlaybackRate(t){const e=this._GetFirstAudioStateByTags(t);return e?e["playbackRate"]:0},Volume(t){const e=this._GetFirstAudioStateByTags(t);return e?this.LinearToDb(e["volume"]):0},MasterVolume(){return this.LinearToDb(this._GetMasterVolume())},EffectCount(t){return this._effectCount.get(t.toLowerCase())||0},AnalyserFreqBinCount(t,e){const s=this.GetAnalyserData(t,Math.floor(e));return s?s["binCount"]:0},AnalyserFreqBinAt(t,e,s){const i=this.GetAnalyserData(t,Math.floor(e));return i?(s=Math.floor(s))<0||s>=i["binCount"]?0:i["freqBins"][s]:0},AnalyserPeakLevel(t,e){const s=this.GetAnalyserData(t,Math.floor(e));return s?s["peak"]:0},AnalyserRMSLevel(t,e){const s=this.GetAnalyserData(t,Math.floor(e));return s?s["rms"]:0},SampleRate(){return this._sampleRate},CurrentTime:()=>self["C3_GetAudioContextCurrentTime"]?self["C3_GetAudioContextCurrentTime"]():performance.now()/1e3,OutputLatency(){return this._outputLatency},NormalizedVolume(t,e){return 0===(t=u.clamp(+t,0,100)/100)?-1/0:t<.1?this.LinearToDb(u.lerp(0,this.DbToLinear(e),10*t)):u.lerp(e,0,(t-.1)/.9)}}}
 }
 
+// scripts/plugins/Json/c3runtime/runtime.js
+{
+{const t=self.C3;t.Plugins.Json=class extends t.SDKPluginBase{constructor(t){super(t)}Release(){super.Release()}}}{const t=self.C3;t.Plugins.Json.Type=class extends t.SDKTypeBase{constructor(t){super(t)}Release(){super.Release()}OnCreate(){}}}{const t=self.C3,e=self.C3X,a=self.IInstance;t.Plugins.Json.Instance=class extends t.SDKInstanceBase{constructor(t,e){super(t),this._valueCache=[null,null],this._locationCache=[null,null],this._data={},this._path=[],this._currentKey="",this._currentValue=0}Release(){super.Release()}_InvalidateValueCache(){this._valueCache[0]=null,this._valueCache[1]=null}_HasValueCache(e,a){const s=this._valueCache[0];if(null===e||null===s)return!1;if(s===e||t.arraysEqual(s,e))return!0;if(a&&s.length>0){for(let t=0,a=Math.min(e.length,s.length);t<a;++t)if(e[t]!==s[t])return!1;return!0}return!1}_GetValueCache(){return this._valueCache[1]}_UpdateValueCache(t,e){this._valueCache[0]=t,this._valueCache[1]=e}_InvalidateLocationCache(){this._locationCache[0]=null,this._locationCache[1]=null}_HasLocationCache(t){return this._locationCache[0]===t}_GetLocationCache(){return this._locationCache[1]}_UpdateLocationCache(t,e){this._locationCache[0]=t,this._locationCache[1]=e}_SetData(t){this._data=t,this._InvalidateValueCache(),this._SetPath("")}_GetData(){return this._data}_SetPath(t){this._path=this._ParsePathUnsafe(t),this._InvalidateLocationCache()}_ParsePath(e){return t.cloneArray(this._ParsePathUnsafe(e))}_ParsePathUnsafe(e){const a=[];let s,r=!1;if(this._HasLocationCache(e))return this._GetLocationCache();"."===e[0]?(s=t.cloneArray(this._path),e=e.slice(1)):s=[];for(const n of e)r?(a.push(n),r=!1):"\\"===n?r=!0:"."===n?(s.push(a.join("")),t.clearArray(a)):a.push(n);return 0!==a.length&&s.push(a.join("")),this._UpdateLocationCache(e,s),s}_GetValueAtFullPath(t,e){if(this._HasValueCache(t,!1))return this._GetValueCache();let a=this._data;for(const s of t)if(Array.isArray(a)){const t=parseInt(s,10);if(t<0||t>=a.length||!isFinite(t)){a=null;break}a=a[t]}else{if("object"!=typeof a||null===a){a=null;break}if(a.hasOwnProperty(s))a=a[s];else{if(!e){a=null;break}{const t={};a[s]=t,a=t}}}return this._UpdateValueCache(t,a),a}_GetValue(t){const e=this._ParsePath(t);if(!e.length)return this._data;const a=e.pop(),s=this._GetValueAtFullPath(e,!1);if(Array.isArray(s)){const t=parseInt(a,10);return t>=0&&t<s.length?s[t]:null}return"object"==typeof s&&null!==s&&s.hasOwnProperty(a)?s[a]:null}_JSONTypeOf(t){return null===t?"null":Array.isArray(t)?"array":typeof t}_GetTypeOf(t){const e=this._GetValue(t);return this._JSONTypeOf(e)}_ToSafeValue(t){const e=typeof t;return"number"===e||"string"===e?t:"boolean"===e&&t?1:0}_GetSafeValue(t){return this._ToSafeValue(this._GetValue(t))}_HasKey(t){const e=this._ParsePath(t);if(!e.length)return!1;const a=e.pop(),s=this._GetValueAtFullPath(e,!1);if(Array.isArray(s)){const t=parseInt(a,10);return t>=0&&t<s.length}return"object"==typeof s&&null!==s&&s.hasOwnProperty(a)}_SetValue(t,e){const a=this._ParsePath(t);if(!a.length)return!1;this._HasValueCache(a,!0)&&this._InvalidateValueCache();const s=a.pop(),r=this._GetValueAtFullPath(a,!0);if(Array.isArray(r)){const t=parseInt(s,10);return!(!isFinite(t)||t<0||t>=r.length)&&(r[t]=e,!0)}return"object"==typeof r&&null!==r&&(r[s]=e,!0)}_DeleteKey(t){const e=this._ParsePath(t);if(!e.length)return!1;this._HasValueCache(e,!0)&&this._InvalidateValueCache();const a=e.pop(),s=this._GetValueAtFullPath(e,!1);return!Array.isArray(s)&&("object"==typeof s&&null!==s&&(delete s[a],!0))}SaveToJson(){return{"path":this._path,"data":this._data}}LoadFromJson(t){this._InvalidateValueCache(),this._InvalidateLocationCache(),this._path=t["path"],this._data=t["data"]}_SanitizeValue(t){return"number"===typeof t?isFinite(t)?t:0:"object"==typeof t?JSON.stringify(t):t+""}GetDebuggerProperties(){const t="plugins.json.debugger";let e;try{e=this._SanitizeValue(this._data)}catch(t){e='"invalid"'}return[{title:t+".title",properties:[{name:t+".data",value:e,onedit:t=>{try{const e=JSON.parse(t);this._SetData(e)}catch(t){}}},{name:t+".path",value:this._path.map(t=>t.replace(/\./g,"\\.")).join(".")}]}]}GetScriptInterfaceClass(){return self.IJSONInstance}};const s=new WeakMap;self.IJSONInstance=class extends a{constructor(){super(),s.set(this,a._GetInitInst().GetSdkInstance())}getJsonDataCopy(){const t=s.get(this)._GetData();return JSON.parse(JSON.stringify(t))}setJsonDataCopy(t){try{const e=JSON.parse(JSON.stringify(t));s.get(this)._SetData(e)}catch(t){throw console.error("[JSON plugin] setJsonData: object is not valid JSON: ",t),t}}setJsonString(t){e.RequireString(t);try{const e=JSON.parse(t);s.get(this)._SetData(e)}catch(t){throw console.error("[JSON plugin] setJsonString: string is not valid JSON: ",t),t}}toCompactString(){return JSON.stringify(s.get(this)._GetData())}toBeautifiedString(){return JSON.stringify(s.get(this)._GetData(),null,4)}}}{const t=self.C3,e=["null","boolean","number","string","object","array"];t.Plugins.Json.Cnds={HasKey(t){return this._HasKey(t)},CompareType(t,a){return this._GetTypeOf(t)===e[a]},CompareValue(e,a,s){return t.compare(this._GetSafeValue(e),a,s)},IsBooleanSet(t){return!0===this._GetValue(t)},ForEach(e){const a=this._GetValue(e);if("object"!=typeof a||null===a)return!1;const s=this._runtime,r=s.GetEventSheetManager(),n=s.GetCurrentEvent(),i=n.GetSolModifiers(),l=s.GetEventStack(),u=l.GetCurrentStackFrame(),h=l.Push(n),o=this._path,c=this._currentKey,_=this._currentValue,p=this._ParsePathUnsafe(e);s.SetDebuggingEnabled(!1);for(const[e,s]of Object.entries(a)){this._path=t.cloneArray(p),this._path.push(e),this._currentKey=e,this._currentValue=s,r.PushCopySol(i);this.GetObjectClass().GetCurrentSol().PickOne(this.GetInstance()),n.Retrigger(u,h),r.PopSol(i)}return s.SetDebuggingEnabled(!0),this._path=o,this._InvalidateLocationCache(),this._currentKey=c,this._currentValue=_,l.Pop(),!1},OnParseError:()=>!0,OnParseSuccess:()=>!0}}{const t=self.C3;t.Plugins.Json.Acts={Parse(e){try{this._SetData(JSON.parse(e)),this.Trigger(t.Plugins.Json.Cnds.OnParseSuccess)}catch(e){console.warn("[JSON plugin] Failed to parse JSON data: ",e),this._SetData({}),this.Trigger(t.Plugins.Json.Cnds.OnParseError)}},SetPath(t){this._SetPath(t)},SetValue(t,e){this._SetValue(t,e)},SetArray(e,a){let s=this._GetValue(e);Array.isArray(s)?t.resizeArray(s,a,0):(s=[],t.extendArray(s,a,0),this._SetValue(e,s))},SetObject(t){this._SetValue(t,{})},SetJSON(e,a){let s=null;try{s=JSON.parse(a),this.Trigger(t.Plugins.Json.Cnds.OnParseSuccess)}catch(e){console.warn("[JSON plugin] Failed to parse JSON data: ",e),this.Trigger(t.Plugins.Json.Cnds.OnParseError)}this._SetValue(e,s)},SetNull(t){this._SetValue(t,null)},SetBoolean(t,e){this._SetValue(t,0!==e)},ToggleBoolean(t){const e=this._GetValue(t);"boolean"==typeof e&&this._SetValue(t,!e)},AddTo(t,e){const a=this._GetValue(t);"number"==typeof a&&this._SetValue(t,a+e)},SubtractFrom(t,e){const a=this._GetValue(t);"number"==typeof a&&this._SetValue(t,a-e)},DeleteKey(t){this._DeleteKey(t)},PushValue(t,e,a){const s=this._GetValue(e);Array.isArray(s)&&(0===t?s.push(a):s.unshift(a),this._InvalidateValueCache())},PopValue(t,e){const a=this._GetValue(e);Array.isArray(a)&&(0===t?a.pop():a.shift(),this._InvalidateValueCache())},InsertValue(t,e,a){const s=this._GetValue(e);Array.isArray(s)&&(s.splice(a,0,t),this._InvalidateValueCache())},RemoveValues(t,e,a){const s=this._GetValue(e);Array.isArray(s)&&t>0&&(s.splice(a,t),this._InvalidateValueCache())}}}self.C3.Plugins.Json.Exps={ToCompactString(){try{return JSON.stringify(this._data)}catch(t){return""}},ToBeautifiedString(){try{return JSON.stringify(this._data,null,4)}catch(t){return""}},Get(t){return this._GetSafeValue(t)},GetAsCompactString(t){const e=this._GetValue(t);return JSON.stringify(e)},GetAsBeautifiedString(t){const e=this._GetValue(t);return JSON.stringify(e,null,4)},Front(t){const e=this._GetValue(t);if(Array.isArray(e)){const t=e[0];return this._ToSafeValue(t)}return-1},Back(t){const e=this._GetValue(t);if(Array.isArray(e)){const t=e.at(-1);return this._ToSafeValue(t)}return-1},Type(t){return this._GetTypeOf(t)},ArraySize(t){const e=this._GetValue(t);return Array.isArray(e)?e.length:-1},Path(){return this._path.map(t=>t.replace(/\./g,"\\.")).join(".")},CurrentKey(){return this._currentKey},CurrentValue(){return this._ToSafeValue(this._currentValue)},CurrentType(){return this._JSONTypeOf(this._currentValue)}};
+}
+
 // scripts/behaviors/Tween/c3runtime/runtime.js
 {
 {const e=self.C3;e.Behaviors.Tween=class extends e.SDKBehaviorBase{constructor(e){super(e)}Release(){super.Release()}}}{const e=self.C3;e.Behaviors.Tween.Type=class extends e.SDKBehaviorTypeBase{constructor(e){super(e)}Release(){super.Release()}OnCreate(){}}}{const e=self.C3,s=e.Behaviors.Tween,t=0;s.Instance=class extends e.SDKBehaviorInstanceBase{constructor(e,s){super(e),this._allowMultiple=!1,this._enabled=!0,s&&(this._allowMultiple=!1,this._enabled=!!s[t]),this._activeTweens=new Map,this._disabledTweens=[],this._waitingForReleaseTweens=new Map,this._finishingTween=null,this._activeTweensJson=null,this._disabledTweensJson=null,this._waitingForReleaseTweensJson=null,this._finishingTweenName="",this._triggerTweens=[],this._afterLoad=e=>this._OnAfterLoad(),this.GetRuntime().Dispatcher().addEventListener("afterload",this._afterLoad)}Release(){this.GetRuntime().Dispatcher().removeEventListener("afterload",this._afterLoad),this._afterLoad=null,this._finishingTween&&(this.ReleaseAndCompleteTween(this._finishingTween),this._finishingTween=null),this.ReleaseAndCompleteTweens(),this._tweens=null,this.ClearDisabledList(),this._disabledTweens=null,this._ReleaseWaitingTweens(),this._waitingForReleaseTweens=null,this._triggerTweens=null,super.Release()}PushTriggerTween(e){this._triggerTweens.push(e)}PopTriggerTween(){this._triggerTweens.pop()}GetTriggerTween(){return this._triggerTweens[this._triggerTweens.length-1]}SetEnabled(e){this._enabled=!!e,e?this._waitingForReleaseTweens&&this._waitingForReleaseTweens.size&&this._StartTicking2():this._StopTicking2();for(const s of this.AllTweens())e?this.IsInDisabledList(s)&&s.Resume():((s.IsPlaying()||s.IsScheduled())&&this.AddToDisabledList(s),s.Stop());e&&this.ClearDisabledList()}IsEnabled(){return this._enabled}AddToDisabledList(e){this._disabledTweens.push(e)}IsInDisabledList(e){return this._disabledTweens.includes(e)}ClearDisabledList(){e.clearArray(this._disabledTweens)}GetFinishingTween(){return this._finishingTween}IsInstanceValid(){const e=this.GetObjectInstance();return!!e&&!e.IsDestroyed()}GetTween(e,s,t=!1){const n=s?this.PropertyTweens(s,t):this.AllTweens(t);if(n&&n.length)for(const s of n)if(s.HasTags(e))return s}CheckTweensWithTags(e,s){for(const t of this._activeTweens.values())for(const n of t)if(!n.IsReleased()&&n.HasTags(e)&&s(n))return!0;for(const t of this._waitingForReleaseTweens.values())for(const n of t)if(!n.IsReleased()&&n.HasTags(e)&&s(n))return!0;return!1}CheckTweens(e){for(const s of this._activeTweens.values())for(const t of s)if(!t.IsReleased()&&e(t))return!0;for(const s of this._waitingForReleaseTweens.values())for(const t of s)if(!t.IsReleased()&&e(t))return!0;return!1}GetTweenIncludingWaitingForRelease(e,s){return this.GetTween(e,s,!0)}*GetTweens(e,s,t=!1){const n=s?this.PropertyTweens(s,t):this.AllTweens(t);if(n&&n.length)for(const s of n)s.HasTags(e)&&(yield s)}*GetTweensIncludingWaitingForRelease(e,s){yield*this.GetTweens(e,s,!0)}PropertyTweens(e,s){if(s){let s=this._activeTweens.get(e),t=this._waitingForReleaseTweens.get(e);return s||(s=[]),t||(t=[]),s.concat(t).filter(e=>e).filter(e=>!e.IsReleased())}{let s=this._activeTweens.get(e);return s||(s=[]),s.filter(e=>e).filter(e=>!e.IsReleased())}}AllTweens(e){if(e){const e=[...this._activeTweens.values()].flat(),s=[...this._waitingForReleaseTweens.values()].flat();return e.concat(s).filter(e=>e).filter(e=>!e.IsReleased())}return[...this._activeTweens.values()].flat().filter(e=>e).filter(e=>!e.IsReleased())}AllTweensIncludingWaitingForRelease(){return this.AllTweens(!0)}SaveToJson(e="full"){return{"s":!1,"e":!!this._enabled,"at":this._SaveActiveTweensToJson(),"dt":this._SaveDisabledTweensToJson(),"wt":this._SaveWaitingForReleaseTweensToJson(),"ft":this._SaveFinishingTweenToJson()}}LoadFromJson(e,s="full"){e&&(this._activeTweensJson=e["at"],this._disabledTweensJson=e["dt"],this._waitingForReleaseTweensJson=e["wt"],this._finishingTweenName=e["ft"],this._allowMultiple=!1,this._enabled=!!e["e"],"state"===s&&this._OnAfterLoad())}_OnAfterLoad(){const s=this.GetRuntime().GetTimelineManager();if(this._PopulateTweenMap(this._activeTweensJson,this._activeTweens,s),this._disabledTweensJson){e.clearArray(this._disabledTweens);for(const e of this._disabledTweensJson)this._PopulateTweenArray(this._disabledTweens,e,s)}this._PopulateTweenMap(this._waitingForReleaseTweensJson,this._waitingForReleaseTweens,s),this._finishingTween=this._GetTween(this._finishingTweenName,s),this._enabled?this._waitingForReleaseTweens&&this._waitingForReleaseTweens.size&&this._StartTicking2():this._StopTicking2()}_PopulateTweenMap(s,t,n){if(s)for(const i in s){let a=t.get(i);a?e.clearArray(a):a=[];const r=s[i];for(const s of r){if(this._PopulateTweenArray(a,s["name"],n))this._LoadTweenFromJson(s["name"],s,n);else{const t=e.TweenState.Build({runtime:this.GetRuntime(),json:s});e.TweenState.SetInstanceUID(t,this.GetObjectInstance().GetUID()),t.AddCompletedCallback(e=>this._FinishTriggers(e)),t.SetBehaviorInstance(this),n.AddScheduledTimeline(t),this._PopulateTweenArray(a,t,n)}}t.set(i,a)}}_GetTween(e,s){return s.GetScheduledOrPlayingTimelineByName(e)}_PopulateTweenArray(e,s,t){if("string"!=typeof s)return!!e.push(s);{const n=this._GetTween(s,t);if(n)return!!e.push(n)}return!1}_LoadTweenFromJson(s,t,n){if("string"==typeof s){const i=this._GetTween(s,n);i&&(i._LoadFromJson(t),e.TweenState.SetInstanceUID(i,this.GetObjectInstance().GetUID()),e.TweenState.SetBehaviorInstance(i,this))}else s._LoadFromJson(t),e.TweenState.SetInstanceUID(s,this.GetObjectInstance().GetUID()),e.TweenState.SetBehaviorInstance(s,this)}_SaveActiveTweensToJson(){const e={};for(const[s,t]of this._activeTweens)e[s]=t.filter(e=>!e.IsReleased()).map(e=>e._SaveToJson());return e}_SaveDisabledTweensToJson(){return this._disabledTweens.filter(e=>!e.IsReleased()).map(e=>e.GetName())}_SaveWaitingForReleaseTweensToJson(){const e={};for(const[s,t]of this._waitingForReleaseTweens)e[s]=t.map(e=>e._SaveToJson());return e}_SaveFinishingTweenToJson(){return this._finishingTween?this._finishingTween.GetName():""}Tick2(){this._ReleaseWaitingTweens()}CreateTween(t){const n=s.Config.GetPropertyTracksConfig(t.property,t.startValue,t.endValue,t.ease,t.resultMode,this.GetObjectInstance()),i=s.Maps.GetPropertyFromIndex(t.property);s.Maps.IsValueId(i)||this.ReleaseTweens(t.property);const a=e.TweenState.Build({runtime:this.GetRuntime(),id:i,tags:t.tags,time:t.time,instance:this.GetObjectInstance(),releaseOnComplete:!!t.releaseOnComplete,loop:!!t.loop,pingPong:!!t.pingPong,repeatCount:t.repeatCount,initialValueMode:t.initialValueMode,propertyTracksConfig:n});return a.AddCompletedCallback(e=>this._FinishTriggers(e)),a.SetBehaviorInstance(this),this._AddTween(a,t.property),a}_MaybeRemoveFromActiveTweenMap(e){const s=e.GetId();if(this._activeTweens.has(s)){const t=this._activeTweens.get(s);if(t){const s=t.indexOf(e);-1!==s&&t.splice(s,1)}}}ReleaseTween(e,s=!1){this._MaybeRemoveFromActiveTweenMap(e),e.IsReleased()||this._IsInWaitingList(e)||(e.Stop(s),this._AddToWaitingList(e))}ReleaseTweens(t,n=!1){if(e.IsFiniteNumber(t)){const i=s.Maps.GetPropertyFromIndex(t);if(!this._activeTweens.has(i))return;const a=this._activeTweens.get(i),r=this.GetFinishingTween();for(const e of a)e!==r&&(e.IsReleased()||this._IsInWaitingList(e)||(e.Stop(n),e.Release()));e.clearArray(a)}else{const s=this.GetFinishingTween();for(const e of this.AllTweens())e!==s&&(e.IsReleased()||this._IsInWaitingList(e)||(e.Stop(n),e.Release()));for(const s of this._activeTweens.keys())e.clearArray(this._activeTweens.get(s)),this._activeTweens.delete(s);this._activeTweens.clear()}}ReleaseAndCompleteTween(e){this.ReleaseTween(e,!0)}ReleaseAndCompleteTweens(){this.ReleaseTweens(NaN,!0)}GetPropertyValueByIndex(e){if(e===t)return this._enabled}SetPropertyValueByIndex(e,s){if(e===t)this._enabled=!!s}_GetBehaviorType(e){const s=e.GetInstance().GetBehaviorInstances();for(const e of s){const s=e.GetBehaviorType();if(s.GetInstanceSdkCtor()===this.constructor)return s}}Trigger(e,s,t,n){return this._runtime?super.Trigger(e):s.Trigger(e,t,n)}_FinishTriggers(e){let t,n;if(this._finishingTween=e,s.Cnds.SetFinishingTween(e),this.GetRuntime())t=this._inst,n=this._runtime,this.Trigger(s.Cnds.OnTweensFinished),this.Trigger(s.Cnds.OnAnyTweensFinished),this.ReleaseTween(e);else{if(t=e.GetInstance(),!t)return;if(t&&t.IsDestroyed())return;n=t.GetRuntime();const i=this._GetBehaviorType(e);this.Trigger(s.Cnds.OnTweensFinished,n,t,i),this.Trigger(s.Cnds.OnAnyTweensFinished,n,t,i),e.Stop()}this._finishingTween=null,s.Cnds.SetFinishingTween(null),e.GetDestroyInstanceOnComplete()&&n.DestroyInstance(t)}_AddTween(e,t){const n=s.Maps.GetPropertyFromIndex(t);this._activeTweens.has(n)||this._activeTweens.set(n,[]);this._activeTweens.get(n).push(e)}_AddToWaitingList(e){const s=e.GetId();this._waitingForReleaseTweens.has(s)||this._waitingForReleaseTweens.set(s,[]),this._waitingForReleaseTweens.get(s).push(e),this.IsTicking2()||this._StartTicking2()}_IsInWaitingList(e){const s=e.GetId();return!!this._waitingForReleaseTweens.has(s)&&this._waitingForReleaseTweens.get(s).includes(e)}_ReleaseWaitingTweens(){if(this._waitingForReleaseTweens.size){for(const s of this._waitingForReleaseTweens.values()){for(const e of s)e.IsReleased()||e.Release();e.clearArray(s)}this._waitingForReleaseTweens.clear(),this.IsTicking2()&&this._StopTicking2()}}GetDebuggerProperties(){return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:"behaviors.tween.properties.enabled.name",value:this.IsEnabled(),onedit:e=>this.SetEnabled(e)}]}]}GetScriptInterfaceClass(){return self.ITweenBehaviorInstance}}}{const e=self.C3;let s=null;e.Behaviors.Tween.Cnds={OnAnyTweenLoop:()=>!0,OnTweensLoop(e){const s=this.GetTriggerTween();return!!s&&s.HasTags(e)},OnAnyTweenPingPong(e){const s=this.GetTriggerTween();return!!s&&(s.GetPingPongState()===e||2===e)},OnTweensPingPong(e,s){const t=this.GetTriggerTween();return!!t&&((t.GetPingPongState()===s||2===s)&&t.HasTags(e))},OnTweensReleased(e){return this.GetTriggerTween().HasTags(e)},OnAnyTweensReleased:()=>!0,SetFinishingTween(e){s=e},OnTweensFinished:e=>s.HasTags(e),OnAnyTweensFinished:()=>!0,IsPlaying(s){return this.CheckTweensWithTags(s,e.TweenState.IsPlaying)},IsAnyPlaying(){return this.CheckTweens(e.TweenState.IsPlaying)},IsPaused(s){return this.CheckTweensWithTags(s,e.TweenState.IsPaused)},IsAnyPaused(){return this.CheckTweens(e.TweenState.IsPaused)},IsPingPong(s,t){return 0===t?this.CheckTweensWithTags(s,e.TweenState.IsPing):1===t&&this.CheckTweensWithTags(s,e.TweenState.IsPong)},IsAnyPingPong(s){return 0===s?this.CheckTweens(e.TweenState.IsPing):1===s&&this.CheckTweens(e.TweenState.IsPong)}}}{const e=self.C3,s=self.Ease,t=e.Behaviors.Tween;t.Acts={SetEnabled(e){this.SetEnabled(!!e)},async TweenOneProperty(...e){if(!this.IsEnabled()||!this.IsInstanceValid())return;const s=this.CreateTween(t.TweenArguments.OneProperty(this,...e));s.Play()&&await s.GetPlayPromise()},async TweenTwoProperties(...e){if(!this.IsEnabled()||!this.IsInstanceValid())return;const s=this.CreateTween(t.TweenArguments.TwoProperties(this,...e));s.Play()&&await s.GetPlayPromise()},async TweenThreeProperties(...e){if(!this.IsEnabled()||!this.IsInstanceValid())return;const s=this.CreateTween(t.TweenArguments.ThreeProperties(this,...e));s.Play()&&await s.GetPlayPromise()},async TweenValue(...e){if(!this.IsEnabled()||!this.IsInstanceValid())return;const s=this.CreateTween(t.TweenArguments.ValueProperty(this,...e));s.Play()&&await s.GetPlayPromise()},PauseTweens(e){if(this.IsEnabled()&&this.IsInstanceValid())for(const s of this.GetTweens(e))s.Stop()},PauseAllTweens(){if(this.IsEnabled()&&this.IsInstanceValid())for(const e of this.AllTweens())e.Stop()},ResumeTweens(e){if(this.IsEnabled()&&this.IsInstanceValid())for(const s of this.GetTweens(e))s.Resume()},ResumeAllTweens(){if(this.IsEnabled()&&this.IsInstanceValid())for(const e of this.AllTweens())e.Resume()},StopTweens(e){if(this.IsEnabled()&&this.IsInstanceValid())for(const s of this.GetTweens(e))this.ReleaseTween(s)},StopAllTweens(){if(this.IsEnabled()&&this.IsInstanceValid())for(const e of this.AllTweens())this.ReleaseTween(e)},SetOnePropertyTweensEndValue(s,t,n){if(!this.IsEnabled()||!this.IsInstanceValid())return;const i=e.Behaviors.Tween.Maps.GetSinglePropertyFromIndex(t);for(const e of this.GetTweens(s))e.BeforeSetEndValues([i]),e.SetEndValue(n,i)},SetTwoPropertiesTweensEndValue(s,t,n,i){if(!this.IsEnabled()||!this.IsInstanceValid())return;const a=e.Behaviors.Tween.Maps.GetRealProperties(t);for(const e of this.GetTweens(s))e.BeforeSetEndValues(a),e.SetEndValue(n,a[0]),e.SetEndValue(i,a[1])},SetThreePropertiesTweensEndValue(s,t,n,i,a){if(!this.IsEnabled()||!this.IsInstanceValid())return;const r=e.Behaviors.Tween.Maps.GetRealProperties(t);for(const e of this.GetTweens(s))e.BeforeSetEndValues(r),e.SetEndValue(n,r[0]),e.SetEndValue(i,r[1]),e.SetEndValue(a,r[2])},SetValuePropertyTweensStartValue(e,s){if(this.IsEnabled()&&this.IsInstanceValid())for(const t of this.GetTweens(e,"value"))t.SetStartValue(s,"value")},SetValuePropertyTweensEndValue(e,s){if(this.IsEnabled()&&this.IsInstanceValid())for(const t of this.GetTweens(e,"value"))t.BeforeSetEndValues(["value"]),t.SetEndValue(s,"value")},SetTweensEase(e,t){if(!this.IsEnabled()||!this.IsInstanceValid())return;const n=s.GetEaseFromIndex(t);for(const s of this.GetTweens(e))s.SetEase(n)},SetAllTweensEase(e){if(!this.IsEnabled()||!this.IsInstanceValid())return;const t=s.GetEaseFromIndex(e);for(const e of this.AllTweens())e.SetEase(t)},SetTweensTime(e,s){if(this.IsEnabled()&&this.IsInstanceValid())for(const t of this.GetTweens(e))t.SetTime(s)},SetAllTweensTime(e){if(this.IsEnabled()&&this.IsInstanceValid())for(const s of this.AllTweens())s.SetTime(e)},SetTweensPlaybackRate(e,s){if(this.IsEnabled()&&this.IsInstanceValid())for(const t of this.GetTweens(e))t.SetPlaybackRate(s)},SetAllTweensPlaybackRate(e){if(this.IsEnabled()&&this.IsInstanceValid())for(const s of this.AllTweens())s.SetPlaybackRate(e)},SetTweensDestroyOnComplete(e,s){if(this.IsEnabled()&&this.IsInstanceValid())for(const t of this.GetTweens(e))t.SetDestroyInstanceOnComplete(!!s)},SetAllTweensDestroyOnComplete(e){if(this.IsEnabled()&&this.IsInstanceValid())for(const s of this.AllTweens())s.SetDestroyInstanceOnComplete(!!e)}}}self.C3.Behaviors.Tween.Exps={Time(e){const s=this.GetTweenIncludingWaitingForRelease(e);return s?s.GetTime():0},Progress(e){const s=this.GetTweenIncludingWaitingForRelease(e);return s?s.GetTime()/s.GetTotalTime():0},PlaybackRate(e){const s=this.GetTweenIncludingWaitingForRelease(e);return s?s.GetPlaybackRate():0},Value(e){const s=this.GetTweenIncludingWaitingForRelease(e,"value");return s?s.GetPropertyTrack("value").GetSourceAdapterValue():0},Tags(){let e=this.GetFinishingTween();return e?e.GetStringTags():(e=this.GetTriggerTween(),e?e.GetStringTags():"")}};
@@ -1652,8 +1657,9 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => (and("[b][size=53]", n0.ExpObject(n1.ExpObject())) + "[/size][/b]");
+			const v1 = p._GetNode(1).GetVar();
+			const n2 = p._GetNode(2);
+			return () => (and("[b][size=53]", n0.ExpObject(and((("catName." + v1.GetValue()) + "."), n2.ExpObject()))) + "[/size][/b]");
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -1665,11 +1671,15 @@ self.C3_ExpressionFuncs = [
 		() => "canUnlock",
 		p => {
 			const n0 = p._GetNode(0);
-			return () => (and("*[size=47]", n0.ExpInstVar()) + "[/size]");
+			return () => (and("[size=47]", n0.ExpInstVar()) + "[/size]*");
 		},
 		() => 50,
 		() => "lock",
-		() => "[size=45]закрыто[/size]",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => (and("[size=45]", n0.ExpObject(("closedCat." + v1.GetValue()))) + "[/size]");
+		},
 		() => 100,
 		() => "Unlocked",
 		() => 0.005,
@@ -1735,6 +1745,17 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => Math.round((f0(0) * 0.7));
 		},
+		() => "puzzlePrepare",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("puzzlePrepare." + v1.GetValue()));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => f0(n1.ExpObject(), "%", "\n");
+		},
 		() => "getImage",
 		() => 0.45,
 		p => {
@@ -1769,11 +1790,14 @@ self.C3_ExpressionFuncs = [
 			return () => (and((("https://arturbier.github.io/puzzlegame/images/" + v0.GetValue()) + "/"), v1.GetValue()) + ".jpg");
 		},
 		p => {
-			const v0 = p._GetNode(0).GetVar();
-			const n1 = p._GetNode(1);
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
 			const v2 = p._GetNode(2).GetVar();
-			const v3 = p._GetNode(3).GetVar();
-			return () => and((and((v0.GetValue() + ": "), n1.ExpObject(v2.GetValue())) + "/"), v3.GetValue());
+			const n3 = p._GetNode(3);
+			const n4 = p._GetNode(4);
+			const v5 = p._GetNode(5).GetVar();
+			const v6 = p._GetNode(6).GetVar();
+			return () => and(and(and(and(n0.ExpObject(((("catName." + v1.GetValue()) + ".") + v2.GetValue())), ": "), n3.ExpObject(n4.ExpObject((("catName.ru" + ".") + v5.GetValue())))), "/"), v6.GetValue());
 		},
 		() => 3,
 		() => "loocked",
@@ -1785,6 +1809,11 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpObject("coins");
 		},
 		() => "txtCoinMenu",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("seconds." + v1.GetValue()));
+		},
 		() => "Daily Timer",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1918,19 +1947,29 @@ self.C3_ExpressionFuncs = [
 			return () => ((f0(Math.floor((v1.GetValue() / 60)), 1) + ".") + f2(Math.floor((v3.GetValue() % 60)), 2));
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Пазл дня? Легко", "Вот это скорость!");
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			return () => n0.ExpObject(and(("dailyPuzzleTop." + v1.GetValue()), f2(".0", ".1")));
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Отличный результат", "Завтра новый вызов", "Корона твоя? Или..");
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			return () => n0.ExpObject(and(("dailyPuzzleBottom." + v1.GetValue()), f2(".0", ".1", ".2")));
 		},
 		() => "daily",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject((("catName.ru" + ".") + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
 			const v2 = p._GetNode(2).GetVar();
-			return () => C3.clamp(add(n0.ExpObject(v1.GetValue()), 1), 0, v2.GetValue());
+			const v3 = p._GetNode(3).GetVar();
+			return () => C3.clamp(add(n0.ExpObject(n1.ExpObject((("catName.ru" + ".") + v2.GetValue()))), 1), 0, v3.GetValue());
 		},
 		() => "coins",
 		p => {
@@ -1948,8 +1987,9 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			const v1 = p._GetNode(1).GetVar();
-			return () => n0.ExpObject(v1.GetValue());
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			return () => n0.ExpObject(n1.ExpObject((("catName.ru" + ".") + v2.GetValue())));
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1964,7 +2004,11 @@ self.C3_ExpressionFuncs = [
 			const n2 = p._GetNode(2);
 			return () => n0.ExpObject(and("unlock_", n1.ExpObject((n2.ExpObject() + 1))));
 		},
-		() => "Завершено!",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("catCompletedTop." + v1.GetValue()));
+		},
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -1975,12 +2019,16 @@ self.C3_ExpressionFuncs = [
 			return () => ("unlock_" + v0.GetValue());
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Отличная новость", "Категория завершена");
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			return () => n0.ExpObject(and(("catFinishedTop." + v1.GetValue()), f2(".0", ".1")));
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Возвращайся в меню", "Выбирай новую", "Новая уже открыта");
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			return () => n0.ExpObject(and(("catFinishedBottom." + v1.GetValue()), f2(".0", ".1", ".2")));
 		},
 		() => "completed",
 		() => "School",
@@ -1989,12 +2037,16 @@ self.C3_ExpressionFuncs = [
 			return () => Math.floor(((v0.GetValue() - 1) / 19));
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Ой, стало сложнее", "Уже не так просто", "Снова вызов");
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			return () => n0.ExpObject(and(("upTop." + v1.GetValue()), f2(".0", ".1", ".2")));
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Больше кусочков", "Погнали собирать", "Новый челлендж");
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			return () => n0.ExpObject(and(("upBottom." + v1.GetValue()), f2(".0", ".1", ".2")));
 		},
 		() => "up",
 		() => "Next",
@@ -2016,6 +2068,12 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => f0(v1.GetValue());
 		},
+		() => "nextPuzzle",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("nextPuzzle." + v1.GetValue()));
+		},
 		() => "WidthUp",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -2024,8 +2082,9 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const n0 = p._GetNode(0);
-			const v1 = p._GetNode(1).GetVar();
-			return () => add(n0.ExpObject(v1.GetValue()), 1);
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			return () => add(n0.ExpObject(n1.ExpObject((("catName.ru" + ".") + v2.GetValue()))), 1);
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -2038,12 +2097,15 @@ self.C3_ExpressionFuncs = [
 			return () => (((f0(0) + (n1.ExpObject() / 2)) + n2.ExpObject()) + 20);
 		},
 		() => "friend",
-		() => "Новая игре с пазлами! 🧩\nПрисоединяйся",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const n2 = p._GetNode(2);
+			const v3 = p._GetNode(3).GetVar();
+			return () => and(and(and(n0.ExpObject((("share." + v1.GetValue()) + ".0")), "🧩"), " "), n2.ExpObject((("share." + v3.GetValue()) + ".1")));
+		},
 		() => "share",
-		() => "Новая игра с пазлами! 🧩\nПрисоединяйся",
-		() => "https://vk.com/app54459437",
 		() => "https://arturbier.github.io/puzzlegame/images/snippet.png",
-		() => "https://ok.ru/app/512004873357",
 		() => "ScreenShake",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2066,10 +2128,6 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() + (f1(0) * 2));
 		},
 		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => (v0.GetValue() + 1);
-		},
-		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() * 0.9);
 		},
@@ -2089,9 +2147,17 @@ self.C3_ExpressionFuncs = [
 		() => 0.22,
 		p => {
 			const n0 = p._GetNode(0);
-			return () => ("Урааа! " + n0.ExpInstVar());
+			const v1 = p._GetNode(1).GetVar();
+			const n2 = p._GetNode(2);
+			const v3 = p._GetNode(3).GetVar();
+			const n4 = p._GetNode(4);
+			return () => and(n0.ExpObject(("catOpenedTop." + v1.GetValue())), n2.ExpObject(and((("catName." + v3.GetValue()) + "."), n4.ExpInstVar())));
 		},
-		() => "Давай поиграем уже",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("catOpenedBottom." + v1.GetValue()));
+		},
 		() => "opened",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2100,27 +2166,26 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 0.1,
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Не так быстро :)", "Закрыто... пока)");
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const f2 = p._GetNode(2).GetBoundMethod();
+			return () => n0.ExpObject(and(("catClosedTop." + v1.GetValue()), f2(".0", ".1")));
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
-			const n2 = p._GetNode(2);
-			const f3 = p._GetNode(3).GetBoundMethod();
+			const v2 = p._GetNode(2).GetVar();
+			const n3 = p._GetNode(3);
 			const n4 = p._GetNode(4);
-			const n5 = p._GetNode(5);
-			return () => f0((and("Не хватает ", subtract(n1.ExpInstVar(), n2.ExpObject("coins"))) + f3(subtract(n4.ExpInstVar(), n5.ExpObject("coins")))), "Ты почти там");
+			const f5 = p._GetNode(5).GetBoundMethod();
+			const n6 = p._GetNode(6);
+			const n7 = p._GetNode(7);
+			const n8 = p._GetNode(8);
+			const v9 = p._GetNode(9).GetVar();
+			return () => f0(and(and(n1.ExpObject((("catClosedBottom." + v2.GetValue()) + ".0")), subtract(n3.ExpInstVar(), n4.ExpObject("coins"))), f5(subtract(n6.ExpInstVar(), n7.ExpObject("coins")))), n8.ExpObject((("catClosedBottom." + v9.GetValue()) + ".1")));
 		},
 		() => "locked",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Не продается!", "Деньги не помогут :)");
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Сначала заслужи", "Придется поиграть");
-		},
+		() => 80,
 		() => "Data",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2149,8 +2214,22 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 11,
 		() => 14,
-		() => " монет",
-		() => " монеты",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject((("notEnoughCoins." + v1.GetValue()) + ".0"));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject((("notEnoughCoins." + v1.GetValue()) + ".1"));
+		},
+		() => "ru",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject((("notEnoughCoins." + v1.GetValue()) + ".2"));
+		},
 		() => "Scroll",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2220,6 +2299,13 @@ self.C3_ExpressionFuncs = [
 		() => "BG",
 		() => "done",
 		() => "undone",
+		() => "menuProgress",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			return () => and(and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % "), n1.ExpObject(("menuProgress." + v2.GetValue())));
+		},
 		() => "Scoped Leaderboard",
 		() => "playerPos",
 		p => {
@@ -2232,14 +2318,38 @@ self.C3_ExpressionFuncs = [
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => f0(f1("dailyTime"));
 		},
-		() => "Корона твоя! №1",
-		() => "Носи с удовольствием",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("crownTop." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("crownBottom." + v1.GetValue()));
+		},
 		() => "crown",
-		() => "Кубок твой! №2",
-		() => "Почти у цели",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("coupTop." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("coupBottom1." + v1.GetValue()));
+		},
 		() => "coup_1",
-		() => "В тройке лучших! №3",
-		() => "Завтра будет лучше",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("coupTop2." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("coupBottom2." + v1.GetValue()));
+		},
 		() => "coup_2",
 		() => "savedData",
 		p => {
@@ -2295,17 +2405,20 @@ self.C3_ExpressionFuncs = [
 		() => -15,
 		() => 0.15,
 		() => "Play",
-		() => "Упс, пазл собран",
-		() => "возвращайся завтра!",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("dailyFinishedTop." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("dailyFinishedBottom." + v1.GetValue()));
+		},
 		() => "morgen",
 		() => "Leaders",
 		() => "Tasks",
 		() => "Progress",
-		() => "menuProgress",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % собрано");
-		},
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() * 1.7);
@@ -2320,7 +2433,8 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
 			const v2 = p._GetNode(2).GetVar();
-			return () => C3.clamp(add(n0.ExpObject(n1.ExpInstVar()), 79), 0, v2.GetValue());
+			const v3 = p._GetNode(3).GetVar();
+			return () => C3.clamp(add(n0.ExpObject(n1.ExpObject((("catName.ru" + ".") + v2.GetValue()))), 79), 0, v3.GetValue());
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -2373,7 +2487,21 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => (v0.GetValue() % 3);
 		},
-		() => 30
+		() => 30,
+		() => "Lang",
+		() => "lang",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			return () => n0.ExpObject((((v1.GetValue() + ".") + v2.GetValue()) + v3.GetValue()));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => f0(n1.ExpObject(), "");
+		}
 ];
 
 
