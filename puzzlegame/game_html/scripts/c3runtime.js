@@ -2412,6 +2412,17 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("pingErrorTop." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("pingErrorBottom." + v1.GetValue()));
+		},
+		() => "ping",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("dailyFinishedTop." + v1.GetValue()));
 		},
 		p => {

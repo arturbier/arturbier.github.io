@@ -386,5 +386,25 @@
   "pt": [" moeda", " moedas", " moedas"],
   "tr": [" coin", " coin", " coin"],
   "id": [" koin", " koin", " koin"]
+},
+"pingErrorTop": {
+  "ru": "Ой, ошибочка",
+  "en": "Oops, error",
+  "de": "Ups, Fehler",
+  "es": "Ups, error",
+  "fr": "Oups, erreur",
+  "pt": "Ops, erro",
+  "tr": "Oops, hata",
+  "id": "Ups, error"
+},
+"pingErrorBottom": {
+  "ru": "Сервер не отвечает",
+  "en": "Server not responding",
+  "de": "Server antwortet nicht",
+  "es": "El servidor no responde",
+  "fr": "Le serveur ne répond pas",
+  "pt": "Servidor não responde",
+  "tr": "Sunucu yanıt vermiyor",
+  "id": "Server tidak merespons"
 }
 }
