@@ -1774,7 +1774,11 @@ self.C3_ExpressionFuncs = [
 			return () => (("https://arturbier.github.io/puzzlegame/images/365_images/image_" + f0(v1.GetValue(), 3)) + ".jpg");
 		},
 		() => "gameText",
-		() => "Пазл дня!",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("dailyTitle." + v1.GetValue()));
+		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => Math.floor((v0.GetValue() / 19));

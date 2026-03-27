@@ -167,6 +167,16 @@
     "tr": "Bulmaca%hazırlanıyor",
     "id": "Menyiapkan%puzzle"
   },
+  "dailyTitle": {
+  "ru": "Пазл дня!",
+  "en": "Daily Puzzle!",
+  "de": "Tägliches Puzzle!",
+  "es": "¡Puzzle del día!",
+  "fr": "Puzzle du jour !",
+  "pt": "Puzzle do dia!",
+  "tr": "Günün bulmacası!",
+  "id": "Puzzle harian!"
+},
   "share": {
   "ru": ["Новая игра с пазлами!", "Присоединяйся"],
   "en": ["New puzzle game!", "Join now"],
