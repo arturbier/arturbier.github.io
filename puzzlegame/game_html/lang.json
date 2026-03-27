@@ -368,7 +368,7 @@
   "id": "Selesai!"
 },
 "notEnoughCoins": {
-  "ru": [" монеты", " монеты", " монет"],
+  "ru": [" монет", " монеты", " монет"],
   "en": [" coin", " coins", " coins"],
   "de": [" münze", " münzen", " münzen"],
   "es": [" moneda", " monedas", " monedas"],
