@@ -2310,6 +2310,12 @@ self.C3_ExpressionFuncs = [
 			const v2 = p._GetNode(2).GetVar();
 			return () => and(and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % "), n1.ExpObject(("menuProgress." + v2.GetValue())));
 		},
+		() => "Play",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 40);
+		},
+		() => 15,
 		() => "Scoped Leaderboard",
 		() => "playerPos",
 		p => {
@@ -2361,6 +2367,7 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() * 80);
 		},
 		() => "savedTime",
+		() => "tutorial",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("shows");
@@ -2370,6 +2377,8 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
 		},
+		() => "Tutorial",
+		() => "Buttons",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("Data");
@@ -2386,6 +2395,10 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("sound");
 		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("tutorial");
+		},
 		() => "progress",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2400,7 +2413,6 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => ((v0.GetValue() / v1.GetValue()) * 100);
 		},
-		() => "Buttons",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(3, 5);
@@ -2408,7 +2420,6 @@ self.C3_ExpressionFuncs = [
 		() => "Daily",
 		() => -15,
 		() => 0.15,
-		() => "Play",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2443,6 +2454,45 @@ self.C3_ExpressionFuncs = [
 			return () => ((n0.ExpObject()) ? (0) : (1));
 		},
 		() => "sound",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => C3.clamp((v0.GetValue() + 1), 0, 6);
+		},
+		() => 45,
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("step0." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("step1." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("step2." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("step3." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("step4." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 30);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("step5." + v1.GetValue()));
+		},
 		() => "Debug",
 		p => {
 			const n0 = p._GetNode(0);

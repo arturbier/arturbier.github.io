@@ -24,9 +24,9 @@
     "en": "Achievements",
     "de": "Erfolge",
     "es": "Logros",
-    "fr": "Succès",
+    "fr": "Succes",
     "pt": "Conquistas",
-    "tr": "Başarılar",
+    "tr": "Basarilar",
     "id": "Prestasi"
   },
   "menuProgress": {
@@ -34,9 +34,9 @@
     "en": "collected",
     "de": "gesammelt",
     "es": "recogido",
-    "fr": "collecté",
+    "fr": "collecte",
     "pt": "coletado",
-    "tr": "toplandı",
+    "tr": "toplandi",
     "id": "dikumpulkan"
   },
   "progress": {
@@ -52,29 +52,29 @@
   "daily": {
     "ru": "Пазл%дня",
     "en": "Daily%Puzzle",
-    "de": "Tägliches%Puzzle",
+    "de": "Tagliches%Puzzle",
     "es": "Rompecabezas%diario",
     "fr": "Puzzle%du jour",
-    "pt": "Quebra-cabeça%diário",
-    "tr": "Günün%bulmacası",
+    "pt": "Quebra-cabeca%diario",
+    "tr": "Gunun%bulmacasi",
     "id": "Teka-teki%harian"
   },
   "leader": {
     "ru": "Лидеры%дня",
     "en": "Daily%Leaders",
     "de": "Tagesbesten",
-    "es": "Líderes%del día",
+    "es": "Lideres%del dia",
     "fr": "Meilleurs%du jour",
-    "pt": "Líderes%do dia",
-    "tr": "Günün%liderleri",
+    "pt": "Lideres%do dia",
+    "tr": "Gunun%liderleri",
     "id": "Pemimpin%harian"
   },
   "categoriesHeader": {
     "ru": "Категории",
     "en": "Categories",
     "de": "Kategorien",
-    "es": "Categorías",
-    "fr": "Catégories",
+    "es": "Categorias",
+    "fr": "Categories",
     "pt": "Categorias",
     "tr": "Kategoriler",
     "id": "Kategori"
@@ -96,38 +96,38 @@
     ],
     "de": [
       "Abstrakt","Tiere","Architektur","Kunst","Herbst",
-      "Autos","Städte","Bildung","Mode","Blumen",
-      "Essen","Gesundheit","Innenraum","Motorräder","Natur",
-      "Menschen","Weltraum","Sport","Frühling","Sommer",
+      "Autos","Stadte","Bildung","Mode","Blumen",
+      "Essen","Gesundheit","Innenraum","Motorrader","Natur",
+      "Menschen","Weltraum","Sport","Fruhling","Sommer",
       "Technologie","Reisen","Winter"
     ],
     "es": [
-      "Abstracto","Animales","Arquitectura","Arte","Otoño",
-      "Coches","Ciudades","Educación","Moda","Flores",
+      "Abstracto","Animales","Arquitectura","Arte","Otono",
+      "Coches","Ciudades","Educacion","Moda","Flores",
       "Comida","Salud","Interior","Motocicletas","Naturaleza",
       "Personas","Espacio","Deporte","Primavera","Verano",
-      "Tecnología","Viajes","Invierno"
+      "Tecnologia","Viajes","Invierno"
     ],
     "fr": [
       "Abstrait","Animaux","Architecture","Art","Automne",
-      "Voitures","Villes","Éducation","Mode","Fleurs",
-      "Nourriture","Santé","Intérieur","Motos","Nature",
-      "Personnes","Espace","Sport","Printemps","Été",
+      "Voitures","Villes","Education","Mode","Fleurs",
+      "Nourriture","Sante","Interieur","Motos","Nature",
+      "Personnes","Espace","Sport","Printemps","Ete",
       "Technologie","Voyages","Hiver"
     ],
     "pt": [
       "Abstrato","Animais","Arquitetura","Arte","Outono",
-      "Carros","Cidades","Educação","Moda","Flores",
-      "Comida","Saúde","Interior","Motocicletas","Natureza",
-      "Pessoas","Espaço","Esporte","Primavera","Verão",
+      "Carros","Cidades","Educacao","Moda","Flores",
+      "Comida","Saude","Interior","Motocicletas","Natureza",
+      "Pessoas","Espaco","Esporte","Primavera","Verao",
       "Tecnologia","Viagens","Inverno"
     ],
     "tr": [
       "Soyut","Hayvanlar","Mimari","Sanat","Sonbahar",
-      "Arabalar","Şehirler","Eğitim","Moda","Çiçekler",
-      "Yemek","Sağlık","İç Mekan","Motosikletler","Doğa",
-      "İnsanlar","Uzay","Spor","İlkbahar","Yaz",
-      "Teknoloji","Seyahat","Kış"
+      "Arabalar","Sehirler","Egitim","Moda","Cicekler",
+      "Yemek","Saglik","Ic Mekan","Motosikletler","Doga",
+      "Insanlar","Uzay","Spor","Ilkbahar","Yaz",
+      "Teknoloji","Seyahat","Kis"
     ],
     "id": [
       "Abstrak","Hewan","Arsitektur","Seni","Musim Gugur",
@@ -142,19 +142,19 @@
     "en": "Locked",
     "de": "Gesperrt",
     "es": "Bloqueado",
-    "fr": "Verrouillé",
+    "fr": "Verrouille",
     "pt": "Bloqueado",
     "tr": "Kilitli",
     "id": "Terkunci"
   },
-  "nextPuzzle": {
+    "nextPuzzle": {
     "ru": "Дальше",
     "en": "Next",
     "de": "Weiter",
     "es": "Siguiente",
     "fr": "Suivant",
-    "pt": "Próximo",
-    "tr": "İleri",
+    "pt": "Proximo",
+    "tr": "Ileri",
     "id": "Lanjut"
   },
   "puzzlePrepare": {
@@ -162,249 +162,315 @@
     "en": "Preparing%puzzle",
     "de": "Puzzle wird%vorbereitet",
     "es": "Preparando%rompecabezas",
-    "fr": "Préparation%du puzzle",
-    "pt": "Preparando%quebra-cabeça",
-    "tr": "Bulmaca%hazırlanıyor",
+    "fr": "Preparation%du puzzle",
+    "pt": "Preparando%quebra-cabeca",
+    "tr": "Bulmaca%hazirlaniyor",
     "id": "Menyiapkan%puzzle"
   },
   "dailyTitle": {
-  "ru": "Пазл дня!",
-  "en": "Daily Puzzle!",
-  "de": "Tägliches Puzzle!",
-  "es": "¡Puzzle del día!",
-  "fr": "Puzzle du jour !",
-  "pt": "Puzzle do dia!",
-  "tr": "Günün bulmacası!",
-  "id": "Puzzle harian!"
-},
+    "ru": "Пазл дня!",
+    "en": "Daily Puzzle!",
+    "de": "Tagliches Puzzle!",
+    "es": "Puzzle del dia!",
+    "fr": "Puzzle du jour!",
+    "pt": "Puzzle do dia!",
+    "tr": "Gunun bulmacasi!",
+    "id": "Puzzle harian!"
+  },
   "share": {
-  "ru": ["Новая игра с пазлами!", "Присоединяйся"],
-  "en": ["New puzzle game!", "Join now"],
-  "de": ["Neues Puzzle-Spiel!", "Jetzt mitmachen"],
-  "es": ["¡Nuevo juego de puzzles!", "Únete ahora"],
-  "fr": ["Nouveau jeu de puzzle !", "Rejoins-nous"],
-  "pt": ["Novo jogo de quebra-cabeça!", "Junte-se agora"],
-  "tr": ["Yeni bulmaca oyunu!", "Hemen katıl"],
-  "id": ["Game puzzle baru!", "Gabung sekarang"]
+    "ru": ["Новая игра с пазлами!", "Присоединяйся"],
+    "en": ["New puzzle game!", "Join now"],
+    "de": ["Neues Puzzle-Spiel!", "Jetzt mitmachen"],
+    "es": ["Nuevo juego de puzzles!", "Unete ahora"],
+    "fr": ["Nouveau jeu de puzzle!", "Rejoins-nous"],
+    "pt": ["Novo jogo de quebra-cabeca!", "Junte-se agora"],
+    "tr": ["Yeni bulmaca oyunu!", "Hemen katil"],
+    "id": ["Game puzzle baru!", "Gabung sekarang"]
+  },
+  "catFinishedTop": {
+    "ru": ["Отличная новость", "Категория завершена"],
+    "en": ["Great news", "Category completed"],
+    "de": ["Gute Nachrichten", "Kategorie abgeschlossen"],
+    "es": ["Buenas noticias", "Categoria completada"],
+    "fr": ["Bonne nouvelle", "Categorie terminee"],
+    "pt": ["Boa noticia", "Categoria concluida"],
+    "tr": ["Harika haber", "Kategori tamamlandi"],
+    "id": ["Kabar baik", "Kategori selesai"]
+  },
+  "catFinishedBottom": {
+    "ru": ["Возвращайся в меню", "Выбирай новую", "Новая уже открыта"],
+    "en": ["Return to menu", "Choose a new one", "A new one is already unlocked"],
+    "de": ["Zuruck zum Menu", "Wahle eine neue", "Eine neue ist bereits freigeschaltet"],
+    "es": ["Volver al menu", "Elige una nueva", "Una nueva ya esta desbloqueada"],
+    "fr": ["Retour au menu", "Choisis-en une nouvelle", "Une nouvelle est deja debloquee"],
+    "pt": ["Voltar ao menu", "Escolha uma nova", "Uma nova ja foi desbloqueada"],
+    "tr": ["Menuye don", "Yeni bir tane sec", "Yeni bir tane zaten acildi"],
+    "id": ["Kembali ke menu", "Pilih yang baru", "Yang baru sudah terbuka"]
+  },
+  "dailyPuzzleTop": {
+    "ru": ["Пазл дня? Легко", "Вот это скорость!"],
+    "en": ["Daily puzzle? Easy", "That was fast!"],
+    "de": ["Tagespuzzle? Einfach", "Das war schnell!"],
+    "es": ["Puzzle diario? Facil", "Que rapido!"],
+    "fr": ["Puzzle du jour? Facile", "Quelle rapidite!"],
+    "pt": ["Puzzle do dia? Facil", "Que rapido!"],
+    "tr": ["Gunun bulmacasi? Kolay", "Ne kadar hizli!"],
+    "id": ["Puzzle harian? Mudah", "Cepat sekali!"]
+  },
+  "dailyPuzzleBottom": {
+    "ru": ["Отличный результат", "Завтра новый вызов", "Корона твоя? Или.."],
+    "en": ["Great result", "A new challenge tomorrow", "Is the crown yours? Or..."],
+    "de": ["Tolles Ergebnis", "Morgen neue Herausforderung", "Gehort die Krone dir? Oder..."],
+    "es": ["Gran resultado", "Manana nuevo desafio", "La corona es tuya? O..."],
+    "fr": ["Excellent resultat", "Un nouveau defi demain", "La couronne est a toi? Ou..."],
+    "pt": ["Otimo resultado", "Novo desafio amanha", "A coroa e sua? Ou..."],
+    "tr": ["Harika sonuc", "Yarin yeni bir meydan okuma", "Tac senin mi? Yoksa..."],
+    "id": ["Hasil yang hebat", "Tantangan baru besok", "Mahkotanya milikmu? Atau..."]
+  },
+  "upTop": {
+    "ru": ["Ой, стало сложнее", "Уже не так просто", "Снова вызов"],
+    "en": ["Oh, it got harder", "Not so easy now", "Another challenge"],
+    "de": ["Oh, es wurde schwerer", "Jetzt nicht mehr so einfach", "Wieder eine Herausforderung"],
+    "es": ["Oh, se volvio mas dificil", "Ya no es tan facil", "Otro desafio"],
+    "fr": ["Oh, c'est devenu plus difficile", "Ce n'est plus si simple", "Encore un defi"],
+    "pt": ["Oh, ficou mais dificil", "Ja nao e tao facil", "Outro desafio"],
+    "tr": ["Oh, zorlasti", "Artik o kadar kolay degil", "Yine bir meydan okuma"],
+    "id": ["Wah, jadi lebih sulit", "Sekarang tidak semudah itu", "Tantangan lagi"]
+  },
+  "upBottom": {
+    "ru": ["Больше кусочков", "Погнали собирать", "Новый челлендж"],
+    "en": ["More pieces", "Let's put it together", "New challenge"],
+    "de": ["Mehr Teile", "Los geht's", "Neue Herausforderung"],
+    "es": ["Mas piezas", "Vamos a armarlo", "Nuevo desafio"],
+    "fr": ["Plus de pieces", "Allons-y", "Nouveau defi"],
+    "pt": ["Mais pecas", "Vamos montar", "Novo desafio"],
+    "tr": ["Daha fazla parca", "Hadi baslayalim", "Yeni meydan okuma"],
+    "id": ["Lebih banyak bagian", "Ayo susun", "Tantangan baru"]
+  },
+  "catOpenedTop": {
+    "ru": "Урааа! ",
+    "en": "Yay! ",
+    "de": "Juhu! ",
+    "es": "Genial! ",
+    "fr": "Youpi! ",
+    "pt": "Oba! ",
+    "tr": "Yasasin! ",
+    "id": "Hore! "
+  },
+  "catOpenedBottom": {
+    "ru": "Давай поиграем уже",
+    "en": "Play now!",
+    "de": "Lass uns endlich spielen",
+    "es": "Vamos a jugar ya",
+    "fr": "Allons jouer maintenant",
+    "pt": "Vamos jogar agora",
+    "tr": "Hadi artik oynayalim",
+    "id": "Ayo main sekarang"
+  },
+  "catClosedTop": {
+    "ru": ["Не так быстро :)", "Закрыто...пока)"],
+    "en": ["Not so fast :)", "Locked...for now)"],
+    "de": ["Nicht so schnell :)", "Gesperrt...vorerst)"],
+    "es": ["No tan rapido :)", "Bloqueado...por ahora)"],
+    "fr": ["Pas si vite :)", "Verrouille...pour l'instant)"],
+    "pt": ["Nao tao rapido :)", "Bloqueado..."],
+    "tr": ["O kadar hizli degil :)", "Simdilik kilitli)"],
+    "id": ["Tidak secepat itu :)", "Terkunci...untuk sekarang)"]
+  },
+  "catClosedBottom": {
+    "ru": ["Не хватает ", "Ты почти там"],
+    "en": ["Not enough yet ", "You are almost there"],
+    "de": ["Noch nicht genug ", "Du bist fast da"],
+    "es": ["Aun no es suficiente ", "Casi lo logras"],
+    "fr": ["Pas encore assez ", "Tu y es presque"],
+    "pt": ["Ainda nao e suficiente ", "Voce esta quase la"],
+    "tr": ["Henuz yeterli degil ", "Neredeyse basardin"],
+    "id": ["Belum cukup ", "Kamu hampir sampai"]
+  },
+  "crownTop": {
+    "ru": "Корона твоя! №1",
+    "en": "The crown is yours! №1",
+    "de": "Die Krone gehort dir! №1",
+    "es": "La corona es tuya! №1",
+    "fr": "La couronne est a toi! №1",
+    "pt": "A coroa e sua! №1",
+    "tr": "Tac senin! №1",
+    "id": "Mahkota milikmu! №1"
+  },
+  "crownBottom": {
+    "ru": "Носи с удовольствием",
+    "en": "Wear it with pride",
+    "de": "Trage sie mit Stolz",
+    "es": "Llevala con orgullo",
+    "fr": "Porte-la avec fierte",
+    "pt": "Use com orgulho",
+    "tr": "Gururla tak",
+    "id": "Pakai dengan bangga"
+  },
+  "coupTop1": {
+    "ru": "Кубок твой! №2",
+    "en": "The cup is yours! №2",
+    "de": "Der Pokal gehort dir! №2",
+    "es": "La copa es tuya! №2",
+    "fr": "La coupe est a toi! №2",
+    "pt": "A taca e sua! №2",
+    "tr": "Kupa senin! №2",
+    "id": "Piala milikmu! №2"
+  },
+  "coupBottom1": {
+    "ru": "Почти у цели",
+    "en": "Almost there",
+    "de": "Fast am Ziel",
+    "es": "Casi lo logras",
+    "fr": "Presque termine",
+    "pt": "Quase la",
+    "tr": "Neredeyse oradasin",
+    "id": "Hampir sampai"
+  },
+  "coupTop2": {
+    "ru": "В тройке лучших! №3",
+    "en": "Top 3! №3",
+    "de": "Unter den Top 3! №3",
+    "es": "Entre los 3 mejores! №3",
+    "fr": "Dans le top 3! №3",
+    "pt": "Entre os 3 melhores! №3",
+    "tr": "Ilk 3'te! №3",
+    "id": "Masuk 3 besar! №3"
+  },
+  "coupBottom2": {
+    "ru": "Завтра будет лучше",
+    "en": "Tomorrow will be better",
+    "de": "Morgen wird es besser",
+    "es": "Manana sera mejor",
+    "fr": "Demain sera meilleur",
+    "pt": "Amanha sera melhor",
+    "tr": "Yarin daha iyi olacak",
+    "id": "Besok akan lebih baik"
+  },
+  "dailyFinishedTop": {
+    "ru": "Упс, пазл собран",
+    "en": "Puzzle completed",
+    "de": "Puzzle abgeschlossen",
+    "es": "Rompecabezas completado",
+    "fr": "Puzzle termine",
+    "pt": "Quebra-cabeca concluido",
+    "tr": "Bulmaca tamamlandi",
+    "id": "Puzzle selesai"
+  },
+  "dailyFinishedBottom": {
+    "ru": "Возвращайся завтра!",
+    "en": "Come back tomorrow!",
+    "de": "Komm morgen zuruck!",
+    "es": "Vuelve manana!",
+    "fr": "Reviens demain!",
+    "pt": "Volte amanha!",
+    "tr": "Yarin geri gel!",
+    "id": "Kembali besok!"
+  },
+  "catCompleted": {
+    "ru": "Завершено!",
+    "en": "Completed!",
+    "de": "Abgeschlossen!",
+    "es": "Completado!",
+    "fr": "Termine!",
+    "pt": "Concluido!",
+    "tr": "Tamamlandi!",
+    "id": "Selesai!"
+  },
+  "notEnoughCoins": {
+    "ru": [" монет", " монеты", " монет"],
+    "en": [" coin", " coins", " coins"],
+    "de": [" munze", " munzen", " munzen"],
+    "es": [" moneda", " monedas", " monedas"],
+    "fr": [" piece", " pieces", " pieces"],
+    "pt": [" moeda", " moedas", " moedas"],
+    "tr": [" coin", " coin", " coin"],
+    "id": [" koin", " koin", " koin"]
+  },
+  "pingErrorTop": {
+    "ru": "Ой, ошибочка",
+    "en": "Oops, error",
+    "de": "Ups, Fehler",
+    "es": "Ups, error",
+    "fr": "Oups, erreur",
+    "pt": "Ops, erro",
+    "tr": "Oops, hata",
+    "id": "Ups, error"
+  },
+  "pingErrorBottom": {
+    "ru": "Сервер не отвечает",
+    "en": "Server not responding",
+    "de": "Server antwortet nicht",
+    "es": "El servidor no responde",
+    "fr": "Le serveur ne repond pas",
+    "pt": "Servidor nao responde",
+    "tr": "Sunucu yanit vermiyor",
+    "id": "Server tidak merespons"
+  },
+"step0": {
+  "ru": "[size=200][b]ПАЗЛ ДНЯ[/b][/size]\n\n[size=130]Режим на время[/size]\n[size=100]Собери быстрее всех и попади в лидеры[/size]",
+  "en": "[size=200][b]DAILY PUZZLE[/b][/size]\n\n[size=130]Timed mode[/size]\n[size=100]Solve faster than everyone and reach the leaderboard[/size]",
+  "de": "[size=200][b]TAGLICHES PUZZLE[/b][/size]\n\n[size=130]Zeitmodus[/size]\n[size=100]Sei schneller als alle und komme in die Bestenliste[/size]",
+  "es": "[size=200][b]PUZZLE DIARIO[/b][/size]\n\n[size=130]Modo contrarreloj[/size]\n[size=100]Resuelve mas rapido que todos y entra en la clasificacion[/size]",
+  "fr": "[size=200][b]PUZZLE DU JOUR[/b][/size]\n\n[size=130]Mode chronometre[/size]\n[size=100]Resolus plus vite que tous et entre dans le classement[/size]",
+  "pt": "[size=200][b]PUZZLE DO DIA[/b][/size]\n\n[size=130]Modo com tempo[/size]\n[size=100]Complete mais rapido que todos e entre no ranking[/size]",
+  "tr": "[size=200][b]GUNLUK BULMACA[/b][/size]\n\n[size=130]Zamana karsi mod[/size]\n[size=100]Herkesten hizli tamamla ve liderler listesine gir[/size]",
+  "id": "[size=200][b]PUZZLE HARIAN[/b][/size]\n\n[size=130]Mode waktu[/size]\n[size=100]Selesaikan lebih cepat dari semua dan masuk leaderboard[/size]",
+  "it": "[size=200][b]PUZZLE GIORNALIERO[/b][/size]\n\n[size=130]Modalita a tempo[/size]\n[size=100]Completa piu veloce di tutti e entra in classifica[/size]"
 },
-"catFinishedTop": {
-  "ru": ["Отличная новость", "Категория завершена"],
-  "en": ["Great news", "Category completed"],
-  "de": ["Gute Nachrichten", "Kategorie abgeschlossen"],
-  "es": ["Buenas noticias", "Categoría completada"],
-  "fr": ["Bonne nouvelle", "Catégorie terminée"],
-  "pt": ["Boa notícia", "Categoria concluída"],
-  "tr": ["Harika haber", "Kategori tamamlandı"],
-  "id": ["Kabar baik", "Kategori selesai"]
+"step1": {
+  "ru": "[size=200][b]ЛИДЕРЫ[/b][/size]\n\n[size=130]Рейтинг игроков[/size]\n[size=100]Попади в топ и стань №1[/size]",
+  "en": "[size=200][b]LEADERS[/b][/size]\n\n[size=130]Player ranking[/size]\n[size=100]Reach the top and become #1[/size]",
+  "de": "[size=200][b]BESTENLISTE[/b][/size]\n\n[size=130]Spieler Ranking[/size]\n[size=100]Erreiche die Spitze und werde #1[/size]",
+  "es": "[size=200][b]LIDERES[/b][/size]\n\n[size=130]Ranking de jugadores[/size]\n[size=100]Llega a la cima y conviertete en #1[/size]",
+  "fr": "[size=200][b]CLASSEMENT[/b][/size]\n\n[size=130]Classement des joueurs[/size]\n[size=100]Atteins le sommet et deviens #1[/size]",
+  "pt": "[size=200][b]LIDERES[/b][/size]\n\n[size=130]Ranking de jogadores[/size]\n[size=100]Chegue ao topo e torne-se #1[/size]",
+  "tr": "[size=200][b]LIDERLER[/b][/size]\n\n[size=130]Oyuncu siralamasi[/size]\n[size=100]Zirveye ulas ve #1 ol[/size]",
+  "id": "[size=200][b]PEMIMPIN[/b][/size]\n\n[size=130]Peringkat pemain[/size]\n[size=100]Capai puncak dan jadi #1[/size]",
+  "it": "[size=200][b]CLASSIFICA[/b][/size]\n\n[size=130]Classifica giocatori[/size]\n[size=100]Raggiungi la vetta e diventa #1[/size]"
 },
-"catFinishedBottom": {
-  "ru": ["Возвращайся в меню", "Выбирай новую", "Новая уже открыта"],
-  "en": ["Return to menu", "Choose a new one", "A new one is already unlocked"],
-  "de": ["Zurück zum Menü", "Wähle eine neue", "Eine neue ist bereits freigeschaltet"],
-  "es": ["Volver al menú", "Elige una nueva", "Una nueva ya está desbloqueada"],
-  "fr": ["Retour au menu", "Choisis-en une nouvelle", "Une nouvelle est déjà débloquée"],
-  "pt": ["Voltar ao menu", "Escolha uma nova", "Uma nova já foi desbloqueada"],
-  "tr": ["Menüye dön", "Yeni bir tane seç", "Yeni bir tane zaten açıldı"],
-  "id": ["Kembali ke menu", "Pilih yang baru", "Yang baru sudah terbuka"]
+"step2": {
+  "ru": "[size=200][b]ОБЩИЙ ПРОГРЕСС[/b][/size]\n\n[size=130]Твой прогресс в игре[/size]\n[size=100]Собирай пазлы и открывай новые категории[/size]",
+  "en": "[size=200][b]TOTAL PROGRESS[/b][/size]\n\n[size=130]Your progress in the game[/size]\n[size=100]Solve puzzles and unlock new categories[/size]",
+  "de": "[size=200][b]GESAMTFORTSCHRITT[/b][/size]\n\n[size=130]Dein Fortschritt im Spiel[/size]\n[size=100]Löse Puzzles und schalte neue Kategorien frei[/size]",
+  "es": "[size=200][b]PROGRESO TOTAL[/b][/size]\n\n[size=130]Tu progreso en el juego[/size]\n[size=100]Resuelve puzzles y desbloquea nuevas categorias[/size]",
+  "fr": "[size=200][b]PROGRESSION TOTALE[/b][/size]\n\n[size=130]Ta progression dans le jeu[/size]\n[size=100]Resolus des puzzles et debloque de nouvelles categories[/size]",
+  "pt": "[size=200][b]PROGRESSO TOTAL[/b][/size]\n\n[size=130]Seu progresso no jogo[/size]\n[size=100]Complete puzzles e desbloqueie novas categorias[/size]",
+  "tr": "[size=200][b]TOPLAM ILERLEME[/b][/size]\n\n[size=130]Oyundaki ilerlemen[/size]\n[size=100]Bulmacalari tamamla ve yeni kategoriler ac[/size]",
+  "id": "[size=200][b]PROGRES TOTAL[/b][/size]\n\n[size=130]Progresmu dalam game[/size]\n[size=100]Selesaikan puzzle dan buka kategori baru[/size]",
+  "it": "[size=200][b]PROGRESSO TOTALE[/b][/size]\n\n[size=130]Il tuo progresso nel gioco[/size]\n[size=100]Completa puzzle e sblocca nuove categorie[/size]"
 },
-"dailyPuzzleTop": {
-  "ru": ["Пазл дня? Легко", "Вот это скорость!"],
-  "en": ["Daily puzzle? Easy", "That was fast!"],
-  "de": ["Tagespuzzle? Einfach", "Das war schnell!"],
-  "es": ["¿Puzzle diario? Fácil", "¡Qué rápido!"],
-  "fr": ["Puzzle du jour ? Facile", "Quelle rapidité !"],
-  "pt": ["Puzzle do dia? Fácil", "Que rápido!"],
-  "tr": ["Günün bulmacası? Kolay", "Ne kadar hızlı!"],
-  "id": ["Puzzle harian? Mudah", "Cepat sekali!"]
+"step3": {
+  "ru": "[size=200][b]ИГРАТЬ[/b][/size]\n\n[size=130]Выбери категорию[/size]\n[size=100]Начни игру и проходи уровни[/size]",
+  "en": "[size=200][b]PLAY[/b][/size]\n\n[size=130]Choose a category[/size]\n[size=100]Start the game and complete levels[/size]",
+  "de": "[size=200][b]SPIELEN[/b][/size]\n\n[size=130]Wahle eine Kategorie[/size]\n[size=100]Starte das Spiel und schließe Level ab[/size]",
+  "es": "[size=200][b]JUGAR[/b][/size]\n\n[size=130]Elige una categoria[/size]\n[size=100]Empieza el juego y completa niveles[/size]",
+  "fr": "[size=200][b]JOUER[/b][/size]\n\n[size=130]Choisis une categorie[/size]\n[size=100]Commence le jeu et termine les niveaux[/size]",
+  "pt": "[size=200][b]JOGAR[/b][/size]\n\n[size=130]Escolha uma categoria[/size]\n[size=100]Comece o jogo e complete niveis[/size]",
+  "tr": "[size=200][b]OYNA[/b][/size]\n\n[size=130]Bir kategori sec[/size]\n[size=100]Oyunu baslat ve seviyeleri tamamla[/size]",
+  "id": "[size=200][b]MAINKAN[/b][/size]\n\n[size=130]Pilih kategori[/size]\n[size=100]Mulai permainan dan selesaikan level[/size]",
+  "it": "[size=200][b]GIOCA[/b][/size]\n\n[size=130]Scegli una categoria[/size]\n[size=100]Inizia il gioco e completa i livelli[/size]"
 },
-"dailyPuzzleBottom": {
-  "ru": ["Отличный результат", "Завтра новый вызов", "Корона твоя? Или.."],
-  "en": ["Great result", "A new challenge tomorrow", "Is the crown yours? Or..."],
-  "de": ["Tolles Ergebnis", "Morgen новая Herausforderung", "Gehört die Krone dir? Oder..."],
-  "es": ["Gran resultado", "Mañana новый desafío", "¿La corona es tuya? O..."],
-  "fr": ["Excellent résultat", "Un nouveau défi demain", "La couronne est à toi ? Ou..."],
-  "pt": ["Ótimo resultado", "Novo desafio amanhã", "A coroa é sua? Ou..."],
-  "tr": ["Harika sonuç", "Yarın yeni bir meydan okuma", "Taç senin mi? Yoksa..."],
-  "id": ["Hasil yang hebat", "Tantangan baru besok", "Mahkotanya milikmu? Atau..."]
+"step4": {
+  "ru": "[size=200][b]ДОСТИЖЕНИЯ[/b][/size]\n\n[size=130]Испытай себя[/size]\n[size=100]Открывай достижения и собирай награды[/size]",
+  "en": "[size=200][b]ACHIEVEMENTS[/b][/size]\n\n[size=130]Challenge yourself[/size]\n[size=100]Unlock achievements and collect rewards[/size]",
+  "de": "[size=200][b]ERFOLGE[/b][/size]\n\n[size=130]Teste dich selbst[/size]\n[size=100]Schalte Erfolge frei und sammle Belohnungen[/size]",
+  "es": "[size=200][b]LOGROS[/b][/size]\n\n[size=130]Ponte a prueba[/size]\n[size=100]Desbloquea logros y consigue recompensas[/size]",
+  "fr": "[size=200][b]SUCCES[/b][/size]\n\n[size=130]Mets toi a l epreuve[/size]\n[size=100]Debloque des succes et collecte des recompenses[/size]",
+  "pt": "[size=200][b]CONQUISTAS[/b][/size]\n\n[size=130]Desafie se[/size]\n[size=100]Desbloqueie conquistas e colete recompensas[/size]",
+  "tr": "[size=200][b]BASARILAR[/b][/size]\n\n[size=130]Kendini test et[/size]\n[size=100]Basarilari ac ve oduller topla[/size]",
+  "id": "[size=200][b]PRESTASI[/b][/size]\n\n[size=130]Uji dirimu[/size]\n[size=100]Buka prestasi dan kumpulkan hadiah[/size]",
+  "it": "[size=200][b]OBIETTIVI[/b][/size]\n\n[size=130]Mettiti alla prova[/size]\n[size=100]Sblocca obiettivi e raccogli ricompense[/size]"
 },
-"upTop": {
-  "ru": ["Ой, стало сложнее", "Уже не так просто", "Снова вызов"],
-  "en": ["Oh, it got harder", "Not so easy now", "Another challenge"],
-  "de": ["Oh, es wurde schwerer", "Jetzt nicht mehr so einfach", "Wieder eine Herausforderung"],
-  "es": ["Oh, se volvió más difícil", "Ya no es tan fácil", "Otro desafío"],
-  "fr": ["Oh, c'est devenu plus difficile", "Ce n'est plus si simple", "Encore un défi"],
-  "pt": ["Oh, ficou mais difícil", "Já não é tão fácil", "Outro desafio"],
-  "tr": ["Oh, zorlaştı", "Artık o kadar kolay değil", "Yine bir meydan okuma"],
-  "id": ["Wah, jadi lebih sulit", "Sekarang tidak semudah itu", "Tantangan lagi"]
-},
-"upBottom": {
-  "ru": ["Больше кусочков", "Погнали собирать", "Новый челлендж"],
-  "en": ["More pieces", "Let's put it together", "New challenge"],
-  "de": ["Mehr Teile", "Los geht's", "Neue Herausforderung"],
-  "es": ["Más piezas", "Vamos a armarlo", "Nuevo desafío"],
-  "fr": ["Plus de pièces", "Allons-y", "Nouveau défi"],
-  "pt": ["Mais peças", "Vamos montar", "Novo desafio"],
-  "tr": ["Daha fazla parça", "Hadi başlayalım", "Yeni meydan okuma"],
-  "id": ["Lebih banyak bagian", "Ayo susun", "Tantangan baru"]
-},
-"catOpenedTop": {
-  "ru": "Урааа! ",
-  "en": "Yay! ",
-  "de": "Juhu! ",
-  "es": "¡Genial! ",
-  "fr": "Youpi! ",
-  "pt": "Oba! ",
-  "tr": "Yaşasın! ",
-  "id": "Hore! "
-},
-"catOpenedBottom": {
-  "ru": "Давай поиграем уже",
-  "en": "Play now!",
-  "de": "Lass uns endlich spielen",
-  "es": "Vamos a jugar ya",
-  "fr": "Allons jouer maintenant",
-  "pt": "Vamos jogar agora",
-  "tr": "Hadi artık oynayalım",
-  "id": "Ayo main sekarang"
-},
-"catClosedTop": {
-  "ru": ["Не так быстро :)", "Закрыто... пока)"],
-  "en": ["Not so fast :)", "Locked... for now)"],
-  "de": ["Nicht so schnell :)", "Gesperrt... vorerst)"],
-  "es": ["No tan rápido :)", "Bloqueado... por ahora)"],
-  "fr": ["Pas si vite :)", "Verrouillé... pour l'instant)"],
-  "pt": ["Não tão rápido :)", "Bloqueado... por enquanto)"],
-  "tr": ["O kadar hızlı değil :)", "Şimdilik kilitli)"],
-  "id": ["Tidak secepat itu :)", "Terkunci... untuk sekarang)"]
-},
-"catClosedBottom": {
-  "ru": ["Не хватает ", "Ты почти там "],
-  "en": ["Not enough yet ", "You are almost there "],
-  "de": ["Noch nicht genug ", "Du bist fast da "],
-  "es": ["Aún no es suficiente ", "Casi lo logras "],
-  "fr": ["Pas encore assez ", "Tu y es presque "],
-  "pt": ["Ainda não é suficiente ", "Você está quase lá "],
-  "tr": ["Henüz yeterli değil ", "Neredeyse başardın "],
-  "id": ["Belum cukup ", "Kamu hampir sampai "]
-},
-"crownTop": {
-  "ru": "Корона твоя! №1",
-  "en": "The crown is yours! #1",
-  "de": "Die Krone gehört dir! #1",
-  "es": "¡La corona es tuya! #1",
-  "fr": "La couronne est à toi ! #1",
-  "pt": "A coroa é sua! #1",
-  "tr": "Taç senin! #1",
-  "id": "Mahkota milikmu! #1"
-},
-"crownBottom": {
-  "ru": "Носи с удовольствием",
-  "en": "Wear it with pride",
-  "de": "Trage sie mit Stolz",
-  "es": "Llévala con orgullo",
-  "fr": "Porte-la avec fierté",
-  "pt": "Use com orgulho",
-  "tr": "Gururla tak",
-  "id": "Pakai dengan bangga"
-},
-"coupTop1": {
-  "ru": "Кубок твой! #2",
-  "en": "The cup is yours! #2",
-  "de": "Der Pokal gehört dir! #2",
-  "es": "¡La copa es tuya! #2",
-  "fr": "La coupe est à toi ! #2",
-  "pt": "A taça é sua! #2",
-  "tr": "Kupa senin! #2",
-  "id": "Piala milikmu! #2"
-},
-"coupBottom1": {
-  "ru": "Почти у цели",
-  "en": "Almost there",
-  "de": "Fast am Ziel",
-  "es": "Casi lo logras",
-  "fr": "Presque terminé",
-  "pt": "Quase lá",
-  "tr": "Neredeyse oradasın",
-  "id": "Hampir sampai"
-},
-"coupTop2": {
-  "ru": "В тройке лучших! #3",
-  "en": "Top 3! #3",
-  "de": "Unter den Top 3! #3",
-  "es": "¡Entre los 3 mejores! #3",
-  "fr": "Dans le top 3 ! #3",
-  "pt": "Entre os 3 melhores! #3",
-  "tr": "İlk 3'te! #3",
-  "id": "Masuk 3 besar! #3"
-},
-"coupBottom2": {
-  "ru": "Завтра будет лучше",
-  "en": "Tomorrow will be better",
-  "de": "Morgen wird es besser",
-  "es": "Mañana será mejor",
-  "fr": "Demain sera meilleur",
-  "pt": "Amanhã será melhor",
-  "tr": "Yarın daha iyi olacak",
-  "id": "Besok akan lebih baik"
-},
-"dailyFinishedTop": {
-  "ru": "Упс, пазл собран",
-  "en": "Puzzle completed",
-  "de": "Puzzle abgeschlossen",
-  "es": "Rompecabezas completado",
-  "fr": "Puzzle terminé",
-  "pt": "Quebra-cabeça concluído",
-  "tr": "Bulmaca tamamlandı",
-  "id": "Puzzle selesai"
-},
-"dailyFinishedBottom": {
-  "ru": "Возвращайся завтра!",
-  "en": "Come back tomorrow!",
-  "de": "Komm morgen zurück!",
-  "es": "¡Vuelve mañana!",
-  "fr": "Reviens demain !",
-  "pt": "Volte amanhã!",
-  "tr": "Yarın geri gel!",
-  "id": "Kembali besok!"
-},
-"catCompleted": {
-  "ru": "Завершено!",
-  "en": "Completed!",
-  "de": "Abgeschlossen!",
-  "es": "¡Completado!",
-  "fr": "Terminé !",
-  "pt": "Concluído!",
-  "tr": "Tamamlandı!",
-  "id": "Selesai!"
-},
-"notEnoughCoins": {
-  "ru": [" монет", " монеты", " монет"],
-  "en": [" coin", " coins", " coins"],
-  "de": [" münze", " münzen", " münzen"],
-  "es": [" moneda", " monedas", " monedas"],
-  "fr": [" pièce", " pièces", " pièces"],
-  "pt": [" moeda", " moedas", " moedas"],
-  "tr": [" coin", " coin", " coin"],
-  "id": [" koin", " koin", " koin"]
-},
-"pingErrorTop": {
-  "ru": "Ой, ошибочка",
-  "en": "Oops, error",
-  "de": "Ups, Fehler",
-  "es": "Ups, error",
-  "fr": "Oups, erreur",
-  "pt": "Ops, erro",
-  "tr": "Oops, hata",
-  "id": "Ups, error"
-},
-"pingErrorBottom": {
-  "ru": "Сервер не отвечает",
-  "en": "Server not responding",
-  "de": "Server antwortet nicht",
-  "es": "El servidor no responde",
-  "fr": "Le serveur ne répond pas",
-  "pt": "Servidor não responde",
-  "tr": "Sunucu yanıt vermiyor",
-  "id": "Server tidak merespons"
+"step5": {
+  "ru": "[size=200][b]ПОДДЕРЖКА[/b][/size]\n\n[size=130]Мы на связи[/size]\n[size=100]Напиши, если что-то не работает или есть идея[/size]",
+  "en": "[size=200][b]SUPPORT[/b][/size]\n\n[size=130]We are here[/size]\n[size=100]Write to us if something is not working or you have an idea[/size]",
+  "de": "[size=200][b]SUPPORT[/b][/size]\n\n[size=130]Wir sind fur dich da[/size]\n[size=100]Schreib uns, wenn etwas nicht funktioniert oder du eine Idee hast[/size]",
+  "es": "[size=200][b]SOPORTE[/b][/size]\n\n[size=130]Estamos aqui[/size]\n[size=100]Escribenos si algo no funciona o tienes una idea[/size]",
+  "fr": "[size=200][b]SUPPORT[/b][/size]\n\n[size=130]Nous sommes la[/size]\n[size=100]Ecris nous si quelque chose ne fonctionne pas ou si tu as une idee[/size]",
+  "pt": "[size=200][b]SUPORTE[/b][/size]\n\n[size=130]Estamos aqui[/size]\n[size=100]Escreva se algo nao funcionar ou tiver uma idea[/size]",
+  "tr": "[size=200][b]DESTEK[/b][/size]\n\n[size=130]Buradayiz[/size]\n[size=100]Bir sey calismazsa ya da fikrin varsa yaz[/size]",
+  "id": "[size=200][b]DUKUNGAN[/b][/size]\n\n[size=130]Kami di sini[/size]\n[size=100]Tulis jika ada yang tidak berfungsi atau punya ide[/size]",
+  "it": "[size=200][b]SUPPORTO[/b][/size]\n\n[size=130]Siamo qui[/size]\n[size=100]Scrivici se qualcosa non funziona o hai un idea[/size]"
 }
 }

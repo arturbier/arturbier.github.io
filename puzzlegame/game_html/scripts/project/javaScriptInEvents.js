@@ -176,6 +176,11 @@ const scriptsInEvents = {
 		  spread: 70,
 		  origin: { y: 1.2 }
 		});
+	},
+
+	async E_menu_Event75_Act1(runtime, localVars)
+	{
+		runtime.GamePush.feedbacks.open();
 	}
 };
 
