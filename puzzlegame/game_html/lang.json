@@ -420,14 +420,14 @@
 },
 "step1": {
   "ru": "[size=200][b]ЛИДЕРЫ[/b][/size]\n\n[size=130]Рейтинг игроков[/size]\n[size=100]Попади в топ и стань №1[/size]",
-  "en": "[size=200][b]LEADERS[/b][/size]\n\n[size=130]Player ranking[/size]\n[size=100]Reach the top and become #1[/size]",
-  "de": "[size=200][b]BESTENLISTE[/b][/size]\n\n[size=130]Spieler Ranking[/size]\n[size=100]Erreiche die Spitze und werde #1[/size]",
-  "es": "[size=200][b]LIDERES[/b][/size]\n\n[size=130]Ranking de jugadores[/size]\n[size=100]Llega a la cima y conviertete en #1[/size]",
-  "fr": "[size=200][b]CLASSEMENT[/b][/size]\n\n[size=130]Classement des joueurs[/size]\n[size=100]Atteins le sommet et deviens #1[/size]",
-  "pt": "[size=200][b]LIDERES[/b][/size]\n\n[size=130]Ranking de jogadores[/size]\n[size=100]Chegue ao topo e torne-se #1[/size]",
-  "tr": "[size=200][b]LIDERLER[/b][/size]\n\n[size=130]Oyuncu siralamasi[/size]\n[size=100]Zirveye ulas ve #1 ol[/size]",
-  "id": "[size=200][b]PEMIMPIN[/b][/size]\n\n[size=130]Peringkat pemain[/size]\n[size=100]Capai puncak dan jadi #1[/size]",
-  "it": "[size=200][b]CLASSIFICA[/b][/size]\n\n[size=130]Classifica giocatori[/size]\n[size=100]Raggiungi la vetta e diventa #1[/size]"
+  "en": "[size=200][b]LEADERS[/b][/size]\n\n[size=130]Player ranking[/size]\n[size=100]Reach the top and become №1[/size]",
+  "de": "[size=200][b]BESTENLISTE[/b][/size]\n\n[size=130]Spieler Ranking[/size]\n[size=100]Erreiche die Spitze und werde №1[/size]",
+  "es": "[size=200][b]LIDERES[/b][/size]\n\n[size=130]Ranking de jugadores[/size]\n[size=100]Llega a la cima y conviertete en №1[/size]",
+  "fr": "[size=200][b]CLASSEMENT[/b][/size]\n\n[size=130]Classement des joueurs[/size]\n[size=100]Atteins le sommet et deviens №1[/size]",
+  "pt": "[size=200][b]LIDERES[/b][/size]\n\n[size=130]Ranking de jogadores[/size]\n[size=100]Chegue ao topo e torne-se №1[/size]",
+  "tr": "[size=200][b]LIDERLER[/b][/size]\n\n[size=130]Oyuncu siralamasi[/size]\n[size=100]Zirveye ulas ve №1 ol[/size]",
+  "id": "[size=200][b]PEMIMPIN[/b][/size]\n\n[size=130]Peringkat pemain[/size]\n[size=100]Capai puncak dan jadi №1[/size]",
+  "it": "[size=200][b]CLASSIFICA[/b][/size]\n\n[size=130]Classifica giocatori[/size]\n[size=100]Raggiungi la vetta e diventa №1[/size]"
 },
 "step2": {
   "ru": "[size=200][b]ОБЩИЙ ПРОГРЕСС[/b][/size]\n\n[size=130]Твой прогресс в игре[/size]\n[size=100]Собирай пазлы и открывай новые категории[/size]",

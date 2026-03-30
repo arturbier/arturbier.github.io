@@ -1816,6 +1816,11 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("categoriesHeader." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("seconds." + v1.GetValue()));
 		},
 		() => 0.5,
@@ -2012,7 +2017,7 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
-			return () => n0.ExpObject(("catCompletedTop." + v1.GetValue()));
+			return () => n0.ExpObject(("catCompleted." + v1.GetValue()));
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -2037,6 +2042,11 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "completed",
 		() => "School",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("catCompletedTop." + v1.GetValue()));
+		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => Math.floor(((v0.GetValue() - 1) / 19));
@@ -2366,6 +2376,7 @@ self.C3_ExpressionFuncs = [
 		() => "savedTime",
 		() => "tutorial",
 		() => "tutorial_gameplay",
+		() => "sound",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("shows");
@@ -2451,7 +2462,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => ((n0.ExpObject()) ? (0) : (1));
 		},
-		() => "sound",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => C3.clamp((v0.GetValue() + 1), 0, 6);
@@ -2462,6 +2472,7 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("step0." + v1.GetValue()));
 		},
+		() => 1.5,
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();

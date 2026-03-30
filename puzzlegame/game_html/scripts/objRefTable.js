@@ -265,7 +265,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsFullscreenClose,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsPreloaderClose,
 		C3.Plugins.Eponesh_GameScore.Cnds.OnAdsRewardedClose,
+		C3.Plugins.Spritefont2.Cnds.IsRunningTypewriterText,
+		C3.Plugins.Spritefont2.Acts.TypewriterFinish,
 		C3.Plugins.Spritefont2.Acts.TypewriterText,
+		C3.Plugins.Sprite.Exps.BBoxMidX,
 		C3.Plugins.Eponesh_GameScore.Acts.AchievementsUnlock,
 		C3.Plugins.Spritefont2.Cnds.OnTypewriterTextFinished,
 		C3.Plugins.Keyboard.Cnds.OnKey,
@@ -396,6 +399,7 @@ self.C3_JsPropNameTable = [
 	{support: 0},
 	{tutorial_cursor: 0},
 	{BS: 0},
+	{popup_icons: 0},
 	{puzzlePieceFamily: 0},
 	{allText: 0},
 	{PiecesPerLine: 0},
@@ -525,6 +529,7 @@ self.InstanceType = {
 	support: class extends self.ISpriteInstance {},
 	tutorial_cursor: class extends self.ISpriteInstance {},
 	BS: class extends self.ITiledBackgroundInstance {},
+	popup_icons: class extends self.ISpriteInstance {},
 	puzzlePieceFamily: class extends self.IDrawingCanvasInstance {},
 	allText: class extends self.ISpriteFontInstance {}
 }

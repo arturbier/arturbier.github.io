@@ -9,6 +9,11 @@
 
 const scriptsInEvents = {
 
+	async E_menu_Event74_Act1(runtime, localVars)
+	{
+		runtime.GamePush.feedbacks.open();
+	},
+
 	async E_popup_Event11_Act1(runtime, localVars)
 	{
 		confetti.start(3000)
@@ -176,11 +181,6 @@ const scriptsInEvents = {
 		  spread: 70,
 		  origin: { y: 1.2 }
 		});
-	},
-
-	async E_menu_Event74_Act1(runtime, localVars)
-	{
-		runtime.GamePush.feedbacks.open();
 	}
 };
 
