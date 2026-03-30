@@ -178,7 +178,7 @@ const scriptsInEvents = {
 		});
 	},
 
-	async E_menu_Event75_Act1(runtime, localVars)
+	async E_menu_Event73_Act1(runtime, localVars)
 	{
 		runtime.GamePush.feedbacks.open();
 	}

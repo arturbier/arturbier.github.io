@@ -2287,6 +2287,10 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
 		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => ((v0.GetValue() - 1)).toString();
+		},
 		() => "Option",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2316,17 +2320,10 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() + 40);
 		},
 		() => 15,
-		() => "Scoped Leaderboard",
-		() => "playerPos",
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => ((v0.GetValue() - 1)).toString();
-		},
 		() => "lastRewardedDay",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => f0(f1("dailyTime"));
+			return () => f0("dailyTime");
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -2498,17 +2495,11 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
 			const v2 = p._GetNode(2).GetVar();
-			const v3 = p._GetNode(3).GetVar();
-			return () => C3.clamp(add(n0.ExpObject(n1.ExpObject((("catName.ru" + ".") + v2.GetValue()))), 79), 0, v3.GetValue());
+			return () => C3.clamp(add(n0.ExpObject(n1.ExpInstVar()), 79), 0, v2.GetValue());
 		},
 		p => {
 			const n0 = p._GetNode(0);
 			return () => add(n0.ExpObject("coins"), 200);
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => n0.ExpObject(n1.ExpInstVar());
 		},
 		() => "Вася Васильев",
 		() => 75,
