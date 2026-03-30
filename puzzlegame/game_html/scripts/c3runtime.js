@@ -2365,6 +2365,7 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "savedTime",
 		() => "tutorial",
+		() => "tutorial_gameplay",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("shows");
