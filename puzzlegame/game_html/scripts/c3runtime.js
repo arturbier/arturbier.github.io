@@ -2220,7 +2220,7 @@ self.C3_ExpressionFuncs = [
 		() => "x",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => (f0("x") * 0.2);
+			return () => (f0("x") * 0.25);
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -2308,10 +2308,6 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
 		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => ((v0.GetValue() - 1)).toString();
-		},
 		() => "Option",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2357,6 +2353,8 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpObject(("crownBottom." + v1.GetValue()));
 		},
 		() => "crown",
+		() => 0.15,
+		() => "Random",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2379,6 +2377,23 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpObject(("coupBottom2." + v1.GetValue()));
 		},
 		() => "coup_2",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("notLeaderTop." + v1.GetValue()));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			const n2 = p._GetNode(2);
+			const v3 = p._GetNode(3).GetVar();
+			return () => and(and(n0.ExpObject((("notLeaderBottom." + v1.GetValue()) + ".0")), "\n"), n2.ExpObject((("notLeaderBottom." + v3.GetValue()) + ".1")));
+		},
+		() => "notLeader",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => ((v0.GetValue() - 1)).toString();
+		},
 		() => "savedData",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2439,7 +2454,6 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "Daily",
 		() => -15,
-		() => 0.15,
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2463,6 +2477,7 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "morgen",
 		() => "Leaders",
+		() => 10,
 		() => "Tasks",
 		() => "Progress",
 		p => {
@@ -2556,7 +2571,6 @@ self.C3_ExpressionFuncs = [
 		() => "showPopup",
 		() => "Confetti",
 		() => "Basic",
-		() => "Random",
 		() => "Realistic",
 		() => "Fireworks",
 		() => "Snow",

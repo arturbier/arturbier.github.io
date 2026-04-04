@@ -472,5 +472,27 @@
   "tr": "[size=200][b]DESTEK[/b][/size]\n\n[size=130]Buradayiz[/size]\n[size=100]Bir sey calismazsa ya da fikrin varsa yaz[/size]",
   "id": "[size=200][b]DUKUNGAN[/b][/size]\n\n[size=130]Kami di sini[/size]\n[size=100]Tulis jika ada yang tidak berfungsi atau punya ide[/size]",
   "it": "[size=200][b]SUPPORTO[/b][/size]\n\n[size=130]Siamo qui[/size]\n[size=100]Scrivici se qualcosa non funziona o hai un idea[/size]"
+},
+"notLeaderTop": {
+  "ru": "Почти получилось",
+  "en": "So close",
+  "de": "Fast geschafft",
+  "es": "Casi lo logras",
+  "fr": "Presque",
+  "pt": "Quase",
+  "tr": "Neredeyse",
+  "id": "Hampir",
+  "it": "Quasi"
+},
+"notLeaderBottom": {
+  "ru": ["Почти был в топе!", "Давай сегодня заберём вершину!"],
+  "en": ["You were so close!", "Let’s take the top today!"],
+  "de": ["Du warst ganz nah dran!", "Hol dir heute die Spitze!"],
+  "es": ["Estuviste muy cerca!", "Vamos a conquistar el top hoy!"],
+  "fr": ["Tu etais tout proche!", "Allons chercher le top aujourd hui!"],
+  "pt": ["Voce esteve muito perto!", "Vamos conquistar o topo hoje!"],
+  "tr": ["Cok yakindin!", "Bugun zirveyi al!"],
+  "id": ["Kamu hampir berhasil!", "Ayo ambil puncak hari ini!"],
+  "it": ["Eri molto vicino!", "Prendi la vetta oggi!"]
 }
 }
