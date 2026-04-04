@@ -9,7 +9,7 @@ const scriptsInEvents = {
             runtime.callFunction("OnPing", ping);
         });
     },
-    async E_menu_Event63_Act1(runtime, localVars) {
+    async E_menu_Event59_Act1(runtime, localVars) {
         function checkPing() {
             return fetch("https://arturbier.github.io/puzzlegame/ping.json", { mode: "no-cors" })
                 .then(() => localVars.ping = 1)
@@ -19,7 +19,17 @@ const scriptsInEvents = {
             runtime.callFunction("OnPing", ping);
         });
     },
-    async E_menu_Event70_Act1(runtime, localVars) {
+    async E_menu_Event73_Act1(runtime, localVars) {
+        function checkPing() {
+            return fetch("https://arturbier.github.io/puzzlegame/ping.json", { mode: "no-cors" })
+                .then(() => localVars.ping = 1)
+                .catch(() => localVars.ping = 0);
+        }
+        checkPing().then(ping => {
+            runtime.callFunction("OnPing", ping);
+        });
+    },
+    async E_menu_Event66_Act1(runtime, localVars) {
         function checkPing() {
             return fetch("https://arturbier.github.io/puzzlegame/ping.json", { mode: "no-cors" })
                 .then(() => localVars.ping = 1)

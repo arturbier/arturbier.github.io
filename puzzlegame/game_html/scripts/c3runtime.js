@@ -1543,6 +1543,12 @@ function or(l, r)
 
 self.C3_ExpressionFuncs = [
 		() => 0,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0);
+		},
+		() => "Portrait",
+		() => "Landscape",
 		() => "projectVers",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1551,13 +1557,45 @@ self.C3_ExpressionFuncs = [
 		() => "Categories",
 		() => "Pieces",
 		() => "",
-		() => "UpdateUI",
+		() => "tutorial_gameplay",
+		() => "i",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 1);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => n0.ExpObject(f1("i"), 0);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(v1.GetValue());
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0(0);
+			return () => f0("i");
 		},
-		() => "Portrait",
-		() => "Landscape",
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => n0.ExpObject(f1("i"), 1);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject((("catName.ru" + ".") + v1.GetValue()));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() + 1);
+		},
+		() => "UpdateUI",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject();
@@ -1642,10 +1680,6 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (40 + (n0.ExpObject() * 20));
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -1972,11 +2006,6 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpObject(and(("dailyPuzzleBottom." + v1.GetValue()), f2(".0", ".1", ".2")));
 		},
 		() => "daily",
-		p => {
-			const n0 = p._GetNode(0);
-			const v1 = p._GetNode(1).GetVar();
-			return () => n0.ExpObject((("catName.ru" + ".") + v1.GetValue()));
-		},
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -2319,6 +2348,16 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => (f0(0) - (n1.ExpObject() / 6));
 		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => (f0(0) + n1.ExpObject());
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const n1 = p._GetNode(1);
+			return () => (f0(0) - n1.ExpObject());
+		},
 		() => "bottom",
 		() => "orderCategories",
 		() => "BG",
@@ -2400,8 +2439,6 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() * 80);
 		},
 		() => "savedTime",
-		() => "tutorial",
-		() => "tutorial_gameplay",
 		() => "sound",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2412,8 +2449,6 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
 		},
-		() => "Tutorial",
-		() => "Buttons",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("Data");
@@ -2430,10 +2465,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("sound");
 		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("tutorial");
-		},
 		() => "progress",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2448,12 +2479,14 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => ((v0.GetValue() / v1.GetValue()) * 100);
 		},
+		() => "Buttons",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(3, 5);
 		},
 		() => "Daily",
 		() => -15,
+		() => "cat",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2488,11 +2521,13 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => ((n0.ExpObject()) ? (0) : (1));
 		},
+		() => "Tutorial",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => C3.clamp((v0.GetValue() + 1), 0, 6);
 		},
 		() => 45,
+		() => "tutorial",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2528,6 +2563,10 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("step5." + v1.GetValue()));
 		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 100);
+		},
 		() => "Debug",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2542,10 +2581,6 @@ self.C3_ExpressionFuncs = [
 		() => "Вася Васильев",
 		() => 75,
 		() => "scr.png",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() - 1);
-		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("x");
