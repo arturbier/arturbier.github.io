@@ -2524,7 +2524,7 @@ self.C3_ExpressionFuncs = [
 		() => "Tutorial",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => C3.clamp((v0.GetValue() + 1), 0, 6);
+			return () => C3.clamp((v0.GetValue() + 1), 0, 7);
 		},
 		() => 45,
 		() => "tutorial",
@@ -2556,12 +2556,18 @@ self.C3_ExpressionFuncs = [
 		},
 		p => {
 			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("step5." + v1.GetValue()));
+		},
+		() => 6,
+		p => {
+			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() - 30);
 		},
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
-			return () => n0.ExpObject(("step5." + v1.GetValue()));
+			return () => n0.ExpObject(("step6." + v1.GetValue()));
 		},
 		p => {
 			const n0 = p._GetNode(0);

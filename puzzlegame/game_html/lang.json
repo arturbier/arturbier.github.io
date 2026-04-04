@@ -9,16 +9,16 @@
     "tr": "Bir saniye...",
     "id": "Sebentar..."
   },
-  "play": {
-    "ru": "Играть",
-    "en": "Play",
-    "de": "Spielen",
-    "es": "Jugar",
-    "fr": "Jouer",
-    "pt": "Jogar",
-    "tr": "Oyna",
-    "id": "Mainkan"
-  },
+"play": {
+  "ru": "Продолжить",
+  "en": "Continue",
+  "de": "Fortsetzen",
+  "es": "Continuar",
+  "fr": "Continuer",
+  "pt": "Continuar",
+  "tr": "Devam et",
+  "id": "Lanjutkan"
+},
   "achievements": {
     "ru": "Достижения",
     "en": "Achievements",
@@ -441,17 +441,28 @@
   "it": "[size=200][b]PROGRESSO TOTALE[/b][/size]\n\n[size=130]Il tuo progresso nel gioco[/size]\n[size=100]Completa puzzle e sblocca nuove categorie[/size]"
 },
 "step3": {
-  "ru": "[size=200][b]ИГРАТЬ[/b][/size]\n\n[size=130]Выбери категорию[/size]\n[size=100]Начни игру и проходи уровни[/size]",
-  "en": "[size=200][b]PLAY[/b][/size]\n\n[size=130]Choose a category[/size]\n[size=100]Start the game and complete levels[/size]",
-  "de": "[size=200][b]SPIELEN[/b][/size]\n\n[size=130]Wahle eine Kategorie[/size]\n[size=100]Starte das Spiel und schließe Level ab[/size]",
-  "es": "[size=200][b]JUGAR[/b][/size]\n\n[size=130]Elige una categoria[/size]\n[size=100]Empieza el juego y completa niveles[/size]",
-  "fr": "[size=200][b]JOUER[/b][/size]\n\n[size=130]Choisis une categorie[/size]\n[size=100]Commence le jeu et termine les niveaux[/size]",
-  "pt": "[size=200][b]JOGAR[/b][/size]\n\n[size=130]Escolha uma categoria[/size]\n[size=100]Comece o jogo e complete niveis[/size]",
-  "tr": "[size=200][b]OYNA[/b][/size]\n\n[size=130]Bir kategori sec[/size]\n[size=100]Oyunu baslat ve seviyeleri tamamla[/size]",
-  "id": "[size=200][b]MAINKAN[/b][/size]\n\n[size=130]Pilih kategori[/size]\n[size=100]Mulai permainan dan selesaikan level[/size]",
-  "it": "[size=200][b]GIOCA[/b][/size]\n\n[size=130]Scegli una categoria[/size]\n[size=100]Inizia il gioco e completa i livelli[/size]"
+  "ru": "[size=200][b]КАТЕГОРИИ[/b][/size]\n\n[size=130]Выбери категорию[/size]\n[size=100]Начни игру и проходи уровни[/size]",
+  "en": "[size=200][b]CATEGORIES[/b][/size]\n\n[size=130]Choose a category[/size]\n[size=100]Start the game and complete levels[/size]",
+  "de": "[size=200][b]KATEGORIEN[/b][/size]\n\n[size=130]Wahle eine Kategorie[/size]\n[size=100]Starte das Spiel und schließe Level ab[/size]",
+  "es": "[size=200][b]CATEGORIAS[/b][/size]\n\n[size=130]Elige una categoria[/size]\n[size=100]Empieza el juego y completa niveles[/size]",
+  "fr": "[size=200][b]CATEGORIES[/b][/size]\n\n[size=130]Choisis une categorie[/size]\n[size=100]Commence le jeu et termine les niveaux[/size]",
+  "pt": "[size=200][b]CATEGORIAS[/b][/size]\n\n[size=130]Escolha uma categoria[/size]\n[size=100]Comece o jogo e complete niveis[/size]",
+  "tr": "[size=200][b]KATEGORILER[/b][/size]\n\n[size=130]Bir kategori sec[/size]\n[size=100]Oyunu baslat ve seviyeleri tamamla[/size]",
+  "id": "[size=200][b]KATEGORI[/b][/size]\n\n[size=130]Pilih kategori[/size]\n[size=100]Mulai permainan dan selesaikan level[/size]",
+  "it": "[size=200][b]CATEGORIE[/b][/size]\n\n[size=130]Scegli una categoria[/size]\n[size=100]Inizia il gioco e completa i livelli[/size]"
 },
 "step4": {
+  "ru": "[size=200][b]ПРОДОЛЖИТЬ[/b][/size]\n\n[size=130]Продолжи игру с последнего места[/size]\n[size=100]Нажми, чтобы вернуться к текущему пазлу и собирать дальше[/size]",
+  "en": "[size=200][b]CONTINUE[/b][/size]\n\n[size=130]Continue from where you left off[/size]\n[size=100]Tap to return to your current puzzle and keep solving[/size]",
+  "de": "[size=200][b]FORTSETZEN[/b][/size]\n\n[size=130]Mach dort weiter, wo du aufgehort hast[/size]\n[size=100]Tippe, um zu deinem aktuellen Puzzle zuruckzukehren und weiterzumachen[/size]",
+  "es": "[size=200][b]CONTINUAR[/b][/size]\n\n[size=130]Continua desde donde lo dejaste[/size]\n[size=100]Toca para volver a tu puzzle actual y seguir jugando[/size]",
+  "fr": "[size=200][b]CONTINUER[/b][/size]\n\n[size=130]Reprends ou tu t es arrete[/size]\n[size=100]Appuie pour revenir a ton puzzle actuel et continuer[/size]",
+  "pt": "[size=200][b]CONTINUAR[/b][/size]\n\n[size=130]Continue de onde parou[/size]\n[size=100]Toque para voltar ao puzzle atual e continuar jogando[/size]",
+  "tr": "[size=200][b]DEVAM ET[/b][/size]\n\n[size=130]Kaldigin yerden devam et[/size]\n[size=100]Mevcut bulmacana donmek ve devam etmek icin dokun[/size]",
+  "id": "[size=200][b]LANJUTKAN[/b][/size]\n\n[size=130]Lanjutkan dari tempat terakhir[/size]\n[size=100]Ketuk untuk kembali ke puzzle dan lanjutkan bermain[/size]",
+  "it": "[size=200][b]CONTINUA[/b][/size]\n\n[size=130]Continua da dove hai lasciato[/size]\n[size=100]Tocca per tornare al puzzle attuale e continuare[/size]"
+},
+"step5": {
   "ru": "[size=200][b]ДОСТИЖЕНИЯ[/b][/size]\n\n[size=130]Испытай себя[/size]\n[size=100]Открывай достижения и собирай награды[/size]",
   "en": "[size=200][b]ACHIEVEMENTS[/b][/size]\n\n[size=130]Challenge yourself[/size]\n[size=100]Unlock achievements and collect rewards[/size]",
   "de": "[size=200][b]ERFOLGE[/b][/size]\n\n[size=130]Teste dich selbst[/size]\n[size=100]Schalte Erfolge frei und sammle Belohnungen[/size]",
@@ -462,7 +473,7 @@
   "id": "[size=200][b]PRESTASI[/b][/size]\n\n[size=130]Uji dirimu[/size]\n[size=100]Buka prestasi dan kumpulkan hadiah[/size]",
   "it": "[size=200][b]OBIETTIVI[/b][/size]\n\n[size=130]Mettiti alla prova[/size]\n[size=100]Sblocca obiettivi e raccogli ricompense[/size]"
 },
-"step5": {
+"step6": {
   "ru": "[size=200][b]ПОДДЕРЖКА[/b][/size]\n\n[size=130]Мы на связи[/size]\n[size=100]Напиши, если что-то не работает или есть идея[/size]",
   "en": "[size=200][b]SUPPORT[/b][/size]\n\n[size=130]We are here[/size]\n[size=100]Write to us if something is not working or you have an idea[/size]",
   "de": "[size=200][b]SUPPORT[/b][/size]\n\n[size=130]Wir sind fur dich da[/size]\n[size=100]Schreib uns, wenn etwas nicht funktioniert oder du eine Idee hast[/size]",
