@@ -302,7 +302,15 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Exps.Language,
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.Spritefont2.Cnds.IsBoolInstanceVarSet,
-		C3.Plugins.Spritefont2.Exps.Tags
+		C3.Plugins.Spritefont2.Exps.Tags,
+		C3.JavaScriptInEvents.E_segments_Event2_Act1,
+		C3.JavaScriptInEvents.E_segments_Event2_Act2,
+		C3.Plugins.Sprite.Acts.SetDefaultColor,
+		C3.Plugins.Sprite.Acts.ZMoveToObject,
+		C3.Plugins.Audio.Acts.PlayByName,
+		C3.Plugins.System.Acts.Signal,
+		C3.Plugins.System.Acts.WaitForSignal,
+		C3.Plugins.Sprite.Acts.SetOpacity
 	];
 };
 self.C3_JsPropNameTable = [
@@ -401,6 +409,10 @@ self.C3_JsPropNameTable = [
 	{BS: 0},
 	{popup_icons: 0},
 	{info: 0},
+	{segment: 0},
+	{Segment: 0},
+	{lineCurSegments: 0},
+	{lineSegments: 0},
 	{puzzlePieceFamily: 0},
 	{allText: 0},
 	{PiecesPerLine: 0},
@@ -468,7 +480,14 @@ self.C3_JsPropNameTable = [
 	{fontScale: 0},
 	{Type: 0},
 	{lastAdTime: 0},
-	{key: 0}
+	{key: 0},
+	{darkColor: 0},
+	{lightColor: 0},
+	{segmentCount: 0},
+	{curSegment: 0},
+	{usableWidth: 0},
+	{spacing: 0},
+	{widthPercent: 0}
 ];
 
 self.InstanceType = {
@@ -537,6 +556,9 @@ self.InstanceType = {
 	BS: class extends self.ITiledBackgroundInstance {},
 	popup_icons: class extends self.ISpriteInstance {},
 	info: class extends self.ISpriteInstance {},
+	Segment: class extends self.ISpriteInstance {},
+	lineCurSegments: class extends self.ISpriteInstance {},
+	lineSegments: class extends self.ISpriteInstance {},
 	puzzlePieceFamily: class extends self.IDrawingCanvasInstance {},
 	allText: class extends self.ISpriteFontInstance {}
 }

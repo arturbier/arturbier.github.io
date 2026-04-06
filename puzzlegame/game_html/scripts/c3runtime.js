@@ -2634,6 +2634,89 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			return () => f0(n1.ExpObject(), "");
+		},
+		() => "Segments",
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => (n0.ExpObject() * v1.GetValue());
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const n1 = p._GetNode(1);
+			return () => ((v0.GetValue() - n1.ExpObject()) / (5 - 1));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			const n3 = p._GetNode(3);
+			const v4 = p._GetNode(4).GetVar();
+			const f5 = p._GetNode(5).GetBoundMethod();
+			return () => (((n0.ExpObject() + ((n1.ExpObject() - v2.GetValue()) / 2)) + (n3.ExpObject() / 2)) + (v4.GetValue() * f5("i")));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 275);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0("i") + 1);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0() * 0.1);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 0.55);
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			return () => ((v0.GetValue() % 5) + (and((((v1.GetValue() % 5)) === (0) ? 1 : 0), ((v2.GetValue()) > (0) ? 1 : 0)) * 5));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0() * 0.2);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 0.65);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => and("bloop_", f0(1, 2, 3, 4));
+		},
+		() => "targetSegment",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 0.15);
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => (v0.GetValue() * (v1.GetValue() - 1));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			const n2 = p._GetNode(2);
+			return () => (((v0.GetValue() * (v1.GetValue() - 1)) - (n2.ExpObject() / 2)) + 10);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 0.25);
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => (v0.GetValue() * (v1.GetValue() - 2));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 0.2);
 		}
 ];
 

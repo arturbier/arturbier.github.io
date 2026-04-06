@@ -181,6 +181,72 @@ const scriptsInEvents = {
 		  spread: 70,
 		  origin: { y: 1.2 }
 		});
+	},
+
+	async E_segments_Event2_Act1(runtime, localVars)
+	{
+		let hex = runtime.globalVars.curColor;
+		hex = hex.replace("#", "");
+		
+		let r = parseInt(hex.substring(0, 2), 16);
+		let g = parseInt(hex.substring(2, 4), 16);
+		let b = parseInt(hex.substring(4, 6), 16);
+		
+		// сила затемнения
+		let factor = 0.75;
+		
+		// затемняем
+		r = Math.floor(r * factor);
+		g = Math.floor(g * factor);
+		b = Math.floor(b * factor);
+		
+		// 🔥 защита от ухода в чёрный
+		let min = 40;
+		
+		r = Math.max(r, min);
+		g = Math.max(g, min);
+		b = Math.max(b, min);
+		
+		let darker =
+		  "#" +
+		  r.toString(16).padStart(2, "0") +
+		  g.toString(16).padStart(2, "0") +
+		  b.toString(16).padStart(2, "0");
+		
+		localVars.darkColor = darker;
+	},
+
+	async E_segments_Event2_Act2(runtime, localVars)
+	{
+		let hex = runtime.globalVars.curColor;
+		hex = hex.replace("#", "");
+		
+		let r = parseInt(hex.substring(0, 2), 16);
+		let g = parseInt(hex.substring(2, 4), 16);
+		let b = parseInt(hex.substring(4, 6), 16);
+		
+		// сила осветления
+		let factor = 1.15;
+		
+		// осветляем
+		r = Math.floor(r * factor);
+		g = Math.floor(g * factor);
+		b = Math.floor(b * factor);
+		
+		// 🔥 защита от ухода в белый
+		let max = 230;
+		
+		r = Math.min(r, max);
+		g = Math.min(g, max);
+		b = Math.min(b, max);
+		
+		let brighter =
+		  "#" +
+		  r.toString(16).padStart(2, "0") +
+		  g.toString(16).padStart(2, "0") +
+		  b.toString(16).padStart(2, "0");
+		
+		localVars.lightColor = brighter;
 	}
 };
 
