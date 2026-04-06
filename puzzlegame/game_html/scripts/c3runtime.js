@@ -2079,6 +2079,7 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("catCompletedTop." + v1.GetValue()));
 		},
+		() => 115,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => Math.floor(((v0.GetValue() - 1) / 19));
@@ -2115,6 +2116,7 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => f0(v1.GetValue());
 		},
+		() => 275,
 		() => "nextPuzzle",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2656,10 +2658,6 @@ self.C3_ExpressionFuncs = [
 			return () => (((n0.ExpObject() + ((n1.ExpObject() - v2.GetValue()) / 2)) + (n3.ExpObject() / 2)) + (v4.GetValue() * f5("i")));
 		},
 		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() + 275);
-		},
-		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0("i") + 1);
 		},
@@ -2691,6 +2689,24 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "targetSegment",
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0() * 0.26);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() / 1.5);
+		},
+		() => 0.6,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 1.5);
+		},
+		() => "coinBounce",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 1.6);
+		},
+		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() * 0.15);
 		},
@@ -2717,7 +2733,8 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() * 0.2);
-		}
+		},
+		() => 60
 ];
 
 

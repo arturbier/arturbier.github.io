@@ -310,6 +310,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Audio.Acts.PlayByName,
 		C3.Plugins.System.Acts.Signal,
 		C3.Plugins.System.Acts.WaitForSignal,
+		C3.Plugins.Sprite.Exps.LayerName,
+		C3.Behaviors.Tween.Acts.SetTweensTime,
 		C3.Plugins.Sprite.Acts.SetOpacity
 	];
 };
@@ -413,6 +415,7 @@ self.C3_JsPropNameTable = [
 	{Segment: 0},
 	{lineCurSegments: 0},
 	{lineSegments: 0},
+	{starSegment: 0},
 	{puzzlePieceFamily: 0},
 	{allText: 0},
 	{PiecesPerLine: 0},
@@ -444,6 +447,7 @@ self.C3_JsPropNameTable = [
 	{x: 0},
 	{y: 0},
 	{Count: 0},
+	{addCoin: 0},
 	{nextCategory: 0},
 	{count_debug: 0},
 	{Duration: 0},
@@ -487,7 +491,9 @@ self.C3_JsPropNameTable = [
 	{curSegment: 0},
 	{usableWidth: 0},
 	{spacing: 0},
-	{widthPercent: 0}
+	{widthPercent: 0},
+	{positionY: 0},
+	{coin: 0}
 ];
 
 self.InstanceType = {
@@ -559,6 +565,7 @@ self.InstanceType = {
 	Segment: class extends self.ISpriteInstance {},
 	lineCurSegments: class extends self.ISpriteInstance {},
 	lineSegments: class extends self.ISpriteInstance {},
+	starSegment: class extends self.ISpriteInstance {},
 	puzzlePieceFamily: class extends self.IDrawingCanvasInstance {},
 	allText: class extends self.ISpriteFontInstance {}
 }
