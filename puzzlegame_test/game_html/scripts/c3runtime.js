@@ -2588,7 +2588,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => add(n0.ExpObject("coins"), 200);
 		},
-		() => "firstGame",
 		() => "Вася Васильев",
 		() => 75,
 		() => "scr.png",

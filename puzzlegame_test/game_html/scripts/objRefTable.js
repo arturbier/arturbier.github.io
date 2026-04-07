@@ -238,6 +238,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Plugins.Arr.Acts.JSONLoad,
 		C3.Plugins.AJAX.Exps.LastData,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerWaitForReady,
 		C3.Plugins.Eponesh_GameScore.Cnds.PlayerCompare,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.Date.Exps.Now,
