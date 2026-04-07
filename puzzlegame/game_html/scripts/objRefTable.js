@@ -227,7 +227,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.TiledBg.Acts.SetZ,
 		C3.Plugins.TiledBg.Acts.SetOpacity,
 		C3.Plugins.AJAX.Acts.RequestFile,
-		C3.TypeScriptInEvents.E_menu_Event3_Act1,
+		C3.TypeScriptInEvents.E_menu_Event4_Act1,
 		C3.Plugins.Eponesh_GameScore.Cnds.IsAdsStickyPlaying,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowSticky,
 		C3.Plugins.System.Exps.viewportright,
