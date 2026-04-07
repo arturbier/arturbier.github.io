@@ -324,7 +324,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Sprite.Exps.BBoxMidY,
 		C3.Plugins.Arr.Cnds.Contains,
 		C3.Plugins.Arr.Acts.Push,
-		C3.Plugins.Arr.Exps.AsJSON
+		C3.Plugins.Arr.Exps.AsJSON,
+		C3.Plugins.Eponesh_GameScore.Cnds.AppCanRequestReview,
+		C3.Plugins.Eponesh_GameScore.Acts.AppRequestReview
 	];
 };
 self.C3_JsPropNameTable = [
