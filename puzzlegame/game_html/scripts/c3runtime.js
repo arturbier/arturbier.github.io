@@ -1444,6 +1444,11 @@ const C3=self.C3,C3X=self.C3X,IBehaviorInstance=self.IBehaviorInstance,Ease=self
 {const e=self.C3;e.Behaviors.Sin=class extends e.SDKBehaviorBase{constructor(e){super(e)}Release(){super.Release()}}}{const e=self.C3;e.Behaviors.Sin.Type=class extends e.SDKBehaviorTypeBase{constructor(e){super(e)}Release(){super.Release()}OnCreate(){}}}{const e=self.C3,t=self.C3X,i=self.IBehaviorInstance,s=0,a=1,n=2,h=3,_=4,r=5,o=6,l=7,u=8,d=0,m=1,g=2,v=3,c=4,p=5,G=6,b=7,S=8,V=9,w=0,P=1,M=2,I=3,f=4,k=2*Math.PI,W=Math.PI/2,R=3*Math.PI/2,E=[0,1,8,3,4,2,5,6,9,7];e.Behaviors.Sin.Instance=class extends e.SDKBehaviorInstanceBase{constructor(t,i){super(t),this._i=0,this._movement=0,this._wave=0,this._period=0,this._mag=0,this._isEnabled=!0,this._basePeriod=0,this._basePeriodOffset=0,this._baseMag=0,this._periodRandom=0,this._periodOffsetRandom=0,this._magnitudeRandom=0,this._initialValue=0,this._initialValue2=0,this._lastKnownValue=0,this._lastKnownValue2=0,this._ratio=0,i&&(this._movement=E[i[s]],this._wave=i[a],this._periodRandom=this._runtime.Random()*i[h],this._basePeriod=i[n],this._period=i[n],this._period+=this._periodRandom,this._basePeriodOffset=i[_],0!==this._period&&(this._periodOffsetRandom=this._runtime.Random()*i[r],this._i=i[_]/this._period*k,this._i+=this._periodOffsetRandom/this._period*k),this._magnitudeRandom=this._runtime.Random()*i[l],this._baseMag=i[o],this._mag=i[o],this._mag+=this._magnitudeRandom,this._isEnabled=!!i[u]),this._movement===p&&(this._mag=e.toRadians(this._mag)),this.Init(),this._isEnabled&&this._StartTicking()}Release(){super.Release()}SaveToJson(){return{"i":this._i,"e":this._isEnabled,"mv":this._movement,"w":this._wave,"p":this._period,"mag":this._mag,"iv":this._initialValue,"iv2":this._initialValue2,"r":this._ratio,"lkv":this._lastKnownValue,"lkv2":this._lastKnownValue2}}LoadFromJson(e){this._i=e["i"],this._SetEnabled(e["e"]),this._movement=e["mv"],this._wave=e["w"],this._period=e["p"],this._mag=e["mag"],this._initialValue=e["iv"],this._initialValue2=e["iv2"],this._ratio=e["r"],this._lastKnownValue=e["lkv"],this._lastKnownValue2=e["lkv2"]}Init(){const e=this._inst.GetWorldInfo();switch(this._movement){case d:this._initialValue=e.GetX();break;case m:this._initialValue=e.GetY();break;case g:this._initialValue=e.GetWidth(),this._ratio=e.GetHeight()/e.GetWidth();break;case v:this._initialValue=e.GetWidth();break;case c:this._initialValue=e.GetHeight();break;case p:this._initialValue=e.GetAngle();break;case G:this._initialValue=e.GetOpacity();break;case b:this._initialValue=0;break;case S:this._initialValue=e.GetX(),this._initialValue2=e.GetY();break;case V:this._initialValue=e.GetZ()}this._lastKnownValue=this._initialValue,this._lastKnownValue2=this._initialValue2}WaveFunc(e){switch(e%=k,this._wave){case w:return Math.sin(e);case P:return e<=W?e/W:e<=R?1-2*(e-W)/Math.PI:(e-R)/W-1;case M:return 2*e/k-1;case I:return-2*e/k+1;case f:return e<Math.PI?-1:1}return 0}Tick(){const e=this._runtime.GetDt(this._inst);this._isEnabled&&0!==e&&(0===this._period?this._i=0:this._i=(this._i+e/this._period*k)%k,this._UpdateFromPhase())}_UpdateFromPhase(){const t=this._inst.GetWorldInfo();switch(this._movement){case d:t.GetX()!==this._lastKnownValue&&(this._initialValue+=t.GetX()-this._lastKnownValue),t.SetX(this._initialValue+this.WaveFunc(this._i)*this._mag),this._lastKnownValue=t.GetX();break;case m:t.GetY()!==this._lastKnownValue&&(this._initialValue+=t.GetY()-this._lastKnownValue),t.SetY(this._initialValue+this.WaveFunc(this._i)*this._mag),this._lastKnownValue=t.GetY();break;case g:t.SetWidth(this._initialValue+this.WaveFunc(this._i)*this._mag),t.SetHeight(t.GetWidth()*this._ratio);break;case v:t.SetWidth(this._initialValue+this.WaveFunc(this._i)*this._mag);break;case c:t.SetHeight(this._initialValue+this.WaveFunc(this._i)*this._mag);break;case p:t.GetAngle()!==this._lastKnownValue&&(this._initialValue=e.clampAngle(this._initialValue+(t.GetAngle()-this._lastKnownValue))),t.SetAngle(this._initialValue+this.WaveFunc(this._i)*this._mag),this._lastKnownValue=t.GetAngle();break;case G:t.SetOpacity(this._initialValue+this.WaveFunc(this._i)*this._mag/100);break;case S:t.GetX()!==this._lastKnownValue&&(this._initialValue+=t.GetX()-this._lastKnownValue),t.GetY()!==this._lastKnownValue2&&(this._initialValue2+=t.GetY()-this._lastKnownValue2),t.SetX(this._initialValue+Math.cos(t.GetAngle())*this.WaveFunc(this._i)*this._mag),t.SetY(this._initialValue2+Math.sin(t.GetAngle())*this.WaveFunc(this._i)*this._mag),this._lastKnownValue=t.GetX(),this._lastKnownValue2=t.GetY();break;case V:t.SetZ(this._initialValue+this.WaveFunc(this._i)*this._mag)}t.SetBboxChanged()}_OnSpriteFrameChanged(e,t){}_SetPeriod(e){this._period=e}_GetPeriod(){return this._period}_SetMagnitude(e){this._mag=e}_SetMagnitude_ConvertAngle(t){5===this._movement&&(t=e.toRadians(t)),this._SetMagnitude(t)}_GetMagnitude(){return this._mag}_GetMagnitude_ConvertAngle(){let t=this._GetMagnitude();return 5===this._movement&&(t=e.toDegrees(t)),t}_SetMovement(t){5===this._movement&&5!==t&&(this._mag=e.toDegrees(this._mag)),this._movement=t,this.Init()}_GetMovement(){return this._movement}_SetWave(e){this._wave=e}_GetWave(){return this._wave}_SetPhase(t){this._i=e.clamp(t,0,2*Math.PI),this._UpdateFromPhase()}_GetPhase(){return this._i}_SetEnabled(e){this._isEnabled=!!e,this._isEnabled?this._StartTicking():this._StopTicking()}_IsEnabled(){return this._isEnabled}GetPropertyValueByIndex(e){switch(e){case s:return this._movement;case a:return this._wave;case n:return this._basePeriod;case o:return this._baseMag;case u:return this._isEnabled}}SetPropertyValueByIndex(t,i){switch(t){case s:this._movement=E[i],this.Init();break;case a:this._wave=i;break;case n:this._basePeriod=i,this._period=this._basePeriod+this._periodRandom,this._isEnabled||(0!==this._period?(this._i=this._basePeriodOffset/this._period*k,this._i+=this._periodOffsetRandom/this._period*k):this._i=0);break;case o:this._baseMag=i,this._mag=this._baseMag+this._magnitudeRandom,this._movement===p&&(this._mag=e.toRadians(this._mag));break;case u:this._isEnabled=!!i}}GetDebuggerProperties(){const e="behaviors.sin";return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:e+".properties.enabled.name",value:this._IsEnabled(),onedit:e=>this._SetEnabled(e)},{name:e+".properties.period.name",value:this._GetPeriod(),onedit:e=>this._SetPeriod(e)},{name:e+".properties.magnitude.name",value:this._GetMagnitude_ConvertAngle(),onedit:e=>this._SetMagnitude_ConvertAngle(e)},{name:e+".debugger.value",value:this.WaveFunc(this._GetPhase())*this._GetMagnitude_ConvertAngle()}]}]}GetScriptInterfaceClass(){return self.ISineBehaviorInstance}};const C=new WeakMap,K=["horizontal","vertical","size","width","height","angle","opacity","value-only","forwards-backwards","z-elevation"],F=["sine","triangle","sawtooth","reverse-sawtooth","square"];self.ISineBehaviorInstance=class extends i{constructor(){super(),C.set(this,i._GetInitInst().GetSdkInstance())}set period(e){t.RequireFiniteNumber(e),C.get(this)._SetPeriod(e)}get period(){return C.get(this)._GetPeriod()}set magnitude(e){t.RequireFiniteNumber(e),C.get(this)._SetMagnitude(e)}get magnitude(){return C.get(this)._GetMagnitude()}set phase(e){C.get(this)._SetPhase(e)}get phase(){return C.get(this)._GetPhase()}set movement(e){t.RequireString(e);const i=K.indexOf(e);if(-1===i)throw new Error("invalid movement");C.get(this)._SetMovement(i)}get movement(){return K[C.get(this)._GetMovement()]}set wave(e){t.RequireString(e);const i=F.indexOf(e);if(-1===i)throw new Error("invalid wave");C.get(this)._SetWave(i)}get wave(){return F[C.get(this)._GetWave()]}get value(){const e=C.get(this);return e.WaveFunc(e._GetPhase())*e._GetMagnitude()}updateInitialState(){C.get(this).Init()}set isEnabled(e){C.get(this)._SetEnabled(!!e)}get isEnabled(){return C.get(this)._IsEnabled()}}}{const e=self.C3;e.Behaviors.Sin.Cnds={IsEnabled(){return this._IsEnabled()},CompareMovement(e){return this._GetMovement()===e},ComparePeriod(t,i){return e.compare(this._GetPeriod(),t,i)},CompareMagnitude(t,i){return e.compare(this._GetMagnitude_ConvertAngle(),t,i)},CompareWave(e){return this._GetWave()===e}}}self.C3.Behaviors.Sin.Acts={SetEnabled(e){this._SetEnabled(0!==e)},SetPeriod(e){this._SetPeriod(e)},SetMagnitude(e){this._SetMagnitude_ConvertAngle(e)},SetMovement(e){this._SetMovement(e)},SetWave(e){this._wave=e},SetPhase(e){const t=2*Math.PI;this._SetPhase(e*t%t)},UpdateInitialState(){this.Init()}};self.C3.Behaviors.Sin.Exps={CyclePosition(){return this._GetPhase()/(2*Math.PI)},Period(){return this._GetPeriod()},Magnitude(){return this._GetMagnitude_ConvertAngle()},Value(){return this.WaveFunc(this._GetPhase())*this._GetMagnitude_ConvertAngle()}};
 }
 
+// scripts/behaviors/Rotate/c3runtime/runtime.js
+{
+{const e=self.C3;e.Behaviors.Rotate=class extends e.SDKBehaviorBase{constructor(e){super(e)}Release(){super.Release()}}}{const e=self.C3;e.Behaviors.Rotate.Type=class extends e.SDKBehaviorTypeBase{constructor(e){super(e)}Release(){super.Release()}OnCreate(){}}}{const e=self.C3,t=self.C3X,s=self.IBehaviorInstance,a=0,i=1,n=2;e.Behaviors.Rotate.Instance=class extends e.SDKBehaviorInstanceBase{constructor(t,s){super(t),this._speed=0,this._acceleration=0,this._isEnabled=!0,s&&(this._speed=e.toRadians(s[a]),this._acceleration=e.toRadians(s[i]),this._isEnabled=s[n]),this._isEnabled&&this._StartTicking()}Release(){super.Release()}_SetSpeed(e){this._speed=e}_GetSpeed(){return this._speed}_SetAcceleration(e){this._acceleration=e}_GetAcceleration(){return this._acceleration}SaveToJson(){return{"s":this._speed,"a":this._acceleration,"e":this._isEnabled}}LoadFromJson(e){this._speed=e["s"],this._acceleration=e["a"],this._SetEnabled(e["e"])}Tick(){if(!this._isEnabled)return;const e=this._runtime.GetDt(this._inst);if(0!==e&&(0!==this._acceleration&&(this._speed+=this._acceleration*e),0!==this._speed)){const t=this._inst.GetWorldInfo();t.SetAngle(t.GetAngle()+this._speed*e),t.SetBboxChanged()}}GetPropertyValueByIndex(t){switch(t){case a:return e.toDegrees(this._GetSpeed());case i:return e.toDegrees(this._GetAcceleration());case n:return this._IsEnabled()}}SetPropertyValueByIndex(t,s){switch(t){case a:this._SetSpeed(e.toRadians(s));break;case i:this._SetAcceleration(e.toRadians(s));break;case n:this._SetEnabled(s)}}_SetEnabled(e){this._isEnabled=!!e,this._isEnabled?this._StartTicking():this._StopTicking()}_IsEnabled(){return this._isEnabled}GetDebuggerProperties(){const t="behaviors.rotate";return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:t+".properties.speed.name",value:e.toDegrees(this._GetSpeed()),onedit:t=>this._SetSpeed(e.toRadians(t))},{name:t+".properties.acceleration.name",value:e.toDegrees(this._GetAcceleration()),onedit:t=>this._SetAcceleration(e.toRadians(t))},{name:t+".properties.enabled.name",value:this._IsEnabled(),onedit:e=>this._SetEnabled(e)}]}]}GetScriptInterfaceClass(){return self.IRotateBehaviorInstance}};const r=new WeakMap;self.IRotateBehaviorInstance=class extends s{constructor(){super(),r.set(this,s._GetInitInst().GetSdkInstance())}set speed(e){t.RequireFiniteNumber(e),r.get(this)._SetSpeed(e)}get speed(){return r.get(this)._GetSpeed()}set acceleration(e){t.RequireFiniteNumber(e),r.get(this)._SetAcceleration(e)}get acceleration(){return r.get(this)._GetAcceleration()}get isEnabled(){return r.get(this)._IsEnabled()}set isEnabled(e){r.get(this)._SetEnabled(e)}}}self.C3.Behaviors.Rotate.Cnds={IsEnabled(){return this._IsEnabled()}};{const e=self.C3;e.Behaviors.Rotate.Acts={SetSpeed(t){this._SetSpeed(e.toRadians(t))},SetAcceleration(t){this._SetAcceleration(e.toRadians(t))},SetEnabled(e){this._SetEnabled(e)}}}{const e=self.C3;e.Behaviors.Rotate.Exps={Speed(){return e.toDegrees(this._GetSpeed())},Acceleration(){return e.toDegrees(this._GetAcceleration())}}}
+}
+
 // scripts/expTable.js
 {
 
@@ -1622,7 +1627,7 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => ((n0.ExpObject() + (n1.ExpObject() / 2)) + 25);
 		},
-		() => 2.2,
+		() => 0.5,
 		() => 1,
 		() => -5,
 		p => {
@@ -1860,7 +1865,6 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("seconds." + v1.GetValue()));
 		},
-		() => 0.5,
 		() => "Daily Timer",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2378,6 +2382,56 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() + 40);
 		},
 		() => 15,
+		() => "savedData",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() * 80);
+		},
+		() => "savedTime",
+		() => "sound",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("shows");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Data");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("stickersPack");
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => Math.floor((f0() / (((24 * 60) * 60) * 100)));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => Math.floor(divide(n0.ExpObject("savedTime"), (((24 * 60) * 60) * 100)));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("sound");
+		},
+		() => "progress",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			const v4 = p._GetNode(4).GetVar();
+			return () => f0((v1.GetValue() * 0.1), ((v2.GetValue() / v3.GetValue()) * v4.GetValue()));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => ((v0.GetValue() / v1.GetValue()) * 100);
+		},
 		() => "lastRewardedDay",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2435,52 +2489,6 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => ((v0.GetValue() - 1)).toString();
 		},
-		() => "savedData",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() * 80);
-		},
-		() => "savedTime",
-		() => "sound",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("shows");
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Data");
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => Math.floor((f0() / (((24 * 60) * 60) * 100)));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => Math.floor(divide(n0.ExpObject("savedTime"), (((24 * 60) * 60) * 100)));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("sound");
-		},
-		() => "progress",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const v1 = p._GetNode(1).GetVar();
-			const v2 = p._GetNode(2).GetVar();
-			const v3 = p._GetNode(3).GetVar();
-			const v4 = p._GetNode(4).GetVar();
-			return () => f0((v1.GetValue() * 0.1), ((v2.GetValue() / v3.GetValue()) * v4.GetValue()));
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			const v1 = p._GetNode(1).GetVar();
-			return () => ((v0.GetValue() / v1.GetValue()) * 100);
-		},
 		() => "Buttons",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2535,7 +2543,6 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("step0." + v1.GetValue()));
 		},
-		() => 1.5,
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2570,10 +2577,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("step6." + v1.GetValue()));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() - 100);
 		},
 		() => "Debug",
 		p => {
@@ -2734,7 +2737,29 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() * 0.2);
 		},
-		() => 60
+		() => 60,
+		() => "HUD",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => Math.ceil((v0.GetValue() / 5));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpInstVar() * 4);
+		},
+		() => "sticker_tutorial",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() * 1.3);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			return () => and(and(f0(v1.GetValue()), ":"), Math.ceil((v2.GetValue() / v3.GetValue())));
+		},
+		() => "stickersPack"
 ];
 
 

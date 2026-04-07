@@ -26,6 +26,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore,
 		C3.Plugins.Audio,
 		C3.Plugins.Json,
+		C3.Behaviors.Rotate,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.System.Acts.SetBoolVar,
@@ -231,21 +232,20 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.AJAX.Acts.RequestFile,
 		C3.Plugins.Audio.Cnds.IsTagPlaying,
 		C3.Plugins.Eponesh_GameScore.Cnds.PlayerHasKey,
-		C3.Plugins.Eponesh_GameScore.Cnds.OnLeaderboardFetchPlayer,
-		C3.Plugins.Eponesh_GameScore.Cnds.PlayerCompare,
-		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardCurPlayerField,
-		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardPlayerPosition,
 		C3.Plugins.LocalStorage.Cnds.OnItemExists,
 		C3.Plugins.LocalStorage.Exps.ItemValue,
 		C3.Plugins.AJAX.Cnds.OnComplete,
 		C3.Plugins.Arr.Acts.JSONLoad,
 		C3.Plugins.AJAX.Exps.LastData,
-		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardFetchPlayerRatingScoped,
+		C3.Plugins.Eponesh_GameScore.Cnds.PlayerCompare,
 		C3.Plugins.LocalStorage.Acts.CheckItemExists,
 		C3.Plugins.Date.Exps.Now,
 		C3.Plugins.Dictionary.Acts.JSONLoad,
 		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
 		C3.Plugins.Audio.Acts.SetSilent,
+		C3.Plugins.Eponesh_GameScore.Cnds.OnLeaderboardFetchPlayer,
+		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardCurPlayerField,
+		C3.Plugins.Eponesh_GameScore.Exps.LeaderboardPlayerPosition,
 		C3.TypeScriptInEvents.E_menu_Event60_Act1,
 		C3.TypeScriptInEvents.E_menu_Event67_Act1,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowFullscreen,
@@ -268,6 +268,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Spritefont2.Cnds.IsRunningTypewriterText,
 		C3.Plugins.Spritefont2.Acts.TypewriterFinish,
 		C3.Plugins.Spritefont2.Acts.TypewriterText,
+		C3.Plugins.Sprite.Exps.BBoxMidX,
 		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.Eponesh_GameScore.Acts.AchievementsUnlock,
 		C3.Plugins.Spritefont2.Cnds.OnTypewriterTextFinished,
@@ -303,6 +304,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Json.Acts.Parse,
 		C3.Plugins.Spritefont2.Cnds.IsBoolInstanceVarSet,
 		C3.Plugins.Spritefont2.Exps.Tags,
+		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardFetchPlayerRatingScoped,
 		C3.JavaScriptInEvents.E_segments_Event2_Act1,
 		C3.JavaScriptInEvents.E_segments_Event2_Act2,
 		C3.Plugins.Sprite.Acts.SetDefaultColor,
@@ -312,7 +314,16 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.WaitForSignal,
 		C3.Plugins.Sprite.Exps.LayerName,
 		C3.Behaviors.Tween.Acts.SetTweensTime,
-		C3.Plugins.Sprite.Acts.SetOpacity
+		C3.Plugins.Sprite.Exps.UID,
+		C3.Plugins.Sprite.Acts.SetOpacity,
+		C3.Plugins.Sprite.Cnds.PickByUID,
+		C3.Plugins.System.Exps.viewportmidy,
+		C3.Plugins.Sprite.Acts.AddChild,
+		C3.Plugins.TiledBg.Exps.LayerName,
+		C3.Plugins.Sprite.Exps.BBoxMidY,
+		C3.Plugins.Arr.Cnds.Contains,
+		C3.Plugins.Arr.Acts.Push,
+		C3.Plugins.Arr.Exps.AsJSON
 	];
 };
 self.C3_JsPropNameTable = [
@@ -416,6 +427,10 @@ self.C3_JsPropNameTable = [
 	{lineCurSegments: 0},
 	{lineSegments: 0},
 	{starSegment: 0},
+	{Stickers: 0},
+	{Rotate: 0},
+	{lightSticker: 0},
+	{stickersPack: 0},
 	{puzzlePieceFamily: 0},
 	{allText: 0},
 	{PiecesPerLine: 0},
@@ -492,8 +507,10 @@ self.C3_JsPropNameTable = [
 	{usableWidth: 0},
 	{spacing: 0},
 	{widthPercent: 0},
+	{isGifted: 0},
 	{positionY: 0},
-	{coin: 0}
+	{coin: 0},
+	{uid: 0}
 ];
 
 self.InstanceType = {
@@ -566,6 +583,9 @@ self.InstanceType = {
 	lineCurSegments: class extends self.ISpriteInstance {},
 	lineSegments: class extends self.ISpriteInstance {},
 	starSegment: class extends self.ISpriteInstance {},
+	Stickers: class extends self.ISpriteInstance {},
+	lightSticker: class extends self.ISpriteInstance {},
+	stickersPack: class extends self.IArrayInstance {},
 	puzzlePieceFamily: class extends self.IDrawingCanvasInstance {},
 	allText: class extends self.ISpriteFontInstance {}
 }
