@@ -1562,7 +1562,6 @@ self.C3_ExpressionFuncs = [
 		() => "Categories",
 		() => "Pieces",
 		() => "",
-		() => "tutorial_gameplay",
 		() => "i",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2343,27 +2342,7 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
 		},
-		() => "progress",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const v1 = p._GetNode(1).GetVar();
-			const v2 = p._GetNode(2).GetVar();
-			const v3 = p._GetNode(3).GetVar();
-			const v4 = p._GetNode(4).GetVar();
-			return () => f0((v1.GetValue() * 0.1), ((v2.GetValue() / v3.GetValue()) * v4.GetValue()));
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			const v1 = p._GetNode(1).GetVar();
-			return () => ((v0.GetValue() / v1.GetValue()) * 100);
-		},
-		() => "menuProgress",
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			const v2 = p._GetNode(2).GetVar();
-			return () => and(and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % "), n1.ExpObject(("menuProgress." + v2.GetValue())));
-		},
+		() => "orderCategories",
 		() => "Option",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2389,6 +2368,13 @@ self.C3_ExpressionFuncs = [
 		() => "BG",
 		() => "done",
 		() => "undone",
+		() => "menuProgress",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			const v2 = p._GetNode(2).GetVar();
+			return () => and(and((Math.round((n0.ExpBehavior("progress") * 100)) / 100), " % "), n1.ExpObject(("menuProgress." + v2.GetValue())));
+		},
 		() => "Play",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2396,6 +2382,55 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 15,
 		() => "savedData",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() * 80);
+		},
+		() => "savedTime",
+		() => "sound",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("shows");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Data");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("stickersPack");
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => Math.floor((f0() / (((24 * 60) * 60) * 100)));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => Math.floor(divide(n0.ExpObject("savedTime"), (((24 * 60) * 60) * 100)));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("sound");
+		},
+		() => "progress",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			const v3 = p._GetNode(3).GetVar();
+			const v4 = p._GetNode(4).GetVar();
+			return () => f0((v1.GetValue() * 0.1), ((v2.GetValue() / v3.GetValue()) * v4.GetValue()));
+		},
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => ((v0.GetValue() / v1.GetValue()) * 100);
+		},
 		() => "lastRewardedDay",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2495,7 +2530,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => ((n0.ExpObject()) ? (0) : (1));
 		},
-		() => "sound",
 		() => "Tutorial",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -2756,42 +2790,7 @@ self.C3_ExpressionFuncs = [
 			const v3 = p._GetNode(3).GetVar();
 			return () => and(and(f0(v1.GetValue()), ":"), Math.ceil((v2.GetValue() / v3.GetValue())));
 		},
-		() => "stickersPack",
-		() => "orderCategories",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() * 80);
-		},
-		() => "savedTime",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("shows");
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Data");
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("stickersPack");
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => Math.floor((f0() / (((24 * 60) * 60) * 100)));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => Math.floor(divide(n0.ExpObject("savedTime"), (((24 * 60) * 60) * 100)));
-		},
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("sound");
-		}
+		() => "stickersPack"
 ];
 
 
