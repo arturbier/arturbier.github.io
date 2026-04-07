@@ -505,5 +505,16 @@
   "tr": ["Cok yakindin!", "Bugun zirveyi al!"],
   "id": ["Kamu hampir berhasil!", "Ayo ambil puncak hari ini!"],
   "it": ["Eri molto vicino!", "Prendi la vetta oggi!"]
+},
+"addSegment": {
+  "ru": "В коллекцию!",
+  "en": "Add to collection!",
+  "de": "Zur Sammlung!",
+  "es": "A la coleccion!",
+  "fr": "A la collection!",
+  "pt": "Para a colecao!",
+  "tr": "Koleksiyona ekle!",
+  "id": "Tambahkan%ke koleksi!",
+  "it": "Aggiungi%alla collezione!"
 }
 }

@@ -1,5 +1,5 @@
 const scriptsInEvents = {
-    async E_menu_Event2_Act1(runtime, localVars) {
+    async E_menu_Event3_Act1(runtime, localVars) {
         function checkPing() {
             return fetch("https://arturbier.github.io/puzzlegame/ping.json", { mode: "no-cors" })
                 .then(() => localVars.ping = 1)

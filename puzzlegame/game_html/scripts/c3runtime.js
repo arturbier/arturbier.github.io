@@ -2343,6 +2343,7 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
 		},
+		() => "orderCategories",
 		() => "Option",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2365,7 +2366,6 @@ self.C3_ExpressionFuncs = [
 			return () => (f0(0) - n1.ExpObject());
 		},
 		() => "bottom",
-		() => "orderCategories",
 		() => "BG",
 		() => "done",
 		() => "undone",
@@ -2695,6 +2695,7 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => (f0() * 0.26);
 		},
+		() => "HUD",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() / 1.5);
@@ -2738,7 +2739,8 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpInstVar() * 0.2);
 		},
 		() => 60,
-		() => "HUD",
+		() => "Border",
+		() => "blackScreen",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => Math.ceil((v0.GetValue() / 5));
@@ -2746,6 +2748,36 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpInstVar() * 4);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0(0) + 300);
+		},
+		() => 1000,
+		() => 500,
+		() => "segmentCount",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => and(Math.ceil((v0.GetValue() / 5)), "/16");
+		},
+		() => 1.4,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 150);
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => (f0(0) - 300);
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const v1 = p._GetNode(1).GetVar();
+			return () => n0.ExpObject(("addSegment." + v1.GetValue()));
+		},
+		() => 1.6,
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() - 200);
 		},
 		() => "sticker_tutorial",
 		p => {
