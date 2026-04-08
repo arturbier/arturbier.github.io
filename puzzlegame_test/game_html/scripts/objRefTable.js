@@ -304,6 +304,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.AJAX.Exps.LastData,
 		C3.Plugins.Spritefont2.Cnds.IsBoolInstanceVarSet,
 		C3.Plugins.Spritefont2.Exps.Tags,
+		C3.Plugins.Eponesh_GameScore.Acts.PlayerWaitForReady,
 		C3.JavaScriptInEvents.E_segments_Event2_Act1,
 		C3.JavaScriptInEvents.E_segments_Event2_Act2,
 		C3.Plugins.Sprite.Acts.SetDefaultColor,

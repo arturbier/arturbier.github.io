@@ -2534,11 +2534,6 @@ self.C3_ExpressionFuncs = [
 			return () => n0.ExpObject("shows");
 		},
 		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
-		},
-		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("Data");
 		},
@@ -2561,6 +2556,11 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("sound");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => and("unlock_", n0.ExpObject(n1.ExpObject()));
 		},
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
