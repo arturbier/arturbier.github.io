@@ -2348,6 +2348,10 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
 		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Data");
+		},
 		() => "Option",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2633,10 +2637,6 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const n1 = p._GetNode(1);
 			return () => f0(n1.ExpObject(), "");
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Data");
 		},
 		() => "Segments",
 		p => {
