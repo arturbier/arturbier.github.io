@@ -2043,6 +2043,13 @@ self.C3_ExpressionFuncs = [
 			const n3 = p._GetNode(3);
 			return () => f0(1, Math.round((((v1.GetValue() * v2.GetValue()) * 0.08) * (1 + (n3.ExpObject() * 0.03)))));
 		},
+		() => "savedTime",
+		() => 5,
+		() => "sound",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("shows");
+		},
 		p => {
 			const n0 = p._GetNode(0);
 			const n1 = p._GetNode(1);
@@ -2260,7 +2267,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => (n0.ExpObject() * 1.4);
 		},
-		() => 5,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const v1 = p._GetNode(1).GetVar();
@@ -2479,7 +2485,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			return () => ((n0.ExpObject()) ? (0) : (1));
 		},
-		() => "sound",
 		() => "progress",
 		() => "Tutorial",
 		p => {
@@ -2527,15 +2532,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("step6." + v1.GetValue()));
-		},
-		() => "savedTime",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject("shows");
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Data");
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -2625,6 +2621,7 @@ self.C3_ExpressionFuncs = [
 		() => 30,
 		() => "Lang",
 		() => "lang",
+		() => "orderCategories",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2637,7 +2634,10 @@ self.C3_ExpressionFuncs = [
 			const n1 = p._GetNode(1);
 			return () => f0(n1.ExpObject(), "");
 		},
-		() => "orderCategories",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Data");
+		},
 		() => "Segments",
 		p => {
 			const n0 = p._GetNode(0);
