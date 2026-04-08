@@ -2380,7 +2380,6 @@ self.C3_ExpressionFuncs = [
 			return () => (n0.ExpObject() + 40);
 		},
 		() => 15,
-		() => "savedData",
 		() => "lastRewardedDay",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2528,11 +2527,6 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
 			return () => n0.ExpObject(("step6." + v1.GetValue()));
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => f0(f1("Data"));
 		},
 		() => "savedTime",
 		p => {
