@@ -9,7 +9,7 @@
 
 const scriptsInEvents = {
 
-	async E_menu_Event78_Act1(runtime, localVars)
+	async E_menu_Event63_Act1(runtime, localVars)
 	{
 		runtime.GamePush.feedbacks.open();
 	},
