@@ -226,9 +226,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Acts.GameStart,
 		C3.Plugins.TiledBg.Acts.SetZ,
 		C3.Plugins.TiledBg.Acts.SetOpacity,
-		C3.Plugins.Dictionary.Acts.JSONLoad,
-		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
-		C3.Plugins.Eponesh_GameScore.Exps.Language,
 		C3.TypeScriptInEvents.E_menu_Event2_Act1,
 		C3.Plugins.Eponesh_GameScore.Cnds.IsAdsStickyPlaying,
 		C3.Plugins.Eponesh_GameScore.Acts.AdsShowSticky,
@@ -267,7 +264,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.System.Acts.SetGroupActive,
 		C3.Plugins.Eponesh_GameScore.Acts.AchievementsUnlock,
 		C3.Plugins.Spritefont2.Cnds.OnTypewriterTextFinished,
-		C3.Plugins.Dictionary.Cnds.IsEmpty,
+		C3.Plugins.Dictionary.Exps.KeyCount,
 		C3.Plugins.Arr.Acts.JSONLoad,
 		C3.Plugins.Dictionary.Cnds.HasKey,
 		C3.Plugins.Eponesh_GameScore.Acts.LeaderboardFetchPlayerRatingScoped,
@@ -334,7 +331,11 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Eponesh_GameScore.Cnds.AppIsAlreadyReviewed,
 		C3.Plugins.Eponesh_GameScore.Acts.AppRequestReview,
 		C3.Plugins.Eponesh_GameScore.Cnds.IsAppLastAddShortcutSuccess,
-		C3.Plugins.Eponesh_GameScore.Acts.AppAddShortcut
+		C3.Plugins.Eponesh_GameScore.Acts.AppAddShortcut,
+		C3.Plugins.System.Cnds.OnLoadFinished,
+		C3.Plugins.Dictionary.Acts.JSONLoad,
+		C3.Plugins.Eponesh_GameScore.Exps.PlayerGet,
+		C3.Plugins.Eponesh_GameScore.Exps.Language
 	];
 };
 self.C3_JsPropNameTable = [
@@ -493,7 +494,7 @@ self.C3_JsPropNameTable = [
 	{returnForce: 0},
 	{delta: 0},
 	{dailyPuzzleFinished: 0},
-	{firstGame: 0},
+	{isSecondGame: 0},
 	{dayOfYear: 0},
 	{curProgress: 0},
 	{maxProgress: 0},

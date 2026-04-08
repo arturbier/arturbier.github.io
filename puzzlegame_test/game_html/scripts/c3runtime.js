@@ -2348,10 +2348,6 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => (Math.floor(((f0() - f1(((f2(f3())).toString() + "-01-01T00:00:00Z"))) / 86400000)) + 1);
 		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Data");
-		},
 		() => "Option",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2789,7 +2785,11 @@ self.C3_ExpressionFuncs = [
 			const v3 = p._GetNode(3).GetVar();
 			return () => and(and(f0(v1.GetValue()), ":"), Math.ceil((v2.GetValue() / v3.GetValue())));
 		},
-		() => "stickersPack"
+		() => "stickersPack",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Data");
+		}
 ];
 
 
