@@ -16,5 +16,990 @@
 // workers/jobSchedulerDom.js
 "use strict";{const t="dispatchworker.js",r="jobworker.js";self.JobSchedulerDOM=class{constructor(t){this._runtimeInterface=t,this._maxNumWorkers=Math.min(navigator.hardwareConcurrency||2,16),this._dispatchWorker=null,this._jobWorkers=[],this._inputPort=null,this._outputPort=null}async Init(){if(this._hasInitialised)throw new Error("already initialised");this._hasInitialised=!0;const r=this._runtimeInterface.GetScriptFolder()+t;this._dispatchWorker=await this._runtimeInterface.CreateWorker(r,{name:"DispatchWorker"});const e=new MessageChannel;this._inputPort=e.port1,this._dispatchWorker.postMessage({"type":"_init","in-port":e.port2},[e.port2]),this._outputPort=await this._CreateJobWorker()}async _CreateJobWorker(){const t=this._jobWorkers.length,e=this._runtimeInterface.GetScriptFolder()+r,o=await this._runtimeInterface.CreateWorker(e,{name:"JobWorker"+t}),s=new MessageChannel,i=new MessageChannel;return this._dispatchWorker.postMessage({"type":"_addJobWorker","port":s.port1},[s.port1]),o.postMessage({"type":"init","number":t,"dispatch-port":s.port2,"output-port":i.port2},[s.port2,i.port2]),this._jobWorkers.push(o),i.port1}GetPortData(){return{"inputPort":this._inputPort,"outputPort":this._outputPort,"maxNumWorkers":this._maxNumWorkers}}GetPortTransferables(){return[this._inputPort,this._outputPort]}}}
 
+// scripts/plugins/Button/dom/domSide.js
+"use strict";{const e="button";function t(e){e.stopPropagation()}const n=class extends self.DOMElementHandler{constructor(t){super(t,e)}CreateElement(e,n){const s=document.createElement("input"),a=n["isCheckbox"];let d=s;if(a){s.type="checkbox";const e=document.createElement("label");e.appendChild(s),e.appendChild(document.createTextNode("")),e.style.fontFamily="sans-serif",e.style.userSelect="none",e.style.webkitUserSelect="none",e.style.display="inline-block",e.style.color="black",d=e}else s.type="button";return d.style.position="absolute",d.addEventListener("pointerdown",t),d.addEventListener("pointerrawupdate",t),d.addEventListener("pointerup",t),d.addEventListener("mousedown",t),d.addEventListener("mouseup",t),d.addEventListener("keydown",t),d.addEventListener("keyup",t),d.addEventListener("contextmenu",e=>e.preventDefault()),s.addEventListener("click",()=>this._PostToRuntimeElementMaybeSync("click",e,{"isChecked":s.checked})),n["id"]&&(s.id=n["id"]),n["className"]&&(s.className=n["className"]),a&&n["usesAutoFontSize"]&&s.classList.add("c3-auto-size-checkbox"),this.UpdateState(d,n),d}_GetInputElem(e){return"input"===e.tagName.toLowerCase()?e:e.firstChild}_GetFocusElement(e){return this._GetInputElem(e)}UpdateState(e,t){const n=this._GetInputElem(e);n.checked=t["isChecked"],n.disabled=!t["isEnabled"],e.title=t["title"],e===n?n.value=t["text"]:e.lastChild.textContent=t["text"]}};self.RuntimeInterface.AddDOMHandlerClass(n)}
+
+// scripts/plugins/TextBox/dom/domSide.js
+"use strict";{const e="text-input";function t(e){e.stopPropagation()}function n(e){13!==e.which&&27!==e.which&&e.stopPropagation()}const s=class extends self.DOMElementHandler{constructor(t){super(t,e),this.AddDOMElementMessageHandler("scroll-to-bottom",e=>this._OnScrollToBottom(e))}CreateElement(e,s){let o;const a=s["type"];return"textarea"===a?(o=document.createElement("textarea"),o.style.resize="none"):(o=document.createElement("input"),o.type=a),o.style.position="absolute",o.autocomplete="off",o.addEventListener("pointerdown",t),o.addEventListener("pointerrawupdate",t),o.addEventListener("pointerup",t),o.addEventListener("mousedown",t),o.addEventListener("mouseup",t),o.addEventListener("keydown",n),o.addEventListener("keyup",n),o.addEventListener("click",t=>{t.stopPropagation(),this._PostToRuntimeElementMaybeSync("click",e)}),o.addEventListener("dblclick",t=>{t.stopPropagation(),this._PostToRuntimeElementMaybeSync("dblclick",e)}),o.addEventListener("input",()=>this.PostToRuntimeElement("change",e,{"text":o.value})),s["id"]&&(o.id=s["id"]),s["className"]&&(o.className=s["className"]),this.UpdateState(o,s),o}UpdateState(e,t){e.value=t["text"],e.placeholder=t["placeholder"],e.title=t["title"],e.disabled=!t["isEnabled"],e.readOnly=t["isReadOnly"],e.spellcheck=t["spellCheck"];const n=t["maxLength"];n<0?e.removeAttribute("maxlength"):e.setAttribute("maxlength",n)}_OnScrollToBottom(e){e.scrollTop=e.scrollHeight}};self.RuntimeInterface.AddDOMHandlerClass(s)}
+
+// scripts/plugins/Sparsha_FirebaseSDK/c3runtime/domside.js
+"use strict";
+{
+    const DOM_COMPONENT_ID = "sparsha_firebase_sdk";
+    function StopPropagation(e) {
+        e.stopPropagation();
+    }
+    const HANDLER_CLASS = class MyDOMHandler extends globalThis.DOMHandler {
+        constructor(iRuntime) {
+            super(iRuntime, DOM_COMPONENT_ID);
+            var self = this;
+
+            async function DoAsync(e) {
+
+            }
+
+            function DoSync(e) {
+                //action,sdkName,plugin_uid,recaptchatoken
+                //remove_app,remove_auth,remove_database,remove_storage
+                //enable_auth,enable_database,enable_storage,enable_appcheck
+                //apiKey,projectId,databaseURL,messagingSenderId,appId,version
+                //debug,autoLoad,tseconds
+                var Result = {
+                    action: e.action,
+                    status: "none",
+                    userBasic: {},
+                    userPro: {},
+                };
+                var firebase = globalThis.sparshaFirebase;
+
+                function returnData() {
+                    self.PostToRuntime("run_sparsha_fSDK" + e.plugin_uid, Result)
+                }
+
+                if (e.action === "init" || e.action === "reconnect") {
+                    function setAuthListener() {
+                        var authExpBasic = {};
+                        var authExpPro = {};
+                        var myAuth = firebase.myAuth[e.sdkName];
+                        if (firebase._loadedApp[e.sdkName] !== 1 || e.action === "reconnect") {
+                            firebase.auth.onAuthStateChanged(myAuth, (user) => {
+                                var authMapRes = firebase._GetAuthMapData(user, e.sdkName);
+                                authExpBasic = authMapRes.authExpBasic;
+                                authExpPro = authMapRes.authExpPro;
+                                if (user) {
+                                    if (e.debug) {
+                                        console.log("LOGGED IN" + "\nsdkObject: " + e.sdkName + "\nuserID: " + authExpBasic["myUID"] + "\nprovider: " + authExpBasic["providerID"] + "\nemail: " + authExpBasic["myEmail"] + "\nisEmailVerified: " + authExpBasic["isEmailVerified"] + "\nusername: " + authExpBasic["username"] + "\nphone: " + authExpBasic["phoneNo"] + "\nphotoURL: " + authExpBasic["photoURL"] + "\n ");
+                                    }
+                                }
+                                else {
+                                    if (e.debug) console.log("LOGGED OUT" + "\nsdkObject: " + e.sdkName + "\n ");
+                                }
+                                Result.status = "success";
+                                Result.userBasic = authExpBasic;
+                                Result.userPro = authExpPro;
+                                returnData();
+                                authExpPro.TrigNotEvent=0;
+                                firebase._loadedApp[e.sdkName] = 1;
+
+                            });
+                        }
+                    }
+                    function startInitApp(firebaseConfig) {
+                        if (e.sdkName === firebase.mainSdkName) firebase.myApp[e.sdkName] = firebase.app.initializeApp(firebaseConfig);
+                        else firebase.myApp[e.sdkName] = firebase.app.initializeApp(firebaseConfig, e.sdkName);
+
+                        if (typeof firebase._res[e.sdkName] === "undefined") firebase._res[e.sdkName] = {};
+
+                        if (e.enable_database) {
+                            firebase.myDatabase[e.sdkName] = firebase.database.getDatabase(firebase.myApp[e.sdkName]);
+                            if (firebase._dbDetailLog) firebase.database.enableLogging(true);
+                        }
+                        if (e.enable_firestore) firebase.myFirestore[e.sdkName] = firebase.firestore.getFirestore(firebase.myApp[e.sdkName]);
+                        if (e.enable_storage) firebase.myStorage[e.sdkName] = firebase.storage.getStorage(firebase.myApp[e.sdkName]);
+                        if (e.enable_analytics) firebase.myAnalytics[e.sdkName] = firebase.analytics.getAnalytics(firebase.myApp[e.sdkName]);
+                        if (e.enable_remoteconfig) {
+                            firebase.myRemoteConfig[e.sdkName] = firebase.remoteconfig.getRemoteConfig(firebase.myApp[e.sdkName]);
+                            var remoteConfig = firebase.myRemoteConfig[e.sdkName];
+                            remoteConfig.settings.minimumFetchIntervalMillis = e.remoteConfigTime * 1000;
+                            remoteConfig.defaultConfig = e.remoteConfigDefault;
+                        }
+                        if (e.enable_performance) firebase.myPerformance[e.sdkName] = firebase.performance.getPerformance(firebase.myApp[e.sdkName]);
+                        if (e.enable_appcheck) {
+                        	var providerName="";
+                        	if(e.captchaType===0) providerName="ReCaptchaEnterpriseProvider";
+                        	else providerName= "ReCaptchaV3Provider";
+                            firebase.myAppCheck[e.sdkName] = firebase.appcheck.initializeAppCheck(firebase.myApp[e.sdkName], {
+                                provider: new firebase.appcheck[providerName](e.recaptchatoken),
+                                isTokenAutoRefreshEnabled: e.autoRefCapToken
+                            });
+                        }
+                        if (e.enable_auth) {
+                            firebase.myAuth[e.sdkName] = firebase.auth.getAuth(firebase.myApp[e.sdkName]);
+                            setAuthListener();
+                        }
+                        else {
+                            firebase._loadedApp[e.sdkName] = 1;
+                            Result.status = "success";
+                            returnData();
+                        }
+                    }
+
+                    if (e.action === "init") {
+                        if (typeof firebase.mainSdkName === "undefined") firebase.mainSdkName = e.sdkName;
+
+                        if (e.sdkName === firebase.mainSdkName) {
+                            var iApp = ["deleteApp", "getApp", "initializeApp"];
+                            var iAppCheck = ["initializeAppCheck", "ReCaptchaV3Provider", "ReCaptchaEnterpriseProvider", "getToken", "getLimitedUseToken"];
+                            var iAuth = [
+                                "createUserWithEmailAndPassword",
+                                "deleteUser",
+                                "getAdditionalUserInfo",
+                                "getAuth",
+                                "linkWithCredential",
+                                "linkWithPhoneNumber",
+                                "linkWithPopup",
+                                "linkWithRedirect",
+                                "onAuthStateChanged",
+                                "sendEmailVerification",
+                                "sendPasswordResetEmail",
+                                "setPersistence",
+                                "signInAnonymously",
+                                "signInWithCredential",
+                                "signInWithEmailAndPassword",
+                                "signInWithPhoneNumber",
+                                "signInWithPopup",
+                                "signInWithRedirect",
+                                "signInWithCustomToken",
+                                "signOut",
+                                "unlink",
+                                "updateEmail",
+                                "updatePassword",
+                                "updatePhoneNumber",
+                                "updateProfile",
+                                "useDeviceLanguage",
+                                "AuthCredential",
+                                "EmailAuthCredential",
+                                "EmailAuthProvider",
+                                "FacebookAuthProvider",
+                                "GithubAuthProvider",
+                                "GoogleAuthProvider",
+                                "OAuthProvider",
+                                "OAuthCredential",
+                                "PhoneAuthCredential",
+                                "PhoneAuthProvider",
+                                "RecaptchaVerifier",
+                                "TwitterAuthProvider",
+                            ];
+                            var iRD = [
+                                "enableLogging",
+                                "endAt",
+                                "endBefore",
+                                "equalTo",
+                                "get",
+                                "getDatabase",
+                                "goOffline",
+                                "goOnline",
+                                "increment",
+                                "limitToFirst",
+                                "limitToLast",
+                                "off",
+                                "onChildAdded",
+                                "onChildChanged",
+                                "onChildMoved",
+                                "onChildRemoved",
+                                "onDisconnect",
+                                "onValue",
+                                "orderByChild",
+                                "orderByKey",
+                                "orderByValue",
+                                "push",
+                                "query",
+                                "ref",
+                                "set",
+                                "remove",
+                                "runTransaction",
+                                "serverTimestamp",
+                                "startAfter",
+                                "startAt",
+                                "update",
+                            ];
+                            var iFirestore = [
+                                "addDoc",
+                                "arrayRemove",
+                                "arrayUnion",
+                                "clearIndexedDbPersistence",
+                                "collection",
+                                "collectionGroup",
+                                "deleteDoc",
+                                "deleteField",
+                                "disableNetwork",
+                                "doc",
+                                "documentId",
+                                "enableIndexedDbPersistence",
+                                "enableMultiTabIndexedDbPersistence",
+                                "enableNetwork",
+                                "endAt",
+                                "endBefore",
+                                "getDoc",
+                                "getDocFromCache",
+                                "getDocFromServer",
+                                "getDocs",
+                                "getFirestore",
+                                "increment",
+                                "initializeFirestore",
+                                "limit",
+                                "limitToLast",
+                                "loadBundle",
+                                "namedQuery",
+                                "onSnapshot",
+                                "onSnapshotsInSync",
+                                "orderBy",
+                                "query",
+                                "refEqual",
+                                "runTransaction",
+                                "serverTimestamp",
+                                "setDoc",
+                                "setLogLevel",
+                                "snapshotEqual",
+                                "startAfter",
+                                "startAt",
+                                "terminate",
+                                "updateDoc",
+                                "waitForPendingWrites",
+                                "where",
+                                "writeBatch",
+                            ];
+                            var iStorage = [
+                                "deleteObject",
+                                "getDownloadURL",
+                                "getMetadata",
+                                "getStorage",
+                                "list",
+                                "listAll",
+                                "ref",
+                                "updateMetadata",
+                                "uploadBytes",
+                                "uploadBytesResumable",
+                                "uploadString",
+                            ];
+                            var iAnalytics = ["getAnalytics", "initializeAnalytics", "logEvent", "setAnalyticsCollectionEnabled", "setUserId", "setUserProperties"];
+                            var iRemoteConfig = ["fetchAndActivate", "getAll", "getRemoteConfig"];
+                            var iPerformance = ["getPerformance", "trace"];
+                            e.remove_remoteconfig = "";
+                            //e.remove_analytics = "";
+                            e.remove_performance = "";
+
+                            const srcFirebase = "https://www.gstatic.com/firebasejs/" + e.version + "/firebase-";
+                            var importString = "";
+                            var varString = "";
+
+                            function setScriptString(arr, rem, serviceNm) {
+                                importString += "import {";
+                                varString += "globalThis.sparshaFirebase." + serviceNm + "={";
+                                rem = JSON.parse("[\"" + rem.replaceAll("\n", "\",\"") + "\"]");
+                                rem.forEach(function (item) {
+                                    const index = arr.indexOf(item);
+                                    if (index > -1) {
+                                        arr.splice(index, 1);
+                                    }
+                                });
+
+                                arr.forEach(function (item) {
+                                    if (serviceNm === "database" && (item === "ref" || item === "endAt" || item === "endBefore" || item === "increment" || item === "limitToLast" || item === "query" || item === "runTransaction" || item === "serverTimestamp" || item === "startAfter" || item === "startAt")) {
+                                        var newName = item + serviceNm;
+                                        importString += item + " as " + newName + ", ";
+                                        varString += item + ":" + newName + ",";
+                                    }
+                                    else {
+                                        importString += item + ", ";
+                                        varString += item + ":" + item + ",";
+                                    }
+                                });
+                                if (serviceNm === "appcheck") serviceNm = "app-check";
+                                if (serviceNm === "remoteconfig") serviceNm = "remote-config";
+                                importString += "  } from \"" + srcFirebase + serviceNm + ".js\";";
+                                varString += "};"
+                            }
+
+                            if (typeof window.cordova !== "undefined") e.enable_analytics = false;
+                            
+
+                            setScriptString(iApp, e.remove_app, "app");
+                            if (e.enable_appcheck) setScriptString(iAppCheck, e.remove_appcheck, "appcheck");
+
+                            if (e.enable_auth) setScriptString(iAuth, e.remove_auth, "auth");
+
+                            if (e.enable_database) setScriptString(iRD, e.remove_database, "database");
+
+                            if (e.enable_firestore) setScriptString(iFirestore, e.remove_firestore, "firestore");
+
+                            if (e.enable_storage) setScriptString(iStorage, e.remove_storage, "storage");
+
+                            if (e.enable_analytics) setScriptString(iAnalytics, e.remove_analytics, "analytics");
+
+                            if (e.enable_remoteconfig) setScriptString(iRemoteConfig, e.remove_remoteconfig, "remoteconfig");
+                            
+                            if (e.enable_performance) setScriptString(iPerformance, e.remove_performance, "performance");
+
+                            firebase._callInitApp = function () {
+                                startInitApp(e.firebaseConfig)
+                            }
+
+                            firebase._isLoaded = 0;
+                            function LoadScripts() {
+                                var script = document.createElement("script");
+                                script.type = "module";
+                                script.innerHTML = importString + varString + "globalThis.sparshaFirebase._isLoaded=1;globalThis.sparshaFirebase._callInitApp();";
+                                document.getElementsByTagName("head")[0].appendChild(script);
+                            }
+                            LoadScripts();
+                            var myTimeout = setTimeout(function () {
+                                if (firebase._isLoaded === 0) {
+                                    if (e.debug) console.error("TIMEOUT" + "\nsdkObject: " + e.sdkName);
+                                    if (e.autoLoad) LoadScripts();
+                                    Result.status = "timeout";
+                                    returnData();
+                                }
+                                else {
+                                    clearTimeout(myTimeout);
+                                }
+                            }, e.tseconds * 1000);
+
+                        }
+                        else {
+                            startInitApp(e.firebaseConfig)
+                        }
+                    }
+                    else {
+                        startInitApp(e.firebaseConfig)
+                    }
+                }
+                else if (e.action === "disconnect") {
+                    firebase.app.deleteApp(firebase.myApp[e.sdkName]);
+                }
+            }
+
+            this.AddRuntimeMessageHandler("domSync_sparsha_fSDK", DoSync);
+            //this.AddRuntimeMessageHandler("domAsync_sparsha_fSDK", DoAsync);
+        }
+    };
+    globalThis.RuntimeInterface.AddDOMHandlerClass(HANDLER_CLASS);
+}
+
+// scripts/plugins/Sparsha_FirebaseRealtimeDatabase/c3runtime/domside.js
+"use strict";
+{
+    const DOM_COMPONENT_ID = "sparsha_firebase_database";
+    function StopPropagation(e) {
+        e.stopPropagation();
+    }
+    const HANDLER_CLASS = class MyDOMHandler extends globalThis.DOMHandler {
+        constructor(iRuntime) {
+            super(iRuntime, DOM_COMPONENT_ID);
+            var self = this;
+
+            async function DoAsync(e) {
+                var Result = {
+                    success: 0,
+                };
+
+                var firebase = globalThis.sparshaFirebase;
+                var db = firebase.myDatabase[e.sdkName];
+
+                if (e.action === "AdvancedWriteData") {
+                    await firebase.database.set(firebase.database.ref(db, e.locationLink + '/'), e.data).then(function () {
+                        Result.success = 1;
+                    }).catch(function (error) {
+                        Result.success = 0;
+                        Result.errorCode = error.code;
+                        Result.errorMessage = error.message;
+                    });
+                }
+
+                else if (e.action === "AdvancedReadData" || e.action === "SimpleReadData") {
+                    var paraType = "";
+                    var DataNew = {
+                        valueOLD: "",
+                        Val: "",
+                        JSON: "{}",
+                        PROUI: "{}",
+                        ARRAY: "{}",
+                    };
+
+                    var dataRef = firebase.database.query(firebase.database.ref(db, e.locationLink));
+
+                    await FirebaseGetRead();
+
+                    function FirebaseGetRead() {
+                        return new Promise((resolve) => {
+                            if (e.sync) {
+                                firebase.database.onValue(dataRef, (snapshot) => {
+                                    UpdateReadData(snapshot);
+
+                                    Result.action = e.action;
+                                    Result.id = e.id;
+                                    Result.locationLink = e.locationLink;
+                                    self.PostToRuntime("on_complete" + e.uid, Result);
+
+                                    resolve()
+                                })
+                            }
+                            else {
+                                firebase.database.onValue(dataRef, (snapshot) => {
+                                    UpdateReadData(snapshot);
+                                    resolve()
+                                }, {
+                                    onlyOnce: true
+                                })
+                            }
+                        });
+                    }
+
+                    function UpdateReadData(snap) {
+                        if (snap["exists"]()) {
+                            if (typeof snap["val"]() === 'object') {
+                                DataNew.Val = "[object Object]";
+                                if (e.readJSON) {
+                                    DataNew.valueOLD = JSON.stringify(snap.toJSON());
+                                    DataNew.JSON = DataNew.valueOLD;
+                                }
+                                if (e.readArray) {
+                                    DataNew.ARRAY = JSON.stringify(snap["val"]());
+                                }
+                                if (e.readProui) {
+                                    var arr = [];
+                                    var snapOb = snap.toJSON();
+                                    Object["keys"](snapOb).forEach(function (k) {
+                                        snapOb[k]["~parentNode"] = k;
+                                        arr.push(snapOb[k]);
+                                    });
+                                    DataNew.valueOLD = JSON.stringify(arr)
+                                    DataNew.PROUI = DataNew.valueOLD;
+                                }
+                            }
+                            else {
+                                DataNew.valueOLD = snap["val"]();
+                                DataNew.Val = DataNew.valueOLD;
+                            }
+                            paraType = "read";
+                        }
+                        else paraType = "noExist";
+
+                        Result.success = 1;
+                        Result.DataNew = DataNew;
+                        Result.paraType = paraType;
+                    }
+                }
+
+                else if (e.action === "AdvancedReadLeaderboard" || e.action === "SimpleReadLeaderboard") {
+                    Result.Read_C = {};
+                    Result.myReadJSON = "{}";
+                    Result.myReadPROUI = "{}";
+                    Result.myReadARRAY = "{}";
+                    Result.Rank_C = 0;
+
+                    var paraType = "";
+                    var iLoop = 0;
+                    var rankCount = 0;
+
+                    var dataRef = firebase.database.query(firebase.database.ref(db, e.locationLink), firebase.database.orderByChild(e.orderChild), firebase.database.limitToLast(e.size));
+
+                    await FirebaseGetRead();
+
+                    function FirebaseGetRead() {
+                        return new Promise((resolve) => {
+                            if (e.sync) {
+                                firebase.database.onValue(dataRef, (snapshot) => {
+                                    if (snapshot["exists"]()) UpdateReadData(snapshot);
+                                    else {
+                                        Result.success = 1;
+                                        Result.dataLog = "";
+                                        Result.paraType = "noExist";
+                                    }
+                                    Result.action = e.action;
+                                    Result.id = e.id;
+                                    Result.locationLink = e.locationLink;
+                                    self.PostToRuntime("on_complete" + e.uid, Result);
+                                    resolve()
+                                })
+                            }
+                            else {
+                                firebase.database.onValue(dataRef, (snapshot) => {
+                                    if (snapshot["exists"]()) UpdateReadData(snapshot);
+                                    else {
+                                        Result.success = 1;
+                                        Result.dataLog = "";
+                                        Result.paraType = "noExist";
+                                    }
+                                    resolve()
+                                }, {
+                                    onlyOnce: true
+                                })
+                            }
+                        });
+                    }
+
+                    function UpdateReadData(snapshot) {
+                        if (e.readJSON) Result.myReadJSON = JSON.stringify(snapshot.toJSON());
+
+                        var arrgrid = [];
+                        var allowRankChange = true;
+                        iLoop = Object.keys(snapshot["val"]()).length - 1;
+                        rankCount = iLoop + 1;
+
+                        snapshot["forEach"](function (childSnapshot) {
+                            if (e.readProui) {
+                                var partOb = childSnapshot["val"]();
+                                partOb["~parentNode"] = childSnapshot["key"];
+                                arrgrid.push(partOb);
+                            }
+                            Object.keys(childSnapshot["val"]()).forEach(function (k) {
+                                var childData = childSnapshot["child"](k)["val"]();
+                                if (childData != null) Result.Read_C[k + iLoop] = childData;
+                                else Result.Read_C[k + iLoop] = "";
+                            });
+                            if (e.action === "AdvancedReadLeaderboard" && childSnapshot["child"](e.rankKey)["val"]() == e.rankData) {
+                                Result.Rank_C = rankCount;
+                                allowRankChange = false;
+                            }
+                            else if(e.action === "SimpleReadLeaderboard" && childSnapshot["key"] == e.rankData){
+                            	Result.Rank_C = rankCount;
+                                allowRankChange = false;
+                            }
+                            else if (allowRankChange) Result.Rank_C = 0;
+                            --rankCount;
+                            --iLoop;
+                        });
+                        if (e.readProui) Result.myReadPROUI = JSON.stringify(arrgrid.reverse());
+
+                        Result.success = 1;
+                        Result.dataLog = "[Object object]";
+                        Result.paraType = "lb";
+                        Result.snapshotVal = snapshot.val();
+                    }
+                }
+
+                else if (e.action === "AdvancedWriteLeaderboard") {
+                    await firebase.database.update(firebase.database.ref(db, e.locationLink + '/'), e.dataObj).then(function () {
+                        Result.success = 1;
+                    }).catch(function (error) {
+                        Result.success = 0;
+                        Result.errorCode = error.code;
+                        Result.errorMessage = error.message;
+                    });
+                }
+
+                else if (e.action === "RemoveData") {
+                    await firebase.database.remove(firebase.database.ref(db, e.locationLink + '/')).then(function () {
+                        Result.success = 1;
+                    }).catch(function (error) {
+                        Result.success = 0;
+                        Result.errorCode = error.code;
+                        Result.errorMessage = error.message;
+                    });
+                }
+
+                else if (e.action === "AdvancedIncrement") {
+                    await firebase.database.set(firebase.database.ref(db, e.locationLink + '/'), firebase.database.increment(e.data)).then(function () {
+                        Result.success = 1;
+                    }).catch(function (error) {
+                        Result.success = 0;
+                        Result.errorCode = error.code;
+                        Result.errorMessage = error.message;
+                    });
+                }
+
+                else if (e.action === "SimpleWriteData") {
+                    await firebase.database.update(firebase.database.ref(db, e.locUserData + "/" + e.myUID + '/'), e.dataObj).then(function () {
+                        Result.success = 1;
+                    }).catch(function (error) {
+                        Result.success = 0;
+                        Result.errorCode = error.code;
+                        Result.errorMessage = error.message;
+                    });
+                }
+
+                else if (e.action === "SimpleWriteLeaderboard") {
+                    await firebase.database.update(firebase.database.ref(db, e.locUserLB + "/" + e.myUID + '/'), e.dataObj).then(function () {
+                        Result.success = 1;
+                    }).catch(function (error) {
+                        Result.success = 0;
+                        Result.errorCode = error.code;
+                        Result.errorMessage = error.message;
+                    });
+                }
+
+                else if (e.action === "SimpleIncrement") {
+                    await firebase.database.set(firebase.database.ref(db, e.locationLink), firebase.database.increment(e.data)).then(function () {
+                        Result.success = 1;
+                    }).catch(function (error) {
+                        Result.success = 0;
+                        Result.errorCode = error.code;
+                        Result.errorMessage = error.message;
+                    });
+                }
+
+                else if (e.action === "SimpleRemove") {
+                    await firebase.database.remove(firebase.database.ref(db, e.locationLink)).then(function () {
+                        Result.success = 1;
+                    }).catch(function (error) {
+                        Result.success = 0;
+                        Result.errorCode = error.code;
+                        Result.errorMessage = error.message;
+                    });
+                }
+
+                return Result;
+            }
+
+            function DoSync(e) {
+                //self.PostToRuntime("on_complete"+e.uid)
+                var firebase = globalThis.sparshaFirebase;
+                var db = firebase.myDatabase[e.sdkName];
+
+                if (e.action === "GoOffline") {
+                    firebase.database.goOffline(db);
+                }
+                else if (e.action === "GoOnline") {
+                    firebase.database.goOnline(db);
+                }
+            }
+
+            this.AddRuntimeMessageHandler("domSync_sparsha_fRD", DoSync);
+            this.AddRuntimeMessageHandler("domAsync_sparsha_fRD", DoAsync);
+        }
+    };
+    globalThis.RuntimeInterface.AddDOMHandlerClass(HANDLER_CLASS);
+}
+
+// scripts/plugins/Sparsha_FirebaseAuth/c3runtime/domside.js
+"use strict";
+{
+    const DOM_COMPONENT_ID = "sparsha_firebase_auth";
+    function StopPropagation(e) {
+        e.stopPropagation();
+    }
+    const HANDLER_CLASS = class MyDOMHandler extends globalThis.DOMHandler {
+        constructor(iRuntime) {
+            super(iRuntime, DOM_COMPONENT_ID);
+            var self = this;
+
+            async function DoAsync(e) {
+                var RESULT = {
+                    success: 0,
+                };
+
+                var firebase = globalThis.sparshaFirebase;
+                var auth = firebase.myAuth[e.sdkName];
+
+                if (e.action === "Signupemail" || e.action === "Signinemail" || e.action === "Signupname" || e.action === "Signinname") {
+                    var signFunc = "", theEmail = "";
+                    if (e.action === "Signupemail" || e.action === "Signupname") signFunc = "createUserWithEmailAndPassword";
+                    else signFunc = "signInWithEmailAndPassword";
+                    if (e.action === "Signupname" || e.action === "Signinname") theEmail = e.username.replace(/ /g, '') + "@" + e.domain;
+                    else theEmail = e.email;
+
+                    firebase._LoginByEvent[e.sdkName] = 1;
+
+                    await firebase.auth[signFunc](auth, theEmail, e.password).then((userCredential) => {
+                        var cred = new firebase.auth.EmailAuthCredential(theEmail, e.password, "password");
+                        
+                        const addInfo=firebase.auth.getAdditionalUserInfo(userCredential);
+                        RESULT.isNewUser = addInfo.isNewUser;
+                        RESULT.addInfoJSON=JSON.stringify(addInfo);
+
+                        var authMapRes = firebase._GetAuthMapData(userCredential.user, e.sdkName);
+                        RESULT.userBasic = authMapRes.authExpBasic;
+                        RESULT.userPro = authMapRes.authExpPro;
+
+                        RESULT.cred = JSON.stringify(cred);
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        firebase._LoginByEvent[e.sdkName] = 0;
+
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    })
+                    if (e.action === "Signupname" && RESULT.success) {
+                        await firebase.auth.updateProfile(firebase._res[e.sdkName].user, { displayName: e.username }).then(() => {
+                            RESULT.nameChange = 1;
+                        }).catch((error) => {
+                            RESULT.nameChange = 0;
+                            RESULT.errorCode = error.code;
+                            RESULT.errorMessage = error.message;
+                        });
+                    }
+                }
+                else if (e.action === "VerifyEmail") {
+                    await firebase.auth.sendEmailVerification(firebase._res[e.sdkName].user).then(() => {
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    })
+                }
+                else if (e.action === "UpdateEmail") {
+                    await firebase.auth.updateEmail(firebase._res[e.sdkName].user, e.newEmail).then(() => {
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+                }
+                else if (e.action === "ResetPassword") {
+                    await firebase.auth.sendPasswordResetEmail(auth, e.email).then(() => {
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+                }
+                else if (e.action === "UpdatePassword") {
+                    await firebase.auth.updatePassword(firebase._res[e.sdkName].user, e.password).then(() => {
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+                }
+                else if (e.action === "RenderRecaptcha") {
+
+                    var reCaptchaObj = document.getElementById("SparshaFirebaseCaptcha");
+                    if (reCaptchaObj === null) {
+                        reCaptchaObj = document.createElement("BUTTON");
+                        reCaptchaObj.display = "none";
+                        reCaptchaObj.id = "SparshaFirebaseCaptcha";
+                        document.body.appendChild(reCaptchaObj);
+                    }
+                    firebase._CaptchaVerifier = new firebase.auth.RecaptchaVerifier('SparshaFirebaseCaptcha', {
+                        'size': 'invisible',
+                        'theme': e.theme
+                    }, auth);
+                    await firebase._CaptchaVerifier.render().then((widgetId) => {
+                        firebase._RecaptchaWidgetId = widgetId; //only for reCAPTCHA API Calls
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+
+                }
+                else if (e.action === "SendPhoneNumber") {
+                    await firebase.auth.signInWithPhoneNumber(auth, e.phoneNumber, firebase._CaptchaVerifier).then((confirmationResult) => {
+                        firebase._ConfirmationResult = confirmationResult;
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+                }
+                else if (e.action === "SubmitOtp") {
+                    firebase._LoginByEvent[e.sdkName] = 1;
+                    await firebase._ConfirmationResult.confirm(e.otp).then((result) => {
+                        const addInfo=firebase.auth.getAdditionalUserInfo(result);
+                        RESULT.isNewUser = addInfo.isNewUser;
+                        RESULT.addInfoJSON=JSON.stringify(addInfo);
+                        RESULT.cred = firebase.auth.PhoneAuthProvider.credential(firebase._ConfirmationResult.verificationId, e.otp);
+                        var authMapRes = firebase._GetAuthMapData(result.user, e.sdkName);
+                        RESULT.userBasic = authMapRes.authExpBasic;
+                        RESULT.userPro = authMapRes.authExpPro;
+                        RESULT.cred = JSON.stringify(RESULT.cred);
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        firebase._LoginByEvent[e.sdkName] = 0;
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+                }
+                else if (e.action === "SignOut") {
+                    await firebase.auth.signOut(auth).then(() => {
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+                    if (typeof window.cordova !== "undefined") {
+                        if (typeof window.cordova.plugins !== "undefined") {
+                            if (typeof window.cordova.plugins.firebase !== "undefined") await window.cordova.plugins.firebase.auth.signOut();
+                        }
+                    }
+                    if (typeof window.plugins !== "undefined") {
+                        if (typeof window.plugins.googleplus !== "undefined") await window.plugins.googleplus.logout();
+                    }
+                    if (typeof window.facebookConnectPlugin !== "undefined") await window.facebookConnectPlugin.logout();
+
+                    if(typeof globalThis.sparshaFirebase._UserPresence  !== "undefined" && globalThis.sparshaFirebase._UserPresence.online){
+                        var db = firebase.myDatabase[e.sdkName];
+                        var myConnectionsRef = firebase.database.ref(db, globalThis.sparshaFirebase._UserPresence.loc + '/connections');
+                        var lastOnlineRef = firebase.database.ref(db, globalThis.sparshaFirebase._UserPresence.loc + '/lastOnline');
+                        firebase.database.set(myConnectionsRef, false);
+                        firebase.database.set(lastOnlineRef, firebase.database.serverTimestamp());
+                        globalThis.sparshaFirebase._UserPresence.online=false;
+                    }
+                }
+                else if (e.action === "UpdateUsername") {
+                    await firebase.auth.updateProfile(firebase._res[e.sdkName].user, e.updateProfOb).then(() => {
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+                }
+                else if (e.action === "DeleteUser") {
+                    await firebase.auth.deleteUser(firebase._res[e.sdkName].user).then(() => {
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                    });
+                }
+                else if (e.action === "PopupOauth") {
+                    firebase._LoginByEvent[e.sdkName] = 1;
+                    var provider;
+                    if (e.providerNo === 0) {
+                        provider = new firebase.auth.GoogleAuthProvider();
+                        if(e.googlePromptSelect){
+                        	provider["setCustomParameters"]({
+  								"prompt": "select_account",
+							});
+                        }
+                    }
+                    else if (e.providerNo === 1) provider = new firebase.auth.FacebookAuthProvider();
+                    else if (e.providerNo === 2) provider = new firebase.auth.OAuthProvider('apple.com');
+                    else if (e.providerNo === 3) provider = new firebase.auth.TwitterAuthProvider();
+                    else if (e.providerNo === 4) provider = new firebase.auth.GithubAuthProvider();
+                    else if (e.providerNo === 5) provider = new firebase.auth.OAuthProvider('microsoft.com');
+                    else if (e.providerNo === 6) provider = new firebase.auth.OAuthProvider('yahoo.com');
+
+                    var authResult;
+                    await firebase.auth.signInWithPopup(auth, provider).then((result) => {
+                        const addInfo=firebase.auth.getAdditionalUserInfo(result);
+                        RESULT.isNewUser = addInfo.isNewUser;
+                        RESULT.addInfoJSON=JSON.stringify(addInfo);
+                        authResult = result;
+                        var authMapRes = firebase._GetAuthMapData(result.user, e.sdkName);
+                        RESULT.userBasic = authMapRes.authExpBasic;
+                        RESULT.userPro = authMapRes.authExpPro;
+
+                        if (e.providerNo === 0) RESULT.cred = firebase.auth.GoogleAuthProvider.credentialFromResult(result);
+                        else if (e.providerNo === 2) RESULT.cred = firebase.auth.OAuthProvider.credentialFromResult(result);
+                        else if (e.providerNo === 3) RESULT.cred = firebase.auth.TwitterAuthProvider.credentialFromResult(result);
+                        else if (e.providerNo === 4) RESULT.cred = firebase.auth.GithubAuthProvider.credentialFromResult(result);
+                        else if (e.providerNo >= 5) RESULT.cred = firebase.auth.OAuthProvider.credentialFromResult(result);
+                        RESULT.cred = JSON.stringify(RESULT.cred);
+                        RESULT.success = 1;
+                    }).catch((error) => {
+                        firebase._LoginByEvent[e.sdkName] = 0;
+                        RESULT.success = 0;
+                        RESULT.errorCode = error.code;
+                        RESULT.errorMessage = error.message;
+                        //const email = error.email;
+                        //const credential = FacebookAuthProvider.credentialFromError(error);
+                    });
+                    if (e.providerNo === 1 && RESULT.success === 1) {
+                        RESULT.cred = firebase.auth.FacebookAuthProvider.credentialFromResult(authResult);
+
+                        var user = authResult.user;
+                        var newPic = user.photoURL.split('?')[0] + "?access_token=" + RESULT.cred.accessToken;
+                        RESULT.cred = JSON.stringify(RESULT.cred);
+
+                        await firebase.auth.updateProfile(firebase._res[e.sdkName].user, { photoURL: newPic }).then(() => {
+                            RESULT.picChange = 1;
+                            RESULT.newPicUrl = newPic;
+                        }).catch((error) => {
+                            RESULT.picChange = 0;
+                            RESULT.errorCode = error.code;
+                            RESULT.errorMessage = error.message;
+                        });
+                    }
+
+                }
+
+                return RESULT;
+            }
+
+            function DoSync(e) {
+                if (e.action === "RemoveRecaptcha") {
+                    var style = document.createElement('style');
+                    style.innerHTML = ".grecaptcha-badge{visibility: hidden;}"
+                    document.head.appendChild(style);
+                }
+                else if (e.action === "PopupOauthSafe") {
+                    var RESULT = e;
+                    RESULT.success=0;
+                    var firebase = globalThis.sparshaFirebase;
+                    var auth = firebase.myAuth[e.sdkName];
+
+                    window.document.getElementById(e.buttonId).onclick = function() {PopupOauthSafe_Func()};
+
+                    function PopupOauthSafe_Func() {
+                        var provider;
+                        if (e.providerNo === 0) {
+                        	provider = new firebase.auth.GoogleAuthProvider();
+                        	if(e.googlePromptSelect){
+                        		provider["setCustomParameters"]({
+  									"prompt": "select_account",
+								});
+                        	}
+                        }
+                        else if (e.providerNo === 1) provider = new firebase.auth.FacebookAuthProvider();
+                        else if (e.providerNo === 2) provider = new firebase.auth.OAuthProvider('apple.com');
+                        else if (e.providerNo === 3) provider = new firebase.auth.TwitterAuthProvider();
+                        else if (e.providerNo === 4) provider = new firebase.auth.GithubAuthProvider();
+                        else if (e.providerNo === 5) provider = new firebase.auth.OAuthProvider('microsoft.com');
+                        else if (e.providerNo === 6) provider = new firebase.auth.OAuthProvider('yahoo.com');
+
+                        var authResult;
+                        firebase.auth.signInWithPopup(auth, provider).then((result) => {
+                        	const addInfo=firebase.auth.getAdditionalUserInfo(result);
+                            RESULT.isNewUser = addInfo.isNewUser;
+                            RESULT.addInfoJSON=JSON.stringify(addInfo);
+                            authResult = result;
+                            var authMapRes = firebase._GetAuthMapData(result.user, e.sdkName);
+                            RESULT.userBasic = authMapRes.authExpBasic;
+                            RESULT.userPro = authMapRes.authExpPro;
+                            RESULT.success = 1;
+                            if (e.providerNo === 0) RESULT.cred = firebase.auth.GoogleAuthProvider.credentialFromResult(result);
+                            else if (e.providerNo === 1) {
+                                RESULT.cred = firebase.auth.FacebookAuthProvider.credentialFromResult(authResult);
+
+                                var user = authResult.user;
+                                var newPic = user.photoURL.split('?')[0] + "?access_token=" + RESULT.cred.accessToken;
+                                RESULT.cred = JSON.stringify(RESULT.cred);
+
+                                firebase.auth.updateProfile(firebase._res[e.sdkName].user, { photoURL: newPic }).then(() => {
+                                    RESULT.picChange = 1;
+                                    RESULT.newPicUrl = newPic;
+                                    self.PostToRuntime("run_sparsha_fAuthBasic" + e.plugin_uid, RESULT);
+                                }).catch((error) => {
+                                    RESULT.picChange = 0;
+                                    RESULT.errorCode = error.code;
+                                    RESULT.errorMessage = error.message;
+                                    self.PostToRuntime("run_sparsha_fAuthBasic" + e.plugin_uid, RESULT);
+                                });
+                            }
+                            else if (e.providerNo === 2) RESULT.cred = firebase.auth.OAuthProvider.credentialFromResult(result);
+                            else if (e.providerNo === 3) RESULT.cred = firebase.auth.TwitterAuthProvider.credentialFromResult(result);
+                            else if (e.providerNo === 4) RESULT.cred = firebase.auth.GithubAuthProvider.credentialFromResult(result);
+                            else if (e.providerNo >= 5) RESULT.cred = firebase.auth.OAuthProvider.credentialFromResult(result);
+                            RESULT.cred = JSON.stringify(RESULT.cred);
+                            self.PostToRuntime("run_sparsha_fAuthBasic" + e.plugin_uid, RESULT);
+                        }).catch((error) => {
+                            RESULT.success = 0;
+                            RESULT.errorCode = error.code;
+                            RESULT.errorMessage = error.message;
+                            self.PostToRuntime("run_sparsha_fAuthBasic" + e.plugin_uid, RESULT);
+                            //const email = error.email;
+                            //const credential = FacebookAuthProvider.credentialFromError(error);
+                        });
+                    }
+
+                }
+            }
+
+            this.AddRuntimeMessageHandler("domSync_sparsha_fAuth", DoSync);
+            this.AddRuntimeMessageHandler("domAsync_sparsha_fAuth", DoAsync);
+        }
+    };
+    globalThis.RuntimeInterface.AddDOMHandlerClass(HANDLER_CLASS);
+}
+
+// scripts/plugins/Browser/dom/domSide.js
+"use strict";{let e=null,t=null;function n(e,t){if(e){if(t)return Array.from(document.querySelectorAll(e));{const t=document.querySelector(e);return t?[t]:[]}}return[document.documentElement]}function o(){}window.addEventListener("beforeinstallprompt",n=>(n.preventDefault(),e=n,t&&t._OnBeforeInstallPrompt(),!1));const i="browser",r=class extends self.DOMHandler{constructor(e){super(e,i),this._exportType="",this.AddRuntimeMessageHandlers([["get-initial-state",e=>this._OnGetInitialState(e)],["ready-for-sw-messages",()=>this._OnReadyForSWMessages()],["alert",e=>this._OnAlert(e)],["close",()=>this._OnClose()],["set-focus",e=>this._OnSetFocus(e)],["vibrate",e=>this._OnVibrate(e)],["lock-orientation",e=>this._OnLockOrientation(e)],["unlock-orientation",()=>this._OnUnlockOrientation()],["navigate",e=>this._OnNavigate(e)],["request-fullscreen",e=>this._OnRequestFullscreen(e)],["exit-fullscreen",()=>this._OnExitFullscreen()],["set-hash",e=>this._OnSetHash(e)],["set-document-css-style",e=>this._OnSetDocumentCSSStyle(e)],["get-document-css-style",e=>this._OnGetDocumentCSSStyle(e)],["set-window-size",e=>this._OnSetWindowSize(e)],["set-window-position",e=>this._OnSetWindowPosition(e)],["request-install",()=>this._OnRequestInstall()],["set-warn-on-close",e=>this._OnSetWarnOnClose(e)]]),window.addEventListener("online",()=>this._OnOnlineStateChanged(!0)),window.addEventListener("offline",()=>this._OnOnlineStateChanged(!1)),window.addEventListener("hashchange",()=>this._OnHashChange()),window.addEventListener("fullscreenerror",()=>this._OnFullscreenError()),window.addEventListener("webkitfullscreenerror",()=>this._OnFullscreenError()),window.addEventListener("mozfullscreenerror",()=>this._OnFullscreenError()),this._beforeunload_handler=e=>e.preventDefault(),document.addEventListener("backbutton",()=>this._OnCordovaBackButton())}Attach(){e?this._OnBeforeInstallPrompt():t=this,window.addEventListener("appinstalled",()=>this._OnAppInstalled())}_OnGetInitialState(e){return this._exportType=e["exportType"],{"location":location.toString(),"isOnline":!!navigator.onLine,"referrer":document.referrer,"title":document.title,"isCookieEnabled":!!navigator.cookieEnabled,"screenWidth":screen.width,"screenHeight":screen.height,"windowOuterWidth":window.outerWidth,"windowOuterHeight":window.outerHeight,"isConstructArcade":void 0!==window["is_scirra_arcade"],"windowHasFocus":document.hasFocus()}}_OnReadyForSWMessages(){window["C3_RegisterSW"]&&window["OfflineClientInfo"]&&window["OfflineClientInfo"]["SetMessageCallback"](e=>this.PostToRuntime("sw-message",e["data"]))}_OnBeforeInstallPrompt(){this.PostToRuntime("install-available")}async _OnRequestInstall(){if(!e)return{"result":"unavailable"};try{e["prompt"]();return{"result":(await e["userChoice"])["outcome"]}}catch(e){return console.error("[Construct] Requesting install failed: ",e),{"result":"failed"}}}_OnAppInstalled(){this.PostToRuntime("app-installed")}_OnOnlineStateChanged(e){this.PostToRuntime("online-state",{"isOnline":e})}_OnCordovaBackButton(){this.PostToRuntime("backbutton")}_OnAlert(e){alert(e["message"])}_OnClose(){navigator["app"]&&navigator["app"]["exitApp"]?navigator["app"]["exitApp"]():navigator["device"]&&navigator["device"]["exitApp"]?navigator["device"]["exitApp"]():window.close()}_OnSetFocus(e){e["isFocus"]?window.focus():window.blur()}_OnVibrate(e){navigator["vibrate"]&&navigator["vibrate"](e["pattern"])}_OnLockOrientation(e){const t=e["orientation"];if(screen["orientation"]&&screen["orientation"]["lock"])screen["orientation"]["lock"](t).catch(e=>console.warn("[Construct] Failed to lock orientation: ",e));else try{let e=!1;screen["lockOrientation"]?e=screen["lockOrientation"](t):screen["webkitLockOrientation"]?e=screen["webkitLockOrientation"](t):screen["mozLockOrientation"]?e=screen["mozLockOrientation"](t):screen["msLockOrientation"]&&(e=screen["msLockOrientation"](t)),e||console.warn("[Construct] Failed to lock orientation")}catch(e){console.warn("[Construct] Failed to lock orientation: ",e)}}_OnUnlockOrientation(){try{screen["orientation"]&&screen["orientation"]["unlock"]?screen["orientation"]["unlock"]():screen["unlockOrientation"]?screen["unlockOrientation"]():screen["webkitUnlockOrientation"]?screen["webkitUnlockOrientation"]():screen["mozUnlockOrientation"]?screen["mozUnlockOrientation"]():screen["msUnlockOrientation"]&&screen["msUnlockOrientation"]()}catch(e){}}_OnNavigate(e){const t=e["type"];if("back"===t)navigator["app"]&&navigator["app"]["backHistory"]?navigator["app"]["backHistory"]():window.history.back();else if("forward"===t)window.history.forward();else if("reload"===t)location.reload();else if("url"===t){const t=e["url"],n=e["target"],o=e["exportType"];self["cordova"]&&self["cordova"]["InAppBrowser"]?self["cordova"]["InAppBrowser"]["open"](t,"_system"):"preview"===o||"macos-wkwebiew"===o||"linux-cef"===o||this._iRuntime.IsAnyWebView2Wrapper()?window.open(t,"_blank"):this._isConstructArcade||(2===n?window.top.location=t:1===n?window.parent.location=t:window.location=t)}else if("new-window"===t){const t=e["url"],n=e["tag"];self["cordova"]&&self["cordova"]["InAppBrowser"]?self["cordova"]["InAppBrowser"]["open"](t,"_system"):window.open(t,n)}}_OnRequestFullscreen(e){if(this._iRuntime.IsAnyWebView2Wrapper()||"macos-wkwebview"===this._exportType||"linux-cef"===this._exportType)self.RuntimeInterface._SetWrapperIsFullscreenFlag(!0),this._iRuntime._SendWrapperMessage({"type":"set-fullscreen","fullscreen":!0});else{const t={"navigationUI":"auto"},n=e["navUI"];1===n?t["navigationUI"]="hide":2===n&&(t["navigationUI"]="show");const i=document.documentElement;let r;i["requestFullscreen"]?r=i["requestFullscreen"](t):i["mozRequestFullScreen"]?r=i["mozRequestFullScreen"](t):i["msRequestFullscreen"]?r=i["msRequestFullscreen"](t):i["webkitRequestFullScreen"]&&(r=void 0!==Element["ALLOW_KEYBOARD_INPUT"]?i["webkitRequestFullScreen"](Element["ALLOW_KEYBOARD_INPUT"]):i["webkitRequestFullScreen"]()),r instanceof Promise&&r.catch(o)}}_OnFullscreenError(){this.PostToRuntime("fullscreenerror")}_OnExitFullscreen(){if(this._iRuntime.IsAnyWebView2Wrapper()||"macos-wkwebview"===this._exportType||"linux-cef"===this._exportType)self.RuntimeInterface._SetWrapperIsFullscreenFlag(!1),this._iRuntime._SendWrapperMessage({"type":"set-fullscreen","fullscreen":!1});else{let e;document["exitFullscreen"]?e=document["exitFullscreen"]():document["mozCancelFullScreen"]?e=document["mozCancelFullScreen"]():document["msExitFullscreen"]?e=document["msExitFullscreen"]():document["webkitCancelFullScreen"]&&(e=document["webkitCancelFullScreen"]()),e instanceof Promise&&e.catch(o)}}_OnSetHash(e){location.hash=e["hash"]}_OnHashChange(){this.PostToRuntime("hashchange",{"location":location.toString()})}_OnSetDocumentCSSStyle(e){const t=e["prop"],o=e["value"],i=e["selector"],r=e["is-all"];try{const e=n(i,r);for(const n of e)t.startsWith("--")?n.style.setProperty(t,o):n.style[t]=o}catch(e){console.warn("[Browser] Failed to set style: ",e)}}_OnGetDocumentCSSStyle(e){const t=e["prop"],n=e["selector"];try{const e=document.querySelector(n);if(e){return{"isOk":!0,"result":window.getComputedStyle(e).getPropertyValue(t)}}return{"isOk":!1}}catch(e){return console.warn("[Browser] Failed to get style: ",e),{"isOk":!1}}}_OnSetWindowSize(e){window.resizeTo(e["windowWidth"],e["windowHeight"])}_OnSetWindowPosition(e){window.moveTo(e["windowX"],e["windowY"])}_OnSetWarnOnClose(e){e["enabled"]?window.addEventListener("beforeunload",this._beforeunload_handler):window.removeEventListener("beforeunload",this._beforeunload_handler)}};self.RuntimeInterface.AddDOMHandlerClass(r)}
+
+// scripts/plugins/HTMLElement/dom/domSide.js
+"use strict";{const e="html-element";function t(e){e["replaceChildren"]?e["replaceChildren"]():e.innerHTML=""}function n(e,t){e.innerHTML=t,r(e)}function s(e,t,n){e.insertAdjacentHTML(t,n),r(e)}function r(e){const t=Array.from(e.querySelectorAll("script:not([c3-executed])"));for(const e of t)e.parentNode.replaceChild(o(e),e)}function o(e){const t=document.createElement("script");t.text=e.text;const n=e.attributes;for(let e=0,s=n.length;e<s;++e){const s=n[e];t.setAttribute(s.name,s.value)}return t.setAttribute("c3-executed",""),t}function l(e,t,n){if(t){if(n)return Array.from(e.querySelectorAll(t));{const n=e.querySelector(t);return n?[n]:[]}}return[e]}function c(e){return e?{"isOk":!0,"html":e.innerHTML,"text":e.textContent}:{"isOk":!1}}const i=class extends self.DOMElementHandler{constructor(t){super(t,e),this.AddDOMElementMessageHandler("set-content",(e,t)=>this._OnSetContent(e,t)),this.AddDOMElementMessageHandler("insert-content",(e,t)=>this._OnInsertContent(e,t)),this.AddDOMElementMessageHandler("remove-content",(e,t)=>this._OnRemoveContent(e,t)),this.AddDOMElementMessageHandler("set-content-class",(e,t)=>this._OnSetContentClass(e,t)),this.AddDOMElementMessageHandler("set-content-attribute",(e,t)=>this._OnSetContentAttribute(e,t)),this.AddDOMElementMessageHandler("set-content-css-style",(e,t)=>this._OnSetContentCSSStyle(e,t)),this.AddDOMElementMessageHandler("get-element-box",(e,t)=>this._OnGetElementBox(e,t)),this.AddDOMElementMessageHandler("insert-img-element",(e,t)=>this._OnInsertImgElement(e,t)),this.AddDOMElementMessageHandler("set-scroll-position",(e,t)=>this._OnSetScrollPosition(e,t))}CreateElement(e,t){const s=document.createElement(t["tag"]);t["style-attribute"]&&s.setAttribute("style",t["style-attribute"]),s.style.position="absolute";const r=t["stop-input-events-mode"];if(r>0){let e=null;1===r?e=e=>{e.target!==s&&e.stopPropagation()}:2===r&&(e=e=>e.stopPropagation()),s.addEventListener("pointerdown",e),s.addEventListener("pointermove",e),s.addEventListener("pointerrawupdate",e),s.addEventListener("pointerup",e),s.addEventListener("mousedown",e),s.addEventListener("mouseup",e),s.addEventListener("dblclick",e)}t["allow-context-menu"]&&s.addEventListener("contextmenu",e=>e.stopPropagation()),s.addEventListener("click",t=>{let n=t.target;const r=[];for(;n&&(r.push({"targetId":"string"==typeof n.id?n.id:"","targetClass":"string"==typeof n.className?n.className:""}),n!==s);)n=n.parentNode;this._PostToRuntimeElementMaybeSync("click",e,{"chain":r})}),s.addEventListener("animationend",t=>{const n=t.target;this._PostToRuntimeElementMaybeSync("animationend",e,{"targetId":"string"==typeof n.id?n.id:"","targetClass":"string"==typeof n.className?n.className:"","animationName":t.animationName})}),t["id"]&&(s.id=t["id"]),t["className"]&&(s.className=t["className"]),t["css-color"]&&(s.style.color=t["css-color"]),t["css-background-color"]&&(s.style.backgroundColor=t["css-background-color"]),t["allow-text-selection"]||(s.style.userSelect="none",s.style.webkitUserSelect="none");const o=t["str"];return"html"===t["type"]?n(s,o):s.textContent=o,this._PostToRuntimeElementMaybeSync("initial-content",e,{"html":s.innerHTML,"text":s.textContent}),s}UpdateState(e,t){n(e,t["html"])}_OnSetContent(e,t){const s=t["str"],r=t["type"],o=t["selector"],i=t["is-all"];try{const t=l(e,o,i);if(0===t.length)return c(null);for(const e of t)"html"===r?n(e,s):e.textContent=s;return c(e)}catch(e){return console.warn("[HTML element] Failed to set content: ",e),c(null)}}_OnInsertContent(e,t){const n=t["str"],r=t["type"],o=t["at-end"]?"beforeend":"afterbegin",i=t["selector"],a=t["is-all"];try{const t=l(e,i,a);if(0===t.length)return c(null);for(const e of t)"html"===r?s(e,o,n):e.insertAdjacentText(o,n);return c(e)}catch(e){return console.warn("[HTML element] Failed to insert content: ",e),c(null)}}_OnRemoveContent(e,n){const s=n["is-clear"],r=n["selector"],o=n["is-all"];if(!r)return t(e),c(e);try{const n=l(e,r,o);if(0===n.length)return c(null);for(const e of n)s?t(e):e.remove();return c(e)}catch(e){return console.warn("[HTML element] Failed to remove content: ",e),c(null)}}_OnSetContentClass(e,t){const n=t["mode"],s=t["class-array"],r=t["selector"],o=t["is-all"];try{const t=l(e,r,o);if(0===t.length)return c(null);for(const e of t)for(const t of s)switch(n){case"add":e.classList.add(t);break;case"toggle":e.classList.toggle(t);break;case"remove":e.classList.remove(t)}return c(e)}catch(e){return console.warn("[HTML element] Failed to set class: ",e),c(null)}}_OnSetContentAttribute(e,t){const n=t["mode"],s=t["attribute"],r=t["value"],o=t["selector"],i=t["is-all"];try{const t=l(e,o,i);if(0===t.length)return c(null);for(const e of t)switch(n){case"set":e.setAttribute(s,r);break;case"remove":e.removeAttribute(s)}return c(e)}catch(e){return console.warn("[HTML element] Failed to set attribute: ",e),c(null)}}_OnSetContentCSSStyle(e,t){const n=t["prop"],s=t["value"],r=t["selector"],o=t["is-all"];try{const t=l(e,r,o);if(0===t.length)return c(null);for(const e of t)n.startsWith("--")?e.style.setProperty(n,s):e.style[n]=s;return c(e)}catch(e){return console.warn("[HTML element] Failed to set style: ",e),c(null)}}_OnGetElementBox(e,t){const n=t["selector"];let s=null;if(s=n?e.querySelector(n):e,!s)return{"isOk":!1};const r=s.getBoundingClientRect();return{"isOk":!0,"left":r.left,"top":r.top,"right":r.right,"bottom":r.bottom}}_OnInsertImgElement(e,n){const s=n["blobUrl"],r=n["width"],o=n["height"],l=n["selector"],i=n["insertAt"];let a=e;if(l&&(a=e.querySelector(l),!a))return{"isOk":!1};const d=new Image(r,o);return d.src=s,n["id"]&&(d.id=n["id"]),n["class"]&&(d.className=n["class"]),0===i?a.prepend(d):1===i?a.append(d):a["replaceChildren"]?a["replaceChildren"](d):(t(a),a.append(d)),c(e)}_OnSetScrollPosition(e,t){const n=t["selector"],s=t["direction"],r=t["position"];n&&!(e=e.querySelector(n))||("left"===s?e.scrollLeft=r:e.scrollTop=r)}};self.RuntimeInterface.AddDOMHandlerClass(i)}
+
 // start-export.js
 "use strict";if(window["C3_IsSupported"]){const e=false;window["c3_runtimeInterface"]=new self.RuntimeInterface({useWorker:e,workerMainUrl:"workermain.js",runtimeMainScript:"scripts/c3main.js",scriptFolder:"scripts/",exportType:"html5"})}
