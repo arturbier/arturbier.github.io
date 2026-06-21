@@ -2,12 +2,12 @@
 
 const scriptsInEvents = {
 
-	async Egame_Event10_Act2(runtime, localVars)
+	async Egame_Event12_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event12_Act5(runtime, localVars)
+	async Egame_Event14_Act5(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
@@ -18,7 +18,7 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event14(runtime, localVars)
+	async Egame_Event16(runtime, localVars)
 	{
 window.clearBoard = function() {
   let board = document.querySelector('.leaderboard');
@@ -48,7 +48,7 @@ window.addRow = function(name, score, gems) {
 };
 	},
 
-	async Egame_Event15(runtime, localVars)
+	async Egame_Event17(runtime, localVars)
 	{
 window.meFirst = false;
 window.myPlayerName = "";
@@ -172,7 +172,7 @@ window.addRow = function (name, score, gems, avatarUrl, rank) {
 };
 	},
 
-	async Egame_Event12_Act6(runtime, localVars)
+	async Egame_Event14_Act6(runtime, localVars)
 	{
 		openLeaderboard(true, runtime.globalVars.playerID);
 	}

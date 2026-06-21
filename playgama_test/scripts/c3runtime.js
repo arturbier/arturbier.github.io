@@ -1358,18 +1358,23 @@ function or(l, r)
 
 self.C3_ExpressionFuncs = [
 		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
+		() => 111,
+		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject();
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(0);
 		},
 		() => "Write",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => f0(f1(9999));
-		},
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => ("player_" + v0.GetValue());
 		},
 		() => "write",
 		p => {
