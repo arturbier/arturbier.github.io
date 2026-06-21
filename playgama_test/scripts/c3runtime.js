@@ -1368,10 +1368,8 @@ self.C3_ExpressionFuncs = [
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => f0(f1(9999));
 		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
-		},
+		() => "Артур Биер",
+		() => 220968686,
 		() => "write",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
@@ -1411,6 +1409,10 @@ self.C3_ExpressionFuncs = [
 		() => "daily",
 		() => "refresh",
 		() => "Обработчики Firebase",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
 		() => "i",
 		() => 0,
 		() => 49,

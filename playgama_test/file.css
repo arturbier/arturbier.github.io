@@ -3,9 +3,12 @@
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
+  background: #0a0c12;
 }
 
-/* WRAPPER */
+/* =========================
+   WRAPPER
+========================= */
 .leaderboard-wrapper {
   position: fixed;
   bottom: 0;
@@ -14,31 +17,65 @@ body {
   width: 100%;
   max-width: 900px;
   z-index: 9999;
+
+  pointer-events: none;
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .leaderboard-wrapper.show {
   transform: translate(-50%, 0%);
+  pointer-events: auto;
+  touch-action: pan-y;
 }
 
-/* MAIN PANEL */
+/* =========================
+   OVERLAY
+========================= */
+.leaderboard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9998;
+
+  transition: opacity .25s ease, background .25s ease, backdrop-filter .25s ease;
+  backdrop-filter: blur(6px);
+}
+
+.leaderboard-overlay.show {
+  opacity: 1;
+  background: rgba(0,0,0,0.55);
+  pointer-events: auto;
+}
+
+/* =========================
+   MAIN PANEL
+========================= */
 .leaderboard {
   width: 100%;
   background: rgba(10, 12, 18, 0.85);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+
   color: #eaeef7;
   border-radius: 18px 18px 0 0;
   overflow: hidden;
-  box-shadow: 0 0px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);
+
+  box-shadow:
+    0 0 60px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 .lb-header {
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
+
   padding: 14px 16px;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
@@ -48,23 +85,30 @@ body {
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
+
   background: linear-gradient(90deg, #7c5cff, #00d4ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* CLOSE BUTTON */
+/* =========================
+   CLOSE BUTTON
+========================= */
 .close-btn {
   position: absolute;
   right: 16px;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(255,255,255,0.06);
-  border: none;
-  color: white;
+
   width: 30px;
   height: 30px;
+
+  border: none;
   border-radius: 8px;
+
+  background: rgba(255,255,255,0.06);
+  color: white;
+
   cursor: pointer;
   transition: 0.2s;
 }
@@ -74,55 +118,103 @@ body {
   transform: translateY(-50%) scale(1.05);
 }
 
-/* SUBHEADER */
+/* =========================
+   SUBHEADER
+========================= */
 .lb-subheader {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
+
   padding: 10px 16px;
   font-size: 11px;
   letter-spacing: 2px;
+
   color: rgba(255,255,255,0.5);
 }
 
-/* ROWS CONTAINER (ИЗМЕНЕНО: Добавлен Flexbox) */
+/* =========================
+   SCROLL AREA (ВАЖНО)
+========================= */
 .rows {
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
+
   min-height: 50vh;
   max-height: 60vh;
+
   overflow-y: auto;
   overflow-x: hidden;
+
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+
   touch-action: pan-y;
+
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.25) transparent;
 }
 
-/* ROW */
+/* =========================
+   ROW
+========================= */
 .row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
+
   padding: 12px 16px;
+
   font-size: 14px;
   font-weight: 500;
+
   border-top: 1px solid rgba(255,255,255,0.04);
   transition: 0.2s;
 }
 
 .row:hover {
-  background: rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.06);
 }
 
-.row span:nth-child(1), .lb-subheader span:nth-child(1) { text-align: left; }
-.row span:nth-child(2), .lb-subheader span:nth-child(2) { text-align: center; font-weight: 700; color: #00d4ff; }
-.row span:nth-child(3), .lb-subheader span:nth-child(3) { text-align: right; opacity: 0.7; }
+.row.top1:hover {
+  background: linear-gradient(90deg, rgba(255,215,0,0.15), rgba(255,215,0,0.03));
+}
 
-/* LANDSCAPE — через класс */
-.leaderboard-wrapper { width: 100%; max-width: 900px; }
-.leaderboard-wrapper.landscape { width: 55vw; }
+.my-row:hover {
+  background: linear-gradient(90deg, rgba(0,212,255,0.28), rgba(0,212,255,0.05));
+}
 
-.player-cell { display: flex; align-items: center; gap: 10px; }
+.row span:nth-child(1),
+.lb-subheader span:nth-child(1) {
+  text-align: left;
+}
+
+.row span:nth-child(2),
+.lb-subheader span:nth-child(2) {
+  text-align: center;
+  font-weight: 700;
+  color: #00d4ff;
+}
+
+.row span:nth-child(3),
+.lb-subheader span:nth-child(3) {
+  text-align: right;
+  opacity: 0.7;
+}
+
+/* Своя строка и #1 — 3-я колонка без прозрачности */
+.my-row span:nth-child(3),
+.row.top1 span:nth-child(3) {
+  opacity: 1;
+}
+
+/* =========================
+   PLAYER CELL
+========================= */
+.player-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
 .avatar {
   width: 34px;
@@ -130,47 +222,83 @@ body {
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
+
   border: 2px solid rgba(255,255,255,0.12);
 }
 
-/* SCROLLBAR */
-.rows::-webkit-scrollbar { width: 8px; }
-.rows::-webkit-scrollbar-track { background: transparent; }
-.rows::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 999px; }
+/* =========================
+   BADGES
+========================= */
+.rank-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-.rank-badge { display: inline-flex; align-items: center; justify-content: center; width: 26px; margin-right: 8px; font-size: 16px; }
+  width: 26px;
+  margin-right: 8px;
 
-.name-top1 { color: #ffc800; font-weight: 900; }
-.row.top1 { background: linear-gradient(90deg, rgba(255, 215, 0, 0.08), transparent); border-left: 4px solid #ffc800; }
+  font-size: 16px;
+}
 
-/* MY ROW (ИЗМЕНЕНО: Добавлен order: -1) */
-.my-row {
-  order: -1; 
+.name-top1 {
+  color: #ffc800;
   font-weight: 900;
+}
+
+.row.top1 {
+  background: linear-gradient(90deg, rgba(255, 215, 0, 0.08), transparent);
+  border-left: 4px solid #ffc800;
+}
+
+/* =========================
+   MY ROW
+========================= */
+.my-row {
+  order: -1;
+  font-weight: 900;
+
   background: linear-gradient(90deg, rgba(0,212,255,0.18), transparent);
   border-left: 4px solid #00d4ff;
 }
 
-.leaderboard-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0);
-  opacity: 0; pointer-events: none; z-index: 9998;
-  transition: opacity .25s ease, background .25s ease, backdrop-filter .25s ease;
-  backdrop-filter: blur(6px);
+/* Имя в своей строке (не #1) — белый + свечение */
+.my-row .player-cell span:last-child:not(.name-top1) {
+  color: #00d4ff;
+  text-shadow: 0 0 6px rgba(0,212,255,0.6);
+  font-weight: 700;
 }
-.leaderboard-overlay.show { opacity: 1; background: rgba(0,0,0,0.55); pointer-events: auto; }
 
-/* PULL-TO-REFRESH */
+/* Имя #1 в своей строке — золото + свечение */
+.my-row .player-cell span.name-top1 {
+  color: #ffc800;
+  text-shadow: 0 0 6px rgba(255,200,0,0.6);
+}
+
+/* =========================
+   LANDSCAPE MODE
+========================= */
+.leaderboard-wrapper.landscape {
+  width: 55vw;
+}
+
+/* =========================
+   PULL TO REFRESH
+========================= */
 .pull-indicator {
   height: 0;
   opacity: 0;
-  overflow: hidden;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   gap: 8px;
   padding: 0;
-  transition: height 0.15s ease, opacity 0.15s ease;
+
+  overflow: hidden;
+
   background: rgba(255,255,255,0.03);
+  transition: height 0.15s ease, opacity 0.15s ease;
 }
 
 .pull-icon {
@@ -182,12 +310,18 @@ body {
   color: rgba(255,255,255,0.5);
 }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 .lb-footer {
   text-align: center;
+
   padding: 10px 16px 16px;
+
   font-size: 11px;
-  color: rgba(255,255,255,0.25);
   letter-spacing: 1px;
+
+  color: rgba(255,255,255,0.25);
+
   border-top: 1px solid rgba(255,255,255,0.04);
 }
