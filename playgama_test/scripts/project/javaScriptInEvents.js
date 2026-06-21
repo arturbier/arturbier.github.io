@@ -77,8 +77,12 @@ window.openLeaderboard = function (meFirst = false) {
 
   const el = document.querySelector(".leaderboard-wrapper");
   const overlay = document.querySelector(".leaderboard-overlay");
+  const titleEl = document.querySelector(".lb-header .title");
 
   if (!el) return;
+
+  const tab = runtime.globalVars.currentTab;
+  if (titleEl) titleEl.textContent = tab === "daily" ? "ТОП ДНЯ" : "ЛИДЕРЫ";
 
   overlay?.classList.add("show");
 
@@ -104,6 +108,8 @@ window.closeLeaderboard = function () {
 window.clearBoard = function () {
   const rows = document.querySelector(".rows");
   if (rows) rows.innerHTML = "";
+  const pinned = document.getElementById("pinned-row");
+  if (pinned) pinned.innerHTML = "";
 
   window.resetPullToRefresh();
 };
@@ -146,8 +152,7 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
       <img class="avatar"
            src="${avatarUrl}"
            onerror="this.src='https://via.placeholder.com/64'">
-      <span class="${isTop1 ? "name-top1" : ""}">${name}</span>
-      ${isMe ? "<span class=\"pin-icon\">📌</span>" : ""}
+      <span class="${isTop1 ? "name-top1" : ""}">${name}${isMe ? " 📌" : ""}</span>
     </span>
 
     <span>${score}</span>
@@ -156,7 +161,9 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
 
   if (isMe) {
     row.classList.add("my-row");
-    rows.prepend(row);
+    const pinned = document.getElementById("pinned-row");
+    if (pinned) { pinned.innerHTML = ""; pinned.appendChild(row); }
+    else rows.prepend(row);
   } else {
     rows.appendChild(row);
   }
