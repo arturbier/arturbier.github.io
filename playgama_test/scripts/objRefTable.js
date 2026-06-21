@@ -29,18 +29,18 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Browser.Acts.Alert,
 		C3.Plugins.Sparsha_FirebaseRealtimeDatabase.Cnds.OnAdvTrigger,
 		C3.Plugins.TextBox.Acts.SetText,
-		C3.JavaScriptInEvents.Egame_Event10_Act2,
+		C3.JavaScriptInEvents.Egame_Event12_Act2,
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.Sparsha_FirebaseRealtimeDatabase.Exps.readLeaderboard,
 		C3.Plugins.System.Exps.loopindex,
-		C3.JavaScriptInEvents.Egame_Event12_Act6,
+		C3.JavaScriptInEvents.Egame_Event14_Act6,
 		C3.Plugins.System.Cnds.PickByComparison,
 		C3.Plugins.TextBox.Exps.Tags,
-		C3.JavaScriptInEvents.Egame_Event14_Act1,
-		C3.JavaScriptInEvents.Egame_Event15_Act2,
-		C3.JavaScriptInEvents.Egame_Event17_Act6,
-		C3.JavaScriptInEvents.Egame_Event17_Act7,
-		C3.JavaScriptInEvents.Egame_Event20,
+		C3.JavaScriptInEvents.Egame_Event16_Act1,
+		C3.JavaScriptInEvents.Egame_Event17_Act2,
+		C3.JavaScriptInEvents.Egame_Event19_Act6,
+		C3.JavaScriptInEvents.Egame_Event19_Act7,
+		C3.JavaScriptInEvents.Egame_Event24,
 		C3.Plugins.Sparsha_FirebaseSDK.Cnds.OnLoaded,
 		C3.Plugins.System.Acts.NextPrevLayout
 	];
@@ -68,7 +68,9 @@ self.C3_JsPropNameTable = [
 	{gems: 0},
 	{avatar: 0},
 	{index: 0},
-	{pid: 0}
+	{pid: 0},
+	{currentTab: 0},
+	{refreshFlag: 0}
 ];
 
 self.InstanceType = {

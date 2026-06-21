@@ -157,3 +157,26 @@ body {
   backdrop-filter: blur(6px);
 }
 .leaderboard-overlay.show { opacity: 1; background: rgba(0,0,0,0.55); pointer-events: auto; }
+
+/* PULL-TO-REFRESH */
+.pull-indicator {
+  height: 0;
+  opacity: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 0;
+  transition: height 0.15s ease, opacity 0.15s ease;
+  background: rgba(255,255,255,0.03);
+}
+
+.pull-icon {
+  font-size: 16px;
+}
+
+.pull-text {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+}

@@ -1401,12 +1401,15 @@ self.C3_ExpressionFuncs = [
 		() => 50,
 		() => "LeaderboardRead",
 		() => "name",
+		() => "all",
 		() => "readdaily",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (("LeaderboardDaily/" + v0.GetValue()) + "/");
 		},
 		() => "LeaderboardDailyRead",
+		() => "daily",
+		() => "refresh",
 		() => "Обработчики Firebase",
 		() => "i",
 		() => 0,
@@ -1477,6 +1480,7 @@ self.C3_ExpressionFuncs = [
 			const f3 = p._GetNode(3).GetBoundMethod();
 			return () => and(and(n0.ExpObject("LeaderboardDailyRead", "name", f1("i")), ": "), n2.ExpObject("LeaderboardDailyRead", "score", f3("i")));
 		},
+		() => 1,
 		() => "JavaScript"
 ];
 

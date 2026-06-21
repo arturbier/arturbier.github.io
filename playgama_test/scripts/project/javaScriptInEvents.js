@@ -12,12 +12,12 @@ const scriptsInEvents = {
 		localStorage.setItem("ldr_date", today);
 	},
 
-	async Egame_Event10_Act2(runtime, localVars)
+	async Egame_Event12_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event12_Act6(runtime, localVars)
+	async Egame_Event14_Act6(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
@@ -29,17 +29,17 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event14_Act1(runtime, localVars)
+	async Egame_Event16_Act1(runtime, localVars)
 	{
 		openLeaderboard(true, runtime.globalVars.playerID);
 	},
 
-	async Egame_Event15_Act2(runtime, localVars)
+	async Egame_Event17_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event17_Act6(runtime, localVars)
+	async Egame_Event19_Act6(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
@@ -51,12 +51,12 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event17_Act7(runtime, localVars)
+	async Egame_Event19_Act7(runtime, localVars)
 	{
 		openLeaderboard(true, runtime.globalVars.playerID);
 	},
 
-	async Egame_Event20(runtime, localVars)
+	async Egame_Event24(runtime, localVars)
 	{
 window.meFirst = false;
 window.myPlayerID = "";
@@ -82,6 +82,7 @@ window.openLeaderboard = function (meFirst = false, myPlayerID = "") {
   requestAnimationFrame(() => {
 
     el.classList.add("show");
+    setTimeout(window.initPullToRefresh, 100);
 
   });
 
@@ -176,6 +177,67 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
 
     rows.appendChild(row);
 
+  }
+};
+
+// ===== Pull-to-Refresh =====
+window._pullStartY = 0;
+window._pullDist = 0;
+window._pulling = false;
+
+window.initPullToRefresh = function() {
+  const wrapper = document.getElementById("lb-wrapper");
+  const rows = document.querySelector(".rows");
+  if (!wrapper || !rows) return;
+
+  wrapper.addEventListener("touchstart", function(e) {
+    if (rows.scrollTop <= 1) {
+      window._pullStartY = e.touches[0].clientY;
+      window._pulling = true;
+    }
+  }, {passive: false});
+
+  wrapper.addEventListener("touchmove", function(e) {
+    if (!window._pulling) return;
+    window._pullDist = e.touches[0].clientY - window._pullStartY;
+    if (window._pullDist > 0 && rows.scrollTop <= 1) {
+      const ind = document.getElementById("pull-indicator");
+      if (ind) {
+        const h = Math.min(window._pullDist * 0.5, 80);
+        ind.style.height = h + "px";
+        ind.style.opacity = h / 80;
+        if (h >= 70) ind.querySelector(".pull-icon").textContent = "⬆";
+        else ind.querySelector(".pull-icon").textContent = "⬇";
+      }
+    }
+  }, {passive: false});
+
+  wrapper.addEventListener("touchend", function() {
+    if (!window._pulling) return;
+    window._pulling = false;
+    const ind = document.getElementById("pull-indicator");
+    if (window._pullDist > 70 && rows.scrollTop <= 1) {
+      if (ind) ind.querySelector(".pull-text").textContent = "Обновление...";
+      runtime.globalVars.refreshFlag = 1;
+    }
+    if (ind) {
+      ind.style.height = "0px";
+      ind.style.opacity = "0";
+    }
+    window._pullDist = 0;
+  });
+};
+
+// Убираем индикатор когда clearBoard вызван
+const _origClear = window.clearBoard;
+window.clearBoard = function() {
+  _origClear();
+  const ind = document.getElementById("pull-indicator");
+  if (ind) {
+    ind.style.height = "0px";
+    ind.style.opacity = "0";
+    ind.querySelector(".pull-icon").textContent = "⬇";
+    ind.querySelector(".pull-text").textContent = "Потяните вниз чтобы обновить";
   }
 };
 	}
