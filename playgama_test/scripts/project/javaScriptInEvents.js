@@ -7,58 +7,56 @@ const scriptsInEvents = {
 		const today = new Date().toISOString().split("T")[0];
 		runtime.globalVars.todayDate = today;
 		
-		const lastDate = runtime.globalVars.lastResetDate;
-		if (lastDate && lastDate !== today) {
-		  // Дата сменилась — дневная таблица авто-сбрасывается через новый ключ
-		}
-		runtime.globalVars.lastResetDate = today;
+		const lastDate = localStorage.getItem("ldr_date") || "";
+		runtime.globalVars.oldResetDate = lastDate;
+		localStorage.setItem("ldr_date", today);
 	},
 
-	async Egame_Event9_Act2(runtime, localVars)
+	async Egame_Event10_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event11_Act6(runtime, localVars)
+	async Egame_Event12_Act6(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
 		  localVars.score,
 		  localVars.gems,
 		  localVars.avatar, 
-		  localVars.pid,
-		  localVars.index
+		  localVars.index,
+		  localVars.pid
 		);
 	},
 
-	async Egame_Event11_Act7(runtime, localVars)
+	async Egame_Event14_Act1(runtime, localVars)
 	{
 		openLeaderboard(true, runtime.globalVars.playerID);
 	},
 
-	async Egame_Event13_Act2(runtime, localVars)
+	async Egame_Event15_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event15_Act6(runtime, localVars)
+	async Egame_Event17_Act6(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
 		  localVars.score,
 		  localVars.gems,
 		  localVars.avatar, 
-		  localVars.pid,
-		  localVars.index
+		  localVars.index,
+		  localVars.pid
 		);
 	},
 
-	async Egame_Event15_Act7(runtime, localVars)
+	async Egame_Event17_Act7(runtime, localVars)
 	{
 		openLeaderboard(true, runtime.globalVars.playerID);
 	},
 
-	async Egame_Event18(runtime, localVars)
+	async Egame_Event20(runtime, localVars)
 	{
 window.meFirst = false;
 window.myPlayerID = "";

@@ -1352,6 +1352,16 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
+		() => "",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => ("LeaderboardDaily/" + v0.GetValue());
+		},
+		() => "DailyCleanup",
 		() => "Write",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -1368,10 +1378,6 @@ self.C3_ExpressionFuncs = [
 			return () => ("Leaderboard/" + v0.GetValue());
 		},
 		() => "name,score,gems,pid",
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
-		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			const v1 = p._GetNode(1).GetVar();
@@ -1402,7 +1408,6 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "LeaderboardDailyRead",
 		() => "Обработчики Firebase",
-		() => "",
 		() => "i",
 		() => 0,
 		() => 49,
