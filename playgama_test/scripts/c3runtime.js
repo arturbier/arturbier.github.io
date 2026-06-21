@@ -1357,19 +1357,9 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
-		() => "customLeaderboard/",
-		() => "score",
-		() => 50,
-		() => "",
-		() => "name",
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
-		},
 		p => {
 			const n0 = p._GetNode(0);
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => n0.ExpObject("", "name", f1("i"));
+			return () => n0.ExpObject();
 		},
 		() => "Write",
 		p => {
@@ -1378,16 +1368,19 @@ self.C3_ExpressionFuncs = [
 			return () => f0(f1(9999));
 		},
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const f1 = p._GetNode(1).GetBoundMethod();
-			return () => and("player", f0(f1(999)));
+			const v0 = p._GetNode(0).GetVar();
+			return () => ("player_" + v0.GetValue());
 		},
 		() => "write",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => ("customLeaderboard/" + v0.GetValue());
+			return () => ("Leaderboard/" + v0.GetValue());
 		},
 		() => "name,score,gems",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			const v1 = p._GetNode(1).GetVar();
@@ -1398,11 +1391,12 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "LeaderboardWrite",
 		() => "read",
+		() => "Leaderboard/",
+		() => "score",
+		() => 50,
 		() => "LeaderboardRead",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => n0.ExpObject();
-		},
+		() => "name",
+		() => "",
 		() => "i",
 		() => 0,
 		() => 49,

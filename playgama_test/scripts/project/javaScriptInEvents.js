@@ -2,30 +2,12 @@
 
 const scriptsInEvents = {
 
-	async Egame_Event1_Act4(runtime, localVars)
-	{
-		function updateOrientation() {
-		  const el = document.querySelector('.leaderboard-wrapper');
-		  if (!el) return;
-		
-		  if (window.innerWidth > window.innerHeight) {
-		    el.classList.add('landscape');
-		  } else {
-		    el.classList.remove('landscape');
-		  }
-		}
-		
-		updateOrientation();
-		window.addEventListener('resize', updateOrientation);
-		window.addEventListener('orientationchange', updateOrientation);
-	},
-
-	async Egame_Event7_Act2(runtime, localVars)
+	async Egame_Event10_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event9_Act5(runtime, localVars)
+	async Egame_Event12_Act5(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
@@ -36,12 +18,7 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event9_Act6(runtime, localVars)
-	{
-		openLeaderboard();
-	},
-
-	async Egame_Event11(runtime, localVars)
+	async Egame_Event14(runtime, localVars)
 	{
 window.clearBoard = function() {
   let board = document.querySelector('.leaderboard');
@@ -71,46 +48,59 @@ window.addRow = function(name, score, gems) {
 };
 	},
 
-	async Egame_Event12(runtime, localVars)
+	async Egame_Event15(runtime, localVars)
 	{
-window.openLeaderboard = function () {
+window.meFirst = false;
+window.myPlayerName = "";
+
+window.openLeaderboard = function (meFirst = false, myPlayerName = "") {
+
+  window.meFirst = meFirst;
+
+  window.myPlayerName = myPlayerName;
+
   const el = document.querySelector(".leaderboard-wrapper");
+
+  const overlay = document.querySelector(".leaderboard-overlay");
+
   if (!el) return;
 
+  if (overlay) {
+
+    overlay.classList.add("show");
+
+  }
+
   requestAnimationFrame(() => {
+
     el.classList.add("show");
+
   });
+
 };
 
 window.closeLeaderboard = function () {
-  const el = document.querySelector(".leaderboard-wrapper");
-  if (!el) return;
 
-  el.classList.remove("show");
+  const el = document.querySelector(".leaderboard-wrapper");
+
+  const overlay = document.querySelector(".leaderboard-overlay");
+
+  if (el) {
+
+    el.classList.remove("show");
+
+  }
+
+  if (overlay) {
+
+    overlay.classList.remove("show");
+
+  }
+
 };
 
 window.clearBoard = function () {
-  const rows = document.querySelector(".rows");
-  if (rows) rows.innerHTML = "";
-};
 
-window.openLeaderboard = function () {
-  const el = document.querySelector(".leaderboard-wrapper");
-  if (!el) return;
-
-  requestAnimationFrame(() => {
-    el.classList.add("show");
-  });
-};
-
-window.closeLeaderboard = function () {
-  const el = document.querySelector(".leaderboard-wrapper");
-  if (!el) return;
-
-  el.classList.remove("show");
-};
-
-window.clearBoard = function () {
   const rows = document.querySelector(".rows");
   if (rows) rows.innerHTML = "";
 };
@@ -118,46 +108,73 @@ window.clearBoard = function () {
 window.addRow = function (name, score, gems, avatarUrl, rank) {
 
   const rows = document.querySelector(".rows");
-
   if (!rows) return;
 
   const row = document.createElement("div");
-
   row.className = "row";
 
   const isTop1 = rank === 0;
+  const isMe =
+    window.meFirst &&
+    name === window.myPlayerName;
 
-  if (isTop1) row.classList.add("top1");
+  if (isTop1)
+    row.classList.add("top1");
 
   let badge = "";
 
-  if (rank === 0) badge = "👑";
-
-  else if (rank === 1) badge = "🥈";
-
-  else if (rank === 2) badge = "🥉";
+  if (rank === 0) {
+    badge = "👑";
+  }
+  else if (rank === 1) {
+    badge = "🥈";
+  }
+  else if (rank === 2) {
+    badge = "🥉";
+  }
+  else {
+    badge = `${rank + 1}.`;
+  }
 
   row.innerHTML = `
-
     <span class="player-cell">
 
       <span class="rank-badge">${badge}</span>
 
-      <img class="avatar" src="${avatarUrl}">
+      <img
+        class="avatar"
+        src="${avatarUrl}"
+        onerror="this.src='https://via.placeholder.com/64'"
+      >
 
-      <span class="${isTop1 ? "name-top1" : ""}">${name}</span>
+      <span class="${isTop1 ? "name-top1" : ""}">
+        ${name}
+      </span>
 
     </span>
 
     <span>${score}</span>
 
     <span>${gems}</span>
-
   `;
 
-  rows.appendChild(row);
+  if (isMe) {
 
+    row.classList.add("my-row");
+
+    rows.prepend(row);
+
+  } else {
+
+    rows.appendChild(row);
+
+  }
 };
+	},
+
+	async Egame_Event12_Act6(runtime, localVars)
+	{
+		openLeaderboard(true, runtime.globalVars.playerID);
 	}
 };
 

@@ -1001,5 +1001,397 @@
 // scripts/plugins/HTMLElement/dom/domSide.js
 "use strict";{const e="html-element";function t(e){e["replaceChildren"]?e["replaceChildren"]():e.innerHTML=""}function n(e,t){e.innerHTML=t,r(e)}function s(e,t,n){e.insertAdjacentHTML(t,n),r(e)}function r(e){const t=Array.from(e.querySelectorAll("script:not([c3-executed])"));for(const e of t)e.parentNode.replaceChild(o(e),e)}function o(e){const t=document.createElement("script");t.text=e.text;const n=e.attributes;for(let e=0,s=n.length;e<s;++e){const s=n[e];t.setAttribute(s.name,s.value)}return t.setAttribute("c3-executed",""),t}function l(e,t,n){if(t){if(n)return Array.from(e.querySelectorAll(t));{const n=e.querySelector(t);return n?[n]:[]}}return[e]}function c(e){return e?{"isOk":!0,"html":e.innerHTML,"text":e.textContent}:{"isOk":!1}}const i=class extends self.DOMElementHandler{constructor(t){super(t,e),this.AddDOMElementMessageHandler("set-content",(e,t)=>this._OnSetContent(e,t)),this.AddDOMElementMessageHandler("insert-content",(e,t)=>this._OnInsertContent(e,t)),this.AddDOMElementMessageHandler("remove-content",(e,t)=>this._OnRemoveContent(e,t)),this.AddDOMElementMessageHandler("set-content-class",(e,t)=>this._OnSetContentClass(e,t)),this.AddDOMElementMessageHandler("set-content-attribute",(e,t)=>this._OnSetContentAttribute(e,t)),this.AddDOMElementMessageHandler("set-content-css-style",(e,t)=>this._OnSetContentCSSStyle(e,t)),this.AddDOMElementMessageHandler("get-element-box",(e,t)=>this._OnGetElementBox(e,t)),this.AddDOMElementMessageHandler("insert-img-element",(e,t)=>this._OnInsertImgElement(e,t)),this.AddDOMElementMessageHandler("set-scroll-position",(e,t)=>this._OnSetScrollPosition(e,t))}CreateElement(e,t){const s=document.createElement(t["tag"]);t["style-attribute"]&&s.setAttribute("style",t["style-attribute"]),s.style.position="absolute";const r=t["stop-input-events-mode"];if(r>0){let e=null;1===r?e=e=>{e.target!==s&&e.stopPropagation()}:2===r&&(e=e=>e.stopPropagation()),s.addEventListener("pointerdown",e),s.addEventListener("pointermove",e),s.addEventListener("pointerrawupdate",e),s.addEventListener("pointerup",e),s.addEventListener("mousedown",e),s.addEventListener("mouseup",e),s.addEventListener("dblclick",e)}t["allow-context-menu"]&&s.addEventListener("contextmenu",e=>e.stopPropagation()),s.addEventListener("click",t=>{let n=t.target;const r=[];for(;n&&(r.push({"targetId":"string"==typeof n.id?n.id:"","targetClass":"string"==typeof n.className?n.className:""}),n!==s);)n=n.parentNode;this._PostToRuntimeElementMaybeSync("click",e,{"chain":r})}),s.addEventListener("animationend",t=>{const n=t.target;this._PostToRuntimeElementMaybeSync("animationend",e,{"targetId":"string"==typeof n.id?n.id:"","targetClass":"string"==typeof n.className?n.className:"","animationName":t.animationName})}),t["id"]&&(s.id=t["id"]),t["className"]&&(s.className=t["className"]),t["css-color"]&&(s.style.color=t["css-color"]),t["css-background-color"]&&(s.style.backgroundColor=t["css-background-color"]),t["allow-text-selection"]||(s.style.userSelect="none",s.style.webkitUserSelect="none");const o=t["str"];return"html"===t["type"]?n(s,o):s.textContent=o,this._PostToRuntimeElementMaybeSync("initial-content",e,{"html":s.innerHTML,"text":s.textContent}),s}UpdateState(e,t){n(e,t["html"])}_OnSetContent(e,t){const s=t["str"],r=t["type"],o=t["selector"],i=t["is-all"];try{const t=l(e,o,i);if(0===t.length)return c(null);for(const e of t)"html"===r?n(e,s):e.textContent=s;return c(e)}catch(e){return console.warn("[HTML element] Failed to set content: ",e),c(null)}}_OnInsertContent(e,t){const n=t["str"],r=t["type"],o=t["at-end"]?"beforeend":"afterbegin",i=t["selector"],a=t["is-all"];try{const t=l(e,i,a);if(0===t.length)return c(null);for(const e of t)"html"===r?s(e,o,n):e.insertAdjacentText(o,n);return c(e)}catch(e){return console.warn("[HTML element] Failed to insert content: ",e),c(null)}}_OnRemoveContent(e,n){const s=n["is-clear"],r=n["selector"],o=n["is-all"];if(!r)return t(e),c(e);try{const n=l(e,r,o);if(0===n.length)return c(null);for(const e of n)s?t(e):e.remove();return c(e)}catch(e){return console.warn("[HTML element] Failed to remove content: ",e),c(null)}}_OnSetContentClass(e,t){const n=t["mode"],s=t["class-array"],r=t["selector"],o=t["is-all"];try{const t=l(e,r,o);if(0===t.length)return c(null);for(const e of t)for(const t of s)switch(n){case"add":e.classList.add(t);break;case"toggle":e.classList.toggle(t);break;case"remove":e.classList.remove(t)}return c(e)}catch(e){return console.warn("[HTML element] Failed to set class: ",e),c(null)}}_OnSetContentAttribute(e,t){const n=t["mode"],s=t["attribute"],r=t["value"],o=t["selector"],i=t["is-all"];try{const t=l(e,o,i);if(0===t.length)return c(null);for(const e of t)switch(n){case"set":e.setAttribute(s,r);break;case"remove":e.removeAttribute(s)}return c(e)}catch(e){return console.warn("[HTML element] Failed to set attribute: ",e),c(null)}}_OnSetContentCSSStyle(e,t){const n=t["prop"],s=t["value"],r=t["selector"],o=t["is-all"];try{const t=l(e,r,o);if(0===t.length)return c(null);for(const e of t)n.startsWith("--")?e.style.setProperty(n,s):e.style[n]=s;return c(e)}catch(e){return console.warn("[HTML element] Failed to set style: ",e),c(null)}}_OnGetElementBox(e,t){const n=t["selector"];let s=null;if(s=n?e.querySelector(n):e,!s)return{"isOk":!1};const r=s.getBoundingClientRect();return{"isOk":!0,"left":r.left,"top":r.top,"right":r.right,"bottom":r.bottom}}_OnInsertImgElement(e,n){const s=n["blobUrl"],r=n["width"],o=n["height"],l=n["selector"],i=n["insertAt"];let a=e;if(l&&(a=e.querySelector(l),!a))return{"isOk":!1};const d=new Image(r,o);return d.src=s,n["id"]&&(d.id=n["id"]),n["class"]&&(d.className=n["class"]),0===i?a.prepend(d):1===i?a.append(d):a["replaceChildren"]?a["replaceChildren"](d):(t(a),a.append(d)),c(e)}_OnSetScrollPosition(e,t){const n=t["selector"],s=t["direction"],r=t["position"];n&&!(e=e.querySelector(n))||("left"===s?e.scrollLeft=r:e.scrollTop=r)}};self.RuntimeInterface.AddDOMHandlerClass(i)}
 
+// scripts/plugins/Sparsha_FirebaseAuthExtended/c3runtime/domside.js
+"use strict";
+
+{
+    const DOM_COMPONENT_ID = "sparsha_firebase_authPRO";
+
+    function StopPropagation(e) {
+        e.stopPropagation();
+
+    }
+    const HANDLER_CLASS = class MyDOMHandler extends globalThis.DOMHandler {
+        constructor(iRuntime) {
+            super(iRuntime, DOM_COMPONENT_ID);
+
+            var self = this;
+
+
+            async function DoAsync(e) {
+                    var RESULT = {
+                        success: 0,
+                    };
+    
+                    var firebase = globalThis.sparshaFirebase;
+    
+                    var auth = firebase.myAuth[e.sdkName];
+                    
+
+                    if (e.action === "OauthRedirect") {
+                        firebase._LoginByEvent[e.sdkName] = 1;
+
+                        var provider;
+
+                        if (e.providerNo === 0) {
+                        	provider = new firebase.auth.GoogleAuthProvider();
+                        	if(e.googlePromptSelect){
+                        		provider["setCustomParameters"]({
+  									"prompt": "select_account",
+								});
+                        	}
+                    	}
+
+                        else if (e.providerNo === 1) provider = new firebase.auth.FacebookAuthProvider();
+
+                        else if (e.providerNo === 2) provider = new firebase.auth.OAuthProvider('apple.com');
+
+                        else if (e.providerNo === 3) provider = new firebase.auth.TwitterAuthProvider();
+
+                        else if (e.providerNo === 4) provider = new firebase.auth.GithubAuthProvider();
+
+                        else if (e.providerNo === 5) provider = new firebase.auth.OAuthProvider('microsoft.com');
+
+                        else if (e.providerNo === 6) provider = new firebase.auth.OAuthProvider('yahoo.com');
+
+
+                        var authResult;
+
+                        await firebase.auth.signInWithRedirect(auth, provider).then((result) => {
+                            const addInfo=firebase.auth.getAdditionalUserInfo(result);
+                            RESULT.isNewUser = addInfo.isNewUser;
+                            RESULT.addInfoJSON=JSON.stringify(addInfo);
+
+                            authResult = result;
+
+                            var authMapRes = firebase._GetAuthMapData(result.user, e.sdkName);
+
+                            RESULT.userBasic = authMapRes.authExpBasic;
+
+                            RESULT.userPro = authMapRes.authExpPro;
+
+
+                            if (e.providerNo === 0) RESULT.cred = firebase.auth.GoogleAuthProvider.credentialFromResult(result);
+
+                            else if (e.providerNo === 2) RESULT.cred = firebase.auth.OAuthProvider.credentialFromResult(result);
+
+                            else if (e.providerNo === 3) RESULT.cred = firebase.auth.TwitterAuthProvider.credentialFromResult(result);
+
+                            else if (e.providerNo === 4) RESULT.cred = firebase.auth.GithubAuthProvider.credentialFromResult(result);
+
+                            else if (e.providerNo >= 5) RESULT.cred = firebase.auth.OAuthProvider.credentialFromResult(result);
+                            RESULT.cred = JSON.stringify(RESULT.cred);
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            firebase._LoginByEvent[e.sdkName] = 0;
+
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                        });
+
+                        if (e.providerNo === 1 && RESULT.success === 1) {
+                            RESULT.cred = firebase.auth.FacebookAuthProvider.credentialFromResult(authResult);
+
+
+                            var user = authResult.user;
+
+                            var newPic = user.photoURL.split('?')[0] + "?access_token=" + RESULT.cred.accessToken;
+
+                            RESULT.cred = JSON.stringify(RESULT.cred);
+                            await firebase.auth.updateProfile(firebase._res[e.sdkName].user, { photoURL: newPic }).then(() => {
+                                RESULT.picChange = 1;
+
+                                RESULT.newPicUrl = newPic;
+
+                            }).catch((error) => {
+                                RESULT.picChange = 0;
+
+                                RESULT.errorCode = error.code;
+
+                                RESULT.errorMessage = error.message;
+
+                            });
+
+                        }
+                    }
+                    else if (e.action === "OauthLink") {
+                        var provider;
+
+                        if (e.providerNo === 0) {
+                        	provider = new firebase.auth.GoogleAuthProvider();
+                        	provider["setCustomParameters"]({
+  								"prompt": "select_account",
+                        	});
+                    	}
+
+                        else if (e.providerNo === 1) provider = new firebase.auth.FacebookAuthProvider();
+
+                        else if (e.providerNo === 2) provider = new firebase.auth.OAuthProvider('apple.com');
+
+                        else if (e.providerNo === 3) provider = new firebase.auth.TwitterAuthProvider();
+
+                        else if (e.providerNo === 4) provider = new firebase.auth.GithubAuthProvider();
+
+                        else if (e.providerNo === 5) provider = new firebase.auth.OAuthProvider('microsoft.com');
+
+                        else if (e.providerNo === 6) provider = new firebase.auth.OAuthProvider('yahoo.com');
+
+
+                        var linkType = ["linkWithPopup", "linkWithRedirect"]
+
+                        await firebase.auth[linkType[e.type]](firebase._res[e.sdkName].user, provider).then((result) => {
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                        });
+
+
+                    }
+                    else if (e.action === "SetPersistence") {
+                        var persistVariable = ["browserLocalPersistence", "browserSessionPersistence", "inMemoryPersistence"];
+
+                        await firebase.auth.setPersistence(auth, firebase.auth[persistVariable[e.persistence]]).then(() => {
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                        });
+
+                    }
+                    else if (e.action === "UnlinkProviders") {
+                        var pIDString = ["password", "phone", "google.com", "facebook.com", "apple.com", "twitter.com", "github.com", "microsoft.com", "yahoo.com"];
+
+                        await firebase.auth.unlink(globalThis.sparshaFirebase._res[e.sdkName].user, pIDString[e.pnum]).then(() => {
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                        });
+
+                    }
+                    else if (e.action === "SignInCredential") {
+                        firebase._LoginByEvent[e.sdkName] = 1;
+                        //firebase.auth.OAuthCredential.fromJSON(e.cred)
+                        var newCred;
+                        if (e.type === 0) newCred = firebase.auth.EmailAuthCredential.fromJSON(e.cred);
+                        else if (e.type === 1) newCred = firebase.auth.OAuthCredential.fromJSON(e.cred);
+                        else newCred = firebase.auth.PhoneAuthCredential.fromJSON(e.cred);
+
+                        console.log(e.type, newCred);
+
+                        await firebase.auth.signInWithCredential(auth, newCred).then((result) => {
+                            const addInfo=firebase.auth.getAdditionalUserInfo(result);
+                            RESULT.isNewUser = addInfo.isNewUser;
+                            RESULT.addInfoJSON=JSON.stringify(addInfo);
+
+                            authResult = result;
+
+                            var authMapRes = firebase._GetAuthMapData(result.user, e.sdkName);
+
+                            RESULT.userBasic = authMapRes.authExpBasic;
+
+                            RESULT.userPro = authMapRes.authExpPro;
+
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                            firebase._LoginByEvent[e.sdkName] = 0;
+
+                        });
+
+                    }
+                    else if (e.action === "LinkCredential") {
+                        var newCred;
+                        if (e.type === 0) newCred = firebase.auth.EmailAuthCredential.fromJSON(e.cred);
+                        else if (e.type === 1) newCred = firebase.auth.OAuthCredential.fromJSON(e.cred);
+                        else newCred = firebase.auth.PhoneAuthCredential.fromJSON(e.cred);
+
+                        await firebase.auth.linkWithCredential(firebase._res[e.sdkName].user, newCred).then(() => {
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                        });
+
+                    }
+                    else if (e.action === "AnonymousAuth") {
+                        firebase._LoginByEvent[e.sdkName] = 1;
+
+                        await firebase.auth.signInAnonymously(auth).then((result) => {
+                            const addInfo=firebase.auth.getAdditionalUserInfo(result);
+                            RESULT.isNewUser = addInfo.isNewUser;
+                            RESULT.addInfoJSON=JSON.stringify(addInfo);
+
+                            authResult = result;
+
+                            var authMapRes = firebase._GetAuthMapData(result.user, e.sdkName);
+
+                            RESULT.userBasic = authMapRes.authExpBasic;
+
+                            RESULT.userPro = authMapRes.authExpPro;
+
+
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                            firebase._LoginByEvent[e.sdkName] = 0;
+
+                        });
+
+                    }
+                    else if (e.action === "PhoneLinkBrowser") {
+                        await firebase.auth.linkWithPhoneNumber(firebase._res[e.sdkName].user, firebase.auth.OAuthCredential.fromJSON(e.cred), e.phonenum, firebase._CaptchaVerifier).then(() => {
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                        });
+
+                    }
+                    else if (e.action === "LinkEmail") {
+                        var cred = new firebase.auth.EmailAuthCredential(e.email, e.pass, "password");
+
+                        await firebase.auth.linkWithCredential(firebase._res[e.sdkName].user, cred).then(() => {
+                            RESULT.success = 1;
+
+                        }).catch((error) => {
+                            RESULT.success = 0;
+
+                            RESULT.errorCode = error.code;
+
+                            RESULT.errorMessage = error.message;
+
+                        });
+
+                    }
+                    else if (e.action === "SignInCustomToken") {
+                        //https://us-central1-<project-id>.cloudfunctions.net/widgets/<id>
+                        var fetchedToken = "";
+                        var fetchError = false;
+                        try {
+                            var x = await fetch("https://" + e.serverLoc + "-" + e.myProjectID + ".cloudfunctions.net/getAuthToken?uid=" + e.string);
+                            //var x = await fetch("http://localhost:5001/" + e.myProjectID + "/" + e.serverLoc + "/getAuthToken?uid=" + e.string);
+                            fetchedToken = await x.text();
+                        } catch (err) {
+                            fetchError = true;
+                            RESULT.success = 0;
+                            RESULT.errorCode = "";
+                            RESULT.errorMessage = err;
+                        }
+
+                        if (fetchedToken.indexOf("Error: ") !== -1) {
+                            fetchError = true;
+                            RESULT.success = 0;
+                            RESULT.errorCode = "";
+                            RESULT.errorMessage = fetchedToken;
+                        }
+
+                        if (!fetchError) {
+                            firebase._LoginByEvent[e.sdkName] = 1;
+
+                            await firebase.auth.signInWithCustomToken(auth, fetchedToken).then((result) => {
+                                var authMapRes = firebase._GetAuthMapData(result.user, e.sdkName);
+                                RESULT.userBasic = authMapRes.authExpBasic;
+                                RESULT.userPro = authMapRes.authExpPro;
+
+                                RESULT.success = 1;
+                            }).catch((error) => {
+                                firebase._LoginByEvent[e.sdkName] = 0;
+
+                                RESULT.success = 0;
+                                RESULT.errorCode = error.code;
+                                RESULT.errorMessage = error.message;
+                            })
+                        }
+
+
+                    }
+                    else if (e.action === "GetJwt") {
+                    	
+                    	if(e.idtype===0){
+                        	await auth.currentUser.getIdToken().then(result => {
+                        		RESULT.idToken=result;
+                            	RESULT.success = 1;
+                        	}).catch((error) => {
+                            	RESULT.success = 0;
+                            	RESULT.errorCode = "";
+                            	RESULT.errorMessage = error;
+                        	});
+                        }
+                        else{
+                        	await auth.currentUser.getIdTokenResult().then(result => {
+                        		RESULT.idToken=JSON.stringify(result);
+                            	RESULT.success = 1;
+                        	}).catch((error) => {
+                            	RESULT.success = 0;
+                            	RESULT.errorCode = "";
+                            	RESULT.errorMessage = error;
+                        	});
+                        }
+
+                    }
+                    return RESULT;
+                
+
+            }
+
+            /*function DoSync(e) {
+                //self.PostToRuntime("on_complete"+e.uid)
+            }*/
+
+            //this.AddRuntimeMessageHandler("sync", DoSync);
+
+            this.AddRuntimeMessageHandler("domAsync_sparsha_fAuthPRO", DoAsync);
+
+        }
+    };
+
+    globalThis.RuntimeInterface.AddDOMHandlerClass(HANDLER_CLASS);
+
+}
+
 // start-export.js
 "use strict";if(window["C3_IsSupported"]){const e=false;window["c3_runtimeInterface"]=new self.RuntimeInterface({useWorker:e,workerMainUrl:"workermain.js",runtimeMainScript:"scripts/c3main.js",scriptFolder:"scripts/",exportType:"html5"})}
