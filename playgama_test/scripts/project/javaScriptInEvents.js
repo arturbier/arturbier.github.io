@@ -2,12 +2,12 @@
 
 const scriptsInEvents = {
 
-	async Egame_Event11_Act2(runtime, localVars)
+	async Egame_Event8_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event13_Act5(runtime, localVars)
+	async Egame_Event10_Act5(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
@@ -18,37 +18,33 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event15(runtime, localVars)
+	async Egame_Event10_Act6(runtime, localVars)
 	{
-window.clearBoard = function() {
-  let board = document.querySelector('.leaderboard');
-  if (!board) return;
-
-  board.innerHTML = `
-    <div class='header'>
-      <span>Игрок</span>
-      <span>Очки</span>
-      <span>Тип</span>
-    </div>`;
-};
-
-window.addRow = function(name, score, gems) {
-  let board = document.querySelector('.leaderboard');
-  if (!board) return;
-
-  let row = document.createElement('div');
-  row.className = 'row';
-
-  row.innerHTML = `
-    <span class='name'>${name}</span>
-    <span class='score'>${score}</span>
-    <span class='gems'>${gems}</span>`;
-
-  board.appendChild(row);
-};
+		openLeaderboard(true, runtime.globalVars.playerID);
 	},
 
-	async Egame_Event16(runtime, localVars)
+	async Egame_Event12_Act2(runtime, localVars)
+	{
+		clearBoard()
+	},
+
+	async Egame_Event14_Act5(runtime, localVars)
+	{
+		addRow(
+		  localVars.name,
+		  localVars.score,
+		  localVars.gems,
+		  localVars.avatar, 
+		  localVars.index
+		);
+	},
+
+	async Egame_Event14_Act6(runtime, localVars)
+	{
+		openLeaderboard(true, runtime.globalVars.playerID);
+	},
+
+	async Egame_Event17(runtime, localVars)
 	{
 window.meFirst = false;
 window.myPlayerName = "";
@@ -170,11 +166,6 @@ window.addRow = function (name, score, gems, avatarUrl, rank) {
 
   }
 };
-	},
-
-	async Egame_Event13_Act6(runtime, localVars)
-	{
-		openLeaderboard(true, runtime.globalVars.playerID);
 	}
 };
 
