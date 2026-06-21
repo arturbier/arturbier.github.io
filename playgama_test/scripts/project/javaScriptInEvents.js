@@ -31,7 +31,7 @@ const scriptsInEvents = {
 
 	async Egame_Event16_Act1(runtime, localVars)
 	{
-		openLeaderboard(true, runtime.globalVars.playerID);
+		openLeaderboard(true, runtime.globalVars.playerID, runtime.globalVars.CurrentName);
 	},
 
 	async Egame_Event17_Act2(runtime, localVars)
@@ -51,21 +51,24 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event19_Act7(runtime, localVars)
+	async Egame_Event21_Act1(runtime, localVars)
 	{
-		openLeaderboard(true, runtime.globalVars.playerID);
+		openLeaderboard(true, runtime.globalVars.playerID, runtime.globalVars.CurrentName);
 	},
 
-	async Egame_Event24(runtime, localVars)
+	async Egame_Event25(runtime, localVars)
 	{
 window.meFirst = false;
 window.myPlayerID = "";
+window.myPlayerName = "";
 
-window.openLeaderboard = function (meFirst = false, myPlayerID = "") {
+window.openLeaderboard = function (meFirst = false, myPlayerID = "", myPlayerName = "") {
 
   window.meFirst = meFirst;
 
   window.myPlayerID = myPlayerID;
+
+  window.myPlayerName = myPlayerName;
 
   const el = document.querySelector(".leaderboard-wrapper");
 
@@ -125,7 +128,7 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
   const isTop1 = rank === 0;
   const isMe =
     window.meFirst &&
-    pid === window.myPlayerID;
+    (pid === window.myPlayerID || name === window.myPlayerName);
 
   if (isTop1)
     row.classList.add("top1");
@@ -197,6 +200,13 @@ window.initPullToRefresh = function() {
     }
   }, {passive: false});
 
+  wrapper.addEventListener("mousedown", function(e) {
+    if (rows.scrollTop <= 1) {
+      window._pullStartY = e.clientY;
+      window._pulling = true;
+    }
+  });
+
   wrapper.addEventListener("touchmove", function(e) {
     if (!window._pulling) return;
     window._pullDist = e.touches[0].clientY - window._pullStartY;
@@ -212,7 +222,37 @@ window.initPullToRefresh = function() {
     }
   }, {passive: false});
 
+  window.addEventListener("mousemove", function(e) {
+    if (!window._pulling) return;
+    window._pullDist = e.clientY - window._pullStartY;
+    if (window._pullDist > 0 && rows.scrollTop <= 1) {
+      const ind = document.getElementById("pull-indicator");
+      if (ind) {
+        const h = Math.min(window._pullDist * 0.5, 80);
+        ind.style.height = h + "px";
+        ind.style.opacity = h / 80;
+        if (h >= 70) ind.querySelector(".pull-icon").textContent = "⬆";
+        else ind.querySelector(".pull-icon").textContent = "⬇";
+      }
+    }
+  });
+
   wrapper.addEventListener("touchend", function() {
+    if (!window._pulling) return;
+    window._pulling = false;
+    const ind = document.getElementById("pull-indicator");
+    if (window._pullDist > 70 && rows.scrollTop <= 1) {
+      if (ind) ind.querySelector(".pull-text").textContent = "Обновление...";
+      runtime.globalVars.refreshFlag = 1;
+    }
+    if (ind) {
+      ind.style.height = "0px";
+      ind.style.opacity = "0";
+    }
+    window._pullDist = 0;
+  });
+
+  window.addEventListener("mouseup", function() {
     if (!window._pulling) return;
     window._pulling = false;
     const ind = document.getElementById("pull-indicator");

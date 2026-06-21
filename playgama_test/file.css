@@ -86,8 +86,9 @@ body {
 
 /* ROWS CONTAINER (ИЗМЕНЕНО: Добавлен Flexbox) */
 .rows {
-  display: flex;       /* ВАЖНО: для работы order */
+  display: flex;
   flex-direction: column; 
+  min-height: 50vh;
   max-height: 60vh;
   overflow-y: auto;
   overflow-x: hidden;
@@ -179,4 +180,14 @@ body {
 .pull-text {
   font-size: 12px;
   color: rgba(255,255,255,0.5);
+}
+
+/* FOOTER */
+.lb-footer {
+  text-align: center;
+  padding: 10px 16px 16px;
+  font-size: 11px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 1px;
+  border-top: 1px solid rgba(255,255,255,0.04);
 }
