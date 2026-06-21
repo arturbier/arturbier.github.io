@@ -36,11 +36,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.Egame_Event14_Act6,
 		C3.Plugins.System.Cnds.PickByComparison,
 		C3.Plugins.TextBox.Exps.Tags,
-		C3.JavaScriptInEvents.Egame_Event16_Act1,
 		C3.JavaScriptInEvents.Egame_Event17_Act2,
 		C3.JavaScriptInEvents.Egame_Event17_Act3,
 		C3.JavaScriptInEvents.Egame_Event19_Act6,
-		C3.JavaScriptInEvents.Egame_Event21_Act1,
 		C3.JavaScriptInEvents.Egame_Event25,
 		C3.Plugins.Sparsha_FirebaseSDK.Cnds.OnLoaded,
 		C3.Plugins.System.Acts.NextPrevLayout

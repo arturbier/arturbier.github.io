@@ -34,11 +34,6 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event16_Act1(runtime, localVars)
-	{
-		openLeaderboard(true);
-	},
-
 	async Egame_Event17_Act2(runtime, localVars)
 	{
 		clearBoard()
@@ -59,11 +54,6 @@ const scriptsInEvents = {
 		  localVars.index,
 		  localVars.pid
 		);
-	},
-
-	async Egame_Event21_Act1(runtime, localVars)
-	{
-		openLeaderboard(true);
 	},
 
 	async Egame_Event25(runtime, localVars)
@@ -130,6 +120,8 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
   row.className = "row";
 
   const isTop1 = rank === 0;
+  const isTop2 = rank === 1;
+  const isTop3 = rank === 2;
 
   const isMe =
     window.meFirst &&
@@ -145,6 +137,8 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
     `${rank + 1}.`;
 
   if (isTop1) row.classList.add("top1");
+  if (isTop2) row.classList.add("top2");
+  if (isTop3) row.classList.add("top3");
 
   row.innerHTML = `
     <span class="player-cell">
@@ -153,6 +147,7 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
            src="${avatarUrl}"
            onerror="this.src='https://via.placeholder.com/64'">
       <span class="${isTop1 ? "name-top1" : ""}">${name}</span>
+      ${isMe ? "<span class=\"pin-icon\">📌</span>" : ""}
     </span>
 
     <span>${score}</span>
