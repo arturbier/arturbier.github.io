@@ -1367,7 +1367,7 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => ("Leaderboard/" + v0.GetValue());
 		},
-		() => "name,score,gems",
+		() => "name,score,gems,pid",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
@@ -1378,12 +1378,15 @@ self.C3_ExpressionFuncs = [
 			const v2 = p._GetNode(2).GetVar();
 			const v3 = p._GetNode(3).GetVar();
 			const v4 = p._GetNode(4).GetVar();
-			return () => ((((v0.GetValue() + v1.GetValue()) + v2.GetValue()) + v3.GetValue()) + v4.GetValue());
+			const v5 = p._GetNode(5).GetVar();
+			const v6 = p._GetNode(6).GetVar();
+			return () => ((((((v0.GetValue() + v1.GetValue()) + v2.GetValue()) + v3.GetValue()) + v4.GetValue()) + v5.GetValue()) + v6.GetValue());
 		},
 		() => "LeaderboardWrite",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
-			return () => ("LeaderboardDaily/" + v0.GetValue());
+			const v1 = p._GetNode(1).GetVar();
+			return () => ((("LeaderboardDaily/" + v0.GetValue()) + "/") + v1.GetValue());
 		},
 		() => "LeaderboardDailyWrite",
 		() => "read",
@@ -1393,7 +1396,10 @@ self.C3_ExpressionFuncs = [
 		() => "LeaderboardRead",
 		() => "name",
 		() => "readdaily",
-		() => "LeaderboardDaily/",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (("LeaderboardDaily/" + v0.GetValue()) + "/");
+		},
 		() => "LeaderboardDailyRead",
 		() => "Обработчики Firebase",
 		() => "",
@@ -1418,6 +1424,11 @@ self.C3_ExpressionFuncs = [
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("i");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => n0.ExpObject("LeaderboardRead", "pid", f1("i"));
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -1448,6 +1459,11 @@ self.C3_ExpressionFuncs = [
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
 			return () => n0.ExpObject("LeaderboardDailyRead", "gems", f1("i"));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => n0.ExpObject("LeaderboardDailyRead", "pid", f1("i"));
 		},
 		p => {
 			const n0 = p._GetNode(0);

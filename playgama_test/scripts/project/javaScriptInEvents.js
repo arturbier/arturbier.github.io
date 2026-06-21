@@ -2,58 +2,72 @@
 
 const scriptsInEvents = {
 
-	async Egame_Event8_Act2(runtime, localVars)
+	async Egame_Event1_Act1(runtime, localVars)
+	{
+		const today = new Date().toISOString().split("T")[0];
+		runtime.globalVars.todayDate = today;
+		
+		const lastDate = runtime.globalVars.lastResetDate;
+		if (lastDate && lastDate !== today) {
+		  // Дата сменилась — дневная таблица авто-сбрасывается через новый ключ
+		}
+		runtime.globalVars.lastResetDate = today;
+	},
+
+	async Egame_Event9_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event10_Act5(runtime, localVars)
+	async Egame_Event11_Act6(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
 		  localVars.score,
 		  localVars.gems,
 		  localVars.avatar, 
+		  localVars.pid,
 		  localVars.index
 		);
 	},
 
-	async Egame_Event10_Act6(runtime, localVars)
+	async Egame_Event11_Act7(runtime, localVars)
 	{
 		openLeaderboard(true, runtime.globalVars.playerID);
 	},
 
-	async Egame_Event12_Act2(runtime, localVars)
+	async Egame_Event13_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event14_Act5(runtime, localVars)
+	async Egame_Event15_Act6(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
 		  localVars.score,
 		  localVars.gems,
 		  localVars.avatar, 
+		  localVars.pid,
 		  localVars.index
 		);
 	},
 
-	async Egame_Event14_Act6(runtime, localVars)
+	async Egame_Event15_Act7(runtime, localVars)
 	{
 		openLeaderboard(true, runtime.globalVars.playerID);
 	},
 
-	async Egame_Event17(runtime, localVars)
+	async Egame_Event18(runtime, localVars)
 	{
 window.meFirst = false;
-window.myPlayerName = "";
+window.myPlayerID = "";
 
-window.openLeaderboard = function (meFirst = false, myPlayerName = "") {
+window.openLeaderboard = function (meFirst = false, myPlayerID = "") {
 
   window.meFirst = meFirst;
 
-  window.myPlayerName = myPlayerName;
+  window.myPlayerID = myPlayerID;
 
   const el = document.querySelector(".leaderboard-wrapper");
 
@@ -101,7 +115,7 @@ window.clearBoard = function () {
   if (rows) rows.innerHTML = "";
 };
 
-window.addRow = function (name, score, gems, avatarUrl, rank) {
+window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
 
   const rows = document.querySelector(".rows");
   if (!rows) return;
@@ -112,7 +126,7 @@ window.addRow = function (name, score, gems, avatarUrl, rank) {
   const isTop1 = rank === 0;
   const isMe =
     window.meFirst &&
-    name === window.myPlayerName;
+    pid === window.myPlayerID;
 
   if (isTop1)
     row.classList.add("top1");

@@ -11,6 +11,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.HTMLElement,
 		C3.Plugins.PlaygamaBridge,
 		C3.Plugins.Sparsha_FirebaseAuthExtended,
+		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.JavaScriptInEvents.Egame_Event1_Act1,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.Button.Cnds.OnClicked,
 		C3.Plugins.System.Acts.SetVar,
@@ -25,19 +27,19 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Browser.Acts.Alert,
 		C3.Plugins.Sparsha_FirebaseRealtimeDatabase.Cnds.OnAdvTrigger,
 		C3.Plugins.TextBox.Acts.SetText,
-		C3.JavaScriptInEvents.Egame_Event8_Act2,
+		C3.JavaScriptInEvents.Egame_Event9_Act2,
 		C3.Plugins.System.Cnds.For,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.Sparsha_FirebaseRealtimeDatabase.Exps.readLeaderboard,
 		C3.Plugins.System.Exps.loopindex,
-		C3.JavaScriptInEvents.Egame_Event10_Act5,
-		C3.JavaScriptInEvents.Egame_Event10_Act6,
+		C3.JavaScriptInEvents.Egame_Event11_Act6,
+		C3.JavaScriptInEvents.Egame_Event11_Act7,
 		C3.Plugins.System.Cnds.PickByComparison,
 		C3.Plugins.TextBox.Exps.Tags,
-		C3.JavaScriptInEvents.Egame_Event12_Act2,
-		C3.JavaScriptInEvents.Egame_Event14_Act5,
-		C3.JavaScriptInEvents.Egame_Event14_Act6,
-		C3.JavaScriptInEvents.Egame_Event17,
+		C3.JavaScriptInEvents.Egame_Event13_Act2,
+		C3.JavaScriptInEvents.Egame_Event15_Act6,
+		C3.JavaScriptInEvents.Egame_Event15_Act7,
+		C3.JavaScriptInEvents.Egame_Event18,
 		C3.Plugins.Sparsha_FirebaseSDK.Cnds.OnLoaded,
 		C3.Plugins.System.Acts.NextPrevLayout
 	];
@@ -53,6 +55,7 @@ self.C3_JsPropNameTable = [
 	{HTMLElement: 0},
 	{PlaygamaBridge: 0},
 	{FirebaseAuthPro: 0},
+	{todayDate: 0},
 	{CurrentName: 0},
 	{CurrentScore: 0},
 	{CurrentGems: 0},
@@ -62,7 +65,8 @@ self.C3_JsPropNameTable = [
 	{score: 0},
 	{gems: 0},
 	{avatar: 0},
-	{index: 0}
+	{index: 0},
+	{pid: 0}
 ];
 
 self.InstanceType = {
