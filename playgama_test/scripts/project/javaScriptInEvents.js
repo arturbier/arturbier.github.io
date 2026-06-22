@@ -12,6 +12,16 @@ const scriptsInEvents = {
 		localStorage.setItem("ldr_date", today);
 	},
 
+	async Egame_Event4_Act7(runtime, localVars)
+	{
+
+	},
+
+	async Egame_Event11_Act2(runtime, localVars)
+	{
+		showAchievement("🎉 Первый рекорд!","Твой результат в таблице лидеров","🎯","first");
+	},
+
 	async Egame_Event12_Act2(runtime, localVars)
 	{
 		clearBoard()
@@ -34,17 +44,17 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event17_Act2(runtime, localVars)
+	async Egame_Event16_Act2(runtime, localVars)
 	{
 		clearBoard()
 	},
 
-	async Egame_Event17_Act3(runtime, localVars)
+	async Egame_Event16_Act3(runtime, localVars)
 	{
 		openLeaderboard(true);
 	},
 
-	async Egame_Event19_Act6(runtime, localVars)
+	async Egame_Event18_Act6(runtime, localVars)
 	{
 		addRow(
 		  localVars.name,
@@ -56,7 +66,59 @@ const scriptsInEvents = {
 		);
 	},
 
-	async Egame_Event25(runtime, localVars)
+	async Egame_Event24_Act4(runtime, localVars)
+	{
+		var p=String(localVars.achPid);var n=String(localVars.achName);var id=String(runtime.globalVars.playerID||"");var nm=String(runtime.globalVars.CurrentName||"");if(p===id||n===nm){var r=localVars.achRank;runtime.globalVars.foundRank=r;var prev=localStorage.getItem("ach_state_rank");if(prev!==String(r)){runtime.globalVars.writeRank=1;window.saveHistory(id,r);if(r===0)window.showAchievement("👑 Король дня!","Ты на первом месте","👑",null,null);else if(r===1)window.showAchievement("🥈 Серебро!","Ты на втором месте","🥈",null,null);else if(r===2)window.showAchievement("🥉 Бронза!","Ты на третьем месте","🥉",null,null);if(prev==="0"&&r!==0)window.showAchievement("📉 Потерял первое место!","Теперь не на вершине","😢",null,null)}localStorage.setItem("ach_state_rank",String(r))}
+	},
+
+	async Egame_Event26_Act1(runtime, localVars)
+	{
+		window._histRows = [];
+	},
+
+	async Egame_Event28_Act2(runtime, localVars)
+	{
+		var parts = String(localVars.histRank).split(',');
+		var r = Number(parts[0]);
+		var d = parts[1] || '';
+		if (window._histRows) window._histRows.unshift({r: r, d: d});
+	},
+
+	async Egame_Event29_Act1(runtime, localVars)
+	{
+		var popup = document.getElementById("history-popup");
+		if (!popup || !window._histRows) return;
+		var html = "";
+		if (window._histRows.length === 0) {
+		  html = "<div class='hist-empty'>Нет данных</div>";
+		} else {
+		  var maxR = 10;
+		  html += '<div class=hist-chart>';
+		  window._histRows.reverse().forEach(function(r) {
+		    var h = Math.max(8, (1 - r / maxR) * 100);
+		    var c = r === 0 ? '#ffc800' : r === 1 ? '#a0aac3' : r === 2 ? '#cd7f32' : '#00d4ff';
+		    html += '<div class=hist-bar style=height:' + h + '%;background:' + c + '></div>';
+		  });
+		  html += '</div>';
+		  html += '<div class=hist-labels>';
+		  window._histRows.reverse().forEach(function(r) {
+		    html += '<span>' + (r+1) + '</span>';
+		  });
+		  html += '</div>';
+		  html += '<div class=hist-dates>';
+		  window._histRows.reverse().forEach(function() {
+		    html += '<span>—</span>';
+		  });
+		  html += '</div>';
+		}
+		popup.querySelector('.hist-list').innerHTML = html;
+		var arr = window._histRows || [];
+		if (arr.length > 0) {
+		  localStorage.setItem('hist_' + runtime.globalVars.histPlayerID, JSON.stringify(arr));
+		}
+	},
+
+	async Egame_Event31(runtime, localVars)
 	{
 // =====================
 // GLOBAL STATE
@@ -66,12 +128,129 @@ window.myPlayerID = "";
 window.myPlayerName = "";
 
 // =====================
+// ACHIEVEMENT POPUP
+// =====================
+window._achTimer = null;
+(function(){
+  var d = new Date().toISOString().split("T")[0];
+  if (localStorage.getItem("ach_date") !== d) {
+    localStorage.setItem("ach_date", d);
+    localStorage.removeItem("ach_top1");
+    localStorage.removeItem("ach_top2");
+    localStorage.removeItem("ach_top3");
+    localStorage.removeItem("ach_lostTop1");
+  }
+})();
+window.showAchievement = function(title, text, icon, id, state) {
+  state = state != null ? String(state) : "1";
+  if (id) {
+    const key = "ach_state_" + id;
+    const last = localStorage.getItem(key);
+    if (last === state) return;
+    localStorage.setItem(key, state);
+  }
+  var popup = document.getElementById("achievement-popup");
+  if (!popup) return;
+  clearTimeout(window._achTimer);
+  popup.querySelector(".ach-icon").textContent = icon || "\ud83c\udfc6";
+  popup.querySelector(".ach-title").textContent = title;
+  popup.querySelector(".ach-text").textContent = text;
+  popup.classList.remove("hide");
+  popup.classList.add("show");
+  var iconEl = popup.querySelector(".ach-icon");
+  iconEl.style.animation = "none";
+  iconEl.offsetHeight;
+  iconEl.style.animation = "ach-pulse 0.6s ease";
+  window._achTimer = setTimeout(function() {
+    popup.classList.remove("show");
+    popup.classList.add("hide");
+  }, 3000);
+};
+
+window.clearAchievements = function() {
+  localStorage.removeItem("hist_tip_shown");
+  window.showAchievement("🗑 Очищено!", "Достижения сброшены", "🔄");
+};
+
+// =====================
+// HISTORY POPUP
+// =====================
+window.showHistory = function(pid, playerName) {
+  if (runtime.globalVars.currentTab !== 'daily') return;
+  var popup = document.getElementById("history-popup");
+  if (!popup) return;
+  popup.querySelector(".hist-name").textContent = playerName;
+  var overlay = document.getElementById("history-overlay");
+  if (overlay) overlay.classList.add("show");
+  popup.classList.remove("hide");
+  popup.classList.add("show");
+  var histData = JSON.parse(localStorage.getItem("hist_" + pid) || "[]");
+  var html = "";
+  if (histData.length === 0) {
+    html = "<div class='hist-empty'>Ищем ваши рекорды...</div>";
+    runtime.globalVars.histPlayerID = pid;
+    runtime.globalVars.histTrigger = 1;
+    setTimeout(function() {
+      var p = document.getElementById('history-popup');
+      if (p && p.querySelector('.hist-list').innerHTML.indexOf('Загрузка') !== -1) {
+        p.querySelector('.hist-list').innerHTML = "<div class='hist-empty'>Не найдено</div>";
+      }
+    }, 10000);
+  } else {
+    html += '<div class=hist-cols>';
+    html += '<div class=hist-left>';
+    var items = histData.slice(-10).reverse();
+    items.forEach(function(e, i) {
+      var r = typeof e === 'object' ? e.r : e;
+    });
+    html += '<div class=hist-chart-wrap>';
+    var maxRank = 1;
+    items.forEach(function(e) { var r = typeof e === 'object' ? e.r : e; if (r > maxRank) maxRank = r; });
+    var maxRank = Math.max(10, maxRank);
+    var items = histData.slice(-10).reverse();
+    html += '<div class=hist-bars>';
+    items.forEach(function(e) {
+      var r = typeof e === 'object' ? e.r : e;
+      var cappedR = Math.min(r, 9);
+      var h = Math.max(8, (1 - cappedR / 10) * 100);
+      var color = r === 0 ? '#ffc800' : r === 1 ? '#a0aac3' : r === 2 ? '#cd7f32' : '#00d4ff';
+      var medal = r === 0 ? '👑' : r === 1 ? '🥈' : r === 2 ? '🥉' : '';
+      html += '<div class=hist-col>';
+      html += '<div class=hist-medal>' + medal + '</div>';
+      html += '<div class=hist-bar style=height:' + h + '%;background:' + color + '></div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    html += '<div class=hist-dates>';
+    items.forEach(function(e) {
+      var d = '—';
+      if (typeof e === 'object' && e.t) { var dt = new Date(e.t); d = ('0'+dt.getDate()).slice(-2) + '.' + ('0'+(dt.getMonth()+1)).slice(-2); }
+      html += '<span>' + d + '</span>';
+    });
+    html += '</div>';
+    html += '</div>';
+  }
+  popup.querySelector(".hist-list").innerHTML = html;
+};
+window.closeHistory = function() {
+  var popup = document.getElementById("history-popup");
+  var overlay = document.getElementById("history-overlay");
+  if (popup) { popup.classList.remove("show"); popup.classList.add("hide"); }
+  if (overlay) { overlay.classList.remove("show"); }
+};
+window.saveHistory = function(pid, rank) {
+  var data = JSON.parse(localStorage.getItem("hist_" + pid) || "[]");
+  data.push({r: rank, t: Date.now()});
+  if (data.length > 10) data = data.slice(-10);
+  localStorage.setItem("hist_" + pid, JSON.stringify(data));
+};
+
+// =====================
 // LEADERBOARD OPEN/CLOSE
 // =====================
 window.openLeaderboard = function (meFirst = false) {
 
   window.meFirst = meFirst;
-
   window.myPlayerID = runtime.globalVars.playerID || "";
   window.myPlayerName = runtime.globalVars.CurrentName || "";
 
@@ -83,6 +262,17 @@ window.openLeaderboard = function (meFirst = false) {
 
   const tab = runtime.globalVars.currentTab;
   if (titleEl) titleEl.textContent = tab === "daily" ? "ТОП ДНЯ" : "ЛИДЕРЫ";
+  if (tab === "daily" && !localStorage.getItem("hist_tip_shown")) {
+    localStorage.setItem("hist_tip_shown", "1");
+    setTimeout(function() {
+      var tip = document.createElement('div');
+      tip.className = 'hist-tutorial';
+      tip.innerHTML = '👆 Нажми на игрока<br>чтобы увидеть историю позиций';
+      document.querySelector('.leaderboard-wrapper').appendChild(tip);
+      setTimeout(function() { tip.classList.add('fade'); }, 4000);
+      setTimeout(function() { tip.remove(); }, 5000);
+    }, 800);
+  }
 
   overlay?.classList.add("show");
 
@@ -158,6 +348,7 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
     <span>${score}</span>
     <span>${gems}</span>
   `;
+  row.setAttribute('onclick', "event.stopPropagation();window.showHistory('" + pid + "','" + name.replace(/'/g, "\\'") + "')");
 
   if (isMe) {
     row.classList.add("my-row");
@@ -297,6 +488,11 @@ window.resetPullToRefresh = function() {
   window._ptrReset();
   clearTimeout(window._ptrWheelTimer);
 };
+	},
+
+	async Egame_Event34_Act6(runtime, localVars)
+	{
+		var d=new Date();runtime.globalVars.histDate=d.getDate()+'.'+(d.getMonth()+1)
 	}
 };
 

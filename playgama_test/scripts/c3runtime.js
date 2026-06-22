@@ -1410,8 +1410,8 @@ self.C3_ExpressionFuncs = [
 		() => "refresh",
 		() => "Обработчики Firebase",
 		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue() + 1);
 		},
 		() => "i",
 		() => 0,
@@ -1483,7 +1483,68 @@ self.C3_ExpressionFuncs = [
 			return () => and(and(n0.ExpObject("LeaderboardDailyRead", "name", f1("i")), ": "), n2.ExpObject("LeaderboardDailyRead", "score", f3("i")));
 		},
 		() => 1,
-		() => "JavaScript"
+		() => "AchievementCheck",
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => n0.ExpObject("AchievementCheck", "score", f1("i"));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => n0.ExpObject("AchievementCheck", "name", f1("i"));
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => n0.ExpObject("AchievementCheck", "pid", f1("i"));
+		},
+		() => 600,
+		() => "HistRead",
+		() => 9,
+		p => {
+			const n0 = p._GetNode(0);
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => n0.ExpObject("HistRead", "rank", f1("i"));
+		},
+		() => "JavaScript",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (("History/" + v0.GetValue()) + "/");
+		},
+		() => 10,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => ("Achievements/" + v0.GetValue());
+		},
+		() => "rank",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (v0.GetValue()).toString();
+		},
+		() => "RankSave",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => ((("History/" + v0.GetValue()) + "/") + (v1.GetValue()).toString());
+		},
+		() => "rank,time",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			return () => (((v0.GetValue()).toString() + v1.GetValue()) + (v2.GetValue()).toString());
+		},
+		() => "HistSave",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => (((v0.GetValue()).toString() + ",") + (v1.GetValue()).toString());
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => Math.floor(f0(99999999));
+		}
 ];
 
 
