@@ -1393,5 +1393,8 @@
 
 }
 
+// scripts/plugins/Keyboard/dom/domSide.js
+"use strict";{const r="keyboard",o=class extends self.DOMHandler{constructor(o){super(o,r),this._isKeyboardLockSupported=!(!navigator["keyboard"]||!navigator["keyboard"]["lock"]),this.AddRuntimeMessageHandlers([["init",()=>this._OnInit()],["lock-keyboard",r=>this._OnLockKeyboard(r)],["unlock-keyboard",()=>this._OnUnlockKeyboard()]])}_OnInit(){return{"isKeyboardLockSupported":this._isKeyboardLockSupported}}async _OnLockKeyboard(r){const o=r["keysArr"];try{return 0===o.length?await navigator["keyboard"]["lock"]():await navigator["keyboard"]["lock"](o),{"isOk":!0}}catch(r){return console.error("Error locking keyboard:",r),{"isOk":!1}}}_OnUnlockKeyboard(){try{navigator["keyboard"]["unlock"]()}catch(r){console.error("Error unlocking keyboard:",r)}}};self.RuntimeInterface.AddDOMHandlerClass(o)}
+
 // start-export.js
 "use strict";if(window["C3_IsSupported"]){const e=false;window["c3_runtimeInterface"]=new self.RuntimeInterface({useWorker:e,workerMainUrl:"workermain.js",runtimeMainScript:"scripts/c3main.js",scriptFolder:"scripts/",exportType:"html5"})}

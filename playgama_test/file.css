@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
 
+/* =========================
+   1. BASE
+========================= */
 body {
   font-family: 'Inter', sans-serif;
   margin: 0;
@@ -7,7 +10,7 @@ body {
 }
 
 /* =========================
-   WRAPPER
+   2. LEADERBOARD WRAPPER
 ========================= */
 .leaderboard-wrapper {
   position: fixed;
@@ -17,12 +20,10 @@ body {
   width: 100%;
   max-width: 900px;
   z-index: 9999;
-
   pointer-events: none;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-
   background: transparent;
   overflow: visible;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .leaderboard-wrapper.show {
@@ -31,7 +32,370 @@ body {
 }
 
 /* =========================
-   ACHIEVEMENT POPUP
+   3. OVERLAY
+========================= */
+.leaderboard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9998;
+  backdrop-filter: blur(6px);
+  transition: opacity .25s ease;
+}
+
+.leaderboard-overlay.show {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.55);
+  pointer-events: auto;
+}
+
+/* =========================
+   4. MAIN PANEL
+========================= */
+.leaderboard {
+  width: 100%;
+  background: rgba(10, 12, 18, 0.88);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  color: #eaeef7;
+  border-radius: 28px 28px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* =========================
+   5. HEADER + SUBHEADER + TITLE
+========================= */
+.lb-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 16px 14px 10px;
+  background: rgba(10, 12, 18, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lb-subheader {
+  display: grid;
+  grid-template-columns: 55% 15% 30%;
+  padding: 10px 16px 10px 10px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  background: rgba(10, 12, 18, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lb-subheader> :nth-child(1) {
+  text-align: left;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.lb-subheader> :nth-child(2) {
+  text-align: right;
+  padding-right: 14px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.lb-subheader> :nth-child(3) {
+  text-align: right;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #7c5cff, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =========================
+   6. BUTTONS (close + reset)
+========================= */
+.close-btn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.reset-btn {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.reset-btn:hover {
+  background: rgba(255, 80, 80, 0.2);
+  color: rgba(255, 100, 100, 0.8);
+}
+
+/* =========================
+   7. ROWS CONTAINER
+========================= */
+.rows {
+  display: flex;
+  flex-direction: column;
+  min-height: 50vh;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+.rows::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rows::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rows::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+}
+
+/* =========================
+   8. ROW (grid layout)
+========================= */
+.row {
+  display: grid;
+  grid-template-columns: 55% 15% 30%;
+  align-items: center;
+  padding: 10px 16px 10px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  transition: 0.2s;
+  cursor: pointer;
+}
+
+/* alignment */
+.rows>.row> :nth-child(1),
+#pinned-row>.row> :nth-child(1) {
+  text-align: left;
+}
+
+.rows>.row> :nth-child(2),
+#pinned-row>.row> :nth-child(2) {
+  width: 100%;
+  text-align: right;
+  padding-right: 8px;
+  font-weight: 700;
+  color: #00d4ff;
+}
+
+.rows>.row> :nth-child(3),
+#pinned-row>.row> :nth-child(3) {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  opacity: 0.7;
+}
+
+/* normal rows without border — compensate with padding */
+.row:not(.top1):not(.top2):not(.top3):not(.my-row) {
+  padding-left: 14px;
+}
+
+/* =========================
+   9. HOVER (desktop only)
+========================= */
+@media (hover: hover) {
+  .row:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .row.top1:hover {
+    background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10));
+  }
+
+  .row.my-row:hover {
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08));
+  }
+}
+
+/* =========================
+   10. TOP1, TOP2, TOP3
+========================= */
+.row.top1 {
+  border-left: 4px solid #ffc800;
+  background: linear-gradient(90deg, rgba(255, 200, 0, 0.22), rgba(255, 200, 0, 0.06));
+}
+
+.row.top1 .rank-badge,
+.row.top1 .player-cell span:last-child {
+  color: #ffc800;
+  font-weight: 900;
+  text-shadow: 0 0 10px rgba(255, 200, 0, 0.7);
+}
+
+.row.top1> :nth-child(2),
+.row.top1> :nth-child(3) {
+  color: #ffc800;
+  font-weight: 900;
+}
+
+.row.top2 {
+  border-left: 4px solid #a0aac3;
+}
+
+.row.top3 {
+  border-left: 4px solid #cd7f32;
+}
+
+/* =========================
+   11. MY ROW (pinned player)
+========================= */
+.row.my-row {
+  font-weight: 900;
+  border-left: 4px solid #00d4ff;
+}
+
+.row.my-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.18), transparent);
+  pointer-events: none;
+}
+
+/* =========================
+   12. PINNED ROW
+========================= */
+#pinned-row {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: transparent;
+}
+
+#pinned-row * {
+  opacity: 1 !important;
+}
+
+#pinned-row .row {
+  position: relative;
+  z-index: 6;
+}
+
+#pinned-row .row .avatar,
+#pinned-row .row .rank-badge,
+#pinned-row .row .player-cell span {
+  position: relative;
+  z-index: 7;
+}
+
+#pinned-row .row.top1,
+#pinned-row .row.top2,
+#pinned-row .row.top3 {
+  border-left-color: #00d4ff;
+  background: transparent;
+}
+
+#pinned-row .row.top1 .rank-badge,
+#pinned-row .row .player-cell span:last-child {
+  color: #00d4ff;
+}
+
+#pinned-row .row.top1 .player-cell span:last-child {
+  color: #00d4ff;
+  text-shadow: none;
+}
+
+#pinned-row .row.top1> :nth-child(2),
+#pinned-row .row.top1> :nth-child(3) {
+  color: #00d4ff;
+}
+
+#pinned-row .row.my-row:hover {
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.35), rgba(0, 212, 255, 0.10)) !important;
+}
+
+/* =========================
+   13. PLAYER CELL
+========================= */
+.player-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+}
+
+.rank-badge {
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+.player-cell>span:last-child {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  word-break: break-word;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.pin-icon {
+  font-size: 11px;
+  vertical-align: super;
+}
+
+/* =========================
+   14. FOOTER
+========================= */
+.lb-footer {
+  text-align: center;
+  padding: 10px 16px 16px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* =========================
+   15. ACHIEVEMENT POPUP
 ========================= */
 .ach-popup {
   position: fixed;
@@ -39,25 +403,17 @@ body {
   left: 50%;
   transform: translate(-50%, -120%);
   z-index: 10000;
-
   display: flex;
   align-items: center;
   gap: 12px;
-
   padding: 14px 20px;
   min-width: 260px;
-
   background: rgba(10, 12, 18, 0.95);
-  border: 1px solid rgba(0,212,255,0.4);
+  border: 1px solid rgba(0, 212, 255, 0.4);
   border-radius: 14px;
-
-  box-shadow:
-    0 0 30px rgba(0,212,255,0.3),
-    0 8px 32px rgba(0,0,0,0.5);
-
+  box-shadow: 0 0 30px rgba(0, 212, 255, 0.3), 0 8px 32px rgba(0, 0, 0, 0.5);
   opacity: 0;
-  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              opacity 0.3s ease;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
 }
 
 .ach-popup.show {
@@ -77,9 +433,17 @@ body {
 }
 
 @keyframes ach-pulse {
-  0% { transform: scale(0); }
-  60% { transform: scale(1.3); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(0);
+  }
+
+  60% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 .ach-body {
@@ -97,558 +461,312 @@ body {
 
 .ach-text {
   font-size: 12px;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 /* =========================
-   OVERLAY
+   16. HISTORY POPUP
 ========================= */
-.leaderboard-overlay {
+.hist-popup {
   position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  z-index: 10001;
+  width: 85%;
+  max-width: 360px;
+  background: rgba(10, 12, 18, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
   opacity: 0;
   pointer-events: none;
-  z-index: 9998;
-
-  transition: opacity .25s ease;
-  backdrop-filter: blur(6px);
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.leaderboard-overlay.show {
+.hist-popup.show {
   opacity: 1;
-  background: rgba(0,0,0,0.55);
   pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
 }
 
-/* =========================
-   MAIN PANEL
-========================= */
-.leaderboard {
-  width: 100%;
-  background: rgba(10, 12, 18, 0.88);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-
-  color: #eaeef7;
-
-  border-radius: 28px 28px 0 0;
-  overflow: hidden;
-
-  box-shadow:
-    0 0 60px rgba(0,0,0,0.4),
-    inset 0 1px 0 rgba(255,255,255,0.05);
+.hist-popup.hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.85);
 }
 
-/* =========================
-   HEADER
-========================= */
-.lb-header {
-  position: relative;
+.hist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hist-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.hist-name {
+  font-weight: 700;
+  color: #00d4ff;
+  font-size: 18px;
+}
+
+.hist-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.hist-list {
+  padding: 12px 16px;
+  max-height: 50vh;
+  overflow-y: auto;
+  min-height: 120px;
+}
+
+.hist-empty {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  padding: 14px 16px 14px 10px;
-  background: rgba(10, 12, 18, 0.95);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-/* =========================
-   SUBHEADER
-========================= */
-.lb-subheader {
-  display: grid;
-  grid-template-columns: 55% 15% 30%;
-
-  padding: 10px 16px 10px 10px;
-  font-size: 11px;
-  letter-spacing: 2px;
-
-  background: rgba(10, 12, 18, 0.92);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.lb-subheader > :nth-child(1) {
-  text-align: left;
-  color: rgba(255,255,255,0.5);
-}
-.lb-subheader > :nth-child(2) {
-  text-align: right;
-  padding-right: 14px;
-  color: rgba(255,255,255,0.5);
-}
-.lb-subheader > :nth-child(3) {
-  text-align: right;
-  color: rgba(255,255,255,0.5);
-}
-
-/* =========================
-   TITLE
-========================= */
-.title {
+  height: 140px;
   font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+}
 
-  background: linear-gradient(90deg, #7c5cff, #00d4ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+.hist-tip {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  padding: 8px 16px 14px;
+}
+
+.hist-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 140px;
+}
+
+.hist-dot {
+  font-size: 8px;
+  color: #00d4ff;
+  animation: dotPulse 0.6s ease infinite;
+}
+
+.hist-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.hist-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.hist-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
 }
 
 /* =========================
-   CLOSE BUTTON
+   17. HISTORY OVERLAY
 ========================= */
-.close-btn {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-
-  width: 30px;
-  height: 30px;
-
-  border: none;
-  border-radius: 8px;
-
-  background: rgba(255,255,255,0.06);
-  color: white;
-
-  cursor: pointer;
-  transition: 0.2s;
+.hist-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+  transition: opacity .25s ease;
 }
 
-.close-btn:hover {
-  background: rgba(255,255,255,0.12);
-  transform: translateY(-50%) scale(1.05);
-}
-
-.reset-btn {
-  position: absolute;
-  right: 52px;
-  top: 50%;
-  transform: translateY(-50%);
-
-  width: 30px;
-  height: 30px;
-
-  border: none;
-  border-radius: 8px;
-
-  background: rgba(255,255,255,0.04);
-  color: rgba(255,255,255,0.4);
-  font-size: 14px;
-
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.reset-btn:hover {
-  background: rgba(255,80,80,0.2);
-  color: rgba(255,100,100,0.8);
+.hist-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.45);
 }
 
 /* =========================
-   ROWS
+   18. HISTORY CHART (FIXED)
 ========================= */
-.rows {
+
+.hist-chart-wrap {
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hist-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  height: 130px;
+  width: 100%;
+}
+
+.hist-col {
+  flex: 1;
   display: flex;
   flex-direction: column;
-
-  min-height: 50vh;
-  max-height: 60vh;
-
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255,255,255,0.4) transparent;
-}
-
-.rows::-webkit-scrollbar { width: 6px; }
-.rows::-webkit-scrollbar-track { background: transparent; }
-.rows::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.4);
-  border-radius: 3px;
-}
-
-/* =========================
-   ROW
-========================= */
-.row {
-  display: grid;
-  grid-template-columns: 55% 15% 30%;
-  align-items: center;
-
-  padding: 10px 16px 10px 10px;
-  font-size: 14px;
-  font-weight: 500;
-
-  border-top: 1px solid rgba(255,255,255,0.04);
-  position: relative;
-
-  transition: 0.2s;
-}
-
-/* === ALIGNMENT === */
-.rows > .row > :nth-child(1),
-#pinned-row > .row > :nth-child(1) { text-align: left; }
-.rows > .row > :nth-child(2),
-#pinned-row > .row > :nth-child(2) {
-  width: 100%;
-  text-align: right;
-  padding-right: 8px;
-  font-weight: 700;
-  color: #00d4ff;
-}
-.rows > .row > :nth-child(3),
-#pinned-row > .row > :nth-child(3) {
-  display: flex;
   justify-content: flex-end;
   align-items: center;
-  opacity: 0.7;
 }
 
-/* === PINNED === */
-/* =========================
-   BASE HOVER (desktop only)
-========================= */
-@media (hover: hover) {
-.row:hover {
-  background: rgba(255,255,255,0.06);
-}
-.row.top1:hover {
-  background: linear-gradient(90deg, rgba(255,200,0,0.35), rgba(255,200,0,0.10));
-}
-.row.my-row:hover {
-  background: linear-gradient(90deg, rgba(0,212,255,0.28), rgba(0,212,255,0.08));
-}
+/* 🔥 ВАЖНО: база 0% + анимация */
+/* Контейнер для всех столбцов */
+.hist-bars {
+  display: table; 
+  table-layout: fixed; /* Гарантирует равную ширину */
+  width: 100%; 
+  height: 120px;       /* Фиксированная высота для работы процентов */
+  border-spacing: 4px 0; 
+  margin: 0 auto;
 }
 
-/* TOP1 — свечение только на имени и короне */
-.row.top1 {
-  border-left: 4px solid #ffc800;
-  background: linear-gradient(90deg, rgba(255,200,0,0.22), rgba(255,200,0,0.06));
+/* Ячейка столбца */
+.hist-col {
+  display: table-cell; 
+  vertical-align: bottom; /* Важно: прижимает бары к низу */
+  height: 100%;           /* Заставляет ячейку растянуться на всю высоту */
 }
 
-.row.top1 .rank-badge,
-.row.top1 .player-cell span:last-child {
-  color: #ffc800;
-  font-weight: 900;
-  text-shadow: 0 0 10px rgba(255, 200, 0, 0.7);
-}
-
-.row.top1 > :nth-child(2),
-.row.top1 > :nth-child(3) {
-  color: #ffc800;
-  font-weight: 900;
-}
-
-/* PIN — всегда синий, отменяем золото/серебро/бронзу */
-#pinned-row .row.top1,
-#pinned-row .row.top2,
-#pinned-row .row.top3 {
-  border-left-color: #00d4ff;
-  background: transparent;
-}
-#pinned-row .row.top1 .rank-badge,
-#pinned-row .row .player-cell span:last-child {
-  color: #00d4ff;
-}
-
-#pinned-row .row.top1 .player-cell span:last-child {
-  color: #00d4ff;
-  text-shadow: none;
-}
-#pinned-row .row.top1 > :nth-child(2),
-#pinned-row .row.top1 > :nth-child(3) {
-  color: #00d4ff;
-}
-
-/* =========================
-   TOP 2 / TOP 3
-========================= */
-.row.top2 {
-  border-left: 4px solid #a0aac3;
-}
-
-.row.top3 {
-  border-left: 4px solid #cd7f32;
-}
-
-/* =========================
-   MY ROW
-========================= */
-.row.my-row {
-  font-weight: 900;
-  border-left: 4px solid #00d4ff;
-}
-
-.row.my-row::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(90deg, rgba(0,212,255,0.18), transparent);
-  pointer-events: none;
-}
-
-/* =========================
-   PLAYER CELL
-========================= */
-.player-cell {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  min-width: 0;
-}
-
-.avatar {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  border: 2px solid rgba(255,255,255,0.12);
-}
-
-.rank-badge {
-  width: 24px;
-  text-align: center;
-  flex-shrink: 0;
-  font-size: 13px;
-}
-
-.player-cell > span:last-child {
-  overflow: visible;
-  text-overflow: clip;
-  white-space: normal;
-  word-break: break-word;
-  min-width: 0;
-  line-height: 1.3;
-}
-
-.pin-icon {
-  font-size: 11px;
-  vertical-align: super;
-}
-
-/* =========================
-   PINNED
-========================= */
-#pinned-row {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: transparent;
-}
-
-/* =========================
-   FOOTER
-========================= */
-.lb-footer {
-  text-align: center;
-  padding: 10px 16px 16px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.25);
-  border-top: 1px solid rgba(255,255,255,0.04);
-}
-/* =========================
-   HISTORY POPUP
-========================= */
-.hist-popup {
-  position: fixed; top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scale(0.8);
-  z-index: 10001; width: 85%; max-width: 340px;
-  background: rgba(10,12,18,0.95);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.25s, transform 0.3s cubic-bezier(0.22,1,0.36,1);
-}
-.hist-popup.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
-.hist-popup.hide { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.8); }
-.hist-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.06); }
-.hist-name { font-weight: 700; color: #00d4ff; }
-.hist-close { background: none; border: none; color: rgba(255,255,255,0.5); font-size: 18px; cursor: pointer; }
-.hist-list { padding: 12px 16px; max-height: 40vh; overflow-y: auto; }
-.hist-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; }
-.hist-rank { font-size: 18px; width: 28px; text-align: center; }
-.hist-bar { height: 20px; background: linear-gradient(90deg, #00d4ff, rgba(0,212,255,0.2)); border-radius: 4px; min-width: 8px; }
-.hist-empty { text-align: center; color: rgba(255,255,255,0.3); padding: 20px; }
-.hist-tip { text-align: center; padding: 8px 16px 14px; font-size: 11px; color: rgba(255,255,255,0.25); }
-
-/* Clickable row hint */
-.row { cursor: pointer; }
-
-.hist-overlay {
-  position: fixed; inset: 0; z-index: 10000;
-  background: rgba(0,0,0,0);
-  opacity: 0; pointer-events: none;
-  backdrop-filter: blur(4px);
-  transition: opacity .25s;
-}
-.hist-overlay.show { opacity: 1; pointer-events: auto; background: rgba(0,0,0,0.45); }
-
-.hist-row { 
-  text-align: center; 
-  padding: 8px 0; 
-  font-size: 16px; 
-  font-weight: 600; 
-}
-.hist-arrow { 
-  text-align: center; 
-  color: rgba(255,255,255,0.3); 
-  font-size: 12px; 
-  line-height: 1; 
-}
-
-.hist-chart {
-  display: flex; align-items: flex-end; justify-content: center;
-  gap: 6px; height: 120px; padding: 8px 16px 0;
-}
+/* Сам бар */
 .hist-bar {
-  flex: 1; min-width: 12px; max-width: 30px;
+  width: 100%;
+  /* Используем min-height как базовую "точку покоя" */
+  height: 8px; 
+  
   border-radius: 4px 4px 0 0;
-  transition: height 0.5s ease;
-}
-.hist-labels {
-  display: flex; justify-content: center; gap: 6px;
-  padding: 4px 16px 12px;
-}
-.hist-labels span {
-  flex: 1; min-width: 12px; max-width: 30px;
-  text-align: center; font-size: 10px;
-  color: rgba(255,255,255,0.5);
-}
-
-.hist-cols { display: flex; gap: 0; }
-.hist-left { flex: 1; padding: 12px 8px 12px 16px; }
-.hist-chart { flex: 2; display: flex; align-items: flex-end; gap: 6px; height: 140px; padding: 12px 16px 12px 8px; }
-.hist-bar { flex: 1; min-width: 10px; border-radius: 3px 3px 0 0; transition: height 0.5s ease; }
-
-.hist-dates { display: flex; justify-content: center; gap: 6px; padding: 4px 8px 16px; }
-.hist-dates span { flex: 1; text-align: center; font-size: 9px; color: rgba(255,255,255,0.3); }
-
-.hist-label { font-size: 10px; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2px; }
-.hist-name { font-weight: 700; color: #00d4ff; font-size: 18px; }
-
-#pinned-row .row,
-#pinned-row .row span,
-#pinned-row .row .player-cell,
-#pinned-row .row .rank-badge { opacity: 1 !important; }
-
-#pinned-row * { opacity: 1 !important; }
-
-#pinned-row .row { position: relative; z-index: 6; }
-#pinned-row .row .avatar,
-#pinned-row .row .rank-badge,
-#pinned-row .row .player-cell span { position: relative; z-index: 7; }
-
-.hist-dates { display: flex; gap: 6px; padding: 4px 8px 16px; }
-.hist-dates span { flex: 1; min-width: 10px; text-align: center; font-size: 9px; color: rgba(255,255,255,0.3); }
-
-.hist-chart + .hist-dates {
-  padding-left: 8px;
-  padding-right: 16px;
-  gap: 6px;
+  background: linear-gradient(180deg, #00d4ff, rgba(0,212,255,0.25));
+  
+  transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: height;
+  
   display: flex;
+  align-items: flex-start; /* Чтобы текст не уезжал */
+  justify-content: center;
+  font-size: 11px;
 }
-.hist-chart + .hist-dates span {
+
+/* подписи */
+.hist-medal {
+  font-size: 12px;
+  margin-bottom: 3px;
+}
+
+.hist-dates {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  padding-top: 6px;
+}
+
+.hist-dates span {
   flex: 1;
-  min-width: 10px;
+  text-align: center;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.3);
+  min-width: 0;
+  white-space: nowrap;
+}
+/* Добавьте это в ваш существующий CSS */
+
+.hist-col {
+  display: table-cell;
+  vertical-align: bottom;
+  text-align: center; /* Центрирует всё внутри колонки */
+  max-width: 40px;
 }
 
-.hist-right { flex: 2; display: flex; flex-direction: column; }
-.hist-right .hist-chart { flex: 1; padding: 12px 16px 12px 8px; }
-.hist-right .hist-dates { padding: 4px 16px 8px 8px; gap: 6px; display: flex; }
-.hist-right .hist-dates span { flex: 1; min-width: 10px; text-align: center; font-size: 9px; color: rgba(255,255,255,0.3); }
+.hist-medal {
+  font-size: 18px;
+  margin-bottom: 4px;
+  min-height: 22px;
+  text-align: center; /* Центрирует иконку/номер */
+  display: block;     /* Заставляет элемент вести себя как блок */
+  width: 100%;        /* Растягивает на всю ширину колонки */
+}
 
-.hist-right .hist-chart { min-width: 0; overflow: hidden; }
-.hist-right .hist-bar { min-width: 4px !important; max-width: none; }
-.hist-right .hist-dates span { min-width: 4px; overflow: hidden; text-overflow: ellipsis; }
-
-.hist-chart-wrap { padding: 0 16px; }
-.hist-bars { display: flex; align-items: flex-end; justify-content: center; gap: 6px; height: 120px; }
-.hist-col { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: flex-end; }
-.hist-label-top { font-size: 14px; margin-bottom: 4px; text-align: center; }
-.hist-bar { width: 100%; border-radius: 3px 3px 0 0; }
-.hist-dates { display: flex; justify-content: center; gap: 6px; padding: 6px 0 12px; }
-.hist-dates span { flex: 1; min-width: 0; text-align: center; font-size: 9px; color: rgba(255,255,255,0.3); }
-
-.hist-bar { display: flex; align-items: center; justify-content: center; font-size: 12px; }
-
-.hist-chart-wrap { width: 100%; overflow: hidden; }
-.hist-bars { width: 100%; gap: 4px; }
-.hist-col { flex: 1 1 0; min-width: 0; }
-.hist-dates { width: 100%; gap: 4px; }
-.hist-dates span { flex: 1 1 0; min-width: 0; }
-
-.hist-list { max-height: 50vh; overflow-y: auto; overflow-x: hidden; padding: 0; }
-
-.hist-chart-wrap { width: 100%; max-width: 100%; box-sizing: border-box; overflow: hidden; margin: 0 auto; }
-.hist-bars { width: 100%; max-width: 100%; gap: 3px; padding: 0 8px; box-sizing: border-box; }
-.hist-col { flex: 1 1 0; min-width: 0; max-width: 100%; }
-.hist-col .hist-bar { width: 100%; max-width: 100%; box-sizing: border-box; }
-.hist-dates { width: 100%; max-width: 100%; gap: 3px; padding: 0 8px; box-sizing: border-box; }
-.hist-dates span { flex: 1 1 0; min-width: 0; }
-.hist-popup { width: 88%; max-width: 360px; }
-.hist-list { max-height: 50vh; overflow: hidden; padding: 0 !important; }
-.hist-chart-wrap { width: 100%; max-width: 100%; overflow: hidden; padding: 0 12px; box-sizing: border-box; }
-.hist-bars { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 130px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
-.hist-col { flex: 1 1 4px; min-width: 4px; max-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
-.hist-col .hist-bar { width: 100%; min-width: 0; border-radius: 3px 3px 0 0; display: flex; align-items: center; justify-content: center; font-size: 11px; }
-.hist-dates { display: flex; justify-content: center; gap: 3px; padding: 6px 12px 12px; width: 100%; max-width: 100%; min-width: 0; box-sizing: border-box; }
-.hist-dates span { flex: 1 1 4px; min-width: 4px; text-align: center; font-size: 9px; color: rgba(255,255,255,0.3); overflow: hidden; text-overflow: ellipsis; }
-
-.hist-chart-wrap { display: block; width: 100%; max-width: 100%; overflow: hidden; padding: 0 12px; box-sizing: border-box; }
-.hist-bars { display: table; table-layout: fixed; width: 100%; height: 130px; border-spacing: 3px 0; }
-.hist-col { display: table-cell; vertical-align: bottom; text-align: center; }
-.hist-col .hist-bar { width: 100%; min-width: 0; border-radius: 3px 3px 0 0; display: flex; align-items: center; justify-content: center; font-size: 11px; }
-.hist-dates { display: table; table-layout: fixed; width: 100%; border-spacing: 3px 0; padding: 6px 12px 12px; box-sizing: border-box; }
-.hist-dates span { display: table-cell; text-align: center; font-size: 9px; color: rgba(255,255,255,0.3); }
-
-.hist-chart-wrap { padding-top: 12px; }
-.hist-col { padding-top: 0; }
-.hist-medal { font-size: 14px; margin-bottom: 3px; text-align: center; min-height: 18px; }
-.hist-col .hist-bar { display: flex; align-items: center; justify-content: center; }
-
-.hist-bars { height: 100px; }
-
-.hist-tip { padding-top: 0; margin-top: -4px; }
-.hist-chart-wrap { padding-top: 4px; }
-
-.hist-popup { width: 90%; max-width: 380px; }
-.hist-medal { font-size: 18px; margin-bottom: 4px; min-height: 22px; }
-.hist-bars { height: 120px; }
-
-.hist-list { overflow-y: auto; overflow-x: hidden; }
-.hist-chart-wrap { padding-top: 32px; }
+.hist-bars {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto; /* Центрирует таблицу внутри родителя */
+  border-spacing: 4px 0;
+}
+/* =========================
+   19. HISTORY TUTORIAL (OK)
+========================= */
 
 .hist-tutorial {
-  position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
-  background: rgba(0,212,255,0.9); color: #000; font-weight: 700;
-  padding: 10px 20px; border-radius: 12px; font-size: 13px;
-  text-align: center; z-index: 100; pointer-events: none;
-  animation: tipBounce 0.6s ease;
-  box-shadow: 0 4px 20px rgba(0,212,255,0.4);
-}
-.hist-tutorial.fade { opacity: 0; transition: opacity 0.5s; }
-@keyframes tipBounce {
-  0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
-  60% { transform: translateX(-50%) scale(1.1); }
-  100% { transform: translateX(-50%) scale(1); opacity: 1; }
-}
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
 
-.hist-tutorial {
-  position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
-  background: rgba(10,12,18,0.95); color: #eaeef7;
-  padding: 12px 22px; border-radius: 14px; font-size: 13px;
-  text-align: center; z-index: 100; pointer-events: none;
-  border: 1px solid rgba(0,212,255,0.3);
+  background: rgba(10, 12, 18, 0.95);
+  color: #eaeef7;
+
+  padding: 12px 22px;
+  border-radius: 14px;
+  font-size: 13px;
+  text-align: center;
+
+  z-index: 100;
+  pointer-events: none;
+
+  border: 1px solid rgba(0, 212, 255, 0.3);
   backdrop-filter: blur(12px);
+
   animation: tipBounce 0.6s ease;
-  box-shadow: 0 0 24px rgba(0,212,255,0.15), 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.15),
+              0 8px 32px rgba(0, 0, 0, 0.4);
+
   letter-spacing: 0.3px;
 }
-.hist-tutorial.fade { opacity: 0; transition: opacity 0.5s; }
+
+.hist-tutorial.fade {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+@keyframes tipBounce {
+  0% {
+    transform: translateX(-50%) scale(0.5);
+    opacity: 0;
+  }
+
+  60% {
+    transform: translateX(-50%) scale(1.1);
+  }
+
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}

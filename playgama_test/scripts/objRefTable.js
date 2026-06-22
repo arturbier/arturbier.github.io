@@ -11,6 +11,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.HTMLElement,
 		C3.Plugins.PlaygamaBridge,
 		C3.Plugins.Sparsha_FirebaseAuthExtended,
+		C3.Plugins.Keyboard,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.JavaScriptInEvents.Egame_Event1_Act1,
 		C3.Plugins.System.Cnds.Compare,
@@ -39,11 +40,10 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.Egame_Event16_Act3,
 		C3.JavaScriptInEvents.Egame_Event18_Act6,
 		C3.JavaScriptInEvents.Egame_Event24_Act4,
-		C3.JavaScriptInEvents.Egame_Event26_Act1,
-		C3.JavaScriptInEvents.Egame_Event28_Act2,
+		C3.JavaScriptInEvents.Egame_Event28_Act3,
 		C3.JavaScriptInEvents.Egame_Event29_Act1,
 		C3.JavaScriptInEvents.Egame_Event31,
-		C3.JavaScriptInEvents.Egame_Event34_Act6,
+		C3.JavaScriptInEvents.Egame_Event34_Act1,
 		C3.Plugins.Sparsha_FirebaseSDK.Cnds.OnLoaded,
 		C3.Plugins.System.Acts.NextPrevLayout
 	];
@@ -59,6 +59,7 @@ self.C3_JsPropNameTable = [
 	{HTMLElement: 0},
 	{PlaygamaBridge: 0},
 	{FirebaseAuthPro: 0},
+	{Keyboard: 0},
 	{oldResetDate: 0},
 	{todayDate: 0},
 	{CurrentName: 0},
@@ -75,7 +76,8 @@ self.C3_JsPropNameTable = [
 	{achName: 0},
 	{achPid: 0},
 	{achRank: 0},
-	{histRank: 0},
+	{historyRank: 0},
+	{historyTime: 0},
 	{currentTab: 0},
 	{refreshFlag: 0},
 	{writesCount: 0},
@@ -101,5 +103,6 @@ self.InstanceType = {
 	Browser: class extends self.IInstance {},
 	HTMLElement: class extends self.IHTMLElementInstance {},
 	PlaygamaBridge: class extends C3.Plugins.PlaygamaBridge.Instance {},
-	FirebaseAuthPro: class extends C3.Plugins.Sparsha_FirebaseAuthExtended.Instance {}
+	FirebaseAuthPro: class extends C3.Plugins.Sparsha_FirebaseAuthExtended.Instance {},
+	Keyboard: class extends self.IInstance {}
 }
