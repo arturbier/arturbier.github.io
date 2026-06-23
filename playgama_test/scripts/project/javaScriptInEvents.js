@@ -263,14 +263,137 @@ window.openLeaderboard = function (meFirst = false) {
   }
   overlay?.classList.add("show");
   requestAnimationFrame(() => { el.classList.add("show"); });
+  initSwipeToClose(el);
+};
+//СВАП ЗАКРЫТИЯ
+window.initSwipeToClose = function(el) {
+  var rows = el.querySelector('.rows');
+  if (!rows || el._swipeInited) return;
+  el._swipeInited = true;
+
+  var startY = 0, dist = 0, active = false;
+  var captureTarget = null;
+  var wasDragged = false; 
+
+  var onEnd = function() {
+    if (!active) return;
+    active = false;
+    
+    el.style.transition = 'transform 0.35s ease';
+
+    if (dist > 100) {
+      el.style.transform = ''; 
+      window.closeLeaderboard(); 
+    } else {
+      el.style.transform = ''; 
+    }
+    dist = 0;
+
+    setTimeout(function() { if (!active) el.style.transition = ''; }, 350);
+  };
+
+  // ==========================
+  // 1. TOUCH (СМАРТФОНЫ)
+  // ==========================
+  el.addEventListener('touchstart', function(e) {
+    if (rows && rows.scrollTop > 1) return;
+    startY = e.touches[0].clientY; dist = 0; active = true; wasDragged = false;
+  }, {passive: false});
+
+  el.addEventListener('touchmove', function(e) {
+    if (!active || (rows && rows.scrollTop > 1)) return;
+    dist = e.touches[0].clientY - startY;
+    
+    // КРИТИЧНЫЙ ФИКС ДЛЯ СМАРТФОНА: Если мы тянем вниз,
+    // жестко запрещаем браузеру дергать саму страницу
+    if (dist > 0) {
+      if (e.cancelable) e.preventDefault(); 
+      if (dist > 5) wasDragged = true;
+      
+      el.style.transition = 'none';
+      el.style.transform = 'translate(-50%, ' + Math.min(dist * 0.6, 200) + 'px)';
+    }
+  }, {passive: false});
+
+  el.addEventListener('touchend', onEnd);
+  el.addEventListener('touchcancel', onEnd);
+
+  // ==========================
+  // 2. MOUSE (ПК)
+  // ==========================
+  el.ondragstart = function() { return false; };
+
+  el.addEventListener('pointerdown', function(e) {
+    if (e.pointerType !== 'mouse' || e.button !== 0) return;
+    if (rows && rows.scrollTop > 1) return;
+
+    startY = e.clientY; dist = 0; active = true; wasDragged = false;
+    
+    captureTarget = e.target;
+    if (captureTarget.setPointerCapture) {
+      try { captureTarget.setPointerCapture(e.pointerId); } catch(err){}
+    }
+  });
+
+  el.addEventListener('pointermove', function(e) {
+    if (!active || e.pointerType !== 'mouse') return;
+    dist = e.clientY - startY;
+    
+    if (dist > 0) {
+      if (dist > 5) wasDragged = true;
+      el.style.transition = 'none';
+      el.style.transform = 'translate(-50%, ' + Math.min(dist * 0.6, 200) + 'px)';
+    }
+  });
+
+  el.addEventListener('pointerup', function(e) {
+    if (!active || e.pointerType !== 'mouse') return;
+    if (captureTarget && captureTarget.releasePointerCapture) {
+      try { captureTarget.releasePointerCapture(e.pointerId); } catch(err){}
+    }
+    captureTarget = null;
+    onEnd();
+  });
+
+  el.addEventListener('pointercancel', function(e) {
+    if (!active || e.pointerType !== 'mouse') return;
+    if (captureTarget && captureTarget.releasePointerCapture) {
+      try { captureTarget.releasePointerCapture(e.pointerId); } catch(err){}
+    }
+    captureTarget = null;
+    onEnd();
+  });
+
+  // ==========================
+  // 3. БЛОКИРОВКА ЛОЖНЫХ КЛИКОВ
+  // ==========================
+  el.addEventListener('click', function(e) {
+    if (wasDragged) {
+      e.preventDefault();
+      e.stopPropagation();
+      wasDragged = false;
+    }
+  }, true); 
 };
 
+
+//////
 window.closeLeaderboard = function () {
   const el = document.querySelector(".leaderboard-wrapper");
   const overlay = document.querySelector(".leaderboard-overlay");
-  el?.classList.remove("show");
-  overlay?.classList.remove("show");
-  window.resetPullToRefresh();
+  
+  if (el) {
+    el.classList.remove("show");
+    // ЖЕСТКАЯ ОЧИСТКА: убиваем зависшие стили от прерванного свайпа,
+    // чтобы CSS-класс смог корректно скрыть окно!
+    el.style.transform = '';
+    el.style.transition = '';
+    el._swipeInited = false; // Позволяем переинициализировать свайп при новом открытии
+  }
+  
+  if (overlay) {
+    overlay.classList.remove("show");
+  }
 };
 
 window.clearBoard = function () {
@@ -278,7 +401,6 @@ window.clearBoard = function () {
   if (rows) rows.innerHTML = "";
   const pinned = document.getElementById("pinned-row");
   if (pinned) pinned.innerHTML = "";
-  window.resetPullToRefresh();
 };
 
 window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
@@ -308,76 +430,6 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
   } else {
     rows.appendChild(row);
   }
-};
-
-// =====================
-// PULL TO REFRESH
-// =====================
-window._ptrSet = function(h, txt) {
-  var ind = document.getElementById("pull-indicator");
-  if (!ind) return;
-  ind.style.height = h + "px";
-  ind.style.opacity = Math.min(h / 80, 1);
-  var icon = ind.querySelector(".pull-icon");
-  if (icon) icon.textContent = h >= 70 ? "\u2b06" : "\u2b07";
-  if (txt) ind.querySelector(".pull-text").textContent = txt;
-};
-
-window._ptrDoRefresh = function() {
-  if (runtime.globalVars.refreshFlag === 1) return;
-  window._ptrSet(40, "Обновление...");
-  runtime.globalVars.refreshFlag = 1;
-};
-
-window._ptrReset = function() {
-  window._ptrDist = 0;
-  window._ptrActive = false;
-  window._ptrSet(0, "Потяните вниз чтобы обновить");
-};
-
-window._ptrStart = function(e) {
-  var rows = document.querySelector(".rows");
-  if (!rows || rows.scrollTop > 1) return;
-  window._ptrTouchY = e.touches[0].clientY;
-  window._ptrActive = true;
-};
-
-window._ptrMove = function(e) {
-  if (!window._ptrActive) return;
-  var rows = document.querySelector(".rows");
-  if (!rows || rows.scrollTop > 1) { window._ptrReset(); return; }
-  window._ptrDist = e.touches[0].clientY - window._ptrTouchY;
-  if (window._ptrDist > 0) window._ptrSet(Math.min(window._ptrDist * 0.5, 80));
-  else window._ptrReset();
-};
-
-window._ptrEnd = function() {
-  if (!window._ptrActive) return;
-  window._ptrActive = false;
-  if (window._ptrDist > 70) window._ptrDoRefresh();
-  window._ptrSet(0);
-  window._ptrDist = 0;
-};
-
-window._ptrWheel = function(e) {
-  var rows = document.querySelector(".rows");
-  var wrapper = document.querySelector(".leaderboard-wrapper");
-  if (!rows || !wrapper || !wrapper.classList.contains("show") || rows.scrollTop > 1 || e.deltaY >= 0) return;
-  e.preventDefault();
-  window._ptrDist += Math.abs(e.deltaY) * 0.5;
-  if (window._ptrDist > 120) window._ptrDist = 120;
-  window._ptrSet(Math.min(window._ptrDist * 0.67, 80));
-  clearTimeout(window._ptrWheelTimer);
-  window._ptrWheelTimer = setTimeout(function() {
-    if (window._ptrDist > 70) window._ptrDoRefresh();
-    window._ptrSet(0);
-    window._ptrDist = 0;
-  }, 300);
-};
-
-window.resetPullToRefresh = function() {
-  window._ptrReset();
-  clearTimeout(window._ptrWheelTimer);
 };
 	},
 
