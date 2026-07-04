@@ -11,5 +11,5 @@ body, #page-wrapper, #view-wrapper {
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
-    z-index: -10005;
+    z-index: 0;
 }

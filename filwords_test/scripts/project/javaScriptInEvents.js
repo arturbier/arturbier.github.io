@@ -131,16 +131,31 @@ var removeConfetti; //call to stop the confetti animation and remove all confett
 
 const scriptsInEvents = {
 
+	async E_effect_Event4_Act1(runtime, localVars)
+	{
+		startConfetti();
+	},
+
+	async E_effect_Event4_Act5(runtime, localVars)
+	{
+		stopConfetti();
+	},
+
+	async E_effect_Event5_Act1(runtime, localVars)
+	{
+		stopConfetti();
+	},
+
 	async E_help_Event25_Act1(runtime, localVars)
 	{
 		const elem = document.querySelector('.glass');
 		
 		if (elem) {
-		    // Включаем блюр мгновенно (без тяжелой анимации)
-		    elem.style.backdropFilter = "blur(5px)";
-		    elem.style.background = "rgba(255, 255, 255, 0.1)";
+		    // Полностью убираем лагающий блюр и ставим легкий темный фон
+		    elem.style.backdropFilter = "none";
+		    elem.style.background = "rgba(10, 12, 18, 0.65)"; // Твой фирменный цвет оверлея таблицы лидеров
 		    
-		    // Анимируем ТОЛЬКО прозрачность (это супер-легко для любых устройств)
+		    // Плавное появление ТОЛЬКО через прозрачность (работает аппаратно)
 		    elem.style.transition = "opacity 0.3s ease";
 		    elem.style.opacity = "1";
 		    
@@ -156,33 +171,17 @@ const scriptsInEvents = {
 		const elem = document.querySelector('.glass');
 		
 		if (elem) {
-		    // Плавно гасим прозрачность элемента
+		    // Плавно гасим прозрачность темной подложки
 		    elem.style.transition = "opacity 0.3s ease";
 		    elem.style.opacity = "0";
 		    
-		    // Ждем 300 мс (пока идет анимация), а затем полностью убиваем тяжелый блюр
+		    // Ждем окончания анимации (300 мс) и полностью очищаем фон
 		    setTimeout(() => {
 		        if (elem.style.opacity === "0") {
-		            elem.style.backdropFilter = "none";
 		            elem.style.background = "transparent";
 		        }
 		    }, 300);
 		}
-	},
-
-	async E_effect_Event4_Act1(runtime, localVars)
-	{
-		startConfetti();
-	},
-
-	async E_effect_Event4_Act5(runtime, localVars)
-	{
-		stopConfetti();
-	},
-
-	async E_effect_Event5_Act1(runtime, localVars)
-	{
-		stopConfetti();
 	},
 
 	async E_game_Event12_Act1(runtime, localVars)
@@ -244,241 +243,6 @@ const scriptsInEvents = {
 		        lastParticleTime = currentTime; // Обновляем время последней частицы
 		    }
 		});
-	},
-
-	async E_newgrid_Event3_Act1(runtime, localVars)
-	{
-
-	},
-
-	async E_newgrid_Event3_Act2(runtime, localVars)
-	{
-		window.generateGameGrid = function(size) {
-		    try {
-		        const arr = runtime.objects.wordsArray.getFirstInstance();
-		        const gridArr = runtime.objects.GridArray.getFirstInstance();
-		        const usedWords = runtime.objects.usedWords.getFirstInstance();
-		        
-		        // Работаем через DataMap, как ты показал в примере
-		        const history = runtime.objects.GlobalHistory.getFirstInstance().getDataMap();
-		
-		        const wordList = [];
-		        const height = arr.height;
-		
-		        for (let y = 0; y < height; y++) {
-		            try {
-		                const w = arr.getAt(0, y, 0);
-		                if (w && typeof w === "string" && w.trim().length > 1) {
-		                    wordList.push(w.trim().toUpperCase());
-		                }
-		            } catch (e) {}
-		        }
-		
-		        const N = size;
-		
-		        // ... (функции generateDFSPath и generateFallbackPath остаются без изменений) ...
-		                function generateDFSPath() {
-		            const DIRS = [[1,0],[-1,0],[0,1],[0,-1]];
-		            const visited = Array.from({length: N}, () => new Uint8Array(N));
-		            const path = [];
-		            let ops = 0; // СЧЕТЧИК ОПЕРАЦИЙ (предохранитель от зависания)
-		
-		            function dfs(r, c, depth) {
-		                // Если скрипт сделал слишком много попыток - прерываем его
-		                if (ops > 5000) return false; 
-		                ops++;
-		
-		                visited[r][c] = 1;
-		                path.push({r, c});
-		                if (depth === N * N) return true;
-		
-		                const nb = [];
-		                for (const [dr, dc] of DIRS) {
-		                    const nr = r + dr, nc = c + dc;
-		                    if (nr >= 0 && nr < N && nc >= 0 && nc < N && !visited[nr][nc]) {
-		                        let deg = 0;
-		                        for (const [ddr, ddc] of DIRS) {
-		                            const nnr = nr + ddr, nnc = nc + ddc;
-		                            if (nnr >= 0 && nnr < N && nnc >= 0 && nnc < N && !visited[nnr][nnc]) deg++;
-		                        }
-		                        nb.push({nr, nc, deg});
-		                    }
-		                }
-		                
-		                nb.sort((a, b) => a.deg - b.deg || Math.random() - 0.5);
-		                
-		                for (const {nr, nc} of nb) { 
-		                    if (dfs(nr, nc, depth + 1)) return true; 
-		                }
-		                
-		                visited[r][c] = 0;
-		                path.pop();
-		                return false;
-		            }
-		
-		            // Даем алгоритму 10 попыток найти путь
-		            for (let att = 0; att < 10; att++) {
-		                ops = 0; // Сбрасываем счетчик для новой попытки
-		                for (let r = 0; r < N; r++) visited[r].fill(0);
-		                path.length = 0;
-		                
-		                const sr = (Math.random() * N) | 0;
-		                const sc = (Math.random() * N) | 0;
-		                
-		                if (dfs(sr, sc, 1)) return [...path];
-		            }
-		            return null; // Если не получилось, мгновенно отдаем fallbackPath
-		        }
-		
-		        function generateFallbackPath() {
-		            const path = [];
-		            const horz = Math.random() < 0.5;
-		            if (horz) {
-		                for (let r = 0; r < N; r++) { const fwd = !(r & 1); for (let i = 0; i < N; i++) { const c = fwd ? i : N - 1 - i; path.push({r, c}); } }
-		            } else {
-		                for (let c = 0; c < N; c++) { const fwd = !(c & 1); for (let i = 0; i < N; i++) { const r = fwd ? i : N - 1 - i; path.push({r, c}); } }
-		            }
-		            const off = (Math.random() * path.length) | 0;
-		            const head = path.splice(0, off);
-		            path.push(...head);
-		            return path;
-		        }
-		
-		                let path = generateDFSPath() || generateFallbackPath();
-		        const TOTAL = path.length;
-		
-		        // Фильтруем слова, которые еще не использовались
-		        let cands = wordList.filter(w => w.length <= TOTAL && !history.has(w));
-		        
-		        // Если слов не хватает, сбрасываем историю
-		        if (cands.length === 0) {
-		            console.warn("Слова закончились! Очищаем историю...");
-		            history.clear();
-		            cands = wordList.filter(w => w.length <= TOTAL);
-		        }
-		
-		        // Находим минимальную длину слова в словаре (чтобы не оставлять пустые "хвосты" по 1-2 клетки)
-		        const minWordLen = cands.length > 0 ? Math.min(...cands.map(w => w.length)) : 3;
-		
-		        let selectedWords = [];
-		        let isSuccess = false;
-		
-		        // Рандомный быстрый подбор слов под точную длину TOTAL (максимум 500 попыток)
-		        for (let attempt = 0; attempt < 500; attempt++) {
-		            let shuffled = [...cands].sort(() => Math.random() - 0.5);
-		            selectedWords = [];
-		            let currentLen = 0;
-		
-		            for (const w of shuffled) {
-		                let nextLen = currentLen + w.length;
-		                if (nextLen <= TOTAL) {
-		                    let rem = TOTAL - nextLen;
-		                    // Берем слово, только если остаток равен 0 ИЛИ если в остаток еще влезет хотя бы самое короткое слово
-		                    if (rem === 0 || rem >= minWordLen) {
-		                        selectedWords.push(w);
-		                        currentLen = nextLen;
-		                    }
-		                }
-		                // Если собрали ровно нужную длину - выходим
-		                if (currentLen === TOTAL) {
-		                    isSuccess = true;
-		                    break;
-		                }
-		            }
-		            if (isSuccess) break;
-		        }
-		
-		        if (isSuccess) {
-		            // Подготавливаем сетку
-		            gridArr.setSize(size, size, 3);
-		            for (let r = 0; r < size; r++) {
-		                for (let c = 0; c < size; c++) { 
-		                    gridArr.setAt("", c, r, 0); 
-		                }
-		            }
-		
-		            usedWords.setSize(selectedWords.length, 2, 1);
-		            let currentPos = 0;
-		
-		            // Распределяем выбранные слова по заранее сгенерированному пути
-		            selectedWords.forEach((word, wordIdx) => {
-		                history.set(word, 1); // Записываем в историю
-		                usedWords.setAt(word, wordIdx, 0, 0);
-		                usedWords.setAt(Array.from({length: word.length}, (_, i) => i).join(""), wordIdx, 1, 0);
-		
-		                for (let i = 0; i < word.length; i++) {
-		                    const p = path[currentPos + i];
-		                    gridArr.setAt(word[i], p.c, p.r, 0); // Z=0: Сама буква
-		                    gridArr.setAt(wordIdx, p.c, p.r, 1); // Z=1: Индекс слова
-		                    gridArr.setAt(i, p.c, p.r, 2);       // Z=2: Позиция буквы
-		                }
-		                currentPos += word.length;
-		            });
-		
-		            console.log("УСПЕХ. Размер: " + size + "x" + size + ". Слова:", selectedWords.join(", "));
-		        } else {
-		            console.error("РЕШЕНИЕ НЕ НАЙДЕНО. Не удалось подобрать комбинацию слов длиной ровно " + TOTAL);
-		            // Если вдруг комбинация не подобралась (что редкость), очищаем историю и пробуем еще раз
-		            history.clear();
-		            window.generateGameGrid(size); 
-		        }
-		
-		    } catch (err) {
-		        console.error("Ошибка генерации:", err);
-		    }
-		};
-	},
-
-	async E_newgrid_Event3_Act3(runtime, localVars)
-	{
-		window.generateGameGrid(localVars.gridSize);
-	},
-
-	async E_newgrid_Event6_Act1(runtime, localVars)
-	{
-		const palette = runtime.objects.Palette.getFirstInstance();
-		palette.setSize(3, 50, 1);
-		
-		// Используем золотое сечение (0.618033988749895), чтобы цвета 
-		// равномерно распределялись по цветовому кругу
-		const goldenRatioConjugate = 0.618033988749895;
-		let hue = Math.random(); // Случайный начальный оттенок
-		
-		for (let i = 0; i < 50; i++) {
-		    hue += goldenRatioConjugate;
-		    hue %= 1; // Удерживаем значение в диапазоне [0, 1]
-		
-		    // Конвертируем HSL в RGB
-		    // H (Hue) = hue, S (Saturation) = 0.7, L (Lightness) = 0.6
-		    let rgb = hslToRgb(hue, 0.7, 0.6);
-		
-		    palette.setAt(Math.floor(rgb[0] * 255), 0, i, 0);
-		    palette.setAt(Math.floor(rgb[1] * 255), 1, i, 0);
-		    palette.setAt(Math.floor(rgb[2] * 255), 2, i, 0);
-		}
-		
-		// Вспомогательная функция (добавь её в тот же скрипт)
-		function hslToRgb(h, s, l) {
-		    let r, g, b;
-		    if (s === 0) {
-		        r = g = b = l;
-		    } else {
-		        const hue2rgb = (p, q, t) => {
-		            if (t < 0) t += 1;
-		            if (t > 1) t -= 1;
-		            if (t < 1/6) return p + (q - p) * 6 * t;
-		            if (t < 1/2) return q;
-		            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
-		            return p;
-		        };
-		        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-		        const p = 2 * l - q;
-		        r = hue2rgb(p, q, h + 1/3);
-		        g = hue2rgb(p, q, h);
-		        b = hue2rgb(p, q, h - 1/3);
-		    }
-		    return [r, g, b];
-		}
 	},
 
 	async E_leaderboard_Event1_Act1(runtime, localVars)
@@ -923,6 +687,241 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
 	async E_leaderboard_Event25_Act1(runtime, localVars)
 	{
 		var d=new Date();runtime.globalVars.histTime=d.getTime();runtime.globalVars.histIndex=Number(localStorage.getItem('hist_idx')||0);runtime.globalVars.histIndex=runtime.globalVars.histIndex+1;localStorage.setItem('hist_idx',runtime.globalVars.histIndex)
+	},
+
+	async E_newgrid_Event3_Act1(runtime, localVars)
+	{
+
+	},
+
+	async E_newgrid_Event3_Act2(runtime, localVars)
+	{
+		window.generateGameGrid = function(size) {
+		    try {
+		        const arr = runtime.objects.wordsArray.getFirstInstance();
+		        const gridArr = runtime.objects.GridArray.getFirstInstance();
+		        const usedWords = runtime.objects.usedWords.getFirstInstance();
+		        
+		        // Работаем через DataMap, как ты показал в примере
+		        const history = runtime.objects.GlobalHistory.getFirstInstance().getDataMap();
+		
+		        const wordList = [];
+		        const height = arr.height;
+		
+		        for (let y = 0; y < height; y++) {
+		            try {
+		                const w = arr.getAt(0, y, 0);
+		                if (w && typeof w === "string" && w.trim().length > 1) {
+		                    wordList.push(w.trim().toUpperCase());
+		                }
+		            } catch (e) {}
+		        }
+		
+		        const N = size;
+		
+		        // ... (функции generateDFSPath и generateFallbackPath остаются без изменений) ...
+		                function generateDFSPath() {
+		            const DIRS = [[1,0],[-1,0],[0,1],[0,-1]];
+		            const visited = Array.from({length: N}, () => new Uint8Array(N));
+		            const path = [];
+		            let ops = 0; // СЧЕТЧИК ОПЕРАЦИЙ (предохранитель от зависания)
+		
+		            function dfs(r, c, depth) {
+		                // Если скрипт сделал слишком много попыток - прерываем его
+		                if (ops > 5000) return false; 
+		                ops++;
+		
+		                visited[r][c] = 1;
+		                path.push({r, c});
+		                if (depth === N * N) return true;
+		
+		                const nb = [];
+		                for (const [dr, dc] of DIRS) {
+		                    const nr = r + dr, nc = c + dc;
+		                    if (nr >= 0 && nr < N && nc >= 0 && nc < N && !visited[nr][nc]) {
+		                        let deg = 0;
+		                        for (const [ddr, ddc] of DIRS) {
+		                            const nnr = nr + ddr, nnc = nc + ddc;
+		                            if (nnr >= 0 && nnr < N && nnc >= 0 && nnc < N && !visited[nnr][nnc]) deg++;
+		                        }
+		                        nb.push({nr, nc, deg});
+		                    }
+		                }
+		                
+		                nb.sort((a, b) => a.deg - b.deg || Math.random() - 0.5);
+		                
+		                for (const {nr, nc} of nb) { 
+		                    if (dfs(nr, nc, depth + 1)) return true; 
+		                }
+		                
+		                visited[r][c] = 0;
+		                path.pop();
+		                return false;
+		            }
+		
+		            // Даем алгоритму 10 попыток найти путь
+		            for (let att = 0; att < 10; att++) {
+		                ops = 0; // Сбрасываем счетчик для новой попытки
+		                for (let r = 0; r < N; r++) visited[r].fill(0);
+		                path.length = 0;
+		                
+		                const sr = (Math.random() * N) | 0;
+		                const sc = (Math.random() * N) | 0;
+		                
+		                if (dfs(sr, sc, 1)) return [...path];
+		            }
+		            return null; // Если не получилось, мгновенно отдаем fallbackPath
+		        }
+		
+		        function generateFallbackPath() {
+		            const path = [];
+		            const horz = Math.random() < 0.5;
+		            if (horz) {
+		                for (let r = 0; r < N; r++) { const fwd = !(r & 1); for (let i = 0; i < N; i++) { const c = fwd ? i : N - 1 - i; path.push({r, c}); } }
+		            } else {
+		                for (let c = 0; c < N; c++) { const fwd = !(c & 1); for (let i = 0; i < N; i++) { const r = fwd ? i : N - 1 - i; path.push({r, c}); } }
+		            }
+		            const off = (Math.random() * path.length) | 0;
+		            const head = path.splice(0, off);
+		            path.push(...head);
+		            return path;
+		        }
+		
+		                let path = generateDFSPath() || generateFallbackPath();
+		        const TOTAL = path.length;
+		
+		        // Фильтруем слова, которые еще не использовались
+		        let cands = wordList.filter(w => w.length <= TOTAL && !history.has(w));
+		        
+		        // Если слов не хватает, сбрасываем историю
+		        if (cands.length === 0) {
+		            console.warn("Слова закончились! Очищаем историю...");
+		            history.clear();
+		            cands = wordList.filter(w => w.length <= TOTAL);
+		        }
+		
+		        // Находим минимальную длину слова в словаре (чтобы не оставлять пустые "хвосты" по 1-2 клетки)
+		        const minWordLen = cands.length > 0 ? Math.min(...cands.map(w => w.length)) : 3;
+		
+		        let selectedWords = [];
+		        let isSuccess = false;
+		
+		        // Рандомный быстрый подбор слов под точную длину TOTAL (максимум 500 попыток)
+		        for (let attempt = 0; attempt < 500; attempt++) {
+		            let shuffled = [...cands].sort(() => Math.random() - 0.5);
+		            selectedWords = [];
+		            let currentLen = 0;
+		
+		            for (const w of shuffled) {
+		                let nextLen = currentLen + w.length;
+		                if (nextLen <= TOTAL) {
+		                    let rem = TOTAL - nextLen;
+		                    // Берем слово, только если остаток равен 0 ИЛИ если в остаток еще влезет хотя бы самое короткое слово
+		                    if (rem === 0 || rem >= minWordLen) {
+		                        selectedWords.push(w);
+		                        currentLen = nextLen;
+		                    }
+		                }
+		                // Если собрали ровно нужную длину - выходим
+		                if (currentLen === TOTAL) {
+		                    isSuccess = true;
+		                    break;
+		                }
+		            }
+		            if (isSuccess) break;
+		        }
+		
+		        if (isSuccess) {
+		            // Подготавливаем сетку
+		            gridArr.setSize(size, size, 3);
+		            for (let r = 0; r < size; r++) {
+		                for (let c = 0; c < size; c++) { 
+		                    gridArr.setAt("", c, r, 0); 
+		                }
+		            }
+		
+		            usedWords.setSize(selectedWords.length, 2, 1);
+		            let currentPos = 0;
+		
+		            // Распределяем выбранные слова по заранее сгенерированному пути
+		            selectedWords.forEach((word, wordIdx) => {
+		                history.set(word, 1); // Записываем в историю
+		                usedWords.setAt(word, wordIdx, 0, 0);
+		                usedWords.setAt(Array.from({length: word.length}, (_, i) => i).join(""), wordIdx, 1, 0);
+		
+		                for (let i = 0; i < word.length; i++) {
+		                    const p = path[currentPos + i];
+		                    gridArr.setAt(word[i], p.c, p.r, 0); // Z=0: Сама буква
+		                    gridArr.setAt(wordIdx, p.c, p.r, 1); // Z=1: Индекс слова
+		                    gridArr.setAt(i, p.c, p.r, 2);       // Z=2: Позиция буквы
+		                }
+		                currentPos += word.length;
+		            });
+		
+		            console.log("УСПЕХ. Размер: " + size + "x" + size + ". Слова:", selectedWords.join(", "));
+		        } else {
+		            console.error("РЕШЕНИЕ НЕ НАЙДЕНО. Не удалось подобрать комбинацию слов длиной ровно " + TOTAL);
+		            // Если вдруг комбинация не подобралась (что редкость), очищаем историю и пробуем еще раз
+		            history.clear();
+		            window.generateGameGrid(size); 
+		        }
+		
+		    } catch (err) {
+		        console.error("Ошибка генерации:", err);
+		    }
+		};
+	},
+
+	async E_newgrid_Event3_Act3(runtime, localVars)
+	{
+		window.generateGameGrid(localVars.gridSize);
+	},
+
+	async E_newgrid_Event6_Act1(runtime, localVars)
+	{
+		const palette = runtime.objects.Palette.getFirstInstance();
+		palette.setSize(3, 50, 1);
+		
+		// Используем золотое сечение (0.618033988749895), чтобы цвета 
+		// равномерно распределялись по цветовому кругу
+		const goldenRatioConjugate = 0.618033988749895;
+		let hue = Math.random(); // Случайный начальный оттенок
+		
+		for (let i = 0; i < 50; i++) {
+		    hue += goldenRatioConjugate;
+		    hue %= 1; // Удерживаем значение в диапазоне [0, 1]
+		
+		    // Конвертируем HSL в RGB
+		    // H (Hue) = hue, S (Saturation) = 0.7, L (Lightness) = 0.6
+		    let rgb = hslToRgb(hue, 0.7, 0.6);
+		
+		    palette.setAt(Math.floor(rgb[0] * 255), 0, i, 0);
+		    palette.setAt(Math.floor(rgb[1] * 255), 1, i, 0);
+		    palette.setAt(Math.floor(rgb[2] * 255), 2, i, 0);
+		}
+		
+		// Вспомогательная функция (добавь её в тот же скрипт)
+		function hslToRgb(h, s, l) {
+		    let r, g, b;
+		    if (s === 0) {
+		        r = g = b = l;
+		    } else {
+		        const hue2rgb = (p, q, t) => {
+		            if (t < 0) t += 1;
+		            if (t > 1) t -= 1;
+		            if (t < 1/6) return p + (q - p) * 6 * t;
+		            if (t < 1/2) return q;
+		            if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+		            return p;
+		        };
+		        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+		        const p = 2 * l - q;
+		        r = hue2rgb(p, q, h + 1/3);
+		        g = hue2rgb(p, q, h);
+		        b = hue2rgb(p, q, h - 1/3);
+		    }
+		    return [r, g, b];
+		}
 	}
 };
 
