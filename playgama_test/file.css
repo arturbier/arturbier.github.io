@@ -1,0 +1,13 @@
+canvas {
+    position: absolute;
+    z-index: 0;
+    box-shadow: 0 0 24px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+}
+
+body, #page-wrapper, #view-wrapper {
+    background-image: url("BG.png") !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+}

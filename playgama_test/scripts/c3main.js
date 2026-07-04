@@ -1,0 +1,8 @@
+import "./../box2d.wasm.js";
+import "./c3runtime.js";
+import "./plugins/EMI_INDO_sweetalert2/c3runtime/main.js";
+import "./plugins/Sparsha_FirebaseRealtimeDatabase/c3runtime/main.js";
+import "./plugins/Sparsha_FirebaseSDK/c3runtime/main.js";
+import "./plugins/PlaygamaBridge/c3runtime/main.js";
+import "./objRefTable.js";
+import "./project/javaScriptInEvents.js";
