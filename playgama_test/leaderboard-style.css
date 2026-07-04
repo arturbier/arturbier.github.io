@@ -1,0 +1,731 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+/* =========================
+   1. BASE
+========================= */
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  background: rgba(10, 12, 18, 0.65);
+}
+
+/* =========================
+   2. LEADERBOARD WRAPPER
+========================= */
+.leaderboard-wrapper {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 100%);
+  width: 100%;
+  max-width: 900px;
+  z-index: 9999;
+  pointer-events: none;
+  background: transparent;
+  overflow: visible;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.leaderboard-wrapper.show {
+  transform: translate(-50%, 0%);
+  pointer-events: auto;
+}
+
+/* =========================
+   3. OVERLAY
+========================= */
+.leaderboard-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 9998;
+  transition: opacity .25s ease;
+}
+
+.leaderboard-overlay.show {
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.65);
+  pointer-events: auto;
+}
+
+/* =========================
+   4. MAIN PANEL
+========================= */
+.leaderboard {
+  width: 100%;
+  background: rgba(10, 12, 18, 0.92);
+  color: #eaeef7;
+  border-radius: 28px 28px 0 0;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* =========================
+   5. HEADER + SUBHEADER + TITLE
+========================= */
+.lb-header {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 14px 16px 14px 10px;
+  background: rgba(10, 12, 18, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lb-subheader {
+  display: grid;
+  grid-template-columns: 55% 15% 30%;
+  padding: 10px 16px 10px 10px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  background: rgba(10, 12, 18, 0.92);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lb-subheader> :nth-child(1) {
+  text-align: left;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.lb-subheader> :nth-child(2) {
+  text-align: right;
+  padding-right: 14px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.lb-subheader> :nth-child(3) {
+  text-align: right;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #7c5cff, #00d4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =========================
+   6. BUTTONS (close + reset)
+========================= */
+.close-btn {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.reset-btn {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.reset-btn:hover {
+  background: rgba(255, 80, 80, 0.2);
+  color: rgba(255, 100, 100, 0.8);
+}
+
+/* =========================
+   7. ROWS CONTAINER
+========================= */
+.rows {
+  display: flex;
+  flex-direction: column;
+  min-height: 50vh;
+  max-height: 60vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
+}
+
+.rows::-webkit-scrollbar {
+  width: 6px;
+}
+
+.rows::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.rows::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 3px;
+}
+
+/* =========================
+   8. ROW (grid layout)
+========================= */
+.row {
+  display: grid;
+  grid-template-columns: 55% 15% 30%;
+  align-items: center;
+  padding: 10px 16px 10px 10px;
+  font-size: 14px;
+  font-weight: 500;
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+  position: relative;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+/* alignment */
+.rows>.row> :nth-child(1),
+#pinned-row>.row> :nth-child(1) {
+  text-align: left;
+}
+
+.rows>.row> :nth-child(2),
+#pinned-row>.row> :nth-child(2) {
+  width: 100%;
+  text-align: right;
+  padding-right: 8px;
+  font-weight: 700;
+  color: #00d4ff;
+}
+
+.rows>.row> :nth-child(3),
+#pinned-row>.row> :nth-child(3) {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  opacity: 0.7;
+}
+
+/* normal rows without border — compensate with padding */
+.row:not(.top1):not(.top2):not(.top3):not(.my-row) {
+  padding-left: 14px;
+}
+
+/* =========================
+   9. HOVER (desktop only)
+========================= */
+@media (hover: hover) {
+  .row:hover {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .row.top1:hover {
+    background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10));
+  }
+
+  .row.my-row:hover {
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08));
+  }
+}
+
+/* =========================
+   10. TOP1, TOP2, TOP3
+========================= */
+.row.top1 {
+  border-left: 4px solid #ffc800;
+  background: linear-gradient(90deg, rgba(255, 200, 0, 0.22), rgba(255, 200, 0, 0.06));
+}
+
+.row.top1 .rank-badge,
+.row.top1 .player-cell span:last-child {
+  color: #ffc800;
+  font-weight: 900;
+  text-shadow: 0 0 4px rgba(255, 200, 0, 0.7);
+}
+
+.row.top1> :nth-child(2),
+.row.top1> :nth-child(3) {
+  color: #ffc800;
+  font-weight: 900;
+}
+
+.row.top2 {
+  border-left: 4px solid #a0aac3;
+}
+
+.row.top3 {
+  border-left: 4px solid #cd7f32;
+}
+
+/* =========================
+   11. MY ROW (pinned player)
+========================= */
+.row.my-row {
+  font-weight: 900;
+  border-left: 4px solid #00d4ff;
+}
+
+.row.my-row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.18), transparent);
+  pointer-events: none;
+}
+
+/* =========================
+   12. PINNED ROW
+========================= */
+#pinned-row {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: transparent;
+}
+
+#pinned-row * {
+  opacity: 1 !important;
+}
+
+#pinned-row .row {
+  position: relative;
+  z-index: 6;
+}
+
+#pinned-row .row .avatar,
+#pinned-row .row .rank-badge,
+#pinned-row .row .player-cell span {
+  position: relative;
+  z-index: 7;
+}
+
+#pinned-row .row.top1,
+#pinned-row .row.top2,
+#pinned-row .row.top3 {
+  border-left-color: #00d4ff;
+  background: transparent;
+}
+
+#pinned-row .row.top1 .rank-badge,
+#pinned-row .row .player-cell span:last-child {
+  color: #00d4ff;
+}
+
+#pinned-row .row.top1 .player-cell span:last-child {
+  color: #00d4ff;
+  text-shadow: none;
+}
+
+#pinned-row .row.top1> :nth-child(2),
+#pinned-row .row.top1> :nth-child(3) {
+  color: #00d4ff;
+}
+
+#pinned-row .row.my-row:hover {
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.35), rgba(0, 212, 255, 0.10)) !important;
+}
+
+/* =========================
+   13. PLAYER CELL
+========================= */
+.player-cell {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+}
+
+.rank-badge {
+  width: 24px;
+  text-align: center;
+  flex-shrink: 0;
+  font-size: 13px;
+}
+
+.player-cell>span:last-child {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+  word-break: break-word;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.pin-icon {
+  font-size: 11px;
+  vertical-align: super;
+}
+
+/* =========================
+   14. FOOTER
+========================= */
+.lb-footer {
+  text-align: center;
+  padding: 10px 16px 16px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* =========================
+   15. ACHIEVEMENT POPUP
+========================= */
+.ach-popup {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translate(-50%, -120%);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  min-width: 260px;
+  background: rgba(10, 12, 18, 0.95);
+  border: 1px solid rgba(0, 212, 255, 0.4);
+  border-radius: 14px;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+}
+
+.ach-popup.show {
+  transform: translate(-50%, 0);
+  opacity: 1;
+}
+
+.ach-popup.hide {
+  transform: translate(-50%, -120%);
+  opacity: 0;
+}
+
+.ach-icon {
+  font-size: 32px;
+  flex-shrink: 0;
+  animation: ach-pulse 0.6s ease;
+}
+
+@keyframes ach-pulse {
+  0% {
+    transform: scale(0);
+  }
+
+  60% {
+    transform: scale(1.3);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.ach-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ach-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: #00d4ff;
+  letter-spacing: 0.5px;
+}
+
+.ach-text {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* =========================
+   16. HISTORY POPUP
+========================= */
+.hist-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  z-index: 10001;
+  width: 85%;
+  max-width: 360px;
+  background: rgba(10, 12, 18, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.hist-popup.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.hist-popup.hide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.85);
+}
+
+.hist-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hist-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.hist-name {
+  font-weight: 700;
+  color: #00d4ff;
+  font-size: 18px;
+}
+
+/* Дизайн кнопки закрытия как в Топе Дня */
+.hist-close {
+  position: absolute;
+  right: 16px;
+  top: 14px; /* Привязываем к верху, как в топе */
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  color: white;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  z-index: 10;
+}
+
+.hist-close:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: scale(1.05);
+}
+
+.hist-list {
+  padding: 12px 16px;
+  max-height: 50vh;
+  overflow-y: auto;
+  min-height: 120px;
+}
+
+.hist-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 140px;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.3);
+  text-align: center;
+}
+
+.hist-tip {
+  text-align: center;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.25);
+  padding: 8px 16px 14px;
+}
+
+.hist-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  height: 140px;
+}
+
+.hist-dot {
+  font-size: 8px;
+  color: #00d4ff;
+  animation: dotPulse 0.6s ease infinite;
+}
+
+.hist-dot:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.hist-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.hist-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(0.8);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
+/* =========================
+   17. HISTORY OVERLAY
+========================= */
+.hist-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease;
+}
+
+.hist-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+  background: rgba(0, 0, 0, 0.45);
+}
+
+/* =========================
+   18. HISTORY CHART (АДАПТИВНОЕ РАСПРЕДЕЛЕНИЕ)
+========================= */
+.hist-chart-wrap {
+  padding: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hist-bars {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center; /* Центрируем, если мало элементов */
+  width: 100%;             /* Занимает всю ширину попапа */
+  height: 150px;
+  gap: 4px;                /* Маленький отступ между ними */
+}
+
+.hist-col {
+  flex: 1;                 /* Каждая колонка берет равную часть ширины */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  height: 100%;
+  min-width: 0;            /* Позволяет колонке сжиматься, если их очень много */
+}
+
+.hist-bar {
+  width: 100%;             /* Бар занимает всю ширину своей колонки */
+  border-radius: 4px 4px 0 0;
+  background: linear-gradient(180deg, #00d4ff, rgba(0,212,255,0.25));
+  transition: height 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  min-height: 5px;
+}
+
+.hist-medal {
+  font-size: 12px;
+  margin-bottom: 4px;
+}
+
+.hist-date-text {
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  margin-top: 4px;
+  line-height: 1;
+  white-space: nowrap;
+}
+/* =========================
+   19. HISTORY TUTORIAL (OK)
+========================= */
+
+.hist-tutorial {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: rgba(10, 12, 18, 0.95);
+  color: #eaeef7;
+
+  padding: 12px 22px;
+  border-radius: 14px;
+  font-size: 13px;
+  text-align: center;
+
+  z-index: 100;
+  pointer-events: none;
+
+  border: 1px solid rgba(0, 212, 255, 0.3);
+
+  animation: tipBounce 0.6s ease;
+  box-shadow: 0 0 12px rgba(0, 212, 255, 0.15),
+              0 8px 32px rgba(0, 0, 0, 0.4);
+
+  letter-spacing: 0.3px;
+}
+
+.hist-tutorial.fade {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+@keyframes tipBounce {
+  0% {
+    transform: translateX(-50%) scale(0.5);
+    opacity: 0;
+  }
+
+  60% {
+    transform: translateX(-50%) scale(1.1);
+  }
+
+  100% {
+    transform: translateX(-50%) scale(1);
+    opacity: 1;
+  }
+}
+.hist-chart-wrap { padding-top: 4px; }
+.hist-popup { overflow: hidden; }
+.hist-col .hist-bar { min-width: 0; }
+
+.hist-col { border-left: 1px solid rgba(255,255,255,0.04); }
+.hist-col:first-child { border-left: none; }
+
+.leaderboard-wrapper.swiping { transform: translate(-50%, var(--swipe-y, 0px)) !important; transition: none !important; }

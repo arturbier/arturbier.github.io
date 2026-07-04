@@ -1,11 +1,11 @@
 {
-	"name": "Таблица лидеров firebase",
-	"short_name": "Таблица лидеров firebase",
+	"name": "Наши филворды",
+	"short_name": "Наши филворды",
 	"description": "",
 	"start_url": "index.html",
 	"display": "fullscreen",
 	"orientation": "portrait",
-	"background_color": "#ffffff",
+	"background_color": "#e0e3f5",
 	"icons": [
 		{
 			"src": "icons/icon-16.png",
@@ -38,5 +38,6 @@
 			"type": "image/png"
 		}
 	],
-	"screenshots": []
+	"screenshots": [],
+	"theme_color": "#e0e3f5"
 }
