@@ -227,22 +227,38 @@ body {
 }
 
 /* =========================
-   9. HOVER (desktop only)
+   9. HOVER & TOUCH ACTIVE
 ========================= */
+/* Эффекты для ПК (наведение мыши) */
 @media (hover: hover) {
   .row:hover {
     background: rgba(255, 255, 255, 0.06);
   }
 
-  /* Для первого места ховер ВСЕГДА золотой (даже если это твоя строка) */
+  /* Твоя строка подсвечивается голубым ТОЛЬКО если ты НЕ на первом месте */
+  .row.my-row:not(.top1):hover {
+    background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08)) !important;
+  }
+
+  /* Для первого места ховер ВСЕГДА сочный золотой */
   .row.top1:hover {
     background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important;
   }
+}
 
-  /* Твоя строка подсвечивается голубым ТОЛЬКО если ты НЕ на первом месте */
-  .row.my-row:not(.top1):hover {
-    background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08));
-  }
+/* Эффекты для СМАРТФОНОВ (моментальный отклик при нажатии пальцем) */
+.row.active {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Мобильный тач-отклик для твоей строки (голубой градиент) */
+.row.my-row:not(.top1).active {
+  background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08)) !important;
+}
+
+/* Мобильный тач-отклик для первого места (чистое золото без синевы) */
+.row.top1.active {
+  background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important;
 }
 
 /* =========================

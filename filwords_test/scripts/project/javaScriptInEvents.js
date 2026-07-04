@@ -892,6 +892,7 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
   const isMe = window.meFirst && (pid === window.myPlayerID || name === window.myPlayerName);
   let badge = rank === 0 ? "👑" : rank === 1 ? "🥈" : rank === 2 ? "🥉" : `${rank + 1}.`;
   if (isTop1) row.classList.add("top1");
+  
   row.innerHTML = `
     <span class="player-cell">
       <span class="rank-badge">${badge}</span>
@@ -901,6 +902,12 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
     <span>${score}</span>
     <span>${gems}</span>`;
   row.style.cursor = 'pointer';
+  
+  // ФИКС ДЛЯ МОБИЛЬНОГО ХОВЕРА (ТАЧ-ОТКЛИК)
+  row.addEventListener('touchstart', function() { row.classList.add('active'); }, {passive: true});
+  row.addEventListener('touchend', function() { row.classList.remove('active'); }, {passive: true});
+  row.addEventListener('touchcancel', function() { row.classList.remove('active'); }, {passive: true});
+
   row.onclick = function(e) { e.stopPropagation(); window.showHistory(pid, name); };
   if (isMe) {
     row.classList.add("my-row");

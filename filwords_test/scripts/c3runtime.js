@@ -2719,21 +2719,13 @@ self.C3_ExpressionFuncs = [
 		() => 5948240,
 		() => "Back",
 		() => "BetterOutline",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
-		},
+		() => "TESTER",
+		() => 11111111,
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (("филворды/" + v0.GetValue()) + "/savedData/data");
 		},
 		() => "getData",
-		() => "Name",
-		p => {
-			const n0 = p._GetNode(0);
-			return () => (n0.ExpObject() + 45);
-		},
-		() => "Имя не задано",
 		() => "Play",
 		p => {
 			const n0 = p._GetNode(0);
@@ -2821,6 +2813,10 @@ self.C3_ExpressionFuncs = [
 		() => "all",
 		() => "Mini_Game",
 		() => "getWords",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
 		p => {
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
