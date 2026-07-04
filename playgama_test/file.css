@@ -1,7 +1,0 @@
-canvas {
-    position: absolute;
-    z-index: 0;
-    box-shadow: 0 0 24px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
-}
-
