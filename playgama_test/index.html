@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+	<title>Наши филворды</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+	
+	<!-- Made with Construct, the game and app creator :: https://www.construct.net -->
+	<meta name="generator" content="Scirra Construct">
+
+
+
+	<link rel="manifest" href="appmanifest.json">
+	<link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
+	<link rel="apple-touch-icon" sizes="256x256" href="icons/icon-256.png">
+	<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+	<link rel="icon" type="image/png" href="icons/icon-512.png">
+
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="file.css">
+	<link rel="stylesheet" href="leaderboard-style.css">
+
+
+</head> 
+ 
+<body>
+<div class="leaderboard-overlay" onclick="closeLeaderboard()"></div>
+
+<div id="achievement-popup" class="ach-popup">
+  <div class="ach-icon"></div>
+  <div class="ach-body">
+    <div class="ach-title"></div>
+    <div class="ach-text"></div>
+  </div>
+</div>
+
+<div id="history-popup" class="hist-popup">
+  <div class="hist-header">
+    <div>
+      <div class="hist-label">История позиций</div>
+      <span class="hist-name"></span>
+    </div>
+    <button class="hist-close" onclick="closeHistory()">✕</button>
+  </div>
+  <div class="hist-list"></div>
+  <div class="hist-tip">📊 История позиций (последние 10)</div>
+</div>
+<div id="history-overlay" class="hist-overlay" onclick="closeHistory()"></div>
+
+<div class="leaderboard-wrapper" id="lb-wrapper">
+  <div class="leaderboard">
+
+    <div class="lb-header">
+      <div class="title">Таблица рекордов</div>
+      <button class="close-btn" onclick="closeLeaderboard()">✕</button>
+      <button class="reset-btn" onclick="clearAchievements()">🗑</button>
+    </div>
+
+    <div class="lb-subheader">
+      <span>ИГРОК</span>
+      <span>ОЧКИ</span>
+      <span>ТИП</span>
+    </div>
+    <div id="pinned-row"></div>
+    <div class="rows"></div>
+
+    <div class="lb-footer">powered by arcanebv</div>
+
+  </div>
+</div><!DOCTYPE html>
+<html>
+	<head>
+		
+	</head>
+	<body>
+		
+	</body>
+</html>
+	
+	<script src="init.js"></script>
+<script>
+if (location.protocol.substr(0, 4) === "file")
+{
+	alert("Web exports won't work until you upload them. (When running on the file: protocol, browsers block many features from working for security reasons.)");
+}
+</script>
+	
+	<noscript>
+		<div id="notSupportedWrap">
+			<h2 id="notSupportedTitle">This content requires JavaScript</h2>
+			<p class="notSupportedMessage">JavaScript appears to be disabled. Please enable it to view this content.</p>
+		</div>
+	</noscript>
+	<script src="scripts/modernjscheck.js"></script>
+	<script src="scripts/supportcheck.js"></script>
+	<script src="scripts/offlineclient.js" type="module"></script>
+	<script src="scripts/main.js" type="module"></script>
+	<script src="scripts/register-sw.js" type="module"></script>
+
+</body> 
+</html>
