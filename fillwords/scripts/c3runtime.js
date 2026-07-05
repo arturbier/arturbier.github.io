@@ -2737,13 +2737,22 @@ self.C3_ExpressionFuncs = [
 		() => 5948240,
 		() => "Back",
 		() => "BetterOutline",
-		() => "TESTER",
-		() => 11111111,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (("филворды/" + v0.GetValue()) + "/savedData/data");
 		},
 		() => "getData",
+		() => "https://media.istockphoto.com/id/1465504312/de/vektor/junger-l%C3%A4chelnder-mann-avatar-mann-mit-braunem-bart-schnurrbart-und-haaren-tr%C3%A4gt-gelben.jpg?s=612x612&w=0&k=20&c=te6nmGEnVZLhYtVESOfAm-96eUB2qKXgB8Nv7xq_xz0=",
+		() => "Name",
+		p => {
+			const n0 = p._GetNode(0);
+			return () => (n0.ExpObject() + 45);
+		},
+		() => "Имя не задано",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("getData");
@@ -2836,10 +2845,6 @@ self.C3_ExpressionFuncs = [
 		() => "all",
 		() => "Mini_Game",
 		() => "getWords",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
-		},
 		p => {
 			const n0 = p._GetNode(0);
 			const f1 = p._GetNode(1).GetBoundMethod();
