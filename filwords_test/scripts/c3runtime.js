@@ -2388,6 +2388,7 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "Rank_XP",
 		() => "LVL",
+		() => "",
 		p => {
 			const n0 = p._GetNode(0);
 			const v1 = p._GetNode(1).GetVar();
@@ -2395,7 +2396,6 @@ self.C3_ExpressionFuncs = [
 			return () => and((and(("УРОВЕНЬ" + "\n"), n0.ExpObject(v1.GetValue())) + "/"), v2.GetValue());
 		},
 		() => "Diamonds",
-		() => "",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			const v1 = p._GetNode(1).GetVar();
@@ -2406,6 +2406,18 @@ self.C3_ExpressionFuncs = [
 		},
 		() => 1,
 		() => "Level_XP",
+		() => "Layers",
+		() => 20,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const f1 = p._GetNode(1).GetBoundMethod();
+			return () => f0(f1("Layers"));
+		},
+		() => 7,
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Layers");
+		},
 		() => 16748154,
 		() => 16114656,
 		p => {
@@ -2554,8 +2566,11 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => add(n0.ExpObject(v1.GetValue()), 1);
 		},
-		() => "Уровень пройден!",
-		() => "Отличная работа",
+		() => "Уровень пройден!❤️",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0("Отличная работа! 🎉", "Превосходно! 🔥", "Ты победил! 🏆", "Сильная игра 💪", "Идеально! ✨");
+		},
 		() => "#7c5cff",
 		() => "#d33",
 		() => "Дальше",
@@ -2575,12 +2590,7 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "Help_Btn",
 		() => 1350,
-		() => "Layers",
 		() => 10,
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0("Layers");
-		},
 		() => "About",
 		() => "xp",
 		() => "xp_required",
@@ -2592,6 +2602,7 @@ self.C3_ExpressionFuncs = [
 		() => "rank_level",
 		() => "level",
 		() => "diamonds",
+		() => "GlobalHistory",
 		p => {
 			const v0 = p._GetNode(0).GetVar();
 			return () => (("филворды/" + v0.GetValue()) + "/savedData");
@@ -2626,23 +2637,7 @@ self.C3_ExpressionFuncs = [
 			const v0 = p._GetNode(0).GetVar();
 			return () => and("Уровень ", v0.GetValue());
 		},
-		() => "Idle",
-		() => "Help_Container",
-		() => "Open",
-		() => 1637,
-		() => "LevelUP",
 		() => "rank_UP",
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			const v1 = p._GetNode(1).GetVar();
-			return () => (v0.GetValue() - v1.GetValue());
-		},
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			const v1 = p._GetNode(1).GetVar();
-			const v2 = p._GetNode(2).GetVar();
-			return () => f0((v1.GetValue() * v2.GetValue()));
-		},
 		() => "Rank_Multiplier",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2661,6 +2656,22 @@ self.C3_ExpressionFuncs = [
 			return () => (1.1 + (v0.GetValue() * 0.2));
 		},
 		() => "Player_Rank",
+		() => "Idle",
+		() => "Help_Container",
+		() => "Open",
+		() => 1637,
+		() => "LevelUP",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			const v1 = p._GetNode(1).GetVar();
+			return () => (v0.GetValue() - v1.GetValue());
+		},
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			const v1 = p._GetNode(1).GetVar();
+			const v2 = p._GetNode(2).GetVar();
+			return () => f0((v1.GetValue() * v2.GetValue()));
+		},
 		() => "Алмазы",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2711,6 +2722,7 @@ self.C3_ExpressionFuncs = [
 		() => 70,
 		() => -15,
 		() => "Stop",
+		() => "line",
 		() => 4561092,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -2732,16 +2744,13 @@ self.C3_ExpressionFuncs = [
 			return () => (("филворды/" + v0.GetValue()) + "/savedData/data");
 		},
 		() => "getData",
-		() => "Play",
-		p => {
-			const n0 = p._GetNode(0);
-			const n1 = p._GetNode(1);
-			return () => n0.ExpObject(n1.ExpInstVar());
-		},
-		() => "ГОТОВО",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("getData");
+		},
+		p => {
+			const n0 = p._GetNode(0);
+			return () => n0.ExpObject("GlobalHistory");
 		},
 		p => {
 			const n0 = p._GetNode(0);
@@ -2798,6 +2807,13 @@ self.C3_ExpressionFuncs = [
 			const v1 = p._GetNode(1).GetVar();
 			return () => and(Math.floor(multiply(divide(n0.ExpObject(), v1.GetValue()), 100)), "%");
 		},
+		() => "Play",
+		p => {
+			const n0 = p._GetNode(0);
+			const n1 = p._GetNode(1);
+			return () => n0.ExpObject(n1.ExpInstVar());
+		},
+		() => "ГОТОВО",
 		() => "Новичок",
 		() => 1.1,
 		() => 1.3,
@@ -2811,6 +2827,7 @@ self.C3_ExpressionFuncs = [
 			return () => (("Звание: [color=rgb(250, 195, 90)]" + v0.GetValue()) + "[/color]");
 		},
 		() => "Theme_Btn",
+		() => "случайный",
 		() => "Leaderboard_Btn",
 		() => "филворды/Leaderboard/",
 		() => "score",
@@ -3125,7 +3142,6 @@ self.C3_ExpressionFuncs = [
 		() => "histIndex",
 		() => "IdxSave",
 		() => "layers",
-		() => 20,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0("layers");

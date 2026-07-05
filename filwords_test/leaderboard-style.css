@@ -85,18 +85,18 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.lb-subheader> :nth-child(1) {
+.lb-subheader > :nth-child(1) {
   text-align: left;
   color: rgba(255, 255, 255, 0.5);
 }
 
-.lb-subheader> :nth-child(2) {
+.lb-subheader > :nth-child(2) {
   text-align: right;
   padding-right: 14px;
   color: rgba(255, 255, 255, 0.5);
 }
 
-.lb-subheader> :nth-child(3) {
+.lb-subheader > :nth-child(3) {
   text-align: right;
   color: rgba(255, 255, 255, 0.5);
 }
@@ -122,17 +122,15 @@ body {
   width: 30px;
   height: 30px;
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.06);
   color: white;
   cursor: pointer;
   transition: 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: translateY(-50%) scale(1.05);
-}
+.close-btn:hover { background: rgba(255, 255, 255, 0.12); }
 
 .reset-btn {
   position: absolute;
@@ -142,18 +140,16 @@ body {
   width: 30px;
   height: 30px;
   border: none;
-  border-radius: 8px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
   color: rgba(255, 255, 255, 0.4);
   font-size: 14px;
   cursor: pointer;
   transition: 0.2s;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.reset-btn:hover {
-  background: rgba(255, 80, 80, 0.2);
-  color: rgba(255, 100, 100, 0.8);
-}
+.reset-btn:hover { background: rgba(255, 80, 80, 0.2); color: rgba(255, 100, 100, 0.8); }
 
 /* =========================
    7. ROWS CONTAINER
@@ -169,18 +165,9 @@ body {
   scrollbar-color: rgba(255, 255, 255, 0.4) transparent;
 }
 
-.rows::-webkit-scrollbar {
-  width: 6px;
-}
-
-.rows::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.rows::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.4);
-  border-radius: 3px;
-}
+.rows::-webkit-scrollbar { width: 6px; }
+.rows::-webkit-scrollbar-track { background: transparent; }
+.rows::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.4); border-radius: 3px; }
 
 /* =========================
    8. ROW (grid layout)
@@ -196,16 +183,18 @@ body {
   position: relative;
   transition: background 0.15s;
   cursor: pointer;
+  
+  /* КРИТИЧЕСКИЕ ФИКСЫ ДЛЯ МОБИЛОК: Убираем синюю дефолтную заливку и выделение текста */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
-/* alignment */
-.rows>.row> :nth-child(1),
-#pinned-row>.row> :nth-child(1) {
-  text-align: left;
-}
+.rows > .row > :nth-child(1),
+#pinned-row > .row > :nth-child(1) { text-align: left; }
 
-.rows>.row> :nth-child(2),
-#pinned-row>.row> :nth-child(2) {
+.rows > .row > :nth-child(2),
+#pinned-row > .row > :nth-child(2) {
   width: 100%;
   text-align: right;
   padding-right: 8px;
@@ -213,56 +202,18 @@ body {
   color: #00d4ff;
 }
 
-.rows>.row> :nth-child(3),
-#pinned-row>.row> :nth-child(3) {
+.rows > .row > :nth-child(3),
+#pinned-row > .row > :nth-child(3) {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   opacity: 0.7;
 }
 
-/* normal rows without border — compensate with padding */
-.row:not(.top1):not(.top2):not(.top3):not(.my-row) {
-  padding-left: 14px;
-}
+.row:not(.top1):not(.top2):not(.top3):not(.my-row) { padding-left: 14px; }
 
 /* =========================
-   9. HOVER & TOUCH ACTIVE
-========================= */
-/* Эффекты для ПК (наведение мыши) */
-@media (hover: hover) {
-  .row:hover {
-    background: rgba(255, 255, 255, 0.06);
-  }
-
-  /* Твоя строка подсвечивается голубым ТОЛЬКО если ты НЕ на первом месте */
-  .row.my-row:not(.top1):hover {
-    background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08)) !important;
-  }
-
-  /* Для первого места ховер ВСЕГДА сочный золотой */
-  .row.top1:hover {
-    background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important;
-  }
-}
-
-/* Эффекты для СМАРТФОНОВ (моментальный отклик при нажатии пальцем) */
-.row.active {
-  background: rgba(255, 255, 255, 0.06);
-}
-
-/* Мобильный тач-отклик для твоей строки (голубой градиент) */
-.row.my-row:not(.top1).active {
-  background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08)) !important;
-}
-
-/* Мобильный тач-отклик для первого места (чистое золото без синевы) */
-.row.top1.active {
-  background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important;
-}
-
-/* =========================
-   10. TOP1, TOP2, TOP3
+   10. TOP1, TOP2, TOP3 (статика)
 ========================= */
 .row.top1 {
   border-left: 4px solid #ffc800 !important;
@@ -271,31 +222,25 @@ body {
 
 .row.top1 .rank-badge,
 .row.top1 .player-cell span:last-child,
-.row.top1> :nth-child(2),
-.row.top1> :nth-child(3) {
+.row.top1 > :nth-child(2),
+.row.top1 > :nth-child(3) {
   color: #ffc800 !important;
   font-weight: 900;
   text-shadow: 0 0 4px rgba(255, 200, 0, 0.5);
-  opacity: 1 !important; 
+  opacity: 1 !important;
 }
 
-.row.top2 {
-  border-left: 4px solid #a0aac3;
-}
-
-.row.top3 {
-  border-left: 4px solid #cd7f32;
-}
+.row.top2 { border-left: 4px solid #a0aac3; }
+.row.top3 { border-left: 4px solid #cd7f32; }
 
 /* =========================
-   11. MY ROW (pinned player)
+   11. MY ROW (pinned player) — статика
 ========================= */
 .row.my-row {
   font-weight: 900;
   border-left: 4px solid #00d4ff;
 }
 
-/* Добавляем голубую подложку ТОЛЬКО если строка не заняла 1-е место */
 .row.my-row:not(.top1)::before {
   content: "";
   position: absolute;
@@ -305,7 +250,7 @@ body {
 }
 
 /* =========================
-   12. PINNED ROW
+   12. PINNED ROW — статика
 ========================= */
 #pinned-row {
   position: sticky;
@@ -314,9 +259,7 @@ body {
   background: transparent;
 }
 
-#pinned-row * {
-  opacity: 1 !important;
-}
+#pinned-row * { opacity: 1 !important; }
 
 #pinned-row .row {
   position: relative;
@@ -336,40 +279,50 @@ body {
   background: transparent;
 }
 
-/* Базовый голубой цвет для любой позиции в закрепе (кроме топ-1) */
-#pinned-row .row:not(.top1)> :nth-child(2),
-#pinned-row .row:not(.top1)> :nth-child(3),
+#pinned-row .row:not(.top1) > :nth-child(2),
+#pinned-row .row:not(.top1) > :nth-child(3),
 #pinned-row .row:not(.top1) .rank-badge,
 #pinned-row .row:not(.top1) .player-cell span:last-child {
   color: #00d4ff !important;
 }
 
-/* Если в закреп попадает 1-е место (.top1) — перебиваем всё в чистый золотой */
 #pinned-row .row.top1 {
   border-left-color: #ffc800 !important;
   background: linear-gradient(90deg, rgba(255, 200, 0, 0.22), rgba(255, 200, 0, 0.06)) !important;
 }
 
-#pinned-row .row.top1::before {
-  display: none !important; /* Намертво убираем голубую подложку в закрепе */
-}
+#pinned-row .row.top1::before { display: none !important; }
 
-#pinned-row .row.top1> :nth-child(2),
-#pinned-row .row.top1> :nth-child(3),
+#pinned-row .row.top1 > :nth-child(2),
+#pinned-row .row.top1 > :nth-child(3),
 #pinned-row .row.top1 .rank-badge,
 #pinned-row .row.top1 .player-cell span:last-child {
   color: #ffc800 !important;
   text-shadow: 0 0 4px rgba(255, 200, 0, 0.5) !important;
 }
 
-/* Ховер закрепа если ты ТОП-1 */
-#pinned-row .row.top1:hover {
-  background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important;
-}
+/* =========================
+   9. HOVER & ACTIVE (ПЕРЕНЕСЕН СЮДА ДЛЯ ИСПРАВЛЕНИЯ ПРИОРИТЕТОВ)
+========================= */
 
-/* Ховер закрепа если ты НЕ топ-1 */
-#pinned-row .row.my-row:not(.top1):hover {
-  background: linear-gradient(90deg, rgba(0, 212, 255, 0.35), rgba(0, 212, 255, 0.10)) !important;
+/* --- Мобилки / Клики (:active) --- */
+.row:active, .row.active { background: rgba(255, 255, 255, 0.06) !important; }
+.row.top1:active, .row.top1.active { background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important; }
+.row.top2:active, .row.top3:active, .row.top2.active, .row.top3.active { background: rgba(255, 255, 255, 0.08) !important; }
+.row.my-row:not(.top1):active, .row.my-row:not(.top1).active { background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08)) !important; }
+.row.my-row.top1:active, .row.my-row.top1.active { background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important; }
+#pinned-row .row.my-row:not(.top1):active, #pinned-row .row.my-row:not(.top1).active { background: linear-gradient(90deg, rgba(0, 212, 255, 0.35), rgba(0, 212, 255, 0.10)) !important; }
+#pinned-row .row.top1:active, #pinned-row .row.top1.active { background: linear-gradient(90deg, rgba(255, 200, 0, 0.42), rgba(255, 200, 0, 0.14)) !important; }
+
+/* --- ПК Наведение мыши (@media hover:hover) --- */
+@media (hover: hover) {
+  .row:hover { background: rgba(255, 255, 255, 0.06) !important; }
+  .row.top1:hover { background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important; }
+  .row.top2:hover, .row.top3:hover { background: rgba(255, 255, 255, 0.08) !important; }
+  .row.my-row:not(.top1):hover { background: linear-gradient(90deg, rgba(0, 212, 255, 0.28), rgba(0, 212, 255, 0.08)) !important; }
+  .row.my-row.top1:hover { background: linear-gradient(90deg, rgba(255, 200, 0, 0.35), rgba(255, 200, 0, 0.10)) !important; }
+  #pinned-row .row.my-row:not(.top1):hover { background: linear-gradient(90deg, rgba(0, 212, 255, 0.35), rgba(0, 212, 255, 0.10)) !important; }
+  #pinned-row .row.top1:hover { background: linear-gradient(90deg, rgba(255, 200, 0, 0.42), rgba(255, 200, 0, 0.14)) !important; }
 }
 
 /* =========================
@@ -398,7 +351,7 @@ body {
   font-size: 13px;
 }
 
-.player-cell>span:last-child {
+.player-cell > span:last-child {
   overflow: visible;
   text-overflow: clip;
   white-space: normal;
@@ -407,10 +360,7 @@ body {
   line-height: 1.3;
 }
 
-.pin-icon {
-  font-size: 11px;
-  vertical-align: super;
-}
+.pin-icon { font-size: 11px; vertical-align: super; }
 
 /* =========================
    14. FOOTER
@@ -445,21 +395,10 @@ body {
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
 }
 
-.ach-popup.show {
-  transform: translate(-50%, 0);
-  opacity: 1;
-}
+.ach-popup.show { transform: translate(-50%, 0); opacity: 1; }
+.ach-popup.hide  { transform: translate(-50%, -120%); opacity: 0; }
 
-.ach-popup.hide {
-  transform: translate(-50%, -120%);
-  opacity: 0;
-}
-
-.ach-icon {
-  font-size: 32px;
-  flex-shrink: 0;
-  animation: ach-pulse 0.6s ease;
-}
+.ach-icon { font-size: 32px; flex-shrink: 0; animation: ach-pulse 0.6s ease; }
 
 @keyframes ach-pulse {
   0% { transform: scale(0); }
@@ -467,11 +406,7 @@ body {
   100% { transform: scale(1); }
 }
 
-.ach-body {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
+.ach-body { display: flex; flex-direction: column; gap: 2px; }
 
 .ach-title {
   font-size: 14px;
@@ -480,10 +415,7 @@ body {
   letter-spacing: 0.5px;
 }
 
-.ach-text {
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
-}
+.ach-text { font-size: 12px; color: rgba(255, 255, 255, 0.7); }
 
 /* =========================
    16. HISTORY POPUP
@@ -504,17 +436,8 @@ body {
   transition: opacity 0.25s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.hist-popup.show {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.hist-popup.hide {
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%) scale(0.85);
-}
+.hist-popup.show { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1); }
+.hist-popup.hide { opacity: 0; pointer-events: none; transform: translate(-50%, -50%) scale(0.85); }
 
 .hist-header {
   display: flex;
@@ -532,11 +455,7 @@ body {
   margin-bottom: 2px;
 }
 
-.hist-name {
-  font-weight: 700;
-  color: #00d4ff;
-  font-size: 18px;
-}
+.hist-name { font-weight: 700; color: #00d4ff; font-size: 18px; }
 
 .hist-close {
   position: absolute;
@@ -557,17 +476,9 @@ body {
   z-index: 10;
 }
 
-.hist-close:hover {
-  background: rgba(255, 255, 255, 0.12);
-  transform: scale(1.05);
-}
+.hist-close:hover { background: rgba(255, 255, 255, 0.12); }
 
-.hist-list {
-  padding: 12px 16px;
-  max-height: 50vh;
-  overflow-y: auto;
-  min-height: 120px;
-}
+.hist-list { padding: 12px 16px; max-height: 50vh; overflow-y: auto; min-height: 120px; }
 
 .hist-empty {
   display: flex;
@@ -579,27 +490,11 @@ body {
   text-align: center;
 }
 
-.hist-tip {
-  text-align: center;
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.25);
-  padding: 8px 16px 14px;
-}
+.hist-tip { text-align: center; font-size: 11px; color: rgba(255, 255, 255, 0.25); padding: 8px 16px 14px; }
 
-.hist-loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  height: 140px;
-}
+.hist-loading { display: flex; justify-content: center; align-items: center; gap: 6px; height: 140px; }
 
-.hist-dot {
-  font-size: 8px;
-  color: #00d4ff;
-  animation: dotPulse 0.6s ease infinite;
-}
-
+.hist-dot { font-size: 8px; color: #00d4ff; animation: dotPulse 0.6s ease infinite; }
 .hist-dot:nth-child(1) { animation-delay: 0s; }
 .hist-dot:nth-child(2) { animation-delay: 0.2s; }
 .hist-dot:nth-child(3) { animation-delay: 0.4s; }
@@ -622,39 +517,16 @@ body {
   transition: opacity .25s ease;
 }
 
-.hist-overlay.show {
-  opacity: 1;
-  pointer-events: auto;
-  background: rgba(0, 0, 0, 0.45);
-}
+.hist-overlay.show { opacity: 1; pointer-events: auto; background: rgba(0, 0, 0, 0.45); }
 
 /* =========================
    18. HISTORY CHART
 ========================= */
-.hist-chart-wrap {
-  padding: 10px;
-  width: 100%;
-  box-sizing: border-box;
-}
+.hist-chart-wrap { padding: 10px; width: 100%; box-sizing: border-box; }
 
-.hist-bars {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  width: 100%;
-  height: 150px;
-  gap: 4px;
-}
+.hist-bars { display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 150px; gap: 4px; }
 
-.hist-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: center;
-  height: 100%;
-  min-width: 0;
-}
+.hist-col { flex: 1; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; height: 100%; min-width: 0; }
 
 .hist-bar {
   width: 100%;
@@ -664,19 +536,9 @@ body {
   min-height: 5px;
 }
 
-.hist-medal {
-  font-size: 12px;
-  margin-bottom: 4px;
-}
+.hist-medal { font-size: 12px; margin-bottom: 4px; }
 
-.hist-date-text {
-  font-size: 7px;
-  color: rgba(255, 255, 255, 0.4);
-  text-align: center;
-  margin-top: 4px;
-  line-height: 1;
-  white-space: nowrap;
-}
+.hist-date-text { font-size: 7px; color: rgba(255, 255, 255, 0.4); text-align: center; margin-top: 4px; line-height: 1; white-space: nowrap; }
 
 /* =========================
    19. HISTORY TUTORIAL
@@ -700,10 +562,7 @@ body {
   letter-spacing: 0.3px;
 }
 
-.hist-tutorial.fade {
-  opacity: 0;
-  transition: opacity 0.5s;
-}
+.hist-tutorial.fade { opacity: 0; transition: opacity 0.5s; }
 
 @keyframes tipBounce {
   0% { transform: translateX(-50%) scale(0.5); opacity: 0; }
@@ -711,10 +570,12 @@ body {
   100% { transform: translateX(-50%) scale(1); opacity: 1; }
 }
 
+/* =========================
+   20. MISC FIXES
+========================= */
 .hist-chart-wrap { padding-top: 4px; }
 .hist-popup { overflow: hidden; }
 .hist-col .hist-bar { min-width: 0; }
 .hist-col { border-left: 1px solid rgba(255,255,255,0.04); }
 .hist-col:first-child { border-left: none; }
 .leaderboard-wrapper.swiping { transform: translate(-50%, var(--swipe-y, 0px)) !important; transition: none !important; }
-
