@@ -943,6 +943,88 @@ window.addRow = function (name, score, gems, avatarUrl, rank, pid) {
 		        lastParticleTime = currentTime; // Обновляем время последней частицы
 		    }
 		});
+	},
+
+	async E_game_Event99_Act1(runtime, localVars)
+	{
+		
+		// Находим сам попап
+		const popup = document.querySelector('.swal2-popup');
+		if (popup) {
+		    popup.style.width = '320px';        // Делаем его аккуратным и узким
+		    popup.style.padding = '15px';       // Уменьшаем внутренние гигантские отступы
+		    popup.style.borderRadius = '15px';  // Делаем посимпатичнее скругление
+		}
+		
+		// Уменьшаем огромную иконку галочки
+		const successIcon = document.querySelector('.swal2-icon.swal2-success');
+		if (successIcon) {
+		    successIcon.style.transform = 'scale(0.7)'; // Сжимаем иконку на 30%
+		    successIcon.style.marginBottom = '10px';    // Прижимаем ближе к заголовку
+		}
+		
+		// Корректируем шрифты, чтобы они не орали на весь экран
+		const title = document.querySelector('.swal2-title');
+		if (title) {
+		    title.style.fontSize = '1.4rem';
+		    title.style.margin = '5px 0';
+		}
+		
+		const htmlContainer = document.querySelector('.swal2-html-container');
+		if (htmlContainer) {
+		    htmlContainer.style.fontSize = '1rem';
+		    htmlContainer.style.margin = '5px 0 15px 0';
+		}
+		
+		// Сближаем кнопки, чтобы они аккуратно сидели в маленьком попапе
+		const actions = document.querySelector('.swal2-actions');
+		if (actions) {
+		    actions.style.marginTop = '5px';
+		    actions.style.gap = '10px'; // Расстояние между кнопками
+		}
+		
+	},
+
+	async E_game_Event87_Act5(runtime, localVars)
+	{
+		const cancelBtn = document.querySelector('.swal2-cancel');
+		if (cancelBtn) {
+		    cancelBtn.textContent = 'К словам!';
+		    cancelBtn.style.backgroundColor = "rgb(250, 195, 90)";
+		    cancelBtn.style.outline = "2px solid rgb(255, 218, 148)"; 
+		    cancelBtn.style.border = "1px solid rgb(255, 218, 148)";
+		}
+		
+		const accessBtn = document.querySelector('.swal2-confirm');
+		if (accessBtn) {
+		    accessBtn.textContent = 'Дальше';
+		    // Крутой глубокий зеленый
+		    accessBtn.style.backgroundColor = "rgb(46, 204, 113)"; 
+		    
+		    // Светящаяся салатовая обводка (светлее основного)
+		    accessBtn.style.outline = "2px solid rgb(122, 233, 160)"; 
+		    accessBtn.style.border = "1px solid rgb(122, 233, 160)";
+		    
+		    // Бонус: легкая тень для объема, чтобы кнопка выделялась как главная
+		    accessBtn.style.boxShadow = "0 4px 15px rgba(46, 204, 113, 0.4)";
+		}
+	},
+
+	async E_game_Event62_Act4(runtime, localVars)
+	{
+		const accessBtn = document.querySelector('.swal2-confirm');
+		if (accessBtn) {
+		    accessBtn.textContent = 'Понятно';
+		    // Крутой глубокий зеленый
+		    accessBtn.style.backgroundColor = "rgb(46, 204, 113)"; 
+		    
+		    // Светящаяся салатовая обводка (светлее основного)
+		    accessBtn.style.outline = "2px solid rgb(122, 233, 160)"; 
+		    accessBtn.style.border = "1px solid rgb(122, 233, 160)";
+		    
+		    // Бонус: легкая тень для объема, чтобы кнопка выделялась как главная
+		    accessBtn.style.boxShadow = "0 4px 15px rgba(46, 204, 113, 0.4)";
+		}
 	}
 };
 
