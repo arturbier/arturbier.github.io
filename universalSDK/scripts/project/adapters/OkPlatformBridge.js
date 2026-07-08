@@ -1,53 +1,75 @@
-// OkPlatformBridge.js
-// Настройка: Purpose = Imports for events
+// OkPlatformBridge.js  (Purpose: none — imported by universalSDK.js)
 
 window.OkPlatformBridge = class OkPlatformBridge {
     constructor() {
         this.sdk = null;
         this._isInitialized = false;
-        // Параметры инициализации (замени на свои значения)
-        this.server = window.server || {};
-        this.connection = window.connection || {};
+        this._rewardCb = null;
+        this._closeCb = null;
+        // Init params come from launch URL (OK passes them as query params).
+        const p = new URLSearchParams(location.search);
+        this.server = p.get("api_server") || "";
+        this.connection = p.get("apiconnection") || "";
     }
 
     async initialize() {
-        if (this._isInitialized) return Promise.resolve();
-        
-        return new Promise((resolve) => {
-            const script = document.createElement('script');
-            script.src = '//api.ok.ru/js/fapi5.js';
+        if (this._isInitialized) return;
+
+        await new Promise((resolve) => {
+            const script = document.createElement("script");
+            script.src = "//api.ok.ru/js/fapi5.js";
             script.onload = () => {
                 const check = setInterval(() => {
                     if (window.FAPI) {
                         clearInterval(check);
                         this.sdk = window.FAPI;
-                        
-                        // Привязываем колбэки к методам этого класса
-                        window.API_callback = (method, result, data) => this.apiCallbacks[method]?.(result, data);
-                        
+                        window.API_callback = (method, result, data) =>
+                            this.apiCallbacks[method]?.(result, data);
                         this.sdk.init(this.server, this.connection, () => {
                             this._isInitialized = true;
                             console.log("[OK] Platform initialized");
                             resolve();
-                        });
+                        }, () => resolve());
                     }
                 }, 100);
             };
+            script.onerror = () => resolve();
             document.head.appendChild(script);
         });
     }
 
+    // --- Ads ---
     showInterstitial() {
-        try { this.sdk.UI.showAd(); } 
+        try { this.sdk.UI.showAd(); }
         catch (e) { this.showAdFailurePopup(false); }
     }
 
-    showRewarded() {
-        try { this.sdk.UI.loadAd(); } 
+    showRewarded(onReward, onClose) {
+        this._rewardCb = onReward || null;
+        this._closeCb = onClose || null;
+        try { this.sdk.UI.loadAd(); }
         catch (e) { this.showAdFailurePopup(true); }
     }
 
-    // Твой API колбэк-маппинг
+    // --- Banner (not natively supported here) ---
+    showBanner() { console.warn("[OK] Banner not implemented"); }
+    hideBanner() { console.warn("[OK] Banner not implemented"); }
+
+    // --- Storage (localStorage fallback) ---
+    async load() {
+        try {
+            const save = localStorage.getItem("save");
+            if (save) return JSON.parse(save);
+        } catch (e) { /* ignore */ }
+        return {};
+    }
+
+    async save(data) {
+        try { localStorage.setItem("save", JSON.stringify(data)); }
+        catch (e) { /* ignore */ }
+    }
+
+    // --- FAPI callback mapping ---
     get apiCallbacks() {
         return {
             loadAd: (result) => this.onLoadedRewarded(result),
@@ -56,16 +78,20 @@ window.OkPlatformBridge = class OkPlatformBridge {
         };
     }
 
-    // Твои приватные методы логики
-    onLoadedRewarded(result) { console.log("[OK] Reward loaded:", result); }
+    onLoadedRewarded(result) {
+        console.log("[OK] Reward loaded:", result);
+        try { this.sdk.UI.showLoadedAd(); }
+        catch (e) { this.showAdFailurePopup(true); }
+    }
 
     onRewardedShown(data) {
-        if (data === 'complete') {
+        if (data === "complete") {
             console.log("[OK] Reward Granted");
-            // Тут твоя логика успеха
+            this._rewardCb?.();
         } else {
             this.showAdFailurePopup(true);
         }
+        this._closeCb?.();
     }
 
     onInterstitialShown(data) {
@@ -77,5 +103,5 @@ window.OkPlatformBridge = class OkPlatformBridge {
     }
 };
 
-// Прокидываем в глобальный объект, чтобы UniversalSDK его увидел
+// Register globally for UniversalSDK
 globalThis.okAdapter = window.OkPlatformBridge;

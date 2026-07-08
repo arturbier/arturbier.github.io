@@ -1,88 +1,110 @@
 // =====================================================
-// UniversalSDK | v1.0 | Monolith | CODEX EDITION
+// UniversalSDK | v1.1 | Modular
+// Main entry (Purpose: main)
+//
+// Requires project setting "Use worker" = "DOM".
+// Adapters register themselves on window.<platform>Adapter
+// and are pulled in via the imports below (side-effect imports).
 // =====================================================
+
+import "./adapters/localAdapter.js";
+import "./adapters/VkPlatformBridge.js";
+import "./adapters/YandexPlatformBridge.js";
+import "./adapters/OkPlatformBridge.js";
 
 window.UniversalSDK = {
     platform: "local",
     adapter: null,
     isReady: false,
-    _readyQueue: [],
     debug: true,
+    _initPromise: null,
 
     log(text, type = "info") {
         if (!this.debug) return;
         if (type === "init") {
-            const asciiLogo = `
- __   __  __    _  ___   __   __  _______  ______    _______  _______  ___              _______  ______   ___   _ 
-|  | |  ||  |  | ||   | |  | |  ||       ||    _ |  |       ||   _   ||   |            |       ||      | |   | | |
-|  | |  ||   |_| ||   | |  |_|  ||    ___||   | ||  |  _____||  |_|  ||   |            |  _____||  _    ||   |_| |
-|  |_|  ||       ||   | |       ||   |___ |   |_||_ | |_____ |       ||   |            | |_____ | | |   ||      _|
-|       ||  _    ||   | |       ||    ___||    __  ||_____  ||       ||   |___         |_____  || |_|   ||     |_ 
-|       || | |   ||   |  |     | |   |___ |   |  | | _____| ||   _   ||       | _____   _____| ||       ||    _  |
-|_______||_|  |__||___|   |___|  |_______||___|  |_||_______||__| |__||_______||_____| |_______||______| |___| |_|
-             >> UNIVERSALSDK INITIALIZED <<
-             >> PLATFORM: ${this.platform.toUpperCase()}
-            `;
-            console.log(asciiLogo);
+            console.log(
+                `[SDK] UNIVERSAL_SDK READY | PLATFORM: ${this.platform.toUpperCase()}`
+            );
         } else {
-            console.log("%c[SDK] " + text);
+            console.log("[SDK] " + text);
         }
     },
 
-    async init() {
-        // Определяем платформу, проверяя объекты напрямую в текущем окне (iframe)
-        if (typeof YaGames !== 'undefined') this.platform = "yandex";
-        else if (typeof vkBridge !== 'undefined') this.platform = "vk";
-        else if (typeof FAPI !== 'undefined') this.platform = "ok";
-        else this.platform = "local";
+    // ---------------------------------------------
+    // Platform detection
+    // VK/OK inject their bridge later, so we also
+    // look at launch URL params, not just globals.
+    // ---------------------------------------------
+    _detectPlatform() {
+        const p = new URLSearchParams(location.search);
+        if (typeof YaGames !== "undefined") return "yandex";
+        if (typeof vkBridge !== "undefined" || p.has("vk_app_id")) return "vk";
+        if (typeof FAPI !== "undefined" || p.has("api_server")) return "ok";
+        return "local";
+    },
 
+    // init() is idempotent and safe to call many times.
+    init() {
+        if (!this._initPromise) this._initPromise = this._doInit();
+        return this._initPromise;
+    },
+
+    async _doInit() {
+        this.platform = this._detectPlatform();
         console.log("[SDK] Detected platform: " + this.platform);
 
-        // Ищем класс адаптера: сначала в реестре, затем глобально в window
-        // Для платформы "yandex" ищем window.yandexAdapter и т.д.
-        const AdapterClass = this.adapters[this.platform] || window[this.platform + "Adapter"];
-        
+        let AdapterClass = window[this.platform + "Adapter"];
         if (!AdapterClass) {
-            console.error("[SDK] ОШИБКА: Адаптер не найден для " + this.platform);
-            return;
+            console.error("[SDK] Adapter not found for " + this.platform + " -> fallback to local");
+            this.platform = "local";
+            AdapterClass = window.localAdapter;
         }
 
         this.adapter = new AdapterClass();
-        
-        // ВАЖНО: используем initialize(), так как во всех наших адаптерах метод называется именно так
-        await this.adapter.initialize();
-        
+        try {
+            await this.adapter.initialize?.();
+        } catch (e) {
+            console.error("[SDK] Adapter init failed", e);
+        }
+
         this.isReady = true;
         this.log("READY", "init");
-        this._readyQueue.forEach(r => r());
-        return true;
+        return this.platform;
     },
 
-    // Методы делегирования (теперь безопасные)
-    async showInterstitial() { await this._ensureReady(); return this.adapter.showInterstitial?.(); },
-    async showRewarded(r, c, e) { await this._ensureReady(); return this.adapter.showRewarded?.(r, c, e); },
-    async load() { await this._ensureReady(); return this.adapter.load?.(); },
-    async save(d) { await this._ensureReady(); return this.adapter.save?.(d); },
-    async showBanner(pos) { await this._ensureReady(); return this.adapter.showBanner?.(pos); },
-    async hideBanner() { await this._ensureReady(); return this.adapter.hideBanner?.(); },
-    
-    async _ensureReady() {
-        if (this.isReady) return;
-        return new Promise(resolve => this._readyQueue.push(resolve));
+    getPlatform() {
+        return this.platform;
     },
 
-    adapters: {
-local: class {
-            async initialize() { console.log("[SDK] Local ready"); }
-            async showInterstitial() { console.log("[SDK] Local: Interstitial"); }
-            async showRewarded(onR) { 
-                console.log("[SDK] Local: Rewarded"); 
-                onR?.(); 
-            }
-            async load() { return {}; }
-            async save(d) { console.log("[SDK] Local: Saved", d); }
-            async showBanner() { console.log("[SDK] Local: Banner"); }
-            async hideBanner() { console.log("[SDK] Local: Hide Banner"); }
-        }
+    _ensureReady() {
+        return this.init();
+    },
+
+    // ---------------------------------------------
+    // Delegation (safe: waits for init, optional calls)
+    // ---------------------------------------------
+    async showInterstitial() {
+        await this._ensureReady();
+        return this.adapter.showInterstitial?.();
+    },
+    async showRewarded(onReward, onClose, onError) {
+        await this._ensureReady();
+        return this.adapter.showRewarded?.(onReward, onClose, onError);
+    },
+    async load() {
+        await this._ensureReady();
+        return (await this.adapter.load?.()) ?? {};
+    },
+    async save(data) {
+        await this._ensureReady();
+        return this.adapter.save?.(data);
+    },
+    async showBanner(pos) {
+        await this._ensureReady();
+        return this.adapter.showBanner?.(pos);
+    },
+    async hideBanner() {
+        await this._ensureReady();
+        return this.adapter.hideBanner?.();
     }
 };

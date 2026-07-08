@@ -1,4 +1,6 @@
-// Используем class, а не присвоение сразу, для чистоты
+// localAdapter.js  (Purpose: none — imported by universalSDK.js)
+// Local/dev adapter with visual mock ads.
+
 class LocalAdapter {
     constructor() {
         this.mockBanner = null;
@@ -12,57 +14,76 @@ class LocalAdapter {
         return this.showMockInterstitial();
     }
 
-    async showRewarded(onReward, onClose, onError) {
+    async showRewarded(onReward, onClose) {
         return this.showMockRewarded(onReward, onClose);
     }
 
-    // Твои мок-методы
-    showMockInterstitial() {
-        return new Promise(resolve => {
-            let div = document.createElement("div");
-            div.innerHTML = `<h1>TEST INTERSTITIAL</h1><h2 id="sdkTimer">3</h2>`;
-            Object.assign(div.style, {
-                position: "fixed", top: "0", left: "0", width: "100%", height: "100%",
-                background: "#000", color: "#fff", display: "flex", flexDirection: "column",
-                alignItems: "center", justifyContent: "center", zIndex: "99999"
-            });
-            document.body.appendChild(div);
-            
-            let t = 3;
-            let timer = setInterval(() => {
-                t--;
-                const timerEl = div.querySelector("#sdkTimer");
-                if (timerEl) timerEl.innerHTML = t;
-                if (t <= 0) {
-                    clearInterval(timer);
-                    div.remove();
-                    resolve();
-                }
-            }, 1000);
+    showBanner() {
+        if (this.mockBanner) return;
+        const div = document.createElement("div");
+        div.textContent = "TEST BANNER AD";
+        Object.assign(div.style, {
+            position: "fixed", bottom: "0", left: "0", width: "100%", height: "70px",
+            background: "#222", color: "#fff", display: "flex",
+            alignItems: "center", justifyContent: "center",
+            fontSize: "24px", zIndex: "99999"
         });
+        document.body.appendChild(div);
+        this.mockBanner = div;
+    }
+
+    hideBanner() {
+        if (this.mockBanner) {
+            this.mockBanner.remove();
+            this.mockBanner = null;
+        }
+    }
+
+    async load() {
+        try {
+            const save = localStorage.getItem("save");
+            if (save) return JSON.parse(save);
+        } catch (e) { /* ignore */ }
+        return {};
+    }
+
+    async save(data) {
+        try {
+            localStorage.setItem("save", JSON.stringify(data));
+        } catch (e) { /* ignore */ }
+        console.log("[SDK] Local: Saved", data);
+    }
+
+    // --- Visual mocks ---
+    showMockInterstitial() {
+        return this._fullscreen("TEST INTERSTITIAL", 3, "#000");
     }
 
     async showMockRewarded(onReward, onClose) {
+        await this._fullscreen("TEST REWARDED VIDEO", 5, "#111");
+        if (onReward) onReward();
+        if (onClose) onClose();
+    }
+
+    _fullscreen(title, seconds, bg) {
         return new Promise(resolve => {
-            let div = document.createElement("div");
-            div.innerHTML = `<h1>TEST REWARDED VIDEO</h1><h2 id="rewardTimer">5</h2>`;
+            const div = document.createElement("div");
+            div.innerHTML = `<h1>${title}</h1><h2 id="sdkTimer">${seconds}</h2>`;
             Object.assign(div.style, {
                 position: "fixed", top: "0", left: "0", width: "100%", height: "100%",
-                background: "#111", color: "#fff", display: "flex", flexDirection: "column",
+                background: bg, color: "#fff", display: "flex", flexDirection: "column",
                 alignItems: "center", justifyContent: "center", zIndex: "99999"
             });
             document.body.appendChild(div);
-            
-            let t = 5;
-            let timer = setInterval(() => {
+
+            let t = seconds;
+            const label = div.querySelector("#sdkTimer");
+            const timer = setInterval(() => {
                 t--;
-                const timerEl = div.querySelector("#rewardTimer");
-                if (timerEl) timerEl.innerHTML = t;
+                if (label) label.textContent = t;
                 if (t <= 0) {
                     clearInterval(timer);
                     div.remove();
-                    if (onReward) onReward();
-                    if (onClose) onClose();
                     resolve();
                 }
             }, 1000);
@@ -70,5 +91,5 @@ class LocalAdapter {
     }
 }
 
-// Принудительно выкидываем класс в глобальную область, чтобы UniversalSDK его увидел
+// Register globally so UniversalSDK can find it via window.localAdapter
 globalThis.localAdapter = LocalAdapter;
