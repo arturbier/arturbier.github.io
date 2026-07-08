@@ -9,11 +9,20 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.списоксобытий1_Event3_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event4_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event5_Act1,
-		C3.JavaScriptInEvents.списоксобытий1_Event6_Act1
+		C3.JavaScriptInEvents.списоксобытий1_Event6_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event7_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event8_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event9_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event10_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event11_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event12_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event13_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event14_Act1
 	];
 };
 self.C3_JsPropNameTable = [
-	{Button: 0}
+	{Button: 0},
+	{coins: 0}
 ];
 
 self.InstanceType = {

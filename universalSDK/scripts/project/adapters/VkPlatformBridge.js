@@ -1,110 +1,118 @@
-// VkPlatformBridge.js  (Purpose: none — imported by universalSDK.js)
+// VkPlatformBridge.js — VK Games / VK Mini Apps
+// (Purpose: none — imported by universalSDK.js)
 
-window.VkPlatformBridge = class VkPlatformBridge {
-    constructor() {
-        this.sdk = null;
-        this._isInitialized = false;
-        this._playerId = null;
-    }
+import PlatformBridgeBase from "./PlatformBridgeBase.js";
+
+const SDK_URL = "https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js";
+
+export default class VkPlatformBridge extends PlatformBridgeBase {
+    get platformId() { return "vk"; }
+
+    get isInterstitialSupported() { return true; }
+    get isRewardedSupported() { return true; }
+    get isBannerSupported() { return true; }
+    get isPlayerAuthorizationSupported() { return true; }
+    get isShareSupported() { return true; }
+    get isInviteSupported() { return true; }
+    get isClipboardSupported() { return true; }
 
     async initialize() {
         if (this._isInitialized) return;
 
-        await new Promise((resolve) => {
-            if (window.vkBridge) return resolve();
-            const script = document.createElement("script");
-            script.src = "https://unpkg.com/@vkontakte/vk-bridge/dist/browser.min.js";
-            script.onload = () => resolve();
-            script.onerror = () => resolve();
-            document.head.appendChild(script);
-        });
-
-        this.sdk = window.vkBridge;
-        if (!this.sdk) {
+        await this._loadScript(SDK_URL).catch(() => {});
+        this._platformSdk = await this._waitFor("vkBridge").catch(() => null);
+        if (!this._platformSdk) {
             console.error("[VK] vkBridge failed to load");
             return;
         }
 
         try {
-            await this.sdk.send("VKWebAppInit");
-            const data = await this.sdk.send("VKWebAppGetUserInfo");
-            this._playerId = data.id;
-            console.log("[VK] User info loaded:", data.first_name);
+            await this._platformSdk.send("VKWebAppInit");
+            const data = await this._platformSdk.send("VKWebAppGetUserInfo");
+            if (data) {
+                this._playerId = data.id;
+                this._playerName = `${data.first_name} ${data.last_name}`.trim();
+                this._isPlayerAuthorized = true;
+            }
         } catch (e) {
             console.error("[VK] init error", e);
         }
         this._isInitialized = true;
     }
 
-    // --- Ads ---
     async showInterstitial() {
-        if (!this.sdk) return;
+        if (!this._platformSdk) return;
+        this._emit("adstart");
         try {
-            const data = await this.sdk.send("VKWebAppShowNativeAds", { ad_format: "interstitial" });
-            console.log("[VK] Interstitial result:", data.result);
+            await this._platformSdk.send("VKWebAppShowNativeAds", { ad_format: "interstitial" });
         } catch (e) {
             console.error("[VK] Interstitial error", e);
         }
+        this._emit("adfinish");
     }
 
     async showRewarded(onReward, onClose, onError) {
-        if (!this.sdk) return;
+        if (!this._platformSdk) { if (onError) onError(new Error("VK not ready")); return; }
+        this._emit("adstart");
         try {
-            const data = await this.sdk.send("VKWebAppShowNativeAds", { ad_format: "reward", use_waterfall: true });
-            if (data && data.result) {
-                console.log("[VK] Reward granted!");
-                onReward?.();
-            } else {
-                onError?.(data);
-            }
-            onClose?.();
+            const data = await this._platformSdk.send("VKWebAppShowNativeAds", { ad_format: "reward", use_waterfall: true });
+            if (data && data.result) { if (onReward) onReward(); }
+            else if (onError) onError(data);
         } catch (e) {
             console.error("[VK] Reward error", e);
-            onError?.(e);
+            if (onError) onError(e);
         }
+        this._emit("adfinish");
+        if (onClose) onClose();
     }
 
-    // --- Banner ---
     async showBanner(pos = "bottom") {
-        if (!this.sdk) return;
-        try {
-            await this.sdk.send("VKWebAppShowBannerAd", { banner_location: pos });
-        } catch (e) {
-            console.error("[VK] Banner error", e);
-        }
+        if (!this._platformSdk) return;
+        try { await this._platformSdk.send("VKWebAppShowBannerAd", { banner_location: pos }); }
+        catch (e) { console.error("[VK] Banner error", e); }
     }
 
     async hideBanner() {
-        if (!this.sdk) return;
-        try {
-            await this.sdk.send("VKWebAppHideBannerAd");
-        } catch (e) {
-            console.error("[VK] Hide banner error", e);
-        }
+        if (!this._platformSdk) return;
+        try { await this._platformSdk.send("VKWebAppHideBannerAd"); }
+        catch (e) { console.error("[VK] Hide banner error", e); }
     }
 
-    // --- Storage ---
     async load() {
-        if (!this.sdk) return {};
+        if (!this._platformSdk) return {};
         try {
-            const res = await this.sdk.send("VKWebAppStorageGet", { keys: ["save"] });
+            const res = await this._platformSdk.send("VKWebAppStorageGet", { keys: ["save"] });
             const item = res && res.keys && res.keys[0];
             if (item && item.value) return JSON.parse(item.value);
-        } catch (e) {
-            console.error("[VK] load error", e);
-        }
+        } catch (e) { console.error("[VK] load error", e); }
         return {};
     }
 
     async save(data) {
-        if (!this.sdk) return;
+        if (!this._platformSdk) return;
+        try { await this._platformSdk.send("VKWebAppStorageSet", { key: "save", value: JSON.stringify(data) }); }
+        catch (e) { console.error("[VK] save error", e); }
+    }
+
+    async authorizePlayer() {
+        // VK players are always authorized inside the mini app.
+        return Promise.resolve();
+    }
+
+    async share(options = {}) {
+        return this._platformSdk.send("VKWebAppShare", options.link ? { link: options.link } : {});
+    }
+
+    async inviteFriends() {
+        return this._platformSdk.send("VKWebAppShowInviteBox", {});
+    }
+
+    async clipboardWrite(text) {
+        if (!this._platformSdk) return super.clipboardWrite(text);
         try {
-            await this.sdk.send("VKWebAppStorageSet", { key: "save", value: JSON.stringify(data) });
+            await this._platformSdk.send("VKWebAppCopyText", { text: String(text) });
         } catch (e) {
-            console.error("[VK] save error", e);
+            return super.clipboardWrite(text);
         }
     }
-};
-
-// Register globally for UniversalSDK
-globalThis.vkAdapter = window.VkPlatformBridge;
+}

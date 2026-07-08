@@ -1,107 +1,133 @@
-// OkPlatformBridge.js  (Purpose: none — imported by universalSDK.js)
+// OkPlatformBridge.js — Odnoklassniki (OK) Games
+// Docs: https://apiok.ru/dev/sdk/js , https://apiok.ru/apps/features/ads
+// (Purpose: none — imported by universalSDK.js)
 
-window.OkPlatformBridge = class OkPlatformBridge {
-    constructor() {
-        this.sdk = null;
-        this._isInitialized = false;
-        this._rewardCb = null;
-        this._closeCb = null;
-        // Init params come from launch URL (OK passes them as query params).
-        const p = new URLSearchParams(location.search);
-        this.server = p.get("api_server") || "";
-        this.connection = p.get("apiconnection") || "";
+import PlatformBridgeBase from "./PlatformBridgeBase.js";
+
+const SDK_URL = "//api.ok.ru/js/fapi5.js";
+
+export default class OkPlatformBridge extends PlatformBridgeBase {
+    constructor(options) {
+        super(options);
+        this._pendingSocial = {};
     }
+
+    get platformId() { return "ok"; }
+
+    get isInterstitialSupported() { return true; }
+    get isRewardedSupported() { return true; }
+    get isBannerSupported() { return true; }
+    get isShareSupported() { return true; }
+    get isInviteSupported() { return true; }
 
     async initialize() {
         if (this._isInitialized) return;
 
+        await this._loadScript(SDK_URL).catch(() => {});
+        this._platformSdk = await this._waitFor("FAPI").catch(() => null);
+        if (!this._platformSdk) {
+            console.error("[OK] FAPI failed to load");
+            return;
+        }
+
+        // Route FAPI UI callbacks (ads + social) into this adapter.
+        window.API_callback = (method, result, data) => this._onApiCallback(method, result, data);
+
+        let params;
+        try { params = this._platformSdk.Util.getRequestParameters(); }
+        catch (e) {
+            const p = new URLSearchParams(location.search);
+            params = { api_server: p.get("api_server"), apiconnection: p.get("apiconnection") };
+        }
+
         await new Promise((resolve) => {
-            const script = document.createElement("script");
-            script.src = "//api.ok.ru/js/fapi5.js";
-            script.onload = () => {
-                const check = setInterval(() => {
-                    if (window.FAPI) {
-                        clearInterval(check);
-                        this.sdk = window.FAPI;
-                        window.API_callback = (method, result, data) =>
-                            this.apiCallbacks[method]?.(result, data);
-                        this.sdk.init(this.server, this.connection, () => {
-                            this._isInitialized = true;
-                            console.log("[OK] Platform initialized");
-                            resolve();
-                        }, () => resolve());
-                    }
-                }, 100);
-            };
-            script.onerror = () => resolve();
-            document.head.appendChild(script);
+            try {
+                this._platformSdk.init(
+                    params["api_server"] || "",
+                    params["apiconnection"] || "",
+                    () => { this._isInitialized = true; console.log("[OK] Platform initialized"); resolve(); },
+                    (err) => { console.error("[OK] init error", err); resolve(); }
+                );
+            } catch (e) { console.error("[OK] init exception", e); resolve(); }
         });
     }
 
-    // --- Ads ---
-    showInterstitial() {
-        try { this.sdk.UI.showAd(); }
-        catch (e) { this.showAdFailurePopup(false); }
-    }
-
-    showRewarded(onReward, onClose) {
-        this._rewardCb = onReward || null;
-        this._closeCb = onClose || null;
-        try { this.sdk.UI.loadAd(); }
-        catch (e) { this.showAdFailurePopup(true); }
-    }
-
-    // --- Banner (not natively supported here) ---
-    showBanner() { console.warn("[OK] Banner not implemented"); }
-    hideBanner() { console.warn("[OK] Banner not implemented"); }
-
-    // --- Storage (localStorage fallback) ---
-    async load() {
-        try {
-            const save = localStorage.getItem("save");
-            if (save) return JSON.parse(save);
-        } catch (e) { /* ignore */ }
-        return {};
-    }
-
-    async save(data) {
-        try { localStorage.setItem("save", JSON.stringify(data)); }
-        catch (e) { /* ignore */ }
-    }
-
-    // --- FAPI callback mapping ---
-    get apiCallbacks() {
-        return {
-            loadAd: (result) => this.onLoadedRewarded(result),
-            showLoadedAd: (_, data) => this.onRewardedShown(data),
-            showAd: (_, data) => this.onInterstitialShown(data)
-        };
-    }
-
-    onLoadedRewarded(result) {
-        console.log("[OK] Reward loaded:", result);
-        try { this.sdk.UI.showLoadedAd(); }
-        catch (e) { this.showAdFailurePopup(true); }
-    }
-
-    onRewardedShown(data) {
-        if (data === "complete") {
-            console.log("[OK] Reward Granted");
-            this._rewardCb?.();
-        } else {
-            this.showAdFailurePopup(true);
+    _onApiCallback(method, result, data) {
+        const pending = this._pendingSocial[method];
+        if (pending) {
+            delete this._pendingSocial[method];
+            if (result === "ok" || result === true) pending.resolve(data);
+            else pending.reject(new Error(`[OK] ${method}: ${result}`));
         }
-        this._closeCb?.();
     }
 
-    onInterstitialShown(data) {
-        console.log("[OK] Interstitial shown", data);
+    _socialPromise(method) {
+        return new Promise((resolve, reject) => {
+            this._pendingSocial[method] = { resolve, reject };
+            // Fallback so the game never hangs if OK sends no callback.
+            setTimeout(() => {
+                if (this._pendingSocial[method]) {
+                    delete this._pendingSocial[method];
+                    resolve();
+                }
+            }, 30000);
+        });
     }
 
-    showAdFailurePopup(isRewarded) {
-        console.error("[OK] Ad failed to show. Is rewarded:", isRewarded);
+    showInterstitial() {
+        this._emit("adstart");
+        try { this._platformSdk.UI.showAd(); }
+        catch (e) { console.error("[OK] Interstitial error", e); this._emit("adfinish"); }
     }
-};
 
-// Register globally for UniversalSDK
-globalThis.okAdapter = window.OkPlatformBridge;
+    showRewarded(onReward, onClose, onError) {
+        this._emit("adstart");
+        try {
+            this._platformSdk.UI.loadAd({
+                onLoad: (ad) => {
+                    try {
+                        this._platformSdk.UI.showLoadedAd(ad);
+                        if (onReward) onReward();
+                    } catch (e) { if (onError) onError(e); }
+                    finally { this._emit("adfinish"); if (onClose) onClose(); }
+                },
+                onError: (err) => { console.error("[OK] Ad load failed", err); this._emit("adfinish"); if (onError) onError(err); }
+            });
+        } catch (e) { console.error("[OK] loadAd error", e); this._emit("adfinish"); if (onError) onError(e); }
+    }
+
+    showBanner() {
+        try {
+            this._platformSdk.UI.requestBannerAds?.();
+            this._platformSdk.UI.showBannerAds();
+        } catch (e) { console.error("[OK] Banner error", e); }
+    }
+
+    hideBanner() {
+        try { this._platformSdk.UI.hideBannerAds(); }
+        catch (e) { console.error("[OK] Hide banner error", e); }
+    }
+
+    // Post to the user's feed (share). options: { text, link }
+    async share(options = {}) {
+        if (!this._platformSdk) return Promise.reject(new Error("OK not ready"));
+        const media = [];
+        if (options.text) media.push({ type: "text", text: options.text });
+        if (options.link) media.push({ type: "link", url: options.link });
+        const attachment = { media };
+        const promise = this._socialPromise("postMediatopic");
+        try { this._platformSdk.UI.postMediatopic(attachment, "on"); }
+        catch (e) { delete this._pendingSocial.postMediatopic; return Promise.reject(e); }
+        return promise;
+    }
+
+    // Invite friends. options: { text, params, selectedUids }
+    async inviteFriends(options = {}) {
+        if (!this._platformSdk) return Promise.reject(new Error("OK not ready"));
+        const text = (options.text || "Join me!").slice(0, 120);
+        const promise = this._socialPromise("showInvite");
+        try { this._platformSdk.UI.showInvite(text, options.params || "", options.selectedUids || ""); }
+        catch (e) { delete this._pendingSocial.showInvite; return Promise.reject(e); }
+        return promise;
+    }
+}

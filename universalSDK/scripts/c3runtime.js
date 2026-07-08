@@ -1335,7 +1335,15 @@ self.C3_ExpressionFuncs = [
 		() => "showInterstitial",
 		() => "showRewarded",
 		() => "showBanner",
-		() => "hideBanner"
+		() => "hideBanner",
+		() => "share",
+		() => "invite",
+		() => "authorize",
+		() => "rate",
+		() => "save",
+		() => "load",
+		() => "clipboard",
+		() => "happytime"
 ];
 
 
