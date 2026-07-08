@@ -1,20 +1,21 @@
 const C3 = self.C3;
 self.C3_GetObjectRefTable = function () {
 	return [
-		C3.Plugins.Text,
-		C3.Plugins.HTMLElement,
-		C3.Behaviors.Anchor,
-		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.JavaScriptInEvents.списоксобытий1_Event1_Act1
+		C3.Plugins.Button,
+		C3.Plugins.System.Cnds.OnLoadFinished,
+		C3.JavaScriptInEvents.списоксобытий1_Event1_Act1,
+		C3.Plugins.Button.Cnds.OnClicked,
+		C3.Plugins.Button.Cnds.HasTags,
+		C3.JavaScriptInEvents.списоксобытий1_Event3_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event4_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event5_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event6_Act1
 	];
 };
 self.C3_JsPropNameTable = [
-	{Text: 0},
-	{Anchor: 0},
-	{HTMLElement: 0}
+	{Button: 0}
 ];
 
 self.InstanceType = {
-	Text: class extends self.ITextInstance {},
-	HTMLElement: class extends self.IHTMLElementInstance {}
+	Button: class extends self.IButtonInstance {}
 }
