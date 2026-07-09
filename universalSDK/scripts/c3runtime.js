@@ -1332,6 +1332,7 @@ function or(l, r)
 }
 
 self.C3_ExpressionFuncs = [
+		() => "callbacks",
 		() => "showInterstitial",
 		() => "showRewarded",
 		() => "showBanner",
@@ -1343,7 +1344,9 @@ self.C3_ExpressionFuncs = [
 		() => "save",
 		() => "load",
 		() => "clipboard",
-		() => "happytime"
+		() => "happytime",
+		() => "playerName",
+		() => "joinGroup"
 ];
 
 

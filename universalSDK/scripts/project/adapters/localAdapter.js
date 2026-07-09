@@ -69,6 +69,7 @@ export default class LocalPlatformBridge extends PlatformBridgeBase {
     get isShareSupported() { return true; }
     get isInviteSupported() { return true; }
     get isRateSupported() { return true; }
+    get isJoinCommunitySupported() { return true; }
 
     async initialize() {
         this._injectStyles();
@@ -135,6 +136,16 @@ export default class LocalPlatformBridge extends PlatformBridgeBase {
             buttons: [{ label: "Send invite", value: true }, { label: "Close", value: false, ghost: true }]
         });
         this._toast("Invite sent! (USDK_Mock)");
+    }
+
+    async joinCommunity(options = {}) {
+        const ok = await this._modal({
+            avatar: "⭐", title: "Join community",
+            sub: "Subscribe to the game's community" + (options.groupId ? ` (#${options.groupId})` : "") + "?",
+            buttons: [{ label: "Subscribe", value: true }, { label: "Later", value: false, ghost: true }]
+        });
+        if (!ok) throw new Error("join cancelled");
+        this._toast("Subscribed! (USDK_Mock)");
     }
 
     // ---------------- rate / clipboard / misc ----------------

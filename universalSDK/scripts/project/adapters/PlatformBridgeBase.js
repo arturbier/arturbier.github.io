@@ -32,6 +32,7 @@ export default class PlatformBridgeBase {
     get isInviteSupported() { return false; }
     get isRateSupported() { return false; }
     get isClipboardSupported() { return true; }
+    get isJoinCommunitySupported() { return false; }
 
     // ---------- player ----------
     get isPlayerAuthorized() { return this._isPlayerAuthorized; }
@@ -98,6 +99,10 @@ export default class PlatformBridgeBase {
 
     async inviteFriends() {
         return Promise.reject(new Error(`${this.platformId}: invite not supported`));
+    }
+
+    async joinCommunity() {
+        return Promise.reject(new Error(`${this.platformId}: join community not supported`));
     }
 
     // ---------- rate / feedback ----------

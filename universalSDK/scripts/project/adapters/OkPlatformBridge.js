@@ -19,6 +19,7 @@ export default class OkPlatformBridge extends PlatformBridgeBase {
     get isBannerSupported() { return true; }
     get isShareSupported() { return true; }
     get isInviteSupported() { return true; }
+    get isJoinCommunitySupported() { return true; }
 
     async initialize() {
         if (this._isInitialized) return;
@@ -39,6 +40,9 @@ export default class OkPlatformBridge extends PlatformBridgeBase {
             const p = new URLSearchParams(location.search);
             params = { api_server: p.get("api_server"), apiconnection: p.get("apiconnection") };
         }
+
+        // App id for referencing the OK game in feed posts (not the hosting URL).
+        this._appId = params["application_id"] || params["app_id"] || "";
 
         await new Promise((resolve) => {
             try {
@@ -113,7 +117,9 @@ export default class OkPlatformBridge extends PlatformBridgeBase {
         if (!this._platformSdk) return Promise.reject(new Error("OK not ready"));
         const media = [];
         if (options.text) media.push({ type: "text", text: options.text });
-        if (options.link) media.push({ type: "link", url: options.link });
+        // Reference the OK game itself, not the raw hosting URL.
+        if (this._appId) media.push({ type: "app-ref", appId: this._appId });
+        else if (options.link) media.push({ type: "link", url: options.link });
         const attachment = { media };
         const promise = this._socialPromise("postMediatopic");
         try { this._platformSdk.UI.postMediatopic(attachment, "on"); }
@@ -128,6 +134,17 @@ export default class OkPlatformBridge extends PlatformBridgeBase {
         const promise = this._socialPromise("showInvite");
         try { this._platformSdk.UI.showInvite(text, options.params || "", options.selectedUids || ""); }
         catch (e) { delete this._pendingSocial.showInvite; return Promise.reject(e); }
+        return promise;
+    }
+
+    // Subscribe to an OK group. options: { groupId }
+    async joinCommunity(options = {}) {
+        if (!this._platformSdk) return Promise.reject(new Error("OK not ready"));
+        const groupId = options.groupId || this._options.groupId;
+        if (!groupId) return Promise.reject(new Error("OK: groupId not set"));
+        const promise = this._socialPromise("joinGroup");
+        try { this._platformSdk.UI.joinGroup(groupId); }
+        catch (e) { delete this._pendingSocial.joinGroup; return Promise.reject(e); }
         return promise;
     }
 }

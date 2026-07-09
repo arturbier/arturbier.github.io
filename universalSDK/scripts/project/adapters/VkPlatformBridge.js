@@ -15,9 +15,12 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
     get isShareSupported() { return true; }
     get isInviteSupported() { return true; }
     get isClipboardSupported() { return true; }
+    get isJoinCommunitySupported() { return true; }
 
     async initialize() {
         if (this._isInitialized) return;
+
+        this._appId = new URLSearchParams(location.search).get("vk_app_id") || "";
 
         await this._loadScript(SDK_URL).catch(() => {});
         this._platformSdk = await this._waitFor("vkBridge").catch(() => null);
@@ -100,7 +103,9 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
     }
 
     async share(options = {}) {
-        return this._platformSdk.send("VKWebAppShare", options.link ? { link: options.link } : {});
+        // Never share the raw hosting URL — share the VK app page instead.
+        const link = options.link || (this._appId ? `https://vk.com/app${this._appId}` : undefined);
+        return this._platformSdk.send("VKWebAppShare", link ? { link } : {});
     }
 
     async inviteFriends() {
@@ -114,5 +119,14 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
         } catch (e) {
             return super.clipboardWrite(text);
         }
+    }
+
+    // Subscribe to a VK community. options: { groupId }
+    async joinCommunity(options = {}) {
+        let groupId = options.groupId || this._options.groupId;
+        if (!groupId) return Promise.reject(new Error("VK: groupId not set"));
+        groupId = parseInt(groupId, 10);
+        if (Number.isNaN(groupId)) return Promise.reject(new Error("VK: invalid groupId"));
+        return this._platformSdk.send("VKWebAppJoinGroup", { group_id: groupId });
     }
 }

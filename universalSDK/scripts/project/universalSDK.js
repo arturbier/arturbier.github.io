@@ -38,8 +38,7 @@ window.UniversalSDK = {
         if (!this.debug) return;
         if (type === "init") {
             console.log(
-                `%c[SDK] UNIVERSALSDK READY | PLATFORM: ${this.platform.toUpperCase()}`,
-                "color:#0f0;font-weight:bold"
+                `[SDK] UNIVERSALSDK READY | PLATFORM: ${this.platform.toUpperCase()}`
             );
         } else {
             console.log("[SDK] " + text);
@@ -102,7 +101,8 @@ window.UniversalSDK = {
             share: "isShareSupported",
             invite: "isInviteSupported",
             rate: "isRateSupported",
-            clipboard: "isClipboardSupported"
+            clipboard: "isClipboardSupported",
+            joinCommunity: "isJoinCommunitySupported"
         };
         return !!this.adapter[map[feature]];
     },
@@ -144,6 +144,7 @@ window.UniversalSDK = {
     // ---------- social ----------
     async share(options) { await this._ensureReady(); return this.adapter.share(options); },
     async inviteFriends(options) { await this._ensureReady(); return this.adapter.inviteFriends(options); },
+    async joinCommunity(options) { await this._ensureReady(); return this.adapter.joinCommunity(options); },
 
     // ---------- rate / clipboard / misc ----------
     async rateGame() { await this._ensureReady(); return this.adapter.rateGame(); },
