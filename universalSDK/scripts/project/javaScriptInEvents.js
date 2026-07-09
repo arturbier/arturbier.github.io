@@ -39,7 +39,7 @@ const scriptsInEvents = {
 
 	async списоксобытий1_Event11_Act1(runtime, localVars)
 	{
-		runtime.globalVars.playerName = UniversalSDK.adapter.playerName
+		runtime.globalVars.playerName = UniversalSDK.adapter.playerName || ""
 	},
 
 	async списоксобытий1_Event23_Act1(runtime, localVars)
@@ -92,7 +92,7 @@ const scriptsInEvents = {
 	async списоксобытий1_Event31_Act1(runtime, localVars)
 	{
 		UniversalSDK.authorizePlayer()
-		    .then(() => { runtime.globalVars.playerName = UniversalSDK.adapter.playerName; runtime.callFunction("On_Auth_Success"); })
+		    .then(() => { runtime.globalVars.playerName = UniversalSDK.adapter.playerName || ""; runtime.callFunction("On_Auth_Success"); })
 		    .catch(() => { runtime.callFunction("On_Auth_Fail"); });
 	},
 
