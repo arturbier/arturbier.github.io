@@ -46,15 +46,38 @@ window.UniversalSDK = {
     },
 
     // ---------- platform detection ----------
-    // Order: ?platform= > config.forcedPlatform > auto (globals/params) > local
+    // Order: ?platform= > config.forcedPlatform > auto > local
+    // NOTE: VK and OK games now share VK's infrastructure, so on OK the VK
+    // bridge (vkBridge / vk_app_id) is ALSO present. Therefore OK must be
+    // detected BEFORE VK, using OK-specific launch params / FAPI / ok.ru host.
     _detectPlatform() {
         const p = new URLSearchParams(location.search);
         const forced = p.get("platform") || this.config.forcedPlatform;
         if (forced && ADAPTERS[forced]) return forced;
 
+        // Top-window host chain — robust discriminator on the shared VK/OK infra.
+        let hostChain = "";
+        try { hostChain = Array.from(location.ancestorOrigins || []).join(" "); } catch (e) { /* ignore */ }
+        hostChain += " " + (document.referrer || "");
+        this._detectSignals = {
+            api_server: p.has("api_server"),
+            application_key: p.has("application_key"),
+            apiconnection: p.has("apiconnection"),
+            vk_app_id: p.has("vk_app_id"),
+            FAPI: typeof FAPI !== "undefined",
+            vkBridge: typeof vkBridge !== "undefined",
+            host: hostChain.trim()
+        };
+
         if (typeof YaGames !== "undefined") return "yandex";
-        if (typeof vkBridge !== "undefined" || p.has("vk_app_id")) return "vk";
-        if (typeof FAPI !== "undefined" || p.has("api_server")) return "ok";
+
+        // OK BEFORE VK
+        if (p.has("api_server") || p.has("apiconnection") || p.has("application_key")) return "ok";
+        if (typeof FAPI !== "undefined") return "ok";
+        if (/ok\.ru/.test(hostChain)) return "ok";
+
+        if (p.has("vk_app_id") || typeof vkBridge !== "undefined" || /vk\.(com|ru)/.test(hostChain)) return "vk";
+
         return "local";
     },
 
@@ -66,7 +89,7 @@ window.UniversalSDK = {
 
     async _doInit() {
         this.platform = this._detectPlatform();
-        console.log("[SDK] Detected platform: " + this.platform);
+        console.log("[SDK] Detected platform: " + this.platform, this._detectSignals || {});
 
         let AdapterClass = ADAPTERS[this.platform];
         if (!AdapterClass) {

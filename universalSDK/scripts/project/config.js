@@ -11,7 +11,8 @@ const UniversalSDKConfig = {
             groupId: "204017056"
         },
         ok: {
-            groupId: "59748855382160"
+            groupId: "59748855382160",
+            enableMessages: true
         },
         gamedistribution: {
             gameId: "YOUR_GD_GAME_ID"
