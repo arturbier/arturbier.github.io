@@ -8,7 +8,7 @@ const UniversalSDKConfig = {
     forcedPlatform: "",
     platforms: {
         vk: {
-            groupId: "public204017056"
+            groupId: "204017056"
         },
         ok: {
             groupId: "59748855382160"
