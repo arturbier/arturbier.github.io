@@ -137,13 +137,13 @@ export default class OkPlatformBridge extends PlatformBridgeBase {
         return promise;
     }
 
-    // Subscribe to an OK group. options: { groupId }
+    // Subscribe to an OK group. options: { groupId, enableMessages }
     async joinCommunity(options = {}) {
         if (!this._platformSdk) return Promise.reject(new Error("OK not ready"));
         const groupId = options.groupId || this._options.groupId;
         if (!groupId) { console.warn("[OK] groupId not set — fill config.js platforms.ok.groupId or pass { groupId }"); return Promise.reject(new Error("OK: groupId not set")); }
         const promise = this._socialPromise("joinGroup");
-        try { this._platformSdk.UI.joinGroup(groupId); }
+        try { this._platformSdk.UI.joinGroup(groupId, options.enableMessages ?? false); }
         catch (e) { delete this._pendingSocial.joinGroup; return Promise.reject(e); }
         return promise;
     }

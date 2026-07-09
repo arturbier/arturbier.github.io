@@ -127,6 +127,8 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
         if (!groupId) { console.warn("[VK] groupId not set — fill config.js platforms.vk.groupId or pass { groupId }"); return Promise.reject(new Error("VK: groupId not set")); }
         groupId = parseInt(groupId, 10);
         if (Number.isNaN(groupId)) return Promise.reject(new Error("VK: invalid groupId"));
-        return this._platformSdk.send("VKWebAppJoinGroup", { group_id: groupId });
+        const result = await this._platformSdk.send("VKWebAppJoinGroup", { group_id: groupId });
+        try { window.open(`https://vk.com/public${groupId}`); } catch (e) { /* ignore */ }
+        return result;
     }
 }

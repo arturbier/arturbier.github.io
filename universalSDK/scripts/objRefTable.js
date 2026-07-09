@@ -13,11 +13,12 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.списоксобытий1_Event7_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event8_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event11_Act1,
+		C3.Plugins.Text.Cnds.HasTags,
+		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.JavaScriptInEvents.списоксобытий1_Event21_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event22_Act1,
 		C3.Plugins.Button.Cnds.OnClicked,
 		C3.Plugins.Button.Cnds.HasTags,
-		C3.JavaScriptInEvents.списоксобытий1_Event23_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event24_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event25_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event26_Act1,
@@ -30,9 +31,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.списоксобытий1_Event33_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event34_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event35_Act1,
-		C3.Plugins.Text.Cnds.HasTags,
-		C3.Plugins.System.Acts.WaitForPreviousActions,
-		C3.Plugins.Text.Acts.SetText,
+		C3.JavaScriptInEvents.списоксобытий1_Event36_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event37_Act1
 	];
 };

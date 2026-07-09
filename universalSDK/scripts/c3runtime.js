@@ -1338,6 +1338,11 @@ function or(l, r)
 
 self.C3_ExpressionFuncs = [
 		() => "callbacks",
+		() => "name",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
 		() => "showInterstitial",
 		() => "showRewarded",
 		() => "showBanner",
@@ -1351,11 +1356,6 @@ self.C3_ExpressionFuncs = [
 		() => "clipboard",
 		() => "happytime",
 		() => "playerName",
-		() => "name",
-		p => {
-			const v0 = p._GetNode(0).GetVar();
-			return () => v0.GetValue();
-		},
 		() => "joinGroup"
 ];
 
