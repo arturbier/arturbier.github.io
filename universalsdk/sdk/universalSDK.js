@@ -58,14 +58,16 @@ window.UniversalSDK = {
         // Top-window host chain — robust discriminator on the shared VK/OK infra.
         let hostChain = "";
         try { hostChain = Array.from(location.ancestorOrigins || []).join(" "); } catch (e) { /* ignore */ }
-        hostChain += " " + (document.referrer || "");
+        hostChain += " " + (document.referrer || "") + " " + (location.hostname || "");
         this._detectSignals = {
             api_server: p.has("api_server"),
             application_key: p.has("application_key"),
             apiconnection: p.has("apiconnection"),
             vk_app_id: p.has("vk_app_id"),
+            poki_url: p.has("poki_url"),
             FAPI: typeof FAPI !== "undefined",
             vkBridge: typeof vkBridge !== "undefined",
+            hostname: location.hostname || "",
             host: hostChain.trim()
         };
 
@@ -75,6 +77,11 @@ window.UniversalSDK = {
         if (p.has("api_server") || p.has("apiconnection") || p.has("application_key")) return "ok";
         if (typeof FAPI !== "undefined") return "ok";
         if (/ok\.ru/.test(hostChain)) return "ok";
+
+        // Web portals — detected by game host / launch param
+        if (/poki/i.test(hostChain) || p.has("poki_url")) return "poki";
+        if (/crazygames\.|1001juegos\.com/i.test(hostChain)) return "crazygames";
+        if (/gamedistribution\.com/i.test(hostChain)) return "gamedistribution";
 
         if (p.has("vk_app_id") || typeof vkBridge !== "undefined" || /vk\.(com|ru)/.test(hostChain)) return "vk";
 
@@ -152,6 +159,8 @@ window.UniversalSDK = {
     },
 
     // ---------- gameplay signals ----------
+    // Async + lazy-init: allows calling gameplayStart() as early as
+    // "On loader layout complete" — it will initialize the SDK if needed.
     async gameplayStart() { await this._ensureReady(); return this.adapter.gameplayStart(); },
     async gameplayStop() { await this._ensureReady(); return this.adapter.gameplayStop(); },
 

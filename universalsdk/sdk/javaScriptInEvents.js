@@ -146,6 +146,16 @@ const scriptsInEvents = {
 	async списоксобытий1_Event44_Act1(runtime, localVars)
 	{
 		UniversalSDK.addToFavorites().then(() => runtime.callFunction("On_AddedToFav")).catch(e => console.warn("[GAME] fav n/a", e && e.message ? e.message : e));
+	},
+
+	async списоксобытий1_Event45_Act1(runtime, localVars)
+	{
+		UniversalSDK.gameplayStart(); console.log("[GAME] gameplayStart");
+	},
+
+	async списоксобытий1_Event46_Act1(runtime, localVars)
+	{
+		UniversalSDK.gameplayStop(); console.log("[GAME] gameplayStop");
 	}
 };
 

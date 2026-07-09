@@ -126,4 +126,13 @@ export default class YandexPlatformBridge extends PlatformBridgeBase {
         if (!canShow || !canShow.canShow) return Promise.reject(new Error("Yandex: prompt not available"));
         return this._platformSdk.shortcut.showPrompt();
     }
+
+    // Yandex GameplayAPI — signal real gameplay start/stop (pauses ads etc.).
+    gameplayStart() {
+        try { this._platformSdk?.features?.GameplayAPI?.start?.(); } catch (e) { /* ignore */ }
+    }
+
+    gameplayStop() {
+        try { this._platformSdk?.features?.GameplayAPI?.stop?.(); } catch (e) { /* ignore */ }
+    }
 }

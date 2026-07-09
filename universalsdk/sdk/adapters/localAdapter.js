@@ -167,6 +167,9 @@ export default class LocalPlatformBridge extends PlatformBridgeBase {
         this._toast("🎉 Happy moment recorded!");
     }
 
+    gameplayStart() { console.log("[USDK_Mock] gameplayStart"); }
+    gameplayStop() { console.log("[USDK_Mock] gameplayStop"); }
+
     async checkAdBlock() {
         const blocked = typeof window.__mockAdBlock !== "undefined" ? !!window.__mockAdBlock : false;
         this._toast("AdBlock: " + (blocked ? "detected" : "not detected") + " (USDK_Mock)");
