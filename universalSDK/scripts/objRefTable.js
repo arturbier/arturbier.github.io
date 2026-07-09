@@ -3,6 +3,7 @@ self.C3_GetObjectRefTable = function () {
 	return [
 		C3.Plugins.Button,
 		C3.Plugins.EMI_INDO_sweetalert2,
+		C3.Plugins.Text,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.JavaScriptInEvents.списоксобытий1_Event2_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event3_Act1,
@@ -29,17 +30,22 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.списоксобытий1_Event33_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event34_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event35_Act1,
-		C3.JavaScriptInEvents.списоксобытий1_Event36_Act1
+		C3.Plugins.Text.Cnds.HasTags,
+		C3.Plugins.System.Acts.WaitForPreviousActions,
+		C3.Plugins.Text.Acts.SetText,
+		C3.JavaScriptInEvents.списоксобытий1_Event37_Act1
 	];
 };
 self.C3_JsPropNameTable = [
 	{Button: 0},
 	{sweetalert2: 0},
+	{debug: 0},
 	{coins: 0},
 	{playerName: 0}
 ];
 
 self.InstanceType = {
 	Button: class extends self.IButtonInstance {},
-	sweetalert2: class extends C3.Plugins.EMI_INDO_sweetalert2.Instance {}
+	sweetalert2: class extends C3.Plugins.EMI_INDO_sweetalert2.Instance {},
+	debug: class extends self.ITextInstance {}
 }

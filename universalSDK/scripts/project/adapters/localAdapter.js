@@ -79,15 +79,15 @@ export default class LocalPlatformBridge extends PlatformBridgeBase {
 
     // ---------------- ads ----------------
     async showInterstitial() {
-        this._emit("adstart");
+        this._emit("adstart", "interstitial");
         await this._adOverlay({ title: "Interstitial Ad", sub: "Your game will continue shortly…", seconds: 3, rewarded: false });
-        this._emit("adfinish");
+        this._emit("adfinish", "interstitial");
     }
 
     async showRewarded(onReward, onClose) {
-        this._emit("adstart");
+        this._emit("adstart", "rewarded");
         const granted = await this._adOverlay({ title: "Rewarded Video", sub: "Watch the full ad to earn your reward.", seconds: 5, rewarded: true });
-        this._emit("adfinish");
+        this._emit("adfinish", "rewarded");
         if (granted && onReward) onReward();
         if (onClose) onClose();
     }

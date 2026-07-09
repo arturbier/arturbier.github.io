@@ -52,10 +52,10 @@ export default class GameDistributionPlatformBridge extends PlatformBridgeBase {
                 if (this._readyResolve) this._readyResolve();
                 break;
             case "SDK_GAME_PAUSE":
-                this._emit("adstart");
+                this._emit("adstart", this._currentAdType || "interstitial");
                 break;
             case "SDK_GAME_START":
-                this._emit("adfinish");
+                this._emit("adfinish", this._currentAdType || "interstitial");
                 if (this._closeCb) { this._closeCb(); this._closeCb = null; }
                 break;
             case "SDK_REWARDED_WATCH_COMPLETE":
@@ -71,12 +71,14 @@ export default class GameDistributionPlatformBridge extends PlatformBridgeBase {
 
     async showInterstitial() {
         if (!this._platformSdk) return;
+        this._currentAdType = "interstitial";
         try { await this._platformSdk.showAd(); }
         catch (e) { console.error("[GD] Interstitial error", e); }
     }
 
     async showRewarded(onReward, onClose, onError) {
         if (!this._platformSdk) { if (onError) onError(new Error("GD not ready")); return; }
+        this._currentAdType = "rewarded";
         this._rewardCb = onReward || null;
         this._closeCb = onClose || null;
         try {

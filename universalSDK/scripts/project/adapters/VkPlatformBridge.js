@@ -45,18 +45,18 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
 
     async showInterstitial() {
         if (!this._platformSdk) return;
-        this._emit("adstart");
+        this._emit("adstart", "interstitial");
         try {
             await this._platformSdk.send("VKWebAppShowNativeAds", { ad_format: "interstitial" });
         } catch (e) {
             console.error("[VK] Interstitial error", e);
         }
-        this._emit("adfinish");
+        this._emit("adfinish", "interstitial");
     }
 
     async showRewarded(onReward, onClose, onError) {
         if (!this._platformSdk) { if (onError) onError(new Error("VK not ready")); return; }
-        this._emit("adstart");
+        this._emit("adstart", "rewarded");
         try {
             const data = await this._platformSdk.send("VKWebAppShowNativeAds", { ad_format: "reward", use_waterfall: true });
             if (data && data.result) { if (onReward) onReward(); }
@@ -65,7 +65,7 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
             console.error("[VK] Reward error", e);
             if (onError) onError(e);
         }
-        this._emit("adfinish");
+        this._emit("adfinish", "rewarded");
         if (onClose) onClose();
     }
 
@@ -124,7 +124,7 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
     // Subscribe to a VK community. options: { groupId }
     async joinCommunity(options = {}) {
         let groupId = options.groupId || this._options.groupId;
-        if (!groupId) return Promise.reject(new Error("VK: groupId not set"));
+        if (!groupId) { console.warn("[VK] groupId not set — fill config.js platforms.vk.groupId or pass { groupId }"); return Promise.reject(new Error("VK: groupId not set")); }
         groupId = parseInt(groupId, 10);
         if (Number.isNaN(groupId)) return Promise.reject(new Error("VK: invalid groupId"));
         return this._platformSdk.send("VKWebAppJoinGroup", { group_id: groupId });

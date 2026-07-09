@@ -49,22 +49,22 @@ const scriptsInEvents = {
 		    // Wire ad lifecycle to callbacks (one-time setup)
 		    if (!UniversalSDK._callbacksWired) {
 		        UniversalSDK._callbacksWired = true;
-		        UniversalSDK.on("adstart", () => runtime.callFunction("On_Interstitial_Show"));
-		        UniversalSDK.on("adfinish", () => runtime.callFunction("On_Interstitial_Close"));
+		        UniversalSDK.on("adstart", (type) => runtime.callFunction(type === "rewarded" ? "On_Rewarded_Show" : "On_Interstitial_Show"));
+		        UniversalSDK.on("adfinish", (type) => runtime.callFunction(type === "rewarded" ? "On_Rewarded_Close" : "On_Interstitial_Close"));
 		    }
 		}).catch(e => console.error("[game] SDK init failed", e));
 	},
 
 	async списоксобытий1_Event23_Act1(runtime, localVars)
 	{
-		UniversalSDK.showInterstitial().then(() => runtime.callFunction("On_Interstitial_Close"));
+		UniversalSDK.showInterstitial();
 	},
 
 	async списоксобытий1_Event24_Act1(runtime, localVars)
 	{
 		UniversalSDK.showRewarded(
-		    () => { runtime.callFunction("On_Rewarded_Success"); runtime.callFunction("On_Rewarded_Close"); },
-		    () => { runtime.callFunction("On_Rewarded_Close"); },
+		    () => { runtime.callFunction("On_Rewarded_Success"); },
+		    () => {},
 		    () => { runtime.callFunction("On_Rewarded_Error"); }
 		);
 	},
@@ -126,11 +126,11 @@ const scriptsInEvents = {
 		UniversalSDK._ensureReady().then(() => { runtime.globalVars.playerName = UniversalSDK.adapter.playerName || "?"; runtime.callFunction("On_Auth_Success"); });
 	},
 
-	async списоксобытий1_Event36_Act1(runtime, localVars)
+	async списоксобытий1_Event37_Act1(runtime, localVars)
 	{
 		UniversalSDK.joinCommunity()
-		    .then(() => runtime.callFunction("On_Join_Done"))
-		    .catch(() => runtime.callFunction("On_Join_Fail"));
+		    .then(() => { console.log("[GAME] joined community"); runtime.callFunction("On_Join_Done"); })
+		    .catch(e => { console.warn("[GAME] join failed:", e && e.message ? e.message : e); runtime.callFunction("On_Join_Fail"); });
 	}
 };
 

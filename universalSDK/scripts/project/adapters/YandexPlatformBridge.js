@@ -47,9 +47,9 @@ export default class YandexPlatformBridge extends PlatformBridgeBase {
         if (!this._platformSdk) return;
         this._platformSdk.adv.showFullscreenAdv({
             callbacks: {
-                onOpen: () => this._emit("adstart"),
-                onClose: () => this._emit("adfinish"),
-                onError: (e) => { console.error("[Yandex] Interstitial error", e); this._emit("adfinish"); }
+                onOpen: () => this._emit("adstart", "interstitial"),
+                onClose: () => this._emit("adfinish", "interstitial"),
+                onError: (e) => { console.error("[Yandex] Interstitial error", e); this._emit("adfinish", "interstitial"); }
             }
         });
     }
@@ -58,10 +58,10 @@ export default class YandexPlatformBridge extends PlatformBridgeBase {
         if (!this._platformSdk) { if (onError) onError(new Error("Yandex not ready")); return; }
         this._platformSdk.adv.showRewardedVideo({
             callbacks: {
-                onOpen: () => this._emit("adstart"),
+                onOpen: () => this._emit("adstart", "rewarded"),
                 onRewarded: () => { if (onReward) onReward(); },
-                onClose: () => { this._emit("adfinish"); if (onClose) onClose(); },
-                onError: (e) => { console.error("[Yandex] Rewarded error", e); this._emit("adfinish"); if (onError) onError(e); }
+                onClose: () => { this._emit("adfinish", "rewarded"); if (onClose) onClose(); },
+                onError: (e) => { console.error("[Yandex] Rewarded error", e); this._emit("adfinish", "rewarded"); if (onError) onError(e); }
             }
         });
     }

@@ -46,8 +46,8 @@ export default class PlatformBridgeBase {
 
     // ---------- advertisement (defaults: unsupported) ----------
     async showInterstitial() {
-        this._emit("adstart");
-        this._emit("adfinish");
+        this._emit("adstart", "interstitial");
+        this._emit("adfinish", "interstitial");
     }
 
     async showRewarded(onReward, onClose, onError) {

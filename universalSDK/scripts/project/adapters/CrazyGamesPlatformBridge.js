@@ -48,9 +48,9 @@ export default class CrazyGamesPlatformBridge extends PlatformBridgeBase {
         if (!this._platformSdk) return;
         return new Promise((resolve) => {
             this._platformSdk.ad.requestAd("midgame", {
-                adStarted: () => this._emit("adstart"),
-                adFinished: () => { this._emit("adfinish"); resolve(); },
-                adError: (e) => { console.error("[CrazyGames] Interstitial error", e); this._emit("adfinish"); resolve(); }
+                adStarted: () => this._emit("adstart", "interstitial"),
+                adFinished: () => { this._emit("adfinish", "interstitial"); resolve(); },
+                adError: (e) => { console.error("[CrazyGames] Interstitial error", e); this._emit("adfinish", "interstitial"); resolve(); }
             });
         });
     }
@@ -59,9 +59,9 @@ export default class CrazyGamesPlatformBridge extends PlatformBridgeBase {
         if (!this._platformSdk) { if (onError) onError(new Error("CrazyGames not ready")); return; }
         return new Promise((resolve) => {
             this._platformSdk.ad.requestAd("rewarded", {
-                adStarted: () => this._emit("adstart"),
-                adFinished: () => { this._emit("adfinish"); if (onReward) onReward(); if (onClose) onClose(); resolve(); },
-                adError: (e) => { console.error("[CrazyGames] Rewarded error", e); this._emit("adfinish"); if (onError) onError(e); if (onClose) onClose(); resolve(); }
+                adStarted: () => this._emit("adstart", "rewarded"),
+                adFinished: () => { this._emit("adfinish", "rewarded"); if (onReward) onReward(); if (onClose) onClose(); resolve(); },
+                adError: (e) => { console.error("[CrazyGames] Rewarded error", e); this._emit("adfinish", "rewarded"); if (onError) onError(e); if (onClose) onClose(); resolve(); }
             });
         });
     }

@@ -79,13 +79,13 @@ export default class OkPlatformBridge extends PlatformBridgeBase {
     }
 
     showInterstitial() {
-        this._emit("adstart");
+        this._emit("adstart", "interstitial");
         try { this._platformSdk.UI.showAd(); }
-        catch (e) { console.error("[OK] Interstitial error", e); this._emit("adfinish"); }
+        catch (e) { console.error("[OK] Interstitial error", e); this._emit("adfinish", "interstitial"); }
     }
 
     showRewarded(onReward, onClose, onError) {
-        this._emit("adstart");
+        this._emit("adstart", "rewarded");
         try {
             this._platformSdk.UI.loadAd({
                 onLoad: (ad) => {
@@ -93,11 +93,11 @@ export default class OkPlatformBridge extends PlatformBridgeBase {
                         this._platformSdk.UI.showLoadedAd(ad);
                         if (onReward) onReward();
                     } catch (e) { if (onError) onError(e); }
-                    finally { this._emit("adfinish"); if (onClose) onClose(); }
+                    finally { this._emit("adfinish", "rewarded"); if (onClose) onClose(); }
                 },
-                onError: (err) => { console.error("[OK] Ad load failed", err); this._emit("adfinish"); if (onError) onError(err); }
+                onError: (err) => { console.error("[OK] Ad load failed", err); this._emit("adfinish", "rewarded"); if (onError) onError(err); }
             });
-        } catch (e) { console.error("[OK] loadAd error", e); this._emit("adfinish"); if (onError) onError(e); }
+        } catch (e) { console.error("[OK] loadAd error", e); this._emit("adfinish", "rewarded"); if (onError) onError(e); }
     }
 
     showBanner() {
@@ -141,7 +141,7 @@ export default class OkPlatformBridge extends PlatformBridgeBase {
     async joinCommunity(options = {}) {
         if (!this._platformSdk) return Promise.reject(new Error("OK not ready"));
         const groupId = options.groupId || this._options.groupId;
-        if (!groupId) return Promise.reject(new Error("OK: groupId not set"));
+        if (!groupId) { console.warn("[OK] groupId not set — fill config.js platforms.ok.groupId or pass { groupId }"); return Promise.reject(new Error("OK: groupId not set")); }
         const promise = this._socialPromise("joinGroup");
         try { this._platformSdk.UI.joinGroup(groupId); }
         catch (e) { delete this._pendingSocial.joinGroup; return Promise.reject(e); }

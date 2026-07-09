@@ -38,28 +38,28 @@ export default class PokiPlatformBridge extends PlatformBridgeBase {
     async showInterstitial() {
         if (!this._platformSdk) return;
         this._platformSdk.gameplayStop();
-        this._emit("adstart");
+        this._emit("adstart", "interstitial");
         try {
             await this._platformSdk.commercialBreak();
         } catch (e) {
             console.error("[Poki] Interstitial error", e);
         }
-        this._emit("adfinish");
+        this._emit("adfinish", "interstitial");
         this._platformSdk.gameplayStart();
     }
 
     async showRewarded(onReward, onClose, onError) {
         if (!this._platformSdk) { if (onError) onError(new Error("Poki not ready")); return; }
         this._platformSdk.gameplayStop();
-        this._emit("adstart");
+        this._emit("adstart", "rewarded");
         try {
             const withReward = await this._platformSdk.rewardedBreak();
-            this._emit("adfinish");
+            this._emit("adfinish", "rewarded");
             if (withReward) { if (onReward) onReward(); }
             else if (onError) onError(new Error("No reward"));
         } catch (e) {
             console.error("[Poki] Rewarded error", e);
-            this._emit("adfinish");
+            this._emit("adfinish", "rewarded");
             if (onError) onError(e);
         }
         if (onClose) onClose();
