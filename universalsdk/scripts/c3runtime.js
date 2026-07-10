@@ -1366,7 +1366,9 @@ self.C3_ExpressionFuncs = [
 		() => "addToHomeScreen",
 		() => "addToFavorites",
 		() => "gameplayStart",
-		() => "gameplayStop"
+		() => "gameplayStop",
+		() => "showLeaderboard",
+		() => "submitScore"
 ];
 
 

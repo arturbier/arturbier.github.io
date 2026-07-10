@@ -16,11 +16,9 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text.Acts.SetText,
 		C3.Plugins.System.Exps.projectversion,
 		C3.Plugins.System.Cnds.OnLayoutStart,
-		C3.JavaScriptInEvents.списоксобытий1_Event26_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event28_Act1,
 		C3.Plugins.Button.Cnds.OnClicked,
 		C3.Plugins.Button.Cnds.HasTags,
-		C3.JavaScriptInEvents.списоксобытий1_Event28_Act1,
-		C3.JavaScriptInEvents.списоксобытий1_Event29_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event30_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event31_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event32_Act1,
@@ -37,7 +35,11 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.списоксобытий1_Event43_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event44_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event45_Act1,
-		C3.JavaScriptInEvents.списоксобытий1_Event46_Act1
+		C3.JavaScriptInEvents.списоксобытий1_Event46_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event47_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event48_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event49_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event50_Act1
 	];
 };
 self.C3_JsPropNameTable = [

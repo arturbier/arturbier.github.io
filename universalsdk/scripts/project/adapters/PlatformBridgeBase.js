@@ -1,0 +1,204 @@
+// =====================================================
+// PlatformBridgeBase
+// Base class for all platform adapters.
+// Provides the unified interface, capability flags,
+// default localStorage storage, helpers and an event bus.
+// (Purpose: none — imported by other adapters)
+// =====================================================
+
+export default class PlatformBridgeBase {
+    constructor(options = {}) {
+        this._options = options || {};
+        this._isInitialized = false;
+        this._platformSdk = null;
+
+        this._playerId = null;
+        this._playerName = null;
+        this._isPlayerAuthorized = false;
+
+        this._listeners = {};
+    }
+
+    // ---------- platform ----------
+    get platformId() { return "unknown"; }
+    get isInitialized() { return this._isInitialized; }
+
+    // ---------- capabilities (overridden by adapters) ----------
+    get isInterstitialSupported() { return false; }
+    get isRewardedSupported() { return false; }
+    get isBannerSupported() { return false; }
+    get isPlayerAuthorizationSupported() { return false; }
+    get isShareSupported() { return false; }
+    get isInviteSupported() { return false; }
+    get isRateSupported() { return false; }
+    get isClipboardSupported() { return true; }
+    get isJoinCommunitySupported() { return false; }
+    get isCheckAdBlockSupported() { return false; }
+    get isAddToHomeScreenSupported() { return false; }
+    get isAddToFavoritesSupported() { return false; }
+    get isLeaderboardsSupported() { return false; }
+
+    // ---------- leaderboard bridge (lazy, shared) ----------
+    _lb() {
+        if (!this.__lb) {
+            const cfg = (this._options && this._options._firebaseConfig) || {};
+            import("./LeaderboardBridge.js").then((mod) => {
+                this.__lb = new mod.default({ ...cfg, collection: cfg.leaderboardCollection || "leaderboards", gameName: cfg.gameName, storageCollection: cfg.storageCollection || "saves" }, this.playerId || "guest", this.platformId || "local");
+            }).catch(() => {});
+        }
+        return this.__lb;
+    }
+
+    async submitScore(score) { const lb = this._lb(); return lb ? lb.submitScore(score, this.playerName) : Promise.reject(new Error("lb not ready")); }
+    async getTop(limit) { const lb = this._lb(); return lb ? lb.getTop(limit) : []; }
+    async getPlayerRank() { const lb = this._lb(); return lb ? lb.getPlayerRank() : { rank: null, totalEntries: 0 }; }
+    showLeaderboard(limit) {
+        const lb = this._lb();
+        if (lb) lb.showLeaderboard(limit);
+        this._emit("leaderboard:show", limit || 10);
+    }
+
+    // ---------- player ----------
+    get isPlayerAuthorized() { return this._isPlayerAuthorized; }
+    get playerId() { return this._playerId; }
+    get playerName() { return this._playerName; }
+
+    // ---------- lifecycle ----------
+    async initialize() {
+        this._isInitialized = true;
+    }
+
+    // ---------- advertisement (defaults: unsupported) ----------
+    async showInterstitial() {
+        this._emit("adstart", "interstitial");
+        this._emit("adfinish", "interstitial");
+    }
+
+    async showRewarded(onReward, onClose, onError) {
+        if (onError) onError(new Error(`${this.platformId}: rewarded not supported`));
+    }
+
+    async showBanner() { /* unsupported by default */ }
+    async hideBanner() { /* unsupported by default */ }
+
+    // ---------- gameplay signals ----------
+    gameplayStart() { /* optional */ }
+    gameplayStop() { /* optional */ }
+
+    // ---------- storage (default: Firebase cloud via LeaderboardBridge) ----------
+    async load() {
+        const lb = this._lb();
+        if (lb) return lb.cloudLoad().catch(() => ({}));
+        // Fallback if LeaderboardBridge hasn't loaded yet.
+        try { const s = localStorage.getItem("save"); if (s) return JSON.parse(s); } catch (e) { /* ignore */ }
+        return {};
+    }
+
+    async save(data) {
+        const lb = this._lb();
+        if (lb) return lb.cloudSave(data).catch(() => {});
+        try { localStorage.setItem("save", JSON.stringify(data)); } catch (e) { /* ignore */ }
+    }
+
+    async getData(key) {
+        const all = await this.load();
+        return all ? all[key] : undefined;
+    }
+
+    async setData(key, value) {
+        const all = (await this.load()) || {};
+        all[key] = value;
+        return this.save(all);
+    }
+
+    // ---------- player ----------
+    async authorizePlayer() {
+        return Promise.reject(new Error(`${this.platformId}: authorization not supported`));
+    }
+
+    // ---------- social ----------
+    async share() {
+        return Promise.reject(new Error(`${this.platformId}: share not supported`));
+    }
+
+    async inviteFriends() {
+        return Promise.reject(new Error(`${this.platformId}: invite not supported`));
+    }
+
+    async joinCommunity() {
+        return Promise.reject(new Error(`${this.platformId}: join community not supported`));
+    }
+
+    // ---------- device / anti-adblock ----------
+    async checkAdBlock() {
+        return false;   // unknown by default
+    }
+
+    async addToHomeScreen() {
+        return Promise.reject(new Error(`${this.platformId}: addToHomeScreen not supported`));
+    }
+
+    async addToFavorites() {
+        return Promise.reject(new Error(`${this.platformId}: addToFavorites not supported`));
+    }
+
+    // ---------- rate / feedback ----------
+    async rateGame() {
+        return Promise.reject(new Error(`${this.platformId}: rate not supported`));
+    }
+
+    // ---------- clipboard (default: Web Clipboard API) ----------
+    async clipboardWrite(text) {
+        if (navigator && navigator.clipboard && navigator.clipboard.writeText) {
+            return navigator.clipboard.writeText(String(text));
+        }
+        return Promise.reject(new Error("clipboard not available"));
+    }
+
+    // ---------- misc ----------
+    happyTime() { /* optional: signal a positive moment */ }
+
+    // ---------- event bus ----------
+    on(event, cb) {
+        (this._listeners[event] = this._listeners[event] || []).push(cb);
+    }
+
+    off(event, cb) {
+        const arr = this._listeners[event];
+        if (arr) this._listeners[event] = arr.filter((f) => f !== cb);
+    }
+
+    _emit(event, ...args) {
+        (this._listeners[event] || []).forEach((cb) => {
+            try { cb(...args); } catch (e) { console.error(e); }
+        });
+    }
+
+    // ---------- helpers ----------
+    _loadScript(src) {
+        return new Promise((resolve, reject) => {
+            const s = document.createElement("script");
+            s.src = src;
+            s.async = true;
+            s.onload = () => resolve();
+            s.onerror = () => reject(new Error("Failed to load " + src));
+            document.head.appendChild(s);
+        });
+    }
+
+    _waitFor(globalName, timeout = 10000) {
+        return new Promise((resolve, reject) => {
+            if (typeof window[globalName] !== "undefined") return resolve(window[globalName]);
+            const start = Date.now();
+            const t = setInterval(() => {
+                if (typeof window[globalName] !== "undefined") {
+                    clearInterval(t);
+                    resolve(window[globalName]);
+                } else if (Date.now() - start > timeout) {
+                    clearInterval(t);
+                    reject(new Error(globalName + " wait timeout"));
+                }
+            }, 100);
+        });
+    }
+}
