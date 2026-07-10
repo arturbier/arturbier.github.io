@@ -240,45 +240,7 @@ export default class LocalPlatformBridge extends PlatformBridgeBase {
     }
 
     // ---------------- leaderboard ----------------
-    async showLeaderboard(limit = 10) {
-        // Delegate to base class getTop (which uses LeaderboardBridge),
-        // then render our visual overlay.
-        this._injectStyles();
-        const data = await this.getTop(limit).catch(() => []);
-        return this._leaderboardOverlay(data, limit);
-    }
-
-    _leaderboardOverlay(entries, limit) {
-        this._injectStyles();
-        const playerId = this.playerId || "unknown";
-        const rows = entries.length
-            ? entries.map((e, i) => {
-                const isMe = e.playerId === playerId;
-                const platformIcon = ({ vk: "🌐", ok: "👥", yandex: "🟡", crazygames: "🟣", gamedistribution: "🔴", poki: "🟢", local: "🛠️" })[e.platform] || "🎮";
-                return `<div class="usdk-lb-row${isMe ? " usdk-lb-me" : ""}">
-                    <span class="usdk-lb-pos">${i + 1}</span>
-                    <span class="usdk-lb-name">${this._esc(String(e.playerName || "?").slice(0, 20))}</span>
-                    <span class="usdk-lb-score">${e.score}</span>
-                    <span class="usdk-lb-platform" title="${this._esc(e.platform || "")}">${platformIcon}</span>
-                </div>`;
-            }).join("")
-            : '<div class="usdk-sub" style="color:#9aa0c4">No scores yet — be the first!</div>';
-
-        return new Promise((resolve) => {
-            const ov = document.createElement("div");
-            ov.className = "usdk-overlay";
-            ov.innerHTML = `<div class="usdk-card" style="max-height:80vh;overflow-y:auto">
-                <div class="usdk-badge">Leaderboard</div>
-                <div class="usdk-title">🏆 Top ${limit} scores</div>
-                <div class="usdk-lb-header"><span>#</span><span>Name</span><span>Score</span><span>Plat</span></div>
-                ${rows}
-                <div class="usdk-actions" style="margin-top:16px"><button class="usdk-btn" data-c>Close</button></div>
-            </div>`;
-            document.body.appendChild(ov);
-            ov.querySelector("[data-c]").addEventListener("click", () => { ov.remove(); resolve(); });
-            ov.addEventListener("click", (e) => { if (e.target === ov) { ov.remove(); resolve(); } });
-        });
-    }
+    // Uses the shared visual overlay from PlatformBridgeBase → LeaderboardBridge.
 
     // ---------------- UI helpers ----------------
     _esc(str) {

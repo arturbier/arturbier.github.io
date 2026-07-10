@@ -6,12 +6,15 @@
 export default class LeaderboardBridge {
     constructor(opts, playerId, platformId) {
         this._opts = opts || {};
-        this._playerId = playerId || "unknown";
-        this._platformId = platformId || "unknown";
+        this._playerId = LeaderboardBridge._str(playerId);
+        this._platformId = LeaderboardBridge._str(platformId);
     }
 
-    setPlayerId(id) { this._playerId = id || "unknown"; }
-    setPlatformId(id) { this._platformId = id || "unknown"; }
+    // Platform player ids can be numbers (VK/OK) — always store as string.
+    static _str(v) { return (v === undefined || v === null || v === "") ? "unknown" : String(v); }
+
+    setPlayerId(id) { this._playerId = LeaderboardBridge._str(id); }
+    setPlatformId(id) { this._platformId = LeaderboardBridge._str(id); }
 
     // ---------- Firestore REST helper ----------
     _firestore(method, path, body = null) {
@@ -50,7 +53,7 @@ export default class LeaderboardBridge {
     }
 
     async submitScore(score, playerName) {
-        const id = (this._playerId || "unknown").replace(/[\/#?\[\]@!$&'()*+,;=]/g, "_");
+        const id = String(this._playerId || "unknown").replace(/[\/#?\[\]@!$&'()*+,;=]/g, "_");
         const gameId = this._opts.gameId || "unknown";
         const env = this._opts.environment || "prod";
         const coll = this._opts.collection || "leaderboards";
@@ -99,13 +102,78 @@ export default class LeaderboardBridge {
         return { rank: entries.length > 0 ? 1 : null, totalEntries: entries.length };
     }
 
-    showLeaderboard(limit) {
-        // Base no-op. Override in localAdapter for visual overlay.
+    async showLeaderboard(limit = 10) {
+        if (typeof document === "undefined") return;
+        const entries = await this.getTop(limit).catch(() => []);
+        return this._overlay(entries, limit);
+    }
+
+    // ---------- shared visual overlay (works on every platform) ----------
+    _esc(str) {
+        return String(str).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    }
+
+    _injectStyles() {
+        if (typeof document === "undefined" || document.getElementById("usdk-lb-styles")) return;
+        const s = document.createElement("style");
+        s.id = "usdk-lb-styles";
+        s.textContent = `
+.usdk-lb-ov{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;
+  background:rgba(8,10,20,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+.usdk-lb-card{width:min(420px,86vw);max-height:80vh;overflow-y:auto;background:linear-gradient(160deg,#232640,#12131c);
+  border:1px solid rgba(255,255,255,.09);border-radius:22px;padding:26px;color:#eef0ff;text-align:center;
+  box-shadow:0 24px 70px rgba(0,0,0,.55)}
+.usdk-lb-badge{display:inline-block;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#a8adcc;
+  border:1px solid rgba(255,255,255,.16);border-radius:999px;padding:4px 12px;margin-bottom:14px}
+.usdk-lb-title{font-size:22px;font-weight:750;margin:0 0 14px}
+.usdk-lb-header,.usdk-lb-row{display:flex;gap:6px;align-items:center;padding:8px 6px;font-size:14px}
+.usdk-lb-header{color:#8e94b0;font-weight:650;font-size:12px;letter-spacing:.05em;border-bottom:1px solid rgba(255,255,255,.08)}
+.usdk-lb-row{border-bottom:1px solid rgba(255,255,255,.04)}
+.usdk-lb-me{background:rgba(124,108,255,.12);border-radius:9px}
+.usdk-lb-pos{width:28px;text-align:center;font-weight:750;color:#ffd45e;flex-shrink:0}
+.usdk-lb-name{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.usdk-lb-score{width:60px;text-align:right;font-weight:750;flex-shrink:0}
+.usdk-lb-plat{width:32px;text-align:center;flex-shrink:0}
+.usdk-lb-empty{font-size:14px;color:#9aa0c4;padding:18px 0}
+.usdk-lb-btn{appearance:none;border:0;cursor:pointer;font:600 15px/1 inherit;padding:13px 20px;border-radius:13px;margin-top:16px;
+  background:linear-gradient(135deg,#7c6cff,#5b4bdb);color:#fff;box-shadow:0 8px 20px rgba(124,108,255,.35)}`;
+        document.head.appendChild(s);
+    }
+
+    _overlay(entries, limit) {
+        this._injectStyles();
+        const me = this._playerId;
+        const icons = { vk: "🌐", ok: "👥", yandex: "🟡", crazygames: "🟣", gamedistribution: "🔴", poki: "🟢", local: "🛠️" };
+        const rows = entries.length
+            ? entries.map((e, i) => `<div class="usdk-lb-row${e.playerId === me ? " usdk-lb-me" : ""}">
+                <span class="usdk-lb-pos">${i + 1}</span>
+                <span class="usdk-lb-name">${this._esc(String(e.playerName || "?").slice(0, 20))}</span>
+                <span class="usdk-lb-score">${e.score}</span>
+                <span class="usdk-lb-plat" title="${this._esc(e.platform || "")}">${icons[e.platform] || "🎮"}</span>
+            </div>`).join("")
+            : '<div class="usdk-lb-empty">No scores yet — be the first!</div>';
+
+        return new Promise((resolve) => {
+            const ov = document.createElement("div");
+            ov.className = "usdk-lb-ov";
+            ov.innerHTML = `<div class="usdk-lb-card">
+                <div class="usdk-lb-badge">Leaderboard</div>
+                <div class="usdk-lb-title">🏆 Top ${limit} scores</div>
+                <div class="usdk-lb-header"><span>#</span><span>Name</span><span>Score</span><span>Plat</span></div>
+                ${rows}
+                <button class="usdk-lb-btn" data-c>Close</button>
+            </div>`;
+            document.body.appendChild(ov);
+            const done = () => { ov.remove(); resolve(); };
+            ov.querySelector("[data-c]").addEventListener("click", done);
+            ov.addEventListener("click", (e) => { if (e.target === ov) done(); });
+        });
     }
 
     // ---------- cloud storage (Firebase) ----------
     _storagePath() {
-        const id = (this._playerId || "unknown").replace(/[\/#?\[\]@!$&'()*+,;=]/g, "_");
+        const id = String(this._playerId || "unknown").replace(/[\/#?\[\]@!$&'()*+,;=]/g, "_");
         const gameId = this._opts.gameId || "unknown";
         const env = this._opts.environment || "prod";
         const coll = this._opts.storageCollection || "saves";

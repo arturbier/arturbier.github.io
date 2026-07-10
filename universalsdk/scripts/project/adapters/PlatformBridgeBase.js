@@ -6,6 +6,8 @@
 // (Purpose: none — imported by other adapters)
 // =====================================================
 
+import LeaderboardBridge from "./LeaderboardBridge.js";
+
 export default class PlatformBridgeBase {
     constructor(options = {}) {
         this._options = options || {};
@@ -36,26 +38,32 @@ export default class PlatformBridgeBase {
     get isCheckAdBlockSupported() { return false; }
     get isAddToHomeScreenSupported() { return false; }
     get isAddToFavoritesSupported() { return false; }
-    get isLeaderboardsSupported() { return false; }
+    get isLeaderboardsSupported() { return true; }
 
     // ---------- leaderboard bridge (lazy, shared) ----------
     _lb() {
+        const cfg = (this._options && this._options._firebaseConfig) || {};
         if (!this.__lb) {
-            const cfg = (this._options && this._options._firebaseConfig) || {};
-            import("./LeaderboardBridge.js").then((mod) => {
-                this.__lb = new mod.default({ ...cfg, collection: cfg.leaderboardCollection || "leaderboards", gameName: cfg.gameName, storageCollection: cfg.storageCollection || "saves" }, this.playerId || "guest", this.platformId || "local");
-            }).catch(() => {});
+            this.__lb = new LeaderboardBridge(
+                { ...cfg, collection: cfg.leaderboardCollection || "leaderboards", gameName: cfg.gameName, storageCollection: cfg.storageCollection || "saves" },
+                this.playerId || "guest",
+                this.platformId || "local"
+            );
+        } else {
+            // Refresh the native player id (it may be resolved after auth).
+            this.__lb.setPlayerId(this.playerId || "guest");
+            this.__lb.setPlatformId(this.platformId || "local");
         }
         return this.__lb;
     }
 
-    async submitScore(score) { const lb = this._lb(); return lb ? lb.submitScore(score, this.playerName) : Promise.reject(new Error("lb not ready")); }
-    async getTop(limit) { const lb = this._lb(); return lb ? lb.getTop(limit) : []; }
-    async getPlayerRank() { const lb = this._lb(); return lb ? lb.getPlayerRank() : { rank: null, totalEntries: 0 }; }
-    showLeaderboard(limit) {
+    async submitScore(score) { const lb = this._lb(); return lb.submitScore(score, this.playerName); }
+    async getTop(limit) { const lb = this._lb(); return lb.getTop(limit); }
+    async getPlayerRank() { const lb = this._lb(); return lb.getPlayerRank(); }
+    async showLeaderboard(limit) {
         const lb = this._lb();
-        if (lb) lb.showLeaderboard(limit);
         this._emit("leaderboard:show", limit || 10);
+        return lb.showLeaderboard(limit || 10);
     }
 
     // ---------- player ----------
@@ -87,17 +95,16 @@ export default class PlatformBridgeBase {
 
     // ---------- storage (default: Firebase cloud via LeaderboardBridge) ----------
     async load() {
-        const lb = this._lb();
-        if (lb) return lb.cloudLoad().catch(() => ({}));
-        // Fallback if LeaderboardBridge hasn't loaded yet.
-        try { const s = localStorage.getItem("save"); if (s) return JSON.parse(s); } catch (e) { /* ignore */ }
-        return {};
+        return this._lb().cloudLoad().catch(() => {
+            try { const s = localStorage.getItem("save"); if (s) return JSON.parse(s); } catch (e) { /* ignore */ }
+            return {};
+        });
     }
 
     async save(data) {
-        const lb = this._lb();
-        if (lb) return lb.cloudSave(data).catch(() => {});
-        try { localStorage.setItem("save", JSON.stringify(data)); } catch (e) { /* ignore */ }
+        return this._lb().cloudSave(data).catch(() => {
+            try { localStorage.setItem("save", JSON.stringify(data)); } catch (e) { /* ignore */ }
+        });
     }
 
     async getData(key) {
