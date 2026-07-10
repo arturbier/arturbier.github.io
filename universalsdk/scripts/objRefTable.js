@@ -39,17 +39,20 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.списоксобытий1_Event47_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event48_Act1,
 		C3.JavaScriptInEvents.списоксобытий1_Event49_Act1,
-		C3.JavaScriptInEvents.списоксобытий1_Event50_Act1
+		C3.JavaScriptInEvents.списоксобытий1_Event50_Act1,
+		C3.JavaScriptInEvents.списоксобытий1_Event51_Act1
 	];
 };
 self.C3_JsPropNameTable = [
 	{Button: 0},
 	{debug: 0},
+	{TitleText: 0},
 	{coins: 0},
 	{playerName: 0}
 ];
 
 self.InstanceType = {
 	Button: class extends self.IButtonInstance {},
-	debug: class extends self.ITextInstance {}
+	debug: class extends self.ITextInstance {},
+	TitleText: class extends self.ITextInstance {}
 }

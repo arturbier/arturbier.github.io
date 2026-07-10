@@ -30,11 +30,13 @@ export default class YandexPlatformBridge extends PlatformBridgeBase {
         this._isInitialized = true;
         console.log("[Yandex] SDK Initialized");
         try { this._platformSdk.features?.LoadingAPI?.ready?.(); } catch (e) { /* optional */ }
+        this._language = PlatformBridgeBase.normalizeLang(this._platformSdk.environment?.i18n?.lang || navigator.language);
 
         try {
             this._player = await this._platformSdk.getPlayer({ scopes: false });
             this._playerName = this._player.getName();
             this._playerId = this._player.getUniqueID();
+            this._playerPhoto = this._player.getPhoto ? this._player.getPhoto("medium") : "";
             this._isPlayerAuthorized = this._player.getMode() !== "lite";
         } catch (e) { /* player optional */ }
     }
@@ -85,6 +87,7 @@ export default class YandexPlatformBridge extends PlatformBridgeBase {
         this._player = await this._platformSdk.getPlayer();
         this._playerName = this._player.getName();
         this._playerId = this._player.getUniqueID();
+        this._playerPhoto = this._player.getPhoto ? this._player.getPhoto("medium") : "";
         this._isPlayerAuthorized = this._player.getMode() !== "lite";
     }
 

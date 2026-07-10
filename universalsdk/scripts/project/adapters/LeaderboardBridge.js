@@ -13,6 +13,12 @@ export default class LeaderboardBridge {
     // Platform player ids can be numbers (VK/OK) — always store as string.
     static _str(v) { return (v === undefined || v === null || v === "") ? "unknown" : String(v); }
 
+    // Slugify the game id for use as a Firestore path segment (path-safe).
+    static _slug(v) {
+        return String(v || "").trim().toLowerCase().replace(/[^a-z0-9_-]+/g, "_").replace(/^_+|_+$/g, "") || "unknown";
+    }
+    _gid() { return LeaderboardBridge._slug(this._opts.gameId); }
+
     setPlayerId(id) { this._playerId = LeaderboardBridge._str(id); }
     setPlatformId(id) { this._platformId = LeaderboardBridge._str(id); }
 
@@ -37,14 +43,15 @@ export default class LeaderboardBridge {
     }
 
     // ---------- leaderboard ----------
-    _lbDoc(score, playerName) {
+    _lbDoc(score, playerName, playerPhoto) {
         return {
             fields: {
-                gameId: { stringValue: this._opts.gameId || "unknown" },
+                gameId: { stringValue: this._gid() },
                 gameName: { stringValue: this._opts.gameName || this._opts.gameId || "unknown" },
                 environment: { stringValue: this._opts.environment || "prod" },
                 playerId: { stringValue: this._playerId },
                 playerName: { stringValue: playerName || "Unknown" },
+                playerPhoto: { stringValue: playerPhoto || "" },
                 score: { integerValue: String(score) },
                 platform: { stringValue: this._platformId },
                 timestamp: { timestampValue: new Date().toISOString() }
@@ -52,17 +59,17 @@ export default class LeaderboardBridge {
         };
     }
 
-    async submitScore(score, playerName) {
+    async submitScore(score, playerName, playerPhoto) {
         const id = String(this._playerId || "unknown").replace(/[\/#?\[\]@!$&'()*+,;=]/g, "_");
-        const gameId = this._opts.gameId || "unknown";
+        const gameId = this._gid();
         const env = this._opts.environment || "prod";
         const coll = this._opts.collection || "leaderboards";
         const path = `${coll}/${gameId}/${env}/${id}`;
-        return this._firestore("PATCH", path + "?updateMask.fieldPaths=gameId&updateMask.fieldPaths=gameName&updateMask.fieldPaths=environment&updateMask.fieldPaths=playerId&updateMask.fieldPaths=playerName&updateMask.fieldPaths=score&updateMask.fieldPaths=platform&updateMask.fieldPaths=timestamp", this._lbDoc(score, playerName));
+        return this._firestore("PATCH", path + "?updateMask.fieldPaths=gameId&updateMask.fieldPaths=gameName&updateMask.fieldPaths=environment&updateMask.fieldPaths=playerId&updateMask.fieldPaths=playerName&updateMask.fieldPaths=playerPhoto&updateMask.fieldPaths=score&updateMask.fieldPaths=platform&updateMask.fieldPaths=timestamp", this._lbDoc(score, playerName, playerPhoto));
     }
 
     async getTop(limit = 10) {
-        const gameId = this._opts.gameId || "unknown";
+        const gameId = this._gid();
         const env = this._opts.environment || "prod";
         const coll = this._opts.collection || "leaderboards";
         const body = {
@@ -79,6 +86,7 @@ export default class LeaderboardBridge {
             const f = (doc && doc.fields) ? doc.fields : {};
             return {
                 playerName: f.playerName ? f.playerName.stringValue : "?",
+                playerPhoto: f.playerPhoto ? f.playerPhoto.stringValue : "",
                 score: f.score ? parseInt(String(f.score.integerValue || f.score.doubleValue || "0"), 10) : 0,
                 platform: f.platform ? f.platform.stringValue : "?",
                 playerId: f.playerId ? f.playerId.stringValue : ""
@@ -87,7 +95,7 @@ export default class LeaderboardBridge {
     }
 
     async getPlayerRank() {
-        const gameId = this._opts.gameId || "unknown";
+        const gameId = this._gid();
         const env = this._opts.environment || "prod";
         const coll = this._opts.collection || "leaderboards";
         const body = {
@@ -132,6 +140,9 @@ export default class LeaderboardBridge {
 .usdk-lb-row{border-bottom:1px solid rgba(255,255,255,.04)}
 .usdk-lb-me{background:rgba(124,108,255,.12);border-radius:9px}
 .usdk-lb-pos{width:28px;text-align:center;font-weight:750;color:#ffd45e;flex-shrink:0}
+.usdk-lb-ava{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,#7c6cff,#00d1b2);overflow:hidden;font-size:16px}
+.usdk-lb-ava img{width:100%;height:100%;object-fit:cover}
 .usdk-lb-name{flex:1;text-align:left;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .usdk-lb-score{width:60px;text-align:right;font-weight:750;flex-shrink:0}
 .usdk-lb-plat{width:32px;text-align:center;flex-shrink:0}
@@ -148,6 +159,7 @@ export default class LeaderboardBridge {
         const rows = entries.length
             ? entries.map((e, i) => `<div class="usdk-lb-row${e.playerId === me ? " usdk-lb-me" : ""}">
                 <span class="usdk-lb-pos">${i + 1}</span>
+                <span class="usdk-lb-ava">${e.playerPhoto ? `<img src="${this._esc(e.playerPhoto)}" alt="">` : "👤"}</span>
                 <span class="usdk-lb-name">${this._esc(String(e.playerName || "?").slice(0, 20))}</span>
                 <span class="usdk-lb-score">${e.score}</span>
                 <span class="usdk-lb-plat" title="${this._esc(e.platform || "")}">${icons[e.platform] || "🎮"}</span>
@@ -160,7 +172,7 @@ export default class LeaderboardBridge {
             ov.innerHTML = `<div class="usdk-lb-card">
                 <div class="usdk-lb-badge">Leaderboard</div>
                 <div class="usdk-lb-title">🏆 Top ${limit} scores</div>
-                <div class="usdk-lb-header"><span>#</span><span>Name</span><span>Score</span><span>Plat</span></div>
+                <div class="usdk-lb-header"><span>#</span><span></span><span>Name</span><span>Score</span><span>Plat</span></div>
                 ${rows}
                 <button class="usdk-lb-btn" data-c>Close</button>
             </div>`;
@@ -174,7 +186,7 @@ export default class LeaderboardBridge {
     // ---------- cloud storage (Firebase) ----------
     _storagePath() {
         const id = String(this._playerId || "unknown").replace(/[\/#?\[\]@!$&'()*+,;=]/g, "_");
-        const gameId = this._opts.gameId || "unknown";
+        const gameId = this._gid();
         const env = this._opts.environment || "prod";
         const coll = this._opts.storageCollection || "saves";
         return `${coll}/${gameId}/${env}/${id}`;

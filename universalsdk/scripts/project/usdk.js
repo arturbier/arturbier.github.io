@@ -118,8 +118,13 @@ window.usdk = {
         if (this.config.firebase) {
             options._firebaseConfig = {
                 ...this.config.firebase,
+                // Auto-split environment: local dev → "dev", real platforms → "prod".
+                environment: this.platform === "local" ? "dev" : "prod",
                 leaderboardCollection: (this.config.leaderboard && this.config.leaderboard.collection) || "leaderboards",
-                gameName: (this.config.leaderboard && this.config.leaderboard.gameName) || this.config.firebase.gameId,
+                // gameName: explicit config → the game's page title → gameId fallback.
+                gameName: (this.config.leaderboard && this.config.leaderboard.gameName)
+                    || (typeof document !== "undefined" && document.title && document.title.trim())
+                    || this.config.firebase.gameId,
                 storageCollection: (this.config.storage && this.config.storage.collection) || "saves"
             };
         }
@@ -192,7 +197,18 @@ window.usdk = {
     async authorizePlayer() { await this._ensureReady(); return this.adapter.authorizePlayer(); },
     async isPlayerAuthorized() { await this._ensureReady(); return this.adapter.isPlayerAuthorized; },
     async getPlayerId() { await this._ensureReady(); return this.adapter.playerId; },
-    async getPlayerName() { await this._ensureReady(); return this.adapter.playerName; },
+    async getPlayerName() { await this._ensureReady(); return this.adapter.getPlayerName(); },
+
+    // ---------- language ----------
+    // Priority: ?lang= > config.forcedLanguage > native platform lang > navigator.language.
+    // Always returns a lowercase 2-letter ISO-639-1 code (e.g. "en", "ru").
+    _normLang(v) { return String(v || "en").trim().toLowerCase().split(/[-_]/)[0].slice(0, 2) || "en"; },
+    async getLanguage() {
+        await this._ensureReady();
+        const q = new URLSearchParams(location.search).get("lang");
+        const forced = q || this.config.forcedLanguage;
+        return forced ? this._normLang(forced) : this.adapter.getLanguage();
+    },
 
     // ---------- social ----------
     async share(options) { await this._ensureReady(); return this.adapter.share(options); },

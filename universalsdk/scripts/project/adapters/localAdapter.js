@@ -108,8 +108,25 @@ export default class LocalPlatformBridge extends PlatformBridgeBase {
         console.log("[SDK] Local USDK_Mock initialized", this._mock.silent ? "(silent)" : "");
     }
 
-    // Storage is inherited from PlatformBridgeBase → LeaderboardBridge (Firebase).
-    // No localStorage override — all platforms use the same Firebase saves collection.
+    // ---------------- storage (Firebase via base) + visual mock feedback ----------------
+    async save(data) {
+        const r = await super.save(data);
+        this._toast("💾 Saved (USDK_Mock)");
+        return r;
+    }
+
+    async load() {
+        const data = await super.load();
+        this._toast("📂 Loaded (USDK_Mock)");
+        return data;
+    }
+
+    // ---------------- leaderboard (Firebase via base) + visual mock feedback ----------------
+    async submitScore(score) {
+        const r = await super.submitScore(score);
+        this._toast("🏆 Score " + (Number(score) || 0) + " submitted (USDK_Mock)");
+        return r;
+    }
 
     // ---------------- ads ----------------
     async showInterstitial() {
@@ -210,8 +227,8 @@ export default class LocalPlatformBridge extends PlatformBridgeBase {
         this._toast("🎉 Happy moment recorded!");
     }
 
-    gameplayStart() { console.log("[USDK_Mock] gameplayStart"); }
-    gameplayStop() { console.log("[USDK_Mock] gameplayStop"); }
+    gameplayStart() { console.log("[USDK_Mock] gameplayStart"); this._toast("▶️ Gameplay start (USDK_Mock)"); }
+    gameplayStop() { console.log("[USDK_Mock] gameplayStop"); this._toast("⏸️ Gameplay stop (USDK_Mock)"); }
 
     async checkAdBlock() {
         const blocked = (typeof window !== "undefined" && typeof window.__mockAdBlock !== "undefined")
@@ -241,6 +258,20 @@ export default class LocalPlatformBridge extends PlatformBridgeBase {
 
     // ---------------- leaderboard ----------------
     // Uses the shared visual overlay from PlatformBridgeBase → LeaderboardBridge.
+
+    // ---------------- language (base value) + visual mock feedback ----------------
+    getLanguage() {
+        const l = this.language;
+        this._toast("🌐 Language: " + l + " (USDK_Mock)");
+        return l;
+    }
+
+    // ---------------- player name (base value) + visual mock feedback ----------------
+    getPlayerName() {
+        const n = this.playerName;
+        this._toast("👤 Player: " + n + " (USDK_Mock)");
+        return n;
+    }
 
     // ---------------- UI helpers ----------------
     _esc(str) {

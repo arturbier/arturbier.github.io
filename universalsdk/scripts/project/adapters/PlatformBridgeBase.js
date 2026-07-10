@@ -16,6 +16,8 @@ export default class PlatformBridgeBase {
 
         this._playerId = null;
         this._playerName = null;
+        this._playerPhoto = null;
+        this._language = null;
         this._isPlayerAuthorized = false;
 
         this._listeners = {};
@@ -57,7 +59,7 @@ export default class PlatformBridgeBase {
         return this.__lb;
     }
 
-    async submitScore(score) { const lb = this._lb(); return lb.submitScore(score, this.playerName); }
+    async submitScore(score) { const lb = this._lb(); return lb.submitScore(score, this.playerName, this.playerPhoto); }
     async getTop(limit) { const lb = this._lb(); return lb.getTop(limit); }
     async getPlayerRank() { const lb = this._lb(); return lb.getPlayerRank(); }
     async showLeaderboard(limit) {
@@ -70,6 +72,22 @@ export default class PlatformBridgeBase {
     get isPlayerAuthorized() { return this._isPlayerAuthorized; }
     get playerId() { return this._playerId; }
     get playerName() { return this._playerName; }
+    get playerPhoto() { return this._playerPhoto; }
+
+    // ---------- language ----------
+    // Native language when the platform provides it, else navigator.language.
+    // Always normalized to a lowercase 2-letter ISO-639-1 code (e.g. "en", "ru").
+    get language() {
+        return this._language || PlatformBridgeBase.normalizeLang(typeof navigator !== "undefined" ? navigator.language : "en");
+    }
+
+    static normalizeLang(v) {
+        return String(v || "en").trim().toLowerCase().split(/[-_]/)[0].slice(0, 2) || "en";
+    }
+
+    getLanguage() { return this.language; }
+
+    getPlayerName() { return this.playerName; }
 
     // ---------- lifecycle ----------
     async initialize() {

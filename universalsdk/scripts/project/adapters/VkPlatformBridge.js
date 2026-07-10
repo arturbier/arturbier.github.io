@@ -24,6 +24,7 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
 
         this._appId = new URLSearchParams(location.search).get("vk_app_id") || "";
         this._platform = new URLSearchParams(location.search).get("vk_platform") || "";
+        this._language = PlatformBridgeBase.normalizeLang(new URLSearchParams(location.search).get("vk_language") || navigator.language);
 
         await this._loadScript(SDK_URL).catch(() => {});
         this._platformSdk = await this._waitFor("vkBridge").catch(() => null);
@@ -38,6 +39,7 @@ export default class VkPlatformBridge extends PlatformBridgeBase {
             if (data) {
                 this._playerId = data.id;
                 this._playerName = `${data.first_name} ${data.last_name}`.trim();
+                this._playerPhoto = data.photo_100 || data.photo_200 || data.photo_max_orig || data.photo_max || "";
                 this._isPlayerAuthorized = true;
             }
         } catch (e) {

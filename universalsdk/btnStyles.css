@@ -1,0 +1,24 @@
+<style>
+    html, body { margin: 0; background: #0d0f18; }
+    canvas { display: block; }
+
+    /* usdk debug console — styled native buttons */
+    button, .usdk-btn {
+        font: 600 12px/1.15 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif !important;
+        color: #e8ebff !important;
+        background: linear-gradient(135deg, #2a2d4a, #1a1c2c) !important;
+        border: 1px solid rgba(255, 255, 255, .10) !important;
+        border-radius: 11px !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, .35), inset 0 1px 0 rgba(255, 255, 255, .05) !important;
+        letter-spacing: .2px;
+        cursor: pointer;
+        transition: transform .08s ease, filter .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    button:hover, .usdk-btn:hover {
+        filter: brightness(1.18) !important;
+        border-color: rgba(124, 108, 255, .65) !important;
+        box-shadow: 0 6px 20px rgba(124, 108, 255, .30), inset 0 1px 0 rgba(255, 255, 255, .08) !important;
+    }
+    button:active, .usdk-btn:active { transform: scale(.96) !important; }
+    button:disabled, .usdk-btn:disabled { opacity: .5 !important; cursor: not-allowed !important; }
+</style>

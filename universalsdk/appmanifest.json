@@ -1,6 +1,6 @@
 {
-	"name": "universalSDK",
-	"short_name": "universalSDK",
+	"name": "usdktest",
+	"short_name": "usdktest",
 	"description": "",
 	"start_url": "index.html",
 	"display": "fullscreen",

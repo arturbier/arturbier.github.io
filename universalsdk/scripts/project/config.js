@@ -7,18 +7,23 @@
 const UsdkConfig = {
     forcedPlatform: "",
 
+    // Force a UI language ("" = auto-detect). Overridable at runtime with ?lang=<code>.
+    forcedLanguage: "",
+
     // Shared Firebase backend (used by storage and leaderboard).
+    // gameId & environment are auto-assigned: gameId ← project name (slugified),
+    // environment ← platform (local → "dev", others → "prod").
     firebase: {
         projectId: "universalsdk-be2ef",
         apiKey: "AIzaSyDu_nPxw1tbhI_WchMwLMJ7ODhgshaM_5Y",
-        gameId: "universalsdk",
-        environment: "dev"
+        gameId: ""
     },
 
     // Leaderboard (reads/writes to Firestore collection).
+    // gameName: "" = auto (uses document.title — the game's page title set by C3).
     leaderboard: {
         collection: "leaderboards",
-        gameName: "UniversalSDK Test",
+        gameName: "",
         defaultLimit: 10
     },
 

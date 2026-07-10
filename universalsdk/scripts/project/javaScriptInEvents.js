@@ -44,6 +44,8 @@ const scriptsInEvents = {
 
 	async списоксобытий1_Event28_Act1(runtime, localVars)
 	{
+		usdk.config.leaderboard.gameName = usdk.config.leaderboard.gameName || runtime.projectName;
+		usdk.config.firebase.gameId = usdk.config.firebase.gameId || runtime.projectName;
 		usdk.init().then(() => {
 		    runtime.callFunction("On_SDK_Ready");
 		    // Wire ad lifecycle to callbacks (one-time setup)
@@ -123,7 +125,7 @@ const scriptsInEvents = {
 
 	async списоксобытий1_Event42_Act1(runtime, localVars)
 	{
-		usdk._ensureReady().then(() => { runtime.globalVars.playerName = usdk.adapter.playerName || "?"; runtime.callFunction("On_Auth_Success"); });
+		usdk.getPlayerName().then(n => { runtime.globalVars.playerName = n || "?"; runtime.callFunction("On_Auth_Success"); });
 	},
 
 	async списоксобытий1_Event43_Act1(runtime, localVars)
@@ -166,6 +168,11 @@ const scriptsInEvents = {
 	async списоксобытий1_Event50_Act1(runtime, localVars)
 	{
 		usdk.leaderboard.submitScore(runtime.globalVars.coins).then(()=>runtime.callFunction("On_Score_Submitted"));
+	},
+
+	async списоксобытий1_Event51_Act1(runtime, localVars)
+	{
+		usdk.getLanguage().then(l => console.log("[GAME] language:", l));
 	}
 };
 
