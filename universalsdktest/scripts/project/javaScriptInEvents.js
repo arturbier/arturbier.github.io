@@ -44,9 +44,7 @@ const scriptsInEvents = {
 
 	async списоксобытий1_Event28_Act1(runtime, localVars)
 	{
-		usdk.config.leaderboard.gameName = usdk.config.leaderboard.gameName || runtime.projectName;
-		usdk.config.firebase.gameId = usdk.config.firebase.gameId || runtime.projectName;
-		usdk.init().then(() => {
+		usdk.init({ appID: "dH4zLIodrWPLSHYwlXbZ", apiKey: "b26fb244b156ef4b4e29a95af3bfc9db" }).then(() => {
 		    runtime.callFunction("On_SDK_Ready");
 		    // Wire ad lifecycle to callbacks (one-time setup)
 		    if (!usdk._callbacksWired) {
