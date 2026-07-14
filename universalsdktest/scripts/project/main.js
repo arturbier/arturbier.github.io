@@ -13,23 +13,3 @@ globalThis.Init = async (appID, apiKey) => {
 	return usdk.boot(appID, apiKey, rt);
 };
 
-// ── Dictionary helpers (event sheet calls: saveDict("Name") / loadDict("Name")) ──
-// Save C3 Dictionary as JSON under usdk key "_dict_<name>"
-globalThis.saveDict = async (dictName) => {
-	var d = rt.objects[dictName] && rt.objects[dictName].getFirstInstance();
-	if (!d) return;
-	var obj = {};
-	d.getDataMap().forEach(function(v, k) { obj[k] = v; });
-	await usdk.save(dictName, JSON.stringify(obj));
-};
-
-// Load C3 Dictionary from usdk back into the object
-globalThis.loadDict = async (dictName) => {
-	var d = rt.objects[dictName] && rt.objects[dictName].getFirstInstance();
-	if (!d) return;
-	var json = await usdk.load(dictName) || "{}";
-	var obj = {};
-	try { obj = JSON.parse(json); } catch(e) {}
-	var map = d.getDataMap();
-	Object.keys(obj).forEach(function(k) { map.set(k, obj[k]); });
-};
