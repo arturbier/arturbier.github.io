@@ -64,8 +64,7 @@ const scriptsInEvents = {
 
 	async E_game_Event36_Act1(runtime, localVars)
 	{
-		usdk.authorizePlayer()
-		    .then(() => { runtime.globalVars.playerName = usdk.adapter.playerName || ""});
+		usdk.authorizePlayer();
 	},
 
 	async E_game_Event37_Act1(runtime, localVars)
@@ -100,7 +99,7 @@ const scriptsInEvents = {
 
 	async E_game_Event44_Act1(runtime, localVars)
 	{
-		usdk.getPlayerName().then(n => { runtime.globalVars.playerCurName = n || "?";});
+		usdk.getPlayerName();
 	},
 
 	async E_game_Event45_Act1(runtime, localVars)
@@ -135,7 +134,7 @@ const scriptsInEvents = {
 
 	async E_game_Event51_Act1(runtime, localVars)
 	{
-		usdk.leaderboard.show(10,true);
+		usdk.leaderboard.show("ТАБЛИЦА ЛИДЕРОВ", "ОЧКИ", 10, false);
 	},
 
 	async E_game_Event52_Act1(runtime, localVars)
