@@ -4952,7 +4952,6 @@ self.C3_ExpressionFuncs = [
 			const f0 = p._GetNode(0).GetBoundMethod();
 			return () => f0(0);
 		},
-		() => "medium",
 		() => -10,
 		() => 0,
 		() => "GUI",
@@ -5139,7 +5138,6 @@ self.C3_ExpressionFuncs = [
 			return () => ((((f0((Math.floor((v1.GetValue() / 3600)) % 60), 2) + ":") + f2((Math.floor((v3.GetValue() / 60)) % 60), 2)) + ":") + f4(Math.floor((v5.GetValue() % 60)), 2));
 		},
 		() => "+5",
-		() => "success",
 		() => 5,
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
