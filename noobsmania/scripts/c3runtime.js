@@ -4981,6 +4981,10 @@ self.C3_ExpressionFuncs = [
 		},
 		() => "klicks",
 		() => "kk",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0(10, 15);
+		},
 		() => 0.3,
 		p => {
 			const n0 = p._GetNode(0);

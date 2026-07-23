@@ -259,6 +259,11 @@ const scriptsInEvents = {
 	async Storage_Event2_Act1(runtime, localVars)
 	{
 		loadDict("ads");
+	},
+
+	async E_game_Event8_Act1(runtime, localVars)
+	{
+		usdk.leaderboard.submitScore(runtime.globalVars.clicks);
 	}
 };
 
