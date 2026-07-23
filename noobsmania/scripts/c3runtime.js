@@ -5028,14 +5028,13 @@ self.C3_ExpressionFuncs = [
 		() => "монеты",
 		() => "moneys",
 		() => "монет",
+		() => "purchased_characters",
+		() => "First_Game",
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject("purchased_characters");
 		},
-		() => "First_Game",
-		() => "home",
 		() => "открыт",
-		() => "purchased_characters",
 		() => "char_sel",
 		p => {
 			const f0 = p._GetNode(0).GetBoundMethod();
@@ -5046,10 +5045,7 @@ self.C3_ExpressionFuncs = [
 			return () => (f0("GUI") / 7);
 		},
 		() => 100,
-		p => {
-			const n0 = p._GetNode(0);
-			return () => ("not enough " + n0.ExpInstVar());
-		},
+		() => "Не хватает",
 		() => 2760901,
 		() => 0.5,
 		() => "выбран",
