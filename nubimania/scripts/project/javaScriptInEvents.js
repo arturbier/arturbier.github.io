@@ -258,7 +258,7 @@ const scriptsInEvents = {
 
 	async E_init_Event1_Act1(runtime, localVars)
 	{
-		usdkInit("nx6woHMInN3n8GcxdMVb", "b242fc5a00c33a37d1982872b0c82271");
+
 	},
 
 	async E_init_Event4_Act1(runtime, localVars)
