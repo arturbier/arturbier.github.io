@@ -57,34 +57,9 @@ const scriptsInEvents = {
 		usdk.showInterstitial();
 	},
 
-	async Chat_Event1_Act2(runtime, localVars)
-	{
-		usdk.fetchChat(10,false);
-	},
-
-	async Chat_Event4_Act1(runtime, localVars)
-	{
-		usdk.fetchChat(10,false);
-	},
-
-	async Chat_Event6_Act1(runtime, localVars)
-	{
-		usdk.openChat("НИБИКОЧАТ",10,false);
-	},
-
 	async Bonus_Event7_Act2(runtime, localVars)
 	{
 		usdk.addToFavorites();
-	},
-
-	async Storage_Event1_Act1(runtime, localVars)
-	{
-		saveDict("ads"); //словарь
-	},
-
-	async Storage_Event2_Act1(runtime, localVars)
-	{
-		loadDict("ads");
 	},
 
 	async Achievements_Event7_Act1(runtime, localVars)
@@ -256,6 +231,21 @@ const scriptsInEvents = {
 		});
 	},
 
+	async Chat_Event1_Act2(runtime, localVars)
+	{
+		usdk.fetchChat(10,false);
+	},
+
+	async Chat_Event4_Act1(runtime, localVars)
+	{
+		usdk.fetchChat(10,false);
+	},
+
+	async Chat_Event6_Act1(runtime, localVars)
+	{
+		usdk.openChat("НИБИКОЧАТ",10,false);
+	},
+
 	async E_init_Event1_Act1(runtime, localVars)
 	{
 		usdkInit("nx6woHMInN3n8GcxdMVb", "b242fc5a00c33a37d1982872b0c82271");
@@ -263,7 +253,17 @@ const scriptsInEvents = {
 
 	async E_init_Event4_Act1(runtime, localVars)
 	{
+		usdk.gameplayStart(); // ← теперь SDK готов
+	},
 
+	async Storage_Event1_Act1(runtime, localVars)
+	{
+		saveDict("ads"); //словарь
+	},
+
+	async Storage_Event2_Act1(runtime, localVars)
+	{
+		loadDict("ads");
 	}
 };
 
