@@ -77,9 +77,49 @@ const scriptsInEvents = {
 		usdk.saveVar("coins"); //числа
 	},
 
+	async E_game_Event39_Act3(runtime, localVars)
+	{
+		usdk.saveVar("sound"); //булевые
+	},
+
+	async E_game_Event39_Act4(runtime, localVars)
+	{
+		usdk.saveVar("level"); //числа
+	},
+
+	async E_game_Event39_Act5(runtime, localVars)
+	{
+		usdk.saveVar("name"); //строки
+	},
+
 	async E_game_Event39_Act8(runtime, localVars)
 	{
 		saveDict("ads"); //словарь
+	},
+
+	async E_game_Event41_Act2(runtime, localVars)
+	{
+		usdk.loadVar("coins");
+	},
+
+	async E_game_Event41_Act3(runtime, localVars)
+	{
+		usdk.load("coins").then(v => { runtime.globalVars.coins = v })
+	},
+
+	async E_game_Event41_Act4(runtime, localVars)
+	{
+		usdk.loadVar("sound");
+	},
+
+	async E_game_Event41_Act5(runtime, localVars)
+	{
+		usdk.loadVar("level");
+	},
+
+	async E_game_Event41_Act6(runtime, localVars)
+	{
+		usdk.loadVar("name");
 	},
 
 	async E_game_Event41_Act8(runtime, localVars)
@@ -157,6 +197,16 @@ const scriptsInEvents = {
 		usdk.fetchChat(10,false);
 	},
 
+	async E_game_Event56_Act1(runtime, localVars)
+	{
+		usdk.achievements.show();
+	},
+
+	async E_game_Event57_Act1(runtime, localVars)
+	{
+		usdk.achievements.setProgress("666", 110);
+	},
+
 	async E_init_Event1_Act2(runtime, localVars)
 	{
 		usdkInit("KFJKvDmvlQXp36FHl6ti", "b6226dcdb769d870fc613a46982dca2a");
@@ -165,46 +215,6 @@ const scriptsInEvents = {
 	async E_init_Event3_Act1(runtime, localVars)
 	{
 		usdk.gameplayStart(); // ← теперь SDK готов
-	},
-
-	async E_game_Event39_Act3(runtime, localVars)
-	{
-		usdk.saveVar("sound"); //булевые
-	},
-
-	async E_game_Event39_Act4(runtime, localVars)
-	{
-		usdk.saveVar("level"); //числа
-	},
-
-	async E_game_Event39_Act5(runtime, localVars)
-	{
-		usdk.saveVar("name"); //строки
-	},
-
-	async E_game_Event41_Act2(runtime, localVars)
-	{
-		usdk.loadVar("coins");
-	},
-
-	async E_game_Event41_Act4(runtime, localVars)
-	{
-		usdk.loadVar("sound");
-	},
-
-	async E_game_Event41_Act5(runtime, localVars)
-	{
-		usdk.loadVar("level");
-	},
-
-	async E_game_Event41_Act6(runtime, localVars)
-	{
-		usdk.loadVar("name");
-	},
-
-	async E_game_Event41_Act3(runtime, localVars)
-	{
-		usdk.load("coins").then(v => { runtime.globalVars.coins = v })
 	}
 };
 

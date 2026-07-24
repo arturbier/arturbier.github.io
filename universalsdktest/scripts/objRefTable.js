@@ -57,6 +57,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.E_game_Event54_Act1,
 		C3.Plugins.TextBox.Acts.SetText,
 		C3.JavaScriptInEvents.E_game_Event55_Act2,
+		C3.JavaScriptInEvents.E_game_Event56_Act1,
+		C3.JavaScriptInEvents.E_game_Event57_Act1,
 		C3.Plugins.Touch.Cnds.OnTouchObject,
 		C3.Behaviors.Tween.Cnds.IsAnyPlaying,
 		C3.Behaviors.Tween.Acts.TweenOneProperty,
