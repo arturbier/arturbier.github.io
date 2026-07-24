@@ -163,9 +163,8 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.Chat_Event6_Act1,
 		C3.Plugins.TextBox.Acts.AppendText,
 		C3.Plugins.TextBox.Acts.ScrollToBottom,
-		C3.JavaScriptInEvents.E_init_Event1_Act1,
 		C3.Plugins.System.Cnds.OnLoadFinished,
-		C3.JavaScriptInEvents.E_init_Event4_Act1,
+		C3.JavaScriptInEvents.E_init_Event1_Act1,
 		C3.JavaScriptInEvents.Storage_Event1_Act1,
 		C3.JavaScriptInEvents.Storage_Event2_Act1
 	];

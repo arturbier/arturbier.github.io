@@ -246,16 +246,6 @@ const scriptsInEvents = {
 		usdk.openChat("НИБИКОЧАТ",10,false);
 	},
 
-	async E_init_Event1_Act1(runtime, localVars)
-	{
-		usdkInit("nx6woHMInN3n8GcxdMVb", "b242fc5a00c33a37d1982872b0c82271");
-	},
-
-	async E_init_Event4_Act1(runtime, localVars)
-	{
-		usdk.gameplayStart(); // ← теперь SDK готов
-	},
-
 	async Storage_Event1_Act1(runtime, localVars)
 	{
 		saveDict("ads"); //словарь
@@ -264,6 +254,11 @@ const scriptsInEvents = {
 	async Storage_Event2_Act1(runtime, localVars)
 	{
 		loadDict("ads");
+	},
+
+	async E_init_Event1_Act1(runtime, localVars)
+	{
+		usdkInit("nx6woHMInN3n8GcxdMVb", "b242fc5a00c33a37d1982872b0c82271");
 	}
 };
 
