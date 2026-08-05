@@ -1417,6 +1417,11 @@ self.C3_ExpressionFuncs = [
 			const v2 = p._GetNode(2).GetVar();
 			return () => (((((v0.GetValue() + ": ") + v1.GetValue()) + "         ") + v2.GetValue()) + "\n");
 		},
+		() => 0,
+		() => "УРА НУЛЕВОЙ СТРАЙК",
+		() => 1,
+		() => "УРА ПЕРВЫЙ СТРАЙК",
+		() => "2",
 		() => "showInterstitial",
 		() => "showRewarded",
 		() => "showBanner",
@@ -1446,9 +1451,11 @@ self.C3_ExpressionFuncs = [
 		() => "",
 		() => "showAchievments",
 		() => "unlockAchievments",
-		() => 0,
-		() => 0.25,
-		() => 1
+		() => "showModal",
+		() => "showQuests",
+		() => "unlockQuests",
+		() => "showDaily",
+		() => 0.25
 ];
 
 
