@@ -2,31 +2,6 @@
 
 const scriptsInEvents = {
 
-	async E_game_Event8_Act1(runtime, localVars)
-	{
-		usdk.leaderboard.submitScore(runtime.globalVars.clicks);
-	},
-
-	async E_game_Event14_Act1(runtime, localVars)
-	{
-		usdk.showRewarded("booster");
-	},
-
-	async E_game_Event18_Act1(runtime, localVars)
-	{
-		usdk.showInterstitial();
-	},
-
-	async E_game_Event24_Act1(runtime, localVars)
-	{
-		usdk.inviteFriends({ text: "давай зарабатывать вместе на героев игры"&" НУБИК - МАНИЯ" });
-	},
-
-	async E_sharacter_selection_Event1_Act1(runtime, localVars)
-	{
-		usdk.showInterstitial();
-	},
-
 	async E_menu_Event1_Act9(runtime, localVars)
 	{
 		usdk.showBanner("bottom");
@@ -45,6 +20,31 @@ const scriptsInEvents = {
 	async E_menu_Event8_Act1(runtime, localVars)
 	{
 		usdk.leaderboard.show("НУБОЛИДЕРЫ", "КЛИКИ", 10, true);
+	},
+
+	async E_sharacter_selection_Event1_Act1(runtime, localVars)
+	{
+		usdk.showInterstitial();
+	},
+
+	async E_game_Event8_Act1(runtime, localVars)
+	{
+		usdk.leaderboard.submitScore(runtime.globalVars.clicks);
+	},
+
+	async E_game_Event14_Act1(runtime, localVars)
+	{
+		usdk.showRewarded("booster");
+	},
+
+	async E_game_Event18_Act1(runtime, localVars)
+	{
+		usdk.showInterstitial();
+	},
+
+	async E_game_Event24_Act1(runtime, localVars)
+	{
+		usdk.inviteFriends({ text: "давай зарабатывать вместе на героев игры"&" НУБИК - МАНИЯ" });
 	},
 
 	async E_info_Event2_Act1(runtime, localVars)
@@ -246,6 +246,16 @@ const scriptsInEvents = {
 		usdk.openChat("НИБИКОЧАТ",10,false);
 	},
 
+	async E_init_Event1_Act1(runtime, localVars)
+	{
+		usdkInit("nx6woHMInN3n8GcxdMVb", "b242fc5a00c33a37d1982872b0c82271");
+	},
+
+	async E_init_Event2_Act1(runtime, localVars)
+	{
+		usdk.gameplayStart(); // ← теперь SDK готов
+	},
+
 	async Storage_Event1_Act1(runtime, localVars)
 	{
 		saveDict("ads"); //словарь
@@ -254,11 +264,6 @@ const scriptsInEvents = {
 	async Storage_Event2_Act1(runtime, localVars)
 	{
 		loadDict("ads");
-	},
-
-	async E_init_Event1_Act1(runtime, localVars)
-	{
-		usdkInit("nx6woHMInN3n8GcxdMVb", "b242fc5a00c33a37d1982872b0c82271");
 	}
 };
 
