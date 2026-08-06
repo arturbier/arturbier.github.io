@@ -1,0 +1,63 @@
+/* CSS Variables */
+:root {
+  --input-width: 100%;
+  --input-max-width: 360px;
+  --input-font-size: 13px;
+  --chat-font-size: 11px;
+  --input-pad-x: 10px;
+  --input-pad-y: 6px;
+  --input-radius: 12px;
+  --input-bg: rgba(255,255,255,0.30);
+  --input-color: #2d2d2d;
+  --input-placeholder: #343434;
+  --input-border: 1px solid #ffffff;
+  --input-focus-color: #3bf664;
+  --input-focus-ring: 2px;
+  --input-shadow: 0px 10px 32px 0px rgba(0,0,0,0.08);
+}
+
+/* Styles */
+.input-wrapper {
+  position: relative;
+  width: var(--input-width);
+  max-width: var(--input-max-width);
+}
+
+.custom-input {
+  width: 100%;
+  font-family: inherit;
+  font-size: var(--input-font-size) !important;
+  padding: var(--input-pad-y) var(--input-pad-x);
+  border-radius: var(--input-radius);
+  background: var(--input-bg);
+  color: var(--input-color);
+  border: var(--input-border);
+  box-shadow: var(--input-shadow);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-input-chat {
+  width: 100%;
+  font-family: inherit;
+  font-size: var(--chat-font-size) !important;
+  padding: var(--input-pad-y) var(--input-pad-x);
+  border-radius: var(--input-radius);
+  background: var(--input-bg);
+  color: var(--input-color);
+  border: var(--input-border);
+  box-shadow: var(--input-shadow);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.custom-input::placeholder,
+.custom-input-chat::placeholder {
+  color: var(--input-placeholder);
+}
+
+.custom-input:focus,
+.custom-input-chat:focus {
+  border-color: var(--input-focus-color);
+  box-shadow: 0px 4px 16px 0px rgba(0,0,0,0.08), 0 0 0 2px rgba(59,130,246,0.35);
+}
