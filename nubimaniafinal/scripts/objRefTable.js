@@ -22,6 +22,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Mouse,
 		C3.Plugins.TextBox,
 		C3.Plugins.Dictionary,
+		C3.Plugins.PlaygamaBridge,
 		C3.Plugins.System.Cnds.OnLayoutStart,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Plugins.Dictionary.Exps.Get,
@@ -30,8 +31,6 @@ self.C3_GetObjectRefTable = function () {
 		C3.Plugins.Text.Acts.SetText,
 		C3.Behaviors.Timer.Acts.StartTimer,
 		C3.Plugins.Text.Acts.SetVisible,
-		C3.Plugins.Browser.Acts.ConsoleLog,
-		C3.Plugins.Date.Exps.Now,
 		C3.Plugins.Text.Cnds.CompareInstanceVar,
 		C3.Plugins.System.Cnds.Compare,
 		C3.Plugins.System.Exps.viewportright,
@@ -147,6 +146,7 @@ self.C3_GetObjectRefTable = function () {
 		C3.JavaScriptInEvents.E_bg_selection_Event1_Act1,
 		C3.Plugins.Sprite.Acts.SetOpacity,
 		C3.Plugins.System.Exps.zeropad,
+		C3.Plugins.Date.Exps.Now,
 		C3.JavaScriptInEvents.Bonus_Event5_Act10,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.Sprite.Exps.Y,
@@ -233,6 +233,7 @@ self.C3_JsPropNameTable = [
 	{Price: 0},
 	{ads: 0},
 	{gameversion: 0},
+	{PlaygamaBridge: 0},
 	{strong_click: 0},
 	{thousand: 0},
 	{coins: 0},
@@ -297,5 +298,6 @@ self.InstanceType = {
 	timer_text: class extends self.ITextInstance {},
 	Price: class extends self.ISpriteInstance {},
 	ads: class extends self.IDictionaryInstance {},
-	gameversion: class extends self.ITextInstance {}
+	gameversion: class extends self.ITextInstance {},
+	PlaygamaBridge: class extends C3.Plugins.PlaygamaBridge.Instance {}
 }

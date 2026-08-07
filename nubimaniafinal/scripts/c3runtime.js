@@ -4940,10 +4940,6 @@ self.C3_ExpressionFuncs = [
 		() => "2 часа в игре",
 		() => 561600,
 		() => "156 часов в игре",
-		p => {
-			const f0 = p._GetNode(0).GetBoundMethod();
-			return () => f0();
-		},
 		() => 80,
 		() => "ADS",
 		() => "UP",
@@ -5048,6 +5044,10 @@ self.C3_ExpressionFuncs = [
 		() => 2760901,
 		() => 0.5,
 		() => "выбран",
+		p => {
+			const f0 = p._GetNode(0).GetBoundMethod();
+			return () => f0();
+		},
 		() => "закрыт",
 		() => "не выбран",
 		() => "цена",
