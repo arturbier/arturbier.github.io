@@ -2,6 +2,16 @@
 
 const scriptsInEvents = {
 
+	async E_init_Event1_Act2(runtime, localVars)
+	{
+		usdkInit("HVE5GEe73RLOM12ZPN1G", "163ec6e37496c56fdee2f136d8323bda");
+	},
+
+	async E_init_Event3_Act1(runtime, localVars)
+	{
+		usdk.gameplayStart(); // ← теперь SDK готов
+	},
+
 	async E_game_Event2_Act1(runtime, localVars)
 	{
 		// pause game
@@ -204,12 +214,12 @@ const scriptsInEvents = {
 
 	async E_game_Event65_Act1(runtime, localVars)
 	{
-		usdk.achievements.setProgress("22", 100,true);
+
 	},
 
 	async E_game_Event65_Act2(runtime, localVars)
 	{
-
+		usdk.achievements.unlock("11",true);
 	},
 
 	async E_game_Event66_Act1(runtime, localVars)
@@ -232,14 +242,9 @@ const scriptsInEvents = {
 		usdk.dailyRewards.show(true);
 	},
 
-	async E_init_Event1_Act2(runtime, localVars)
+	async E_game_Event70_Act1(runtime, localVars)
 	{
-		usdkInit("KFJKvDmvlQXp36FHl6ti", "b6226dcdb769d870fc613a46982dca2a");
-	},
-
-	async E_init_Event3_Act1(runtime, localVars)
-	{
-		usdk.gameplayStart(); // ← теперь SDK готов
+		usdk.push.subscribe();
 	}
 };
 
